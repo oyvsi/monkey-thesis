@@ -1,0 +1,26 @@
+\input{header}
+
+\date{Onsdag 8. Mars 2013}
+
+
+\begin{document}
+
+\maketitle
+\section*{Tredje iterasjon: Infrastruktur}
+I denne iterasjonen har infrastruktur vært i fokus, dette er hovedsakelig alt som skaper et sikkert miljø for applikasjonene og operere i. Våre områder i denne iterasjonen har omfattet switcher, brannmurer og UPS. Vi startet med å legge inn alle etasjeswitchene lokalt på fylkeshuset og fikk opp overvåkning for temperatur, vifter og load.\\
+
+\noindent Videre ble brannmurer lagt til og parent / child konfigurering ble startet opp for å reflektere det redundante oppsettet. Dette vil være viktig for å kunne varsle riktig.\\
+
+\noindent Planlegging av overvåkning for XEN og VMware har startet, og her venter vi på servicevinduet. den 13.mars for implementering av dette.\\
+
+\noindent Overvåkning av MERU-kontrollerene foregår på en annen måte enn de andre enhetene. Her bruker vi SNMP traps istedenefor å polle hver enhet. Dette vil si at en enhet vil selv si ifra til icinga serveren når noe går galt. Uheldigvis støttes ikke SNMP Inform som ville gitt resending av traps dersom de ikke når fram, men vi regner ikke med at dette blir noe problem i praksis.\\
+
+\noindent For alt som har blitt lagt til i overvåkningen under denne iterasjonen har vi jobbet med SNMP og brukt ulike OID-er for å hente ut ønsket informasjon. OID-ene er definert i MIB-filer som ofte er spesifikke per produsent. Uten disse MIB-filene er det umulig å vite hva det er mulig å hente ut fra enheten. Vi har derfor brukt mye tid på googling etter disse. Det har vært variert dokumentasjon og vanskelighetsgrad for å få tak i denne informasjonen, men det har gått rimelig greit.\\
+
+\noindent Status etter denne iterasjonenen er at vi har fått opp et fungerende oppsett for switcher, brannmurer, kontrollere, og ups. Her inngår merkene HP, Cisco, Dell og MERU.\\
+
+\noindent Et problem er å gjengi en ring topologi for switchene til fylkeshuset, men dette vil ta med videre og se nærmere på. Vi har innsett at vi ikke vil rekke å sette alt utstyret til IKT-avdelingen under overvåkning, men tar et godt utvalg som kan tjene som eksempler på hvordan resten kan implementeres. IKT-avdelingen er også inneforstått med dette.\\
+
+\noindent Ved statusmøte den 7. Mars var oppdragsgiver fornøyd.
+
+\end{document}

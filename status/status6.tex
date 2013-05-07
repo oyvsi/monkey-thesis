@@ -1,0 +1,30 @@
+\input{header}
+
+\date{Fredag 12. April 2013}
+
+\begin{document}
+
+\maketitle
+\section*{Sjette iterasjon: Statusvisning}
+
+
+\noindent I Iterasjonen statusvisning har vi laget en selvutviklet løsning for å vise status for overvåkningen på storskjerm. Vi har her skreddersydd en løsning hvor Svein-Inge og Lasse ofte har kommet med innspill på hvordan de vil ha dette, vi har her integrert\\
+
+\begin{itemize}
+	\item Temperatur grafisk
+	\item luftfuktighet grafisk
+	\item Aktive saker på footprints
+	\item Driftsmeldinger
+	\item Hosts og tjeneste status fra Icinga
+\end{itemize}
+
+\noindent Vi startet med å gjøre research på hvilke løsninger som fantes. Det mest lovende vi fant var basert på Nagios med Nagios-API; nagdash. Her var utseendet og oppsettet ganske likt det vi så for oss, så vi regnet med at vi bare trengte å oversette database-kallene til kall mot Icinga-web API-et. Vi kontaktet utvikleren og ble enig om at vi kunne bruke det som utgangspunkt etter at det ble ilagt en GPL-lisens.\\
+
+\noindent Det viste seg etterhvert at vi måtte skrive om mer eller mindre hele nagdash. Etter ønsker fra IKT-avdelingen har vi også lagt inn små “plugins” som viser annen relevant informasjon som statistikk over saker og RSS-feed for driftsmeldinger.\\
+
+\noindent Selve utførelsen har gått gjennom flere iterasjoner der vi har satt opp en ny versjon hos IKT-avdelingen for hver gang vi har vært der, og fått tilbakemeldinger neste gang. Dette har fungert veldig godt og vi har fått avdekket et par bugs vi antagelig aldri ellers ville funnet. Vi fikk også gode inspill på fontstørrelse, farger og plasseringer. Siden har også bli testet på fargeblinde for å sjekke at fargevalgene ikke går utover lesbarheten.\\
+
+\noindent Siden vi skulle utvikle denne statusvisningen valgte vi å på forhånd ha et møte med mange av de ansatte som til daglig skal bruke denne skjermen, her fikk vi mye informasjon om hvordan dagens løsning brukes, hvordan denne nye løsningen kan bli bedre og hvordan de ønsker at den nye skal fungere.\\
+\noindent Hello!
+
+\end{document}

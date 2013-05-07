@@ -1,0 +1,20 @@
+\input{header}
+\date{Fredag 15. Mars 2013}
+
+\begin{document}
+
+\maketitle
+\section*{Fjerde iterasjon: Varsling}
+
+\noindent I denne iterasjonen har vi satt opp varsling for service- og hostsjekker. Etter at det er blitt bestemt hvem som skal motta meldingen vil den bli formatert til å vise mest mulig relevant info. Disse blir sendt ut både til SMS og Epost. Vi har definert servicevinduene onsdag etter andre tirsdag i måneden som et unntak til varslingen.\\
+
+\noindent Vi har også laget et script for synkronisering av kontakter og kontaktgrupper slik at hvem som varsles kan styres i Active Directory, og epostadresser og mobiltelefonnummer blir hentet fra brukerkontoene. Dette er satt opp og testet i lab, men det gjenstår å få det implementert i produksjon.\\
+
+\noindent Vi fikk være med på service vindu 13. mars, der vi fikk lagt inn NRPE-agenter på flere Windows servere og testet at failover fungerte og ble riktig varslet på en brannmur. På servicevinduet fikk vi også satt opp round-trip-epostmonitorering, der vi sjekker at mail-sending og mottak fungerer, samt hvor lang tid det tar fra mailen er sendt til vi mottar den igjen.\\
+
+\noindent Parallellt med denne iterasjonen har det også blitt satt opp overvåkning av VMware cluster og de ESX hosts som hører til der, og flere forskjellige Xen clustere med tilhørende hosts. Et lite problem med Xen var at sjekkene var veldig CPU-intensive i forhold til de andre sjekkene vi kjører. Dette er noe vi blir nødt til å se litt mer på. \\
+
+\noindent I løpet av iterasjonenen hadde vi et statusmøte med Lasse, og her snakket vi om hvordan ansvarsforholdene var innad i avdelingen. Videre hadde vi en lengre gjennomgang av total status og demo av webgrensesnittet med flere fra IKT-avdelingen den 19. mars.\\
+
+\noindent Etter denne iterasjonen vil vi kjøre iterasjonene Statusvindu og Servermiljø parallellt. Vi har fått utstyret som Servermiljø er avhengig av, og ser nytten i å kjøre Statusvindu nå, da det består av utvikling fra vår side. Påsken kommer i denne iterasjonsperioden og vi vil ikke jobbe samlet i denne perioden.
+\end{document}

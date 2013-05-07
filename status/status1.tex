@@ -1,0 +1,17 @@
+\input{header}
+\date{Onsdag 13. Februar 2013}
+
+\begin{document}
+
+\maketitle
+\section*{Første iterasjon: Kjerneprogramvare}
+
+Vi endte etter en del research opp med å basere oss på Icinga. Vi brukte så tid på å lese dokumentasjonen og teste icinga virtualisert på egne maskiner. Da vi fikk opp labmiljøet på fylkeshuset ble testingen overført dit. \\
+
+\noindent Vi brukte en god del tid på å finne ut hvordan en best mulig kan gjøre endringer i konfigurasjon. Et par forskjellige webgrensesnittt ble testet ut. Men vi synes ikke at noen av de dekker våre behov og har konkludert med at det beste er å bruke tekst-konfigurasjonen direkte. Det største problemet med webgrenesnitt-løsningene er at de er at de ikke tillater oppdeling av konfigurasjonen og en mister dermed lett oversikten. Det viste seg også vanskelig å kombinere konfigurasjon manuelt fra CLI med webgrensesnittene. Eksisterende filer ble dessuten overskrevet ved hver import, noe som absolutt ikke er ønskelig i et produksjonsmiljø. \\
+
+\noindent Så langt har vi fått satt opp en labserver på fylkeshuset der vi har lagt inn Icinga med overvåking av 1 Linux- og 1 Windows-server \\
+
+\noindent På iterasjonsmøte med Lasse og Svein-Inge fikk vi klarsignal til å gå videre med Icinga som kjernemodul. Så langt har ting gått som planlagt og vi er godt i rute.
+
+\end{document}

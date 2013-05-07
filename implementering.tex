@@ -1,0 +1,27 @@
+\section{Implementering}
+\subsection{Utstyr}
+\subsubsection{Labmiljø}
+Et labmiljø har vært brukt for å teste plugins og script før de blir implementert på produksjonsserveren. Ved å teste i lab først, kan en se hvordan sjekker oppfører seg før de implementeres i større skala i produksjon. Labmiljøet inneholder utstyr og tjenester som gjenspeiler det IKT-avdelingen benytter, og på den måten kan ulike scenarier og utstyr testes før dette settes i produksjon.
+
+I Tabell \ref{labmiljo} er en oversikt over utstyret i labmiljøet.
+\begin{changemargin}{-1cm}{-1cm}
+\begin{table}
+\begin{center}
+%\begin{tabular}{|p{2.0in}|c|c|c|} \hline
+\begin{tabular}{ | l | l | l | p{4cm} |} \hline
+	Type & Beskrivelse & Dato installert &Tjenester \\ \hline
+	Server & Debian linux (HiG1) & 22.01.2013 & Icinga, Icinga-Web, Icinga-mobile, MySQL, Apache \\ \hline
+	Server & Debian linux (HiG2) & 22.01.2013 &	MySQL, Apache \\ \hline
+	Server & Windows 2008 R2 (HiG3) & 22.01.2013 & DNS, DHCP, AD, IIS, Fileserver, MSSQL \\ \hline
+	Server & Windows 2008 R2 (HiG4) & 19.02.2013 & Exchange \\ \hline 
+	Switch & Cisco 3550 (hig-sw1) &	29.01.2013 & SNMP \\ \hline
+	Switch & Dell Powerconnect 5324 (hig-sw2) & 29.01.2013 & SNMP \\ \hline
+	Router & Cisco 2600 (hig-ro) & 05.02.2013 & SNMP \\ \hline 
+	Firewall & Cisco 515E (hig-fw) & 05.02.2013 & SNMP \\ \hline
+\end{tabular}
+\caption{Labmiljø}
+\label{labmiljo}
+\end{center}
+\end{table}
+\end{changemargin}
+serverne er virtuelle maskiner plassert i et eget VLAN som er tilgjengelig på fysiske porter slik at nettverksutstyret kan plasseres i samme subnett. VLAN-et har også tilgang ut mot internett og har vært tilgjengelig for gruppen over VPN. Tjenester som testes på HiG1, HiG2, HiG3 og HiG4 blir alle overvåkt via NRPE. For nettverksutstyret blir SNMP benyttet.
