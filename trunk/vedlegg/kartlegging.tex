@@ -1,0 +1,50 @@
+\input{status/header}
+
+
+\title{Kartlegging av behov}
+\date{Tirsdag 19. Mars 2013}
+
+\begin{document}
+\maketitle
+\noindent Sted: Møterom IKT \\
+\noindent Tilstede: \\
+\indent Fra MonKey: Bjørn-Erik Strand og Nils Slåen \\
+\indent Fra IKT-avdelingen: Tore Vegard, Are Stenbrenden og Kristoffer Rødsdalen Hagen \\
+
+
+
+
+\noindent På starten av møtet ble det diskutert om muligheten for å prioritere feil, som i en skala fra 1 og opp til 10. Denne skulle da kunne regnes ut ifra antall children til hosten, antall service sjekker, prioritet på servicesjekken, og prioritering som er manuelt satt på hver host.
+\section{Overvåkning}
+\paragraph{Hvordan bruker dere overvåkningen til daglidagse oppgaver:}
+Det som er ønskelig er å bruke overvåkningen aktivt, det vil si at når det dukker opp feil på overvåkningen vil personale på servicedesk ta tak i problemet med en gang, enten lage en sak på dette som blir videre eskalert, eller løse feilen der og da.
+
+\paragraph{Kjenner dere et behov for å bruke overvåkningen mer aktivt fra dag til dag, for å avdekke behov for oppgradering, vedlikehold, utskifting av utstyr:}
+I dagens løsning er det vanskelig å syneliggjøre om tjenesten og /eller hosten skal være nede eller ikke her skulle det vært muligheter for å schedule unscheduled downtime, slik at det fungerer i praksis.\\
+
+\noindent IKT-avdelingen har også et ønske om mer realtime overvåkning, dagens løsning oppdaterer seg for sent, de har også et ønske om at ressursforbruk blir bedre logget, og at man kan gå tilbake for å se historikk for dette, slik at underliggende feil kan avdekkes.
+\paragraph{Hvor ofte blir det satt opp utstyr der det ville være natulig å legge til enheten til overvåkning:}
+I perioder blir det ikke satt opp mye nytt utstyr, men det blir noe utbytting av gamle servere og utstyr. Det er mest på prosjekter at nye enheter settes i produksjon, her er IKT-avdelingen bevisste på å legge til disse enhetene i overvåkningen.
+\paragraph{Settes det opp utstyr som burde overvåkes bedre (Flere tjenester som overvåkes etc):}
+Alle mener her at det ikke er nok tjenester som overvåkes i dag, en av hovedgrunnen til dette er at siden de ikke er fornøyde med den eksisterende overvåkningsløsningen, er det kun de “viktigste” sjekkene som blir lagt inn. Også blir dagens overvåkningsskjerm ofte berørt av for mye informasjon, og det er vannskelig å sile ut hva som er feil. Det blir altså vekk kastet tid å implementere flere sjekker som tilsynelatende ikke fungerer slik de skal.
+\paragraph{Hvilke rutiner følges i dag for vedlikehold av både eksisterende og nye enheter i overvåkningen:}
+Før ble det brukt ITIL change rutiner for å legge til nytt utstyr, disse rutinene krevde godkjenning av change manager for å få klarsignal til produksjon, disse rutinene er ikke lengre et krav og enkelte service sjekker kan da bli glemt før det implementeres. Derfor får IKT-avdelingen ofte manglende overvåkning av spesifikke applikasjoner. Kan også nevnes at alle er flinke på å legge til hosts i overvåkningen. Ønsker rutiner for tresholds slik at man kan finjustere disse.
+\section{Gjentagene feil}
+\paragraph{Hva skulle dere ønske at kunne oppdage raskt:}
+I dag kjøres alle sjekkene på lik linje, her må man tenke på at skolene er 80\% av brukerne, så i det tilfellet at en skole går ned vil IKT-avdelingen ha melding om dette umiddelbart, dette burde også eskaleres, og sjekkinterval høyre enn vanlige hosts. Det er også et forslag at man skal kunne ha ekstra overvåkning i visse perioder, som eksamen.
+\paragraph{Er det stort sett feil dere har sett før eller nye feil:}
+IKT-avdelingen ser ofte gjentagende feil som CPU, Minne, Ping timeouts osv, det vise rødt på overvåkningen og er irriterende at det viser som feil, når det kanskje ikke er det. \\
+
+\noindent Så det er stort sett feil som går igjen.
+
+\paragraph{Tror dere det forekommer mange feil som dagens overvåkningsløsning ikke oppdager:}
+Det IKT-avdelingen er helt sikker på at det forekommer mange feil som i dag ikke fanges opp, dette er ofte heller oppdaget av at brukerne ringer inn. Her er det ønskelig at flere applikasjoner overvåkes, og at man kan se på trender over utstyr og oppetid.
+\section{Hva ønsker dere å vite}
+\paragraph{Hvordan burde et evt varslingsgrensesnitt se ut? Ingen informasjon når alt er OK, informasjon om load og trafikk etc? Kan dette evt. ligge på en egen “webside” (icinga-web-ish):}
+Ønsker å se totalt antall nede, og hvilke som er nede, vist mest mulig minimalistisk, slik at det er lett å holde oversikten, og man får “beskjed” dersom det skjer noe nytt.
+\paragraph{Hvordan vil dere bli varslet utenom visning på skjerm:}
+IKT-avdelingen kan ikke bli pålagt å ha slik varsling, her blir det eventuellt den som har vakt, eller kan det være ønskelig for de som har ansvaret for spesifikke systemer å få en melding om noe skulle være galt.\\
+
+\noindent Det et ønske å ha oversikt over båndbreddebruk på spesifikke porter på nettverksutstyr. Disse kunne gjerne vært integrert som trafikkgrafer i statusvisningen.
+
+\end{document}

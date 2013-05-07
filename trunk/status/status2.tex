@@ -1,0 +1,23 @@
+\input{header}
+
+\date{Onsdag 20. Februar 2013}
+
+
+\begin{document}
+
+\maketitle
+\section*{Andre iterasjon: Server}
+\noindent Vi begynte iterasjonen med grunnsjekker for Windows og Linux-servere. Dette er i hovedsak hardware som RAM, disk og CPU. En del tid har gått med på å finne et fornuftig oppsett for konfigurasjon av maskiner og tjenester. For å kunne se samlet status av en tjeneste (f.eks for et cluster) har vi testet sjekker som check\_multi og check\_cluster. \\
+
+\noindent Vi har lest om og tester ulike protokoller for kjøring av sjekker på eksterne maskiner. Valget endte til slutt på NRPE for både Linux og Windows. Andre alternativer vi vurderte var SSH, SNMP og WMI. \\
+
+\noindent For applikasjoner har vi hatt fokus på å teste spesielle applikasjoner som krever litt mer enn at bare en service kjører. Her har vi blant annet sett på hvordan vi ser helsestatus til SQL-servere og ytelse på exchange server. For andre applikasjoner har vi funnet en generisk måte å definere de som et sett tjenester, og hvordan disse kan overvåkes. \\
+
+\noindent Videre har vi sett på avhengigheter og parent/child-forhold som også vil gjelde for nettverksutstyr. Dette er viktig å ha på plass når vi skal begynne med varsling slik at en ikke får mange varlser for feil som blir slått som følge av mer underliggende feil.\\
+
+\noindent På iterasjonsmøte fikk vi tilbakemeldinger av Svein-Inge og Lasse på hvordan de ville prioritere de forskjellige applikasjonene vi skal monitorere. Dette gjorde det lettere å sette opp en plan for de siste dagene av iterasjonen. \\
+
+\noindent Status så langt for selve overvåkningen er at vi har satt opp MSSQL og Exchange til overvåkning i lab. Vi ble ikke helt ferdig med Exchange og tar med denne i neste iterasjon. Vi har også satt opp én Dell- og én Cisco-switch som overvåkes på labserveren. Serveren som skal stå i produksjon har også blitt installert og konfigurert med Debian og Icinga.\\
+
+
+\end{document}
