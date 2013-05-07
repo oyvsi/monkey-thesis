@@ -382,19 +382,19 @@ define servicedependency{
 }
 \end{lstlisting}
 
-En kan også erstatte host\_name og dependant\_host\_name med hostgroup og dependant\_host\_group for å lage avhengigheter på alle hoster som tilhører gruppa.
+En kan også erstatte host\_name og dependant\_host\_name med hostgroup og dependant\_host\_group for å lage avhengigheter på alle hoster som tilhører gruppen.
 
 \subsection{Host dependency}
 
-For å sette en avhengighet mellom to host-er benyttes “host dependency”. Dette må ikke forveksles med “parent”, som refererer til nettverksoppsettet. Mens en host dependency går på at en host er avhengig av en annen. Host dependency er bare nyttig i veldig spesielle tilfeller, da det for de fleste tilfeller vil det være avhengigheter til en eller flere tjenester på hosten. 
+For å sette en avhengighet mellom to host-er benyttes “host dependency”. Dette må ikke forveksles med “parent”, som refererer til nettverksoppsettet. Mens en host dependency går på at en host er avhengig av en annen. Host dependency er bare nyttig i veldig spesielle tilfeller, da det for de fleste tilfeller vil være avhengigheter til en eller flere tjenester på hosten. 
 
-her er det anbefalt å bruke parents i stedet. /cite Nagios-boka og http://docs.icinga.org/latest/en/dependencies.html.
+Her er det anbefalt å bruke parents i stedet. /cite Nagios-boka og http://docs.icinga.org/latest/en/dependencies.html.
 
 \subsection{Protokoller og agenter }
 For å kjøre sjekker på enheter må Icinga-serveren kunne kommunisere med operativsystemene på de ulike enhetene. Icinga henviser til protokollene SSH, SNMP, RPC (WMI) og agentene NRPE og NSCA (en del av pakken NSClient++). http://docs.icinga.org/1.8/en/ch09.html http://docs.icinga.org/1.8/en/ch10.html 
 
 \subsubsection{NRPE}
-NRPE (Nagios Remote Plugin Executor) består av en plugin (check\_nrpe) på icinga-servern og en daemon som installeres på hver server som skal overvåkes. NRPE eksekverer lokale plugins på den eksterne serveren og returner dataen fra denne til check\_nrpe. Tillatelse for eksekveringer defineres i en config-fil på hver server, der en oppgir hvilke IP-er som kan koble seg til og hvilke kommandoer som er gyldige. 
+NRPE (Nagios Remote Plugin Executor) består av en plugin (check\_nrpe) på Icinga-servern og en daemon som installeres på hver server som skal overvåkes. NRPE eksekverer lokale plugins på den eksterne serveren og returner dataen fra denne til check\_nrpe. Tillatelse for eksekveringer defineres i en config-fil på hver server, der en oppgir hvilke IP-er som kan koble seg til og hvilke kommandoer som er gyldige. 
 
 \begin{center}
 \begin{figure}
