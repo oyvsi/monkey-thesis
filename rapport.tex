@@ -55,6 +55,10 @@ xleftmargin=3em, framexrightmargin=5pt, framexbottommargin=4pt
 %\renewcommand{\backrefpagesname}{Cited on}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\newcommand\fnurl[2]{%
+  \href{#2}{#1}\footnote{\url{#2}}%
+}
+
 \newcounter{includepdfpage}
 \newcounter{currentpagecounter}
 \newcommand{\addlabelstoallincludedpages}[1]{

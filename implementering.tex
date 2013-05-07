@@ -48,7 +48,7 @@ Programvare:
 \item sendmail
 \end{itemize}
 \subsubsection{Enhet for overvåkning av servermiljø}
-For å overvåke temperatur og luftfuktighet på serverrommet ble det kjøpt inn en NetBotz 200 med støtte for opp til 12 eksterne sensorer /ref http://www.apc.com/resource/include/techspec\_index.cfm?base\_sku=NBRK0201\&tab=software,
+For å overvåke temperatur og luftfuktighet på serverrommet ble det kjøpt inn en NetBotz 200 med støtte for opp til 12 eksterne sensorer \cite{netbotz},
 som oppfyller kravene gitt i oppgavebeskrivelsen. 
 
 \subsection{Overvåkning med Icinga}
@@ -57,10 +57,10 @@ som oppfyller kravene gitt i oppgavebeskrivelsen.
 
 For å sikre tilgjengeligheten til Icinga ytterligere, er det også mulig å sette opp et redundant oppsett der alle Icinga-installasjoner kan dele resultater av sjekker mellom seg. Ekstra viktig vil et slikt oppsett være dersom man knytter overvåkningssystemet mot SLA-er. Dersom en mister data om oppetid og tilgjenglighet på en tjeneste, vil man ikke lenger kunne vise hva den har vært.
 
-En annen utfordring var å vite hvor kraftig hardware serveren trengte. Her ble referanselisten til Icinga lagt til grunn(https://www.icinga.org/users/), hvor mange organisasjoner har lagt inn informasjon om sine oppsett. Etter avtale med oppgragsgiver ble det bestemt å sette opp en bladeserver, som eventuelt kunne byttes med noe kraftigere dersom det skulle bli nødvendig. 
+En annen utfordring var å vite hvor kraftig hardware serveren trengte. Her ble referanselisten til Icinga lagt til grunn \cite{icingainaction}, hvor mange organisasjoner har lagt inn informasjon om sine oppsett. Etter avtale med oppgragsgiver ble det bestemt å sette opp en bladeserver, som eventuelt kunne byttes med noe kraftigere dersom det skulle bli nødvendig. 
 
 \subsubsection{Installasjon}
-I pakkebrønnen for debian-stable fantes bare versjon 1.0.2 av Icinga, i backports lå 1.7.1. Icinga opprettholder en egen pakkebrønn - “The Debian Monitoring Prosject” /ref http://debmon.org/. Fra denne kunne versjon 1.8.4 installeres. I samråd med teknisk kontakt ved IKT-avdelingen ble det bestemt å bruke versjon 1.8.4 fra debmon.
+I pakkebrønnen for debian-stable fantes bare versjon 1.0.2 av Icinga, i backports lå 1.7.1. Icinga opprettholder en egen pakkebrønn - “The Debian Monitoring Prosject” \cite{debmon}. Fra denne kunne versjon 1.8.4 installeres. I samråd med teknisk kontakt ved IKT-avdelingen ble det bestemt å bruke versjon 1.8.4 fra debmon.
 
 \subsubsection{Konfigurasjonsfiler}
 Ved standard installasjon av Icinga er konfigurasjonen delt opp i objekttyper med flere objekter i hver fil:
@@ -75,7 +75,7 @@ Ved standard installasjon av Icinga er konfigurasjonen delt opp i objekttyper me
 \item services\_icinga.cfg
 \item commands.cfg
 \end{itemize}
-Dette var uoversiktelig og en oppdelt konfigurasjon var ønskelig, som også er anbefalt ved større installasjoner.. /cite http://www.standalone-sysadmin.com/blog/2009/07/nagios-config/ + nagios-boka. Det ble bestemt å sette opp følgdende hovedinndeling, med undermapper videre der det var hensiktsmessig:
+Dette var uoversiktelig og en oppdelt konfigurasjon var ønskelig, som også er anbefalt ved større installasjoner.. \cite{sysadmin} + nagios-boka. Det ble bestemt å sette opp følgdende hovedinndeling, med undermapper videre der det var hensiktsmessig:
 
 % NILS, WTF TO DO?
 %\begin{lstlisting}
@@ -96,7 +96,7 @@ Dette var uoversiktelig og en oppdelt konfigurasjon var ønskelig, som også er 
 %│   ├── servicedependencies
 %│   ├── services
 %\end{lstlisting}
-Det ble testet ut et par verktøy for å administrere konfigurasjonsfilene NConf /ref http://www.nconf.org og NagiosQL /ref http://www.nagiosql.org. Disse ble valgt bort til fordel for manuel konfigurering da det ikke støttet oppdeling av konfigurasjon og kunne ikke kombineres med manuell konfigurasjon. I samråd med oppdragsgiver ble det avgjort av manuell konfigurasjon oppfyller kravet “Det skal være enkelt å legge til nye enheter for overvåking”.
+Det ble testet ut et par verktøy for å administrere konfigurasjonsfilene NConf \cite{nconf} og NagiosQL \cite{nagiosql}. Disse ble valgt bort til fordel for manuel konfigurering da det ikke støttet oppdeling av konfigurasjon og kunne ikke kombineres med manuell konfigurasjon. I samråd med oppdragsgiver ble det avgjort av manuell konfigurasjon oppfyller kravet “Det skal være enkelt å legge til nye enheter for overvåking”.
 
 \subsubsection{Bruk av hostgroup}
 Som nevnt i /ref{der vi snakker om det} knyttes et service-objekt til et host-objekt og et command-objekt for at det skal kjøres en sjekk. For å slippe å skrive et service-objekt for hvert host-objekt benyttes gruppering av host-objekter i hostgroup. For å vise hvordan dette er satt opp vises et eksempel for hvordan dette er satt opp for MySQL-servere:
@@ -161,7 +161,7 @@ service_perfdata_file_processing_command=rotate_perf_service
 service_perfdata_file_template=[SERVICEPERFDATA]\tDATATYPE::SERVICEPERFDATA\tTIMET::$TIMET$\tHOSTNAME::$HOSTNAME$\tSERVICEDESC::$SERVICEDESC$\tSERVICEPERFDATA::$SERVICEPERFDATA$service_perfdata_file_processing_interval=200
 \end{lstlisting}
 
-For å transformere performance-dataen til riktig format for graphite benyttes metricinga (ref https://github.com/jgoldschrafe/metricinga). Dette scriptet sjekker spool-mappen én gang i minuttet etter filer som enda ikke er prosessert og sender data inn til carbon (graphite). 
+For å transformere performance-dataen til riktig format for graphite benyttes metricinga \cite{metricinga}. Dette scriptet sjekker spool-mappen én gang i minuttet etter filer som enda ikke er prosessert og sender data inn til carbon (graphite). 
 Gjennom graphite vil det dermed grafes basert på performance data på riktig format fra alle service-checks som kjører en command.
 
 Det ble også testet å modifisere scriptet til å legge outputen til service-sjekkene direkte til en mysql-database, som vist i vedlegg /ref{metricinga diff}. Dette ble gjort for å oppfylle kravet fra oppgavebeskrivelsen om at alle henvendelser skal lagres i database. Men det viste seg at dette ville bli så mange rader at dette ble avgjort til ikke å være hensiktsmessig i samråd med oppdragsgiver. Som et alternativ til dette kan en ta inn all data til graphite, men aggrigere det etter en viss tid. Dataen kan så eksporteres fra graphite.
@@ -169,7 +169,7 @@ Det ble også testet å modifisere scriptet til å legge outputen til service-sj
 \subsubsection{Overvåkning av Windows-servere}
 For overvåkning av Windows vil NSClient++ bli brukt. NSClient++ er et program som brukes for  å kommunisere med ulike agenter og over ulike protokoller på en ekstern server. I dette prosjektet brukes den for å hente ut informasjon via NRPE-agenten og å kjøre WMI-spørringer mot en Windows-server. NSClient har en konfig fil som genereres under installering. 
 
-NSClient++ er valgt fordi klienten oppdateres hyppig /cite{http://www.nsclient.org/nscp/downloads}, og det er den agenten som blir referert i Icinga/Nagios dokumentasjon /cite{http://docs.icinga.org/latest/en/monitoring-windows.html}. Med NSClient++ kommer også forhåndskonfigurerte plugin-er, for eksempel for å sjekke minne, CPU, og harddisk.
+NSClient++ er valgt fordi klienten oppdateres hyppig \cite{nsclient}, og det er den agenten som blir referert i Icinga/Nagios dokumentasjon \cite{icingawin}. Med NSClient++ kommer også forhåndskonfigurerte plugin-er, for eksempel for å sjekke minne, CPU, og harddisk.
 
 For installering av NRPE-agenten og mulighet for WMI-spørringer ble det laget en veiledning /cite{nsclientguide} som forklarer hva som skal installeres. Her er det laget en egen konfig fil som har kun funksjonaliteten vi trenger. 
 
@@ -218,7 +218,7 @@ For windows servere med mange disker brukes oppsjonen -CHECKALL som gir en overs
 \paragraph{CPU}
 
 Overvåkning av CPU vil kunne hjelpe til med å indikere problem som ressursproblemer, flere CPU-krevende applikasjoner på samme server eller at en applikasjon bruker all CPU-kraft.  
-http://www.microsoft.com/en-us/download/details.aspx?id=9296
+wtf is this: http://www.microsoft.com/en-us/download/details.aspx?id=9296
 
 
 På Windows-servere benyttes “CheckCPU” fra NSClient++ for å sjekke CPU-last. Her legges det ved tre opsjoner i sjekken som spesifiserer tidsintervallet for datagrunnlaget, grensen for når det skal gis en advarsel og når det skal vises som en kritisk feil.
@@ -240,8 +240,7 @@ for /l %%x in (1, 1, 10) do (
 :loop
 GOTO loop
 \end{lstlisting}
-For Linux baserer sjekk av CPU-bruk seg på “load” /ref http://www.linuxjournal.com/article/9001
-\ref http://en.wikipedia.org/wiki/Load\_(computing). Dette er i hovedsak et gjennomsnitt for hvor mange prosesser som bruker eller venter på CPU, men disk- eller nettverks I/O kan også spille inn. For maskiner med flere kjerner og/eller CPU-er vil dette fortone seg annerledes da en kan utføre flere prosesser parallellt. Load-tallene må deles på antallet CPU-kjerner for at det skal kunne brukes samme grenseverdier uavhengig av hvor mange kjerner serveren har. Dette gjøres med opsjonen “r”.
+For Linux baserer sjekk av CPU-bruk seg på “load” \cite{loadavg} \cite{wiki:loadavg}. Dette er i hovedsak et gjennomsnitt for hvor mange prosesser som bruker eller venter på CPU, men disk- eller nettverks I/O kan også spille inn. For maskiner med flere kjerner og/eller CPU-er vil dette fortone seg annerledes da en kan utføre flere prosesser parallellt. Load-tallene må deles på antallet CPU-kjerner for at det skal kunne brukes samme grenseverdier uavhengig av hvor mange kjerner serveren har. Dette gjøres med opsjonen “r”.
 
 Tallene som hentes ut er gjennomsnittet for de siste 1, 5 og 15 minuttene. Det er mer interessant hvis load-en er høy over lengre tid, derfor er grenseverdiene lavere for 5 og 15 minutters intervallene.
 
@@ -255,7 +254,7 @@ command[check_dist_load]=/usr/lib/nagios/plugins/check_load -r -w $ARG1$ -c $ARG
 \end{lstlisting}
 
 \paragraph{Minne}
-Datamaskiner som bruker opp tilgjengelig minne må skrive til disk for å få plass til mellomlagrede data. Data som må hentes fra disk vil ha en betydelig høyere aksesstid enn når fysisk minne brukes til mellomlagring /cite{http://en.wikipedia.org/wiki/Paging#Performance}. 
+Datamaskiner som bruker opp tilgjengelig minne må skrive til disk for å få plass til mellomlagrede data. Data som må hentes fra disk vil ha en betydelig høyere aksesstid enn når fysisk minne brukes til mellomlagring \cite{wiki:mem}. 
 Kontinuerlig høyt minneforbruk kan være en indikasjon på flere minnekrevende applikasjoner på samme server, en applikasjon har minnelekkasje, eller at mengden minne ikke strekker til.
 
 Hva en prosess kan kreve. Virtuelt minne teknologi. CheckMem fra NSClient++
@@ -294,17 +293,15 @@ define service {
 \end{lstlisting}
 linux-plugin fra nagios-plugins: check\_procs 
 
-Å se at en tjeneste kjører via Windows kan gi falsk informasjon. Et eksempel her er Microsoft's terminal services. Tjenesten står som kjørende i Windows, men brukere får ikke koblet til. Dette kommer av at tjenesten har hengt seg, uten at den står som “stoppet”. Dette merkes ikke før brukere ringer inn og beskriver problemet /cite{http://www.petri.co.il/forums/showthread.php?t=41357}. Som nevnt i x.x vil en bedre sjekk være å teste selve tjenesten, som i neste delkapittel.
+Å se at en tjeneste kjører via Windows kan gi falsk informasjon. Et eksempel her er Microsoft's terminal services. Tjenesten står som kjørende i Windows, men brukere får ikke koblet til. Dette kommer av at tjenesten har hengt seg, uten at den står som “stoppet”. Dette merkes ikke før brukere ringer inn og beskriver problemet \cite{serviceproblem}. Som nevnt i x.x vil en bedre sjekk være å teste selve tjenesten, som i neste delkapittel.
 
 \paragraph{LDAP, DNS og DHCP}
 
 Tjenester som LDAP-autentisering, DNS-oppslag og DHCP-leasing er en viktig del av tjenestene IKT-avdelingen leverer.
 
-LDAP-tjenesten gjør at brukere får logget på trådløse nettverk og autentisert seg for andre tjenester IKT-avdelingen leverer. 
-http://en.wikipedia.org/wiki/Lightweight\_Directory\_Access\_Protocol
+LDAP-tjenesten gjør at brukere får logget på trådløse nettverk og autentisert seg for andre tjenester IKT-avdelingen leverer \cite{ldap}.
 
-DNS oppslag gjøres hver gang en enhet skal oversette en IP-adresse til et hostname eller omvendt. Uten DNS vil ikke enheten kunne kontakte andre enheter ved å benytte hostname, som brukes i f.eks web-adresser. 
-http://en.wikipedia.org/wiki/Domain\_Name\_System
+DNS oppslag gjøres hver gang en enhet skal oversette en IP-adresse til et hostname eller omvendt. Uten DNS vil ikke enheten kunne kontakte andre enheter ved å benytte hostname, som brukes i f.eks web-adresser /cite http dns . 
 
 Når en ny enhet kobles til nettverket vil denne få tildelt en IP-adresse av DHCP-serveren. Samtidig får den informasjon om gateway og DNS-servere. Uten dette vil ikke enheten få kommunisert med andre enheter på nettverket. http://en.wikipedia.org/wiki/DHCP
 
@@ -432,7 +429,7 @@ MSSQL
 For MSSQL var det vanskelig å finne en databaseklient som er opensource. Her endte vi opp med FreeTDS /cite{http://www.freetds.org/}, sammen med Perl-modulen “libdbd-sybase-perl”
 
 Plugin
-Plugin-ene som blir benyttet for databaser er skrevet av firmaet “Consulting \& Solutions” og heter “Check\_MySQL\_Health”, “Check\_Oracle\_Health” og “Check\_MSSQL\_Health” /ref{http://www.consol.com/open-source-monitoring/database-monitoring/}
+Plugin-ene som blir benyttet for databaser er skrevet av firmaet “Consulting \& Solutions” og heter “Check\_MySQL\_Health”, “Check\_Oracle\_Health” og “Check\_MSSQL\_Health” \fnurl{Consol Open Source Monitoring}{http://www.consol.com/open-source-monitoring/database-monitoring/}
 
 Disse må kompileres fra kildekoden. For å gjøre dette må en først konfigurere de med riktige parametere. Dette er de samme for alle tre plugin-ene.
 
@@ -459,9 +456,7 @@ Kommandoen konfigureres med muligheten for å bestemme hvilken sjekk som skal kj
 
 Her brukes MySQL som eksempel men dette vil være lik på de andre forskjellige SQL serverne. 
 \begin{lstlisting}
-command_line $USER1$/check_truedatabase-motor>_health --hostname=$HOSTADDRESS$     
---username=$USER5$ --password=$USER4$ --mode $ARG1$ 
---warning $ARG2$ --critical $ARG3$
+command_line $USER1$/check_truedatabase-motor>_health --hostname=$HOSTADDRESS$ --username=$USER5$ --password=$USER4$ --mode $ARG1$ --warning $ARG2$ --critical $ARG3$
 \end{lstlisting}
 MySQL Cluster
 
@@ -481,13 +476,13 @@ For minnebruk ble det skrevet en egen plugin, da ingen eksisterende plugin ble f
 
 \begin{lstlisting}
 define host {
-       ...
-        _NODEIDS 2,3  ;Data-nodes IDs to check memory usage
+	...
+	_NODEIDS 2,3  ;Data-nodes IDs to check memory usage
 }
 
 define command {
-  …
-   command_line   $USER1$/libexec/check_ndb_mem.pl --host $HOSTADDRESS$ --nodes $ARG1$ --warning $ARG2$ --critical $ARG3$
+	...
+	command_line   $USER1$/libexec/check_ndb_mem.pl --host $HOSTADDRESS$ --nodes $ARG1$ --warning $ARG2$ --critical $ARG3$
 }
 \end{lstlisting}
 \subsubsection{Microsoft Exchange}
@@ -517,9 +512,9 @@ Konfigurasjonen for dette er vist under. Direktivet “Members” setter medemen
 
 \begin{lstlisting}
 define servicegroup {
-servicegroup_name ERP_WEBAPP
-alias Web App for ERP
-members Web1,Check HTTP, File1,Check SMB, Mail1,Check Exchange, DB1,Check MySQL
+	servicegroup_name ERP_WEBAPP
+	alias Web App for ERP
+	members Web1,Check HTTP, File1,Check SMB, Mail1,Check Exchange, DB1,Check MySQL
 }
 \end{lstlisting}
 
@@ -551,9 +546,9 @@ Ressurser
 Som for switcher /ref{switch} brukes "check\_nwc\_health" til å se at sensorer er OK. I tillegg
 sjekkes CPU-bruk og minneforbruk gjennom samme plugin. 
 
-For CPU-bruk sjekkes gjennomsnittet over 5 minutter. Grenseverdier er satt til 80 % på WARNING og 90 % på CRITICAL, i henhold til det cisco anbefaler \cite {http://www.cisco.com/en/US/prod/collateral/netmgtsw/ps6504/ps6528/ps12363/white_paper_c11-726161.html}. Høy CPU-bruk kan føre til dårligere ytelse, høy rate av buffer-feil og generelle feil med responsivitet /cite {http://www.cisco.com/en/US/products/hw/routers/ps133/products_tech_note09186a00800a70f2.shtml}
+For CPU-bruk sjekkes gjennomsnittet over 5 minutter. Grenseverdier er satt til 80 \% på WARNING og 90 \% på CRITICAL, i henhold til det cisco anbefaler \cite {http://www.cisco.com/en/US/prod/collateral/netmgtsw/ps6504/ps6528/ps12363/white\_paper\_c11-726161.html}. Høy CPU-bruk kan føre til dårligere ytelse, høy rate av buffer-feil og generelle feil med responsivitet /cite {http://www.cisco.com/en/US/products/hw/routers/ps133/products\_tech\_note09186a00800a70f2.shtml}
 
-I følge Cisco kan høytminneforbruk under vanlig operasjon indikere at brannmuren er under angrep. /cite{http://www.cisco.com/en/US/products/ps6120/products\_tech\_note09186a0080b8e100.shtml#showmemory}. Dersom en router bruker opp tilgjengelig minne kan det føre til at routeren slutter å svare på kommandoer, telnet-tilkoblinger eller henger /cite http://www.cisco.com/en/US/products/sw/iosswrel/ps1831/products\_tech\_note09186a00800a6f3a.shtml. Cisco anbefaler en grenseverdi på 15 \% ledig minne /cite {http://www.cisco.com/en/US/prod/collateral/netmgtsw/ps6504/ps6528/ps12363/white\_paper\_c11-726161.html}. Grenseverdier for minne er derfor satt til 20 % for WARNING og 15% for CRITICAL.
+I følge Cisco kan høytminneforbruk under vanlig operasjon indikere at brannmuren er under angrep. /cite{http://www.cisco.com/en/US/products/ps6120/products\_tech\_note09186a0080b8e100.shtml#showmemory}. Dersom en router bruker opp tilgjengelig minne kan det føre til at routeren slutter å svare på kommandoer, telnet-tilkoblinger eller henger /cite http://www.cisco.com/en/US/products/sw/iosswrel/ps1831/products\_tech\_note09186a00800a6f3a.shtml. Cisco anbefaler en grenseverdi på 15 \% ledig minne /cite {http://www.cisco.com/en/US/prod/collateral/netmgtsw/ps6504/ps6528/ps12363/white\_paper\_c11-726161.html}. Grenseverdier for minne er derfor satt til 20 \% for WARNING og 15\% for CRITICAL.
 Failover
 
 Cisco router / Brannmurer har en viktig funksjon som kalles failover. Denne fungerer slik at to like enheter settes opp, der en blir satt som “primary” og den andre som “secondary”, slik at denne kan overta for “primary” om det skulle bli nødvendig. Disse kobles sammen med en seriellkabel. Figur /ref{ciscoasafailover} viser hvordan et Cisco-failover er satt opp. 
@@ -565,7 +560,7 @@ sjekkes CPU-bruk og minneforbruk gjennom samme plugin.
 For CPU-bruk sjekkes gjennomsnittet over 5 minutter. Grenseverdier er satt til 80 \% på WARNING og 90 \% på CRITICAL, i henhold til det cisco anbefaler \cite {http://www.cisco.com/en/US/prod/collateral/netmgtsw/ps6504/ps6528/ps12363/white\_paper\_c11-726161.html}. Høy CPU-bruk kan føre til dårligere ytelse, høy rate av buffer-feil og generelle feil med responsivitet /cite {http://www.cisco.com/en/US/products/hw/routers/ps133/products\_tech\_note09186a00800a70f2.shtml}
 
 
-I følge Cisco kan høytminneforbruk under vanlig operasjon indikere at brannmuren er under angrep. \cite{http://www.cisco.com/en/US/products/ps6120/products_tech_note09186a0080b8e100.shtml#showmemory}. Dersom en router bruker opp tilgjengelig minne kan det føre til at routeren slutter å svare på kommandoer, telnet-tilkoblinger eller henger \cite http://www.cisco.com/en/US/products/sw/iosswrel/ps1831/products\_tech\_note09186a00800a6f3a.shtml. Cisco anbefaler en grenseverdi på 15 \% ledig minne /cite {http://www.cisco.com/en/US/prod/collateral/netmgtsw/ps6504/ps6528/ps12363/white\_paper\_c11-726161.html}. Grenseverdier for minne er derfor satt til 20 \% for WARNING og 15 \% for CRITICAL.
+I følge Cisco kan høytminneforbruk under vanlig operasjon indikere at brannmuren er under angrep. /cite{http://www.cisco.com/en/US/products/ps6120/products\_tech\_note09186a0080b8e100.shtml#showmemory}. Dersom en router bruker opp tilgjengelig minne kan det føre til at routeren slutter å svare på kommandoer, telnet-tilkoblinger eller henger \cite http://www.cisco.com/en/US/products/sw/iosswrel/ps1831/products\_tech\_note09186a00800a6f3a.shtml. Cisco anbefaler en grenseverdi på 15 \% ledig minne /cite {http://www.cisco.com/en/US/prod/collateral/netmgtsw/ps6504/ps6528/ps12363/white\_paper\_c11-726161.html}. Grenseverdier for minne er derfor satt til 20 \% for WARNING og 15 \% for CRITICAL.
 
 \paragraph{Failover}
 
@@ -582,8 +577,7 @@ Sjekkene som settes opp for å verifisere at failover funksjonaliteten fungerer 
 \item Hvis failover ikke er konfigurert returneres UNKNOWN. 
 \end{itemize}
 
-Til dette benyttes pluginen “check\_cisco\_firewall” \ref{
-http://exchange.nagios.org/directory/Plugins/Hardware/Network-Gear/Cisco/Cisco--2D-Check-firewall-ASA-and-PIX/details}
+Til dette benyttes pluginen “check\_cisco\_firewall” \fnurl{Nagios Exhange - Check Firewall ASA-PIX}{http://exchange.nagios.org/directory/Plugins/Hardware/Network-Gear/Cisco/Cisco--2D-Check-firewall-ASA-and-PIX/details}
 
 Hvis brannmurene deler management IP på primary og secondary, er det ingen mulighet for å hente ut informasjon fra den passive brannmuren. Da sjekkes failover status bare for primary. I et ideelt miljø burde både passiv og aktiv ha hver sin IP adresse, slik at fysiske feil kan avdekkes på den passive brannmuren.
 
@@ -591,7 +585,7 @@ Begge brannmurene legges i en hostgroup som er lagt på service-objektet for “
 
 \paragraph{VPN}
 
-For brannmurer som har VPN-tjeneste sjekkes antall oppkoblede bruker opp mot det antallet brannmuren er lisensiert for. Begge disse verdiene finnes som SNMP OID-er definert i CISCO-FIREWALL-MIB. Det fantes allerede en plugin som sjekker antall tilkoblede brukere \ref {http://exchange.nagios.org/directory/Plugins/Uncategorized/Software/SNMP/cisco\_asa\_sessions/details}. Denne ble endret til å også hente ut det maksimale antallet og sammeligne brukt kapasitet i prosent mot grenseverdier som kommer inn som argumenter.
+For brannmurer som har VPN-tjeneste sjekkes antall oppkoblede bruker opp mot det antallet brannmuren er lisensiert for. Begge disse verdiene finnes som SNMP OID-er definert i CISCO-FIREWALL-MIB. Det fantes allerede en plugin som sjekker antall tilkoblede brukere \fnurl{Check Cisco ASA VPN Sessions}{http://exchange.nagios.org/directory/Plugins/Uncategorized/Software/SNMP/cisco\_asa\_sessions/details}. Denne ble endret til å også hente ut det maksimale antallet og sammeligne brukt kapasitet i prosent mot grenseverdier som kommer inn som argumenter.
 
 \paragraph{Båndbredde}
 
