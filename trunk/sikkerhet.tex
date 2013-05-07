@@ -1,1 +1,33 @@
 \section{Sikkerhet}
+\subsection{Pluginintetegritet}
+Flere plugin-er har blitt installert i etterkant av Icinga, og her er det en viss sikkerhetsrisiko. En god del plugin-er har et omfang på 1000-5000 linjer og det blir en tidkrevende prosess å kvalitetsikre alle. De sjekkene som eksekverers på hosts, og ikke på selve Icinga-serveren, er plugin-er som kommer med nagios-plugins og NSclient++. Disse blir brukt av et stort antall organisasjoner og andre. Gruppen har også fulgt med på fora og kommentarfelt for de ulike plugin-ene og for å kunne være trygge på de som kjører på hver enkelt host. 
+
+De plugingen som sjekker en tjeneste eller henter ut informasjon som check\_dns, og check\_dhcp har i utgangspunktet ingen mulighet for å kjøre direkte på en host. Disse kan utføre ondsinnede handlinger på selve Icinga-serveren. Alle plugin-er som er tatt i bruk kommer enten i fra monitor-exchange.org, op5, opsview, eller nagios-exchange.
+\subsection{Nettverk}
+Icinga-serveren står i et adskilt VLAN. Ved hjelp av pakkefiltrering sperres all innkommende trafikk fra andre nettverk. Icinga-serveren må kontakte andre servere den skal overvåke og kommunikasjon som er initiert av Icinga tillates i brannmuren. 
+
+Utstyr som skal sende SNMP-traps til Icinga må få åpnet tilgang i brannmurene som krysses på ruten. Kommunikasjonen fra Icinga-serveren og ut til andre servere rutes gjennom VLAN, som ikke inneholder kommunikasjon fra periferiutstyr. For at denne kommunikasjonen skal kunne sniffes måtte disse nettverkene være kompromittert.
+\subsubsection{SNMP}
+I implementasjonen er det benyttet SNMP v2c for alt utstyr som støtter det. I noen få tilfeller har bare v1 vært støttet. Både v1 og v2c benytter autentisering basert på en klar tekststring kalt “community string”. Det er heller ingen integritetssjekk som verifiserer at kommandoen som ble sendt er den samme som kom fram. Dette er viktigere dersom en sender “write-kommandoer”, men i dette prosjektet benyttes bare “read” for å hente ut informasjon.
+
+I SNMP v3 er det mange muligheter for økt sikkerhet:
+\begin{itemize}
+	\item Konfidensialitet. Kryptering. DES
+	\item Integritet. Hashing med MD5 eller SHA
+	\item Autentisering. Det kan settes rettigheter for spesifikke OID-er for spesifiserte brukere
+\end{itemize}
+
+\subsubsection{NRPE}
+For kryptering og gjenkjenning av hosts har NRPE implementert OpenSSL med en anonymous Diffie-Hellmann. Pluginen bruker h-filen dh.h til å generere base-nummer og prim-nummer for diffie-hellmann nøkkelutveksling. Disse blir satt statisk ved kompilering av kildekoden, noe som vil si at det er likt for alle debian-pakkene. Etter autentisering av host og Icinga-serveren brukes AES 256 bit for kryptering av trafikk. cite https://github.com/KristianLyng/nrpe/blob/master/README.SSL
+\subsubsection{NSClient++}
+allow\_nasty\_meta\_chars, gjør at WMI-spørringer kan sendes som parameter til check\_nrpe og ikke blir regnet som skadelige når NSclient++ mottar de. Serverporten defineres slik at kun Icinga-serveren har tilgang til å koble til via NRPE.
+\subsubsection{Brukerkontoer}
+En brukerkonto ble opprettet i Active Directory for Icinga. Denne benyttes ved tilkobling mot domenet på flere områder:
+\begin{itemize}
+	\item Sjekk av LDAP
+	\item Synkronisering av kontakter
+	\item ???
+	\item Service-kontoer i forbindelse med VMware og Xen ble opprettet med read-only rettigheter
+\end{itemize}
+\subsubsection{LDAP}
+LDAP benyttes ved synkronisering av kontakter og kan benyttes til innlogging i Icinga Web og Icinga Classic, som beskrevet i /ref{ldap auth}. LDAP over SSL kan benyttes for å kryptere denne kommunikasjonen. Da må et sertifikat installeres på Icinga-serveren.
