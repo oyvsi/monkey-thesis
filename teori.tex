@@ -103,7 +103,7 @@ I utgangspunktet kommer ikke Icinga med noe webgrensesnitt. Men det er mulig å 
 
 Icinga Classic baserer seg på det samme vindu-oppsettet som Nagios. For uthenting av data benyttes CGI-moduler.
 
-Icinga-web er en total omskrivning av webgrensesnittet. Det er Ajax-drevet, Web 2.0-inspirert front-end, som har flere lag mellom kjernen av Icinga og visningene:
+Icinga-web er en total omskrivning av webgrensesnittet. Det er Ajax-drevet og en Web 2.0-inspirert front-end, som har flere lag mellom kjernen av Icinga og visningene:
 
 \begin{itemize}
 	\item Doctrine Abstraction Layer henter informasjon fra databasen. Det kan også benyttes av utviklere for å legge til egne moduler i Icinga-Web med uthenting av informasjon fra andre databaser.
@@ -321,7 +321,7 @@ define hostgroup {
 }
 \end{lstlisting}
 
-Det kan også være nyttig for å ekskludere en host fra en servicesjekk som den ellers skulle kjørt. I eksemplet nednfor er HiG3 medlem av hostgroup-en “windows-servers”, men blir ekskludert fra å kjøre sjekken på diskplass ved å sette “!HiG3”:
+Det kan også være nyttig for å ekskludere en host fra en servicesjekk som den ellers skulle kjørt. I eksempelet nedenfor er HiG3 medlem av hostgroup-en “windows-servers”, men blir ekskludert fra å kjøre sjekken på diskplass ved å sette “!HiG3”:
 
 \begin{lstlisting}
 define service {
@@ -335,7 +335,7 @@ use                generic_service
 
 \subsection{Avhengigheter}
 
-I Icinga kan man definere de tre ulike typene avhengigheter “Parent”, “Service dependency”, “Host dependency“. Disse har innvirkning på hvilke varsler som sendes ut og statusen de ulike service-ene og host-ene får. Alle er definert som egne objekttyper og krever egen konfigurasjon. 
+I Icinga kan man definere de tre ulike typene avhengighetene “Parent”, “Service dependency”, “Host dependency“. Disse har innvirkning på hvilke varsler som sendes ut og statusen de ulike service-ene og host-ene får. Alle er definert som egne objekttyper og krever egen konfigurasjon. 
 
 \subsection{Parent}
 Et host-objekt kan settes som en “parent” til et annet host-objekt. Host-objekter som har et parent blir betegnet som en child-host eller child-service. Dette brukes primært for å unngå varsler om alle hosts som har en gitt host som parent om denne går ned. For eksempel hvis kjernerouteren går ned, ønskes ikke varsler for eventuelle host-er som har denne som parent. Disse vil ikke lengre bli sjekket og blir markert som “UNREACHABLE”. Tjenester som tilhører host-ene vil bli markert som “UNKNOWN”.
