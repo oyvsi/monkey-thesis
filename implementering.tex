@@ -99,7 +99,7 @@ Dette var uoversiktelig og en oppdelt konfigurasjon var ønskelig, som også er 
 Det ble testet ut et par verktøy for å administrere konfigurasjonsfilene NConf /ref http://www.nconf.org og NagiosQL /ref http://www.nagiosql.org. Disse ble valgt bort til fordel for manuel konfigurering da det ikke støttet oppdeling av konfigurasjon og kunne ikke kombineres med manuell konfigurasjon. I samråd med oppdragsgiver ble det avgjort av manuell konfigurasjon oppfyller kravet “Det skal være enkelt å legge til nye enheter for overvåking”.
 
 \subsubsection{Bruk av hostgroup}
-Som nevnt i \ref{der vi snakker om det} knyttes et service-objekt til et host-objekt og et command-objekt for at det skal kjøres en sjekk. For å slippe å skrive et service-objekt for hvert host-objekt benyttes gruppering av host-objekter i hostgroup. For å vise hvordan dette er satt opp vises et eksempel for hvordan dette er satt opp for MySQL-servere:
+Som nevnt i /ref{der vi snakker om det} knyttes et service-objekt til et host-objekt og et command-objekt for at det skal kjøres en sjekk. For å slippe å skrive et service-objekt for hvert host-objekt benyttes gruppering av host-objekter i hostgroup. For å vise hvordan dette er satt opp vises et eksempel for hvordan dette er satt opp for MySQL-servere:
 
 \begin{lstlisting}
 define hostgroup {
@@ -150,7 +150,6 @@ For å gjøre dette benyttes et vanlig command-objekt i Icinga. Dette defineres 
 define command {
 command_name            rotate_perf_service
     command_line            /bin/mv /usr/local/icinga/var/perfdata/service-perfdata /usr/local/icinga/var/perfdata/logs/service-perfdata.$TIMET$
-
 }
 \end{lstlisting}
 Videre må denne konfigureres i Icinga.cfg:
@@ -165,14 +164,14 @@ service_perfdata_file_template=[SERVICEPERFDATA]\tDATATYPE::SERVICEPERFDATA\tTIM
 For å transformere performance-dataen til riktig format for graphite benyttes metricinga (ref https://github.com/jgoldschrafe/metricinga). Dette scriptet sjekker spool-mappen én gang i minuttet etter filer som enda ikke er prosessert og sender data inn til carbon (graphite). 
 Gjennom graphite vil det dermed grafes basert på performance data på riktig format fra alle service-checks som kjører en command.
 
-Det ble også testet å modifisere scriptet til å legge outputen til service-sjekkene direkte til en mysql-database, som vist i vedlegg \ref{metricinga diff}. Dette ble gjort for å oppfylle kravet fra oppgavebeskrivelsen om at alle henvendelser skal lagres i database. Men det viste seg at dette ville bli så mange rader at dette ble avgjort til ikke å være hensiktsmessig i samråd med oppdragsgiver. Som et alternativ til dette kan en ta inn all data til graphite, men aggrigere det etter en viss tid. Dataen kan så eksporteres fra graphite.
+Det ble også testet å modifisere scriptet til å legge outputen til service-sjekkene direkte til en mysql-database, som vist i vedlegg /ref{metricinga diff}. Dette ble gjort for å oppfylle kravet fra oppgavebeskrivelsen om at alle henvendelser skal lagres i database. Men det viste seg at dette ville bli så mange rader at dette ble avgjort til ikke å være hensiktsmessig i samråd med oppdragsgiver. Som et alternativ til dette kan en ta inn all data til graphite, men aggrigere det etter en viss tid. Dataen kan så eksporteres fra graphite.
 
 \subsubsection{Overvåkning av Windows-servere}
 For overvåkning av Windows vil NSClient++ bli brukt. NSClient++ er et program som brukes for  å kommunisere med ulike agenter og over ulike protokoller på en ekstern server. I dette prosjektet brukes den for å hente ut informasjon via NRPE-agenten og å kjøre WMI-spørringer mot en Windows-server. NSClient har en konfig fil som genereres under installering. 
 
-NSClient++ er valgt fordi klienten oppdateres hyppig \cite{http://www.nsclient.org/nscp/downloads}, og det er den agenten som blir referert i Icinga/Nagios dokumentasjon \cite{http://docs.icinga.org/latest/en/monitoring-windows.html}. Med NSClient++ kommer også forhåndskonfigurerte plugin-er, for eksempel for å sjekke minne, CPU, og harddisk.
+NSClient++ er valgt fordi klienten oppdateres hyppig /cite{http://www.nsclient.org/nscp/downloads}, og det er den agenten som blir referert i Icinga/Nagios dokumentasjon /cite{http://docs.icinga.org/latest/en/monitoring-windows.html}. Med NSClient++ kommer også forhåndskonfigurerte plugin-er, for eksempel for å sjekke minne, CPU, og harddisk.
 
-For installering av NRPE-agenten og mulighet for WMI-spørringer ble det laget en veiledning \cite{nsclientguide} som forklarer hva som skal installeres. Her er det laget en egen konfig fil som har kun funksjonaliteten vi trenger. 
+For installering av NRPE-agenten og mulighet for WMI-spørringer ble det laget en veiledning /cite{nsclientguide} som forklarer hva som skal installeres. Her er det laget en egen konfig fil som har kun funksjonaliteten vi trenger. 
 
 \subsubsection{Overvåkning av Linux-servere}
 Overvåkning av standard Linux-servere skjer utelukkende ved bruk av NRPE. 
@@ -254,8 +253,9 @@ check_command                   check_nrpe!check_dist_load!0.9,0.7,0.5 1.2,1.0,0
 
 command[check_dist_load]=/usr/lib/nagios/plugins/check_load -r -w $ARG1$ -c $ARG2$
 \end{lstlisting}
+
 \paragraph{Minne}
-Datamaskiner som bruker opp tilgjengelig minne må skrive til disk for å få plass til mellomlagrede data. Data som må hentes fra disk vil ha en betydelig høyere aksesstid enn når fysisk minne brukes til mellomlagring \ref{http://en.wikipedia.org/wiki/Paging#Performance}. 
+Datamaskiner som bruker opp tilgjengelig minne må skrive til disk for å få plass til mellomlagrede data. Data som må hentes fra disk vil ha en betydelig høyere aksesstid enn når fysisk minne brukes til mellomlagring /cite{http://en.wikipedia.org/wiki/Paging#Performance}. 
 Kontinuerlig høyt minneforbruk kan være en indikasjon på flere minnekrevende applikasjoner på samme server, en applikasjon har minnelekkasje, eller at mengden minne ikke strekker til.
 
 Hva en prosess kan kreve. Virtuelt minne teknologi. CheckMem fra NSClient++
@@ -294,7 +294,7 @@ define service {
 \end{lstlisting}
 linux-plugin fra nagios-plugins: check\_procs 
 
-Å se at en tjeneste kjører via Windows kan gi falsk informasjon. Et eksempel her er Microsoft's terminal services. Tjenesten står som kjørende i Windows, men brukere får ikke koblet til. Dette kommer av at tjenesten har hengt seg, uten at den står som “stoppet”. Dette merkes ikke før brukere ringer inn og beskriver problemet \cite{http://www.petri.co.il/forums/showthread.php?t=41357}. Som nevnt i x.x vil en bedre sjekk være å teste selve tjenesten, som i neste delkapittel.
+Å se at en tjeneste kjører via Windows kan gi falsk informasjon. Et eksempel her er Microsoft's terminal services. Tjenesten står som kjørende i Windows, men brukere får ikke koblet til. Dette kommer av at tjenesten har hengt seg, uten at den står som “stoppet”. Dette merkes ikke før brukere ringer inn og beskriver problemet /cite{http://www.petri.co.il/forums/showthread.php?t=41357}. Som nevnt i x.x vil en bedre sjekk være å teste selve tjenesten, som i neste delkapittel.
 
 \paragraph{LDAP, DNS og DHCP}
 
@@ -352,7 +352,7 @@ check_cluster --service -l "Check HTTP"  -d $SERVICESTATEID:localhost:Check HTTP
 \end{lstlisting}
 
 \subsubsection{Databaser}
-Tre forskjellige databasemotorer benyttes av IKT-avdelingen. Disse er MySQL, MSSQL og Oracle DB. Disse opererer ikke helt på samme måten. \cite{http://en.wikipedia.org/wiki/Comparison_of_relational_database_management_systems}. Derfor blir ikke de samme parameterene overvåket på alle. Felles for alle er:
+Tre forskjellige databasemotorer benyttes av IKT-avdelingen. Disse er MySQL, MSSQL og Oracle DB. Disse opererer ikke helt på samme måten. /cite{http://en.wikipedia.org/wiki/Comparison\_of\_relational\_database\_management\_systems}. Derfor blir ikke de samme parameterene overvåket på alle. Felles for alle er:
 
 Connection time (tid det tar å koble til SQL serveren).
 Connected users (antall aktive sessioner mot SQL serveren).
@@ -376,22 +376,22 @@ Connected users sjekker hvor mange sessioner som er koblet til database tjeneste
 Cache hit
 Cache hit er hvor ofte data hentes ut fra databasemotorens egen cache, slik at dataen ikke leses fra disk, Dette sparer diskene for I/O operasjoner. Hvis cache hit ligger på et høyt nivå (90-100 \%), indikerer dette at tabellene det spørringes mest mot lagres i cache. Når cache hit ligger under 90 \% kan dette være et resultat av at serveren ikke har nok minne til å lagre tabellene i cache. Dette kan indikere et minneproblem.
 
-Cache hiten er anbefalt fra Oracle sin side å ligge over 90 \% \cite{http://www.dbspecialists.com/files/presentations/buffercache.html}. 
-For MSSQL er så nærme 100 \% cache hit et godt utgangspunkt. Dette indikerer at MSSQL klarer å lagre de mest brukte tabellene i minne. \cite{http://www.databasejournal.com/features/mssql/article.php/3932406/Top-10-SQL-Server-Counters-for-Monitoring-SQL-Server-Performance.htm}
+Cache hiten er anbefalt fra Oracle sin side å ligge over 90 \% /cite{http://www.dbspecialists.com/files/presentations/buffercache.html}. 
+For MSSQL er så nærme 100 \% cache hit et godt utgangspunkt. Dette indikerer at MSSQL klarer å lagre de mest brukte tabellene i minne. /cite{http://www.databasejournal.com/features/mssql/article.php/3932406/Top-10-SQL-Server-Counters-for-Monitoring-SQL-Server-Performance.htm}
 MySQL databasene til IKT-avdelingen lagrer all database data i minnet, så her vil det ikke være relevant å sjekke cache hit. Sjekken er satt opp slik at ordinære MySQL-servere vil kunne settes opp med denne sjekken i etterkant.
 
 Basis installering av plugin 
 For at Icinga serveren skal kunne snakke med de forskjellige database-motorene trengs en klient for hver av de. 
 
 Oracle
-Databaseklienten finnes på Oracle sine nettsider \cite{http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html}. Den finnes ikke som en deb-pakke, som som brukes for Debian. Det finnes derimot en rpm-pakke, som brukes av blant annet Red Hat. Alien \cite{http://wiki.debian.org/Alien} ble brukt til å konvertere rpm-pakken over til deb-pakke før installasjon på Icinga-serveren. 
+Databaseklienten finnes på Oracle sine nettsider /cite{http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html}. Den finnes ikke som en deb-pakke, som som brukes for Debian. Det finnes derimot en rpm-pakke, som brukes av blant annet Red Hat. Alien /cite{http://wiki.debian.org/Alien} ble brukt til å konvertere rpm-pakken over til deb-pakke før installasjon på Icinga-serveren. 
 \begin{lstlisting}
 alien oracle-instantclient11.2-basic-11.2.0.3.0-1.x86_64.rpm 
 dpkg -i oracle-instantclient11.2-basic-11.2.0.3.0-1.x86_64.deb
 \end{lstlisting}
 Videre trengs også en databasedriver, som gjør det mulig for Perl å benytte klienten. For oracle databaser brukes perl DBI driver for Oracle “libdbd-oracle-perl”.
 
-På en Oracle server vil hver database ha sin egen instans \ref{http://searchoracle.techtarget.com/answer/What-s-an-Oracle-instance}. Det vil si at parametre som overvåkes vil være forskjellig fra database til database. Navnene til instansene legges derfor inn som en egendefinert variabel i hver enkel Oracle-servers host-objekt. Når pluginen kjøres sjekkes filen tnsnames.ora \ref{tnsnames} som inneholder tilkoblingsinformasjon for hver enkelt instans.
+På en Oracle server vil hver database ha sin egen instans /cite{http://searchoracle.techtarget.com/answer/What-s-an-Oracle-instance}. Det vil si at parametre som overvåkes vil være forskjellig fra database til database. Navnene til instansene legges derfor inn som en egendefinert variabel i hver enkel Oracle-servers host-objekt. Når pluginen kjøres sjekkes filen tnsnames.ora /ref{tnsnames} som inneholder tilkoblingsinformasjon for hver enkelt instans.
 \begin{lstlisting}
 ORA11 =
  (DESCRIPTION = 
@@ -429,14 +429,16 @@ eeval [ oracle_health ] =
 MySQL
 I MySQL ligger de nødvendige pakkene i Debians pakkebrønnen og kan installeres med apt. De nødvendige pakkene er “mysql-client”, for database koblingen og “libclass-dbi-mysql-perl”, som er en Perl-modul for å kunne koble til en MySQL-server. 
 MSSQL
-For MSSQL var det vanskelig å finne en databaseklient som er opensource. Her endte vi opp med FreeTDS \cite{http://www.freetds.org/}, sammen med Perl-modulen “libdbd-sybase-perl”
+For MSSQL var det vanskelig å finne en databaseklient som er opensource. Her endte vi opp med FreeTDS /cite{http://www.freetds.org/}, sammen med Perl-modulen “libdbd-sybase-perl”
 
 Plugin
 Plugin-ene som blir benyttet for databaser er skrevet av firmaet “Consulting \& Solutions” og heter “Check\_MySQL\_Health”, “Check\_Oracle\_Health” og “Check\_MSSQL\_Health” /ref{http://www.consol.com/open-source-monitoring/database-monitoring/}
 
 Disse må kompileres fra kildekoden. For å gjøre dette må en først konfigurere de med riktige parametere. Dette er de samme for alle tre plugin-ene.
 
+\begin{lstlisting}
 ./configure --prefix=/usr/lib/nagios/plugins/ --with-nagios-user=nagios --with-nagios-group=nagios --with-perl=/usr/bin/perl --with-statefiles-dir=/tmp
+\end{lstlisting}
 
 Pluginen kompileres og legges i riktig bane ved å kjøre kommandoene
 
@@ -445,13 +447,15 @@ make INSTALL
 
 For å koble til databaseserverne trengs servicebrukere i hver av de. Her holder det med minimale tilganger slik at denne ikke har tilgang til å endre tabeller og spørre etter info. Brukeren vil kun ha tilgang til å kjøre “Server administrasjon” kommandoer.
 
-I MySQL brukes følgende kode for å opprette denne brukeren \cite{http://dev.mysql.com/doc/refman/5.0/en/privileges-provided.html#priv_usage}:
+I MySQL brukes følgende kode for å opprette denne brukeren /cite{http://dev.mysql.com/doc/refman/5.0/en/privileges-provided.html#priv\_usage}:
+\begin{lstlisting}[language=SQL]
 GRANT USAGE ON *.* TO 'icinga'@'10.60.0.20' IDENTIFIED BY 'Bachel0r'; 
+\end{lstlisting}
 
-Script for å opprette brukere i Oracle og MSSQL finnes i vedlegg \ref{sqlscript}.
+Script for å opprette brukere i Oracle og MSSQL finnes i vedlegg /ref{sqlscript}.
 
 Konfigurasjonen
-Kommandoen konfigureres med muligheten for å bestemme hvilken sjekk som skal kjøre i $ARG1$.
+Kommandoen konfigureres med muligheten for å bestemme hvilken sjekk som skal kjøre i \$ARG1\$.
 
 Her brukes MySQL som eksempel men dette vil være lik på de andre forskjellige SQL serverne. 
 \begin{lstlisting}
@@ -464,12 +468,12 @@ MySQL Cluster
 MySQL Cluster er et distribuert oppsett for MySQL. Ved IKT-avdelingen benyttes et MySQL Cluster med NDB som lagringsmotor, der databasene kjører i minnet. Et MySQL Cluster består av tre forskjellige nodetyper:
 
 \begin{itemize}
-\item Management - her konfigureres clusteret og en setter opp hvor mange Data- og SQL-noder som kan kobles til.
-\item Data - oppbevarer dataene i RAM. Disse håndterer lastbalasering, replikering, failover og gjenoppbygging automatisk i mellom hverandre.
-\item SQL - MySQL servere som kobler seg til data-nodene for å hente og lagre data.
+	\item Management - her konfigureres clusteret og en setter opp hvor mange Data- og SQL-noder som kan kobles til.
+	\item Data - oppbevarer dataene i RAM. Disse håndterer lastbalasering, replikering, failover og gjenoppbygging automatisk i mellom hverandre.
+	\item SQL - MySQL servere som kobler seg til data-nodene for å hente og lagre data.
 \end{itemize}
 
-Den enkleste måten å hente ut statistikk om et MySQL Cluster er å benytte seg av mangement programmet “ndb\_adm” som kan hentes ut fra installasjonspakken til mysql-cluster \cite{http://dev.mysql.com/downloads/cluster}. I ndb\_adm kan en se hvor mange noder av hver type som er tilkoblet og minneforbruket til hver av datanodene. De plugin-ene som benyttes baserer seg på output fra “ndb\_adm”.
+Den enkleste måten å hente ut statistikk om et MySQL Cluster er å benytte seg av mangement programmet “ndb\_adm” som kan hentes ut fra installasjonspakken til mysql-cluster /cite{http://dev.mysql.com/downloads/cluster}. I ndb\_adm kan en se hvor mange noder av hver type som er tilkoblet og minneforbruket til hver av datanodene. De plugin-ene som benyttes baserer seg på output fra “ndb\_adm”.
 
 Antallet noder tilkoblet overvåkes med pluginen check\_ndbd (https://www.monitoringexchange.org/inventory/Check-Plugins/Database/MySQL/NDB-node-monitoring). Her ble det gjort en endring i koden slik at serveren som ndb\_adm kobler seg til kan spesifiseres som en parameter.
 
@@ -490,13 +494,13 @@ define command {
 
 Exchange er en kritisk tjeneste for fylkeskommunen. Her routes og lagres all e-post som sendes ut og inn av alle brukere. 
 
-Gjennom perfmon har en tilgang til en rekke viktige tall (cite (http://www.solarwinds.com/resources/videos/exchange-server-monitoring-best-practices.html) for å måle ytelsen i Exchange. Disse kan overvåkes over NRPE med check\_counter i NSClient++.
+Gjennom perfmon har en tilgang til en rekke viktige tall /cite{http://www.solarwinds.com/resources/videos/exchange-server-monitoring-best-practices.html} for å måle ytelsen i Exchange. Disse kan overvåkes over NRPE med check\_counter i NSClient++.
 \begin{itemize}
-\item Antall tilkoblinger
-\item Gjennomsnittlig responstid
-\item Antall meldinger sendt per sekund. Ved høye tall kan det være mistanke om at mail-serveren blir brukt til spam, eller at det er zombier på nettverket.
-\item Antall LDAP-søk som gir timeout. Feil mot AD.
-\item Økning i SMTP-køen
+	\item Antall tilkoblinger
+	\item Gjennomsnittlig responstid
+	\item Antall meldinger sendt per sekund. Ved høye tall kan det være mistanke om at mail-serveren blir brukt til spam, eller at det er zombier på nettverket.
+	\item Antall LDAP-søk som gir timeout. Feil mot AD.
+	\item Økning i SMTP-køen
 \end{itemize}
 
 Microsoft har gitt ut egne anbefalinger til grenseverdier. http://gallery.technet.microsoft.com/office/Performance-and-Threshold-d32ff5a6
@@ -528,7 +532,7 @@ Det vil det også være naturlig å sette opp servicedependency-er mellom ERP We
 \subsubsection{Infrastruktur}
 Infrastruktur består av de grunnleggende enhetene de andre serverne er avhengig av. I dette prosjektet er det definert til: switcher, routere, brannmurer, UPS, virtualiseringsteknologi og serverrommiljø.
 
-Infrastrukturovervåkning er essensielt for å kunne levere IT-Tjenester. Det er viktig at design av overvåkningen fører til at man raskt og effektivt skal kunne oppdage og presentere feil som oppstår. For å få til dette i Icinga benyttes “parent” /ref{parents}. De aller fleste enheter i infrastrukturen (untatt servermiljø) vil være parent for andre enheter. Dette reflekteres i et statuskart i icinga, som vist i Figur{statusmap}.
+Infrastrukturovervåkning er essensielt for å kunne levere IT-Tjenester. Det er viktig at design av overvåkningen fører til at man raskt og effektivt skal kunne oppdage og presentere feil som oppstår. For å få til dette i Icinga benyttes “parent” /ref{parents}. De aller fleste enheter i infrastrukturen (untatt servermiljø) vil være parent for andre enheter. Dette reflekteres i et statuskart i icinga, som vist i Figur /ref{statusmap}.
 
 \paragraph{Switcher}
 Switcher er nettverksutstyr som opererer på lag 2 i OSI modellen. IKT-avdelingen benytter switcher med lag 3 funksjonalitet. Lag 3 funksjonalitet vil si at switchen kan kommunisere over IP. Alle switchene IKT-avdelingen benytter støtter SNMP-protokollen, som brukes til overvåkingen.
@@ -539,17 +543,17 @@ Det er laget et generisk oppsett som overvåker temperatur, PSU og viftestatus. 
 
 Dersom en vifte eller PSU raporteres som defekt vil det raporteres som en CRITICAL-status i Icinga. For temperatur er grenseverdiene satt til xx for WARNING og xx for CRITICAL.
 
-Switchene IKT-Avdelingen bruker er forskjellige modeller fra leverandørne Cisco, Dell og HP. Disse overvåkes med plugin-ene "check\_nwc\_health" \ref{http://labs.consol.de/nagios/check_nwc_health/} for Cisco og HP og check\_snmp\_powerconnect for Dell \ref{http://exchange.nagios.org/directory/Plugins/Hardware/Network-Gear/Dell/Check-PowerConnect-Switch/details}.
+Switchene IKT-Avdelingen bruker er forskjellige modeller fra leverandørne Cisco, Dell og HP. Disse overvåkes med plugin-ene "check\_nwc\_health" /cite{http://labs.consol.de/nagios/check\_nwc\_health/} for Cisco og HP og check\_snmp\_powerconnect for Dell /cite{http://exchange.nagios.org/directory/Plugins/Hardware/Network-Gear/Dell/Check-PowerConnect-Switch/details}.
 
 \paragraph{Routere og brannmurer}
 IKT-avdelinger benytter Cisco ASA og Cisco PIX routere mellom forskjellige subnettverk. I tillegg utfører de gjerne oppgaver som pakkefiltrering, NAT og IPsec-tunneler.
 Ressurser
-Som for switcher \ref{switch} brukes "check\_nwc\_health" til å se at sensorer er OK. I tillegg
+Som for switcher /ref{switch} brukes "check\_nwc\_health" til å se at sensorer er OK. I tillegg
 sjekkes CPU-bruk og minneforbruk gjennom samme plugin. 
 
 For CPU-bruk sjekkes gjennomsnittet over 5 minutter. Grenseverdier er satt til 80 % på WARNING og 90 % på CRITICAL, i henhold til det cisco anbefaler \cite {http://www.cisco.com/en/US/prod/collateral/netmgtsw/ps6504/ps6528/ps12363/white_paper_c11-726161.html}. Høy CPU-bruk kan føre til dårligere ytelse, høy rate av buffer-feil og generelle feil med responsivitet /cite {http://www.cisco.com/en/US/products/hw/routers/ps133/products_tech_note09186a00800a70f2.shtml}
 
-I følge Cisco kan høytminneforbruk under vanlig operasjon indikere at brannmuren er under angrep. \cite{http://www.cisco.com/en/US/products/ps6120/products_tech_note09186a0080b8e100.shtml#showmemory}. Dersom en router bruker opp tilgjengelig minne kan det føre til at routeren slutter å svare på kommandoer, telnet-tilkoblinger eller henger \cite http://www.cisco.com/en/US/products/sw/iosswrel/ps1831/products_tech_note09186a00800a6f3a.shtml. Cisco anbefaler en grenseverdi på 15 % ledig minne /cite {http://www.cisco.com/en/US/prod/collateral/netmgtsw/ps6504/ps6528/ps12363/white_paper_c11-726161.html}. Grenseverdier for minne er derfor satt til 20 % for WARNING og 15% for CRITICAL.
+I følge Cisco kan høytminneforbruk under vanlig operasjon indikere at brannmuren er under angrep. /cite{http://www.cisco.com/en/US/products/ps6120/products\_tech\_note09186a0080b8e100.shtml#showmemory}. Dersom en router bruker opp tilgjengelig minne kan det føre til at routeren slutter å svare på kommandoer, telnet-tilkoblinger eller henger /cite http://www.cisco.com/en/US/products/sw/iosswrel/ps1831/products\_tech\_note09186a00800a6f3a.shtml. Cisco anbefaler en grenseverdi på 15 \% ledig minne /cite {http://www.cisco.com/en/US/prod/collateral/netmgtsw/ps6504/ps6528/ps12363/white\_paper\_c11-726161.html}. Grenseverdier for minne er derfor satt til 20 % for WARNING og 15% for CRITICAL.
 Failover
 
 Cisco router / Brannmurer har en viktig funksjon som kalles failover. Denne fungerer slik at to like enheter settes opp, der en blir satt som “primary” og den andre som “secondary”, slik at denne kan overta for “primary” om det skulle bli nødvendig. Disse kobles sammen med en seriellkabel. Figur /ref{ciscoasafailover} viser hvordan et Cisco-failover er satt opp. 
