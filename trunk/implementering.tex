@@ -593,13 +593,13 @@ For å overvåke båndbreddebruk ut av og inn på en port Cisco ASA og PIX finne
 
 \paragraph{Netflow}
 
-Funksjonen Netflow cite: http://www.cisco.com/en/US/prod/collateral/iosswrel/ps6537/ps6555/ps6601/prod\_white\_paper0900aecd80406232.html fungerer ved at enheten samler inn informasjon om og statistikk over alle pakker som går ut og inn av portene. Dette krevet at Netflow konfigureres på alle routerne og det vil også ta opp ekstra minne og CPU cite: http://www.cisco.com/en/US/technologies/tk543/tk812/technologies\_white\_paper0900aecd802a0eb9.html. Derfor ble det avgjort å ikke benytte Netflow.
+Funksjonen Netflow \cite{iscoiosnetflow} fungerer ved at enheten samler inn informasjon om og statistikk over alle pakker som går ut og inn av portene. Dette krevet at Netflow konfigureres på alle routerne og det vil også ta opp ekstra minne og CPU \cite{cisconetflowperf}. Derfor ble det avgjort å ikke benytte Netflow.
 
 \paragraph{Telle pakker}
 
 Både Cisco Pix og ASA har tellere for antall byte som går ut og inn på en nettverksport. For å kalkulere båndbredde bruk over et intervall kan en hente ut disse, vente en gitt periode og hente ut nye verdier. Da vil bruken være ((målepunkt2 - målepunkt1)*8) / antall sekunder.
 
-Mange plugins benytter seg dette ved å lese ut “ifInOctets” og “ifOutOctets” over SNMP. Det er også disse som er benyttet i Ciscos notat “How to Calculate Bandwidth Using SNMP” cite http://www.cisco.com/en/US/tech/tk648/tk362/technologies\_tech\_note09186a008009496e.shtml 
+Mange plugins benytter seg dette ved å lese ut “ifInOctets” og “ifOutOctets” over SNMP. Det er også disse som er benyttet i Ciscos notat “How to Calculate Bandwidth Using SNMP” \cite{ciscobandwidth}. 
 
 En stor ulempe med å benytte disse er at de er 32 bit, og vil dermed nullstilles kjapt ved høye hastigheter. For 1000Mbps vil tiden det vil ta til telleren går rundt være ((2\^32)-1) / ((10\^9)/8) = ca. 34 sekunder. Se Tabell /ref 
 
@@ -616,9 +616,9 @@ En stor ulempe med å benytte disse er at de er 32 bit, og vil dermed nullstille
 \end{table}
 \end{center}
 
-Det er derfor anbefalt å bruke 64-bit-variablene ifHCOutOctets og ifHCInOctets i stedet. Cite http://www.cisco.com/en/US/tech/tk648/tk362/technologies\_q\_and\_a\_item09186a00800b69ac.shtml.
+Det er derfor anbefalt å bruke 64-bit-variablene ifHCOutOctets og ifHCInOctets i stedet \cite{ciscosnmpcounters}.
 
-Pluginen det er tatt utgangspunkt i for å hente ut båndbreddebruk heter check\_iftraffic64 cite http://exchange.nagios.org/directory/Plugins/Network-Connections,-Stats-and-Bandwidth/check\_iftraffic64/details. Denne er noe omskrevet for å kunne sende inn absolutte verdier som grenseverdier for varsling. I generic-firewall er det satt opp to egendefinerte variabler “WANWARN” og “WANCRIT”, som setter standard grenseverdier for alle brannmurer. For brannmurer der det er normalt med høyere båndbreddebruk er disse variablene overstyrt i konfigurasjonen for host-objektet.
+Pluginen det er tatt utgangspunkt i for å hente ut båndbreddebruk heter check\_iftraffic64 \fnurl{Check Cisco IFtraffic}{http://exchange.nagios.org/directory/Plugins/Network-Connections,-Stats-and-Bandwidth}. Denne er noe omskrevet for å kunne sende inn absolutte verdier som grenseverdier for varsling. I generic-firewall er det satt opp to egendefinerte variabler “WANWARN” og “WANCRIT”, som setter standard grenseverdier for alle brannmurer. For brannmurer der det er normalt med høyere båndbreddebruk er disse variablene overstyrt i konfigurasjonen for host-objektet.
 
 \subsubsection{VMware og Citrix Xen}
 
