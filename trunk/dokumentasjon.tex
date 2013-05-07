@@ -1,4 +1,26 @@
 \section{Dokumentasjon}
+
+I Figur \ref{hostfigur} ser vi hvilken generics de forskjellige hostene skal ha.
+
+\begin{center}
+\begin{figure}
+    \includegraphics{img/host}
+    \caption{Oversikt over host generic plassering}
+    \label{hostfigur}
+\end{figure}
+\end{center}
+
+I Figur \ref{hostgroupfigur} ser vi hvilke hostgroups de forskjellige hostene skal være medlem av.
+
+\begin{center}
+\begin{figure}
+    \includegraphics{img/hostgroups}
+    \caption{Oversikt over hosts hostgroupplassering}
+    \label{hostgroupfigur}
+\end{figure}
+\end{center}
+
+
 \begin{itemize}
 	\item Fremgang for nye enheter (host, hostgroup, templates osv)
         \item Arv og dependency
@@ -9,7 +31,7 @@
 \end{itemize}
 \subsection{Legge til mange host-objekter}
 \begin{itemize}
-	\item Et selvlaget script ref gen.bash brukes for å effektivt legge til mange hosts med Nils to reference his fancy smancy addhost-script med mulighet til å legge til hosts fra CSV-fil
+	\item Et selvlaget script ref gen.bash brukes for å effektivt legge til mange hosts med Nils to reference his fancy smancy addhost-script med mulighet til å legge til hosts fra CSV-fil /ref{kildekode}
 \end{itemize}
 \subsection{Autentisering mot Active Directory} 
 LDAP-autentisering brukes for å styre hvem som skal ha tilgang til web-grensesnittene, ved hjelp av grupper og brukere i Active Directory. Dette er støttet direkte i Icinga-web, men må konfigureres på andre måter for Icinga Classic. Det kan opprettes en sikkerhetsgruppe i AD som inkluderer medlemmene som skal få tilgang. Alle som er med i denne gruppen vil få tilgang til Icinga Web, der det også kan defineres hvilken informasjon hver bruker skal kunne se. 
@@ -33,7 +55,7 @@ Icinga classic autentiserer mot AD gjennom modulene ldap og authnz\_ldap.
 
 /usr/share/icinga-web/app/modules/AppKit/config/auth.xml
 
-\begin{lstlisting}
+\begin{lstlisting]
   <ae:parameter name="ldap_allow_anonymous">false</ae:parameter>
             <ae:parameter name="ldap_dsn">ldap://10.60.0.22</ae:parameter>
             <ae:parameter name="ldap_start_tls">false</ae:parameter>
@@ -53,7 +75,7 @@ Kontaktgrupper hentes fra OU-en icinga\_grupper der alle grupper hentes ut og op
 
 Eksempel på generisk service som blir opprettet:
 
-\begin{lstlisting}
+\begin{lstlisting}[float=h]
 
 define service {
     name network_services
