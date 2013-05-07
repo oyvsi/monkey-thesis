@@ -450,7 +450,7 @@ SNMP benytter seg av UDP for å levere traps. Fordi UDP er en såkalt upåliteli
 For å benytte SNMP på Windows- og Linux-servere kreves installasjon av en SNMP-agent. http://technet.microsoft.com/en-us/library/bb726987.aspx http://www.net-snmp.org/ 
 
 \subsubsection{WMI (Windows Management Instrumentation)}
-WMI er et grensesnitt som gjør det mulig å lage programmer eller script som utfører oppgaver mot operativsystemet Windows, enten lokalt eller mot eksterne maskiner. Disse oppgavene kan være alt fra å restarte maskinen til å hente ut logger over hendelser som har intruffet på maskinen. I et overvåkningssytem vil det være mest relevant å kjøre kommandoer som henter ut informasjon om maskinen og tjenester som kjører på den. Dette kan for eksempel være hvilke prosesser som bruker mest CPU-tid.
+WMI er et grensesnitt som gjør det mulig å lage programmer eller script som utfører oppgaver mot operativsystemet Windows, enten lokalt eller mot eksterne maskiner. Disse oppgavene kan være alt fra å restarte maskinen til å hente ut logger over hendelser som har inntruffet på maskinen. I et overvåkningssytem vil det være mest relevant å kjøre kommandoer som henter ut informasjon om maskinen og tjenester som kjører på den. Dette kan for eksempel være hvilke prosesser som bruker mest CPU-tid.
 
 For å benytte WMI-spørringer fra en ekstern enhet må det konfigureres brukertilgang og brannmurregler /cite http://msdn.microsoft.com/en-us/library/windows/desktop/aa822854(v=vs.85).aspx. Med NSclient[h]++ har en mulighet til å kjøre WMI-queries over NRPE.
 
