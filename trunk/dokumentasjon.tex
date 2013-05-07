@@ -75,8 +75,7 @@ Kontaktgrupper hentes fra OU-en icinga\_grupper der alle grupper hentes ut og op
 
 Eksempel på generisk service som blir opprettet:
 
-\begin{lstlisting}[float=h]
-
+\begin{lstlisting}
 define service {
     name network_services
     register 0
@@ -86,7 +85,6 @@ define service {
     notification_options    w,c,r
     contact_groups          network_contact_group
 }
-
 \end{lstlisting}
 
 Denne brukes på en cisco firewall: 
@@ -99,6 +97,4 @@ define service {
         hostgroup_name all_firewalls
         check_command check_network_component!cpu-load
 }
-
-
 \end{lstlisting}

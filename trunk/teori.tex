@@ -30,23 +30,21 @@ Forskjellen i ITIL på et problem og en hendelse er at hendelser kan gi indikasj
 
 Overvåkning er også en del av komponenten “Capacity Management” innenfor kategorien “Service Delivery”, som legger retningslinjer for proaktive handlinger framfor reaktive. Proaktive handlinger innebærer å være i forkant av hendelser som kan oppstå, og ikke å reagere når det allerede har skjedd; reaktivt. Informasjon fra overvåkningen kan hjelpe til med å identfisere situasjoner som kan håndteres før hendelser inntreffer og får innvirkning for brukere.
 
-/ref http://www.teamquest.com/solutions/itil/service-support/
-/ref http://www.itilfoundations.com/processes/capacity-management/
-/ref http://apmdigest.com/event-management-reactive-proactive-or-predictive
+\cite{itil1}
+\cite{itil2}
+\cite{events}
 
 \subsection{Hvilke Overvåkingsløsninger finnes}
-Det finnes i dag mange løsninger for overvåkning av IT-systemer og infrastruktur /cite{http://en.wikipedia.org/wiki/Comparison\_of\_network\_monitoring\_systems}. Det ble tatt utgangspunkt prosjektets rammer og krav til fuksjonalitet, og plukket ut noen løsninger som ble sett nærmere på. Punktene om ønsket funksjonalitet ble også vektlagt slik at skulle være lettere å implementere dette i senere faser av prosjektetet eller senere prosjekter. 
+Det finnes i dag mange løsninger for overvåkning av IT-systemer og infrastruktur \cite{wiki:networkmonitoring}. Det ble tatt utgangspunkt prosjektets rammer og krav til fuksjonalitet, og plukket ut noen løsninger som ble sett nærmere på. Punktene om ønsket funksjonalitet ble også vektlagt slik at skulle være lettere å implementere dette i senere faser av prosjektetet eller senere prosjekter. 
 
 Det ble også gjort en gjennomgang med oppdragsgiver og med diskusjon rundt de ulike løsningene. De som ble vurdert nærmere etter den første runden med research har alle en open source lisens og en utbredt brukermasse. 
 
-Zenoss, har en open source-lisens på Zenoss Core. Zenoss brukes av mange store aktører /cite{http://www.zenoss.com/customers/index}, som gjorde denne til en verdig kandidat. Det ble likevel valgt å ikke bruke Zenoss på grunn av vinklingen de har mot “Enterprise Solutions” /cite{http://wiki.zenoss.org/Category:ZenPacks}, som involverer at man må kjøpe tilleggsmoduler til selve kjernen for å oppnå en fullverdig overvåkningsløsning.
+Zenoss, har en open source-lisens på Zenoss Core. Zenoss brukes av mange store aktører \cite{zenoss}, som gjorde denne til en verdig kandidat. Det ble likevel valgt å ikke bruke Zenoss på grunn av vinklingen de har mot “Enterprise Solutions” \cite{zenpacks}, som involverer at man må kjøpe tilleggsmoduler til selve kjernen for å oppnå en fullverdig overvåkningsløsning.
 
-Observium har lagt mye vekt på å visualisere ytelsesdata. Dette vises med statistikk og grafer over hver enhet som overvåkes. Observium er ikke ment for å erstatte en såkalt “UP/Down overvåkning”, da alarmer og grenseverdier for tjenester og servere ikke støttes. /cite{http://www.observium.org/wiki/Main\_Page}. Dette gjør at Observium ikke kunne benyttes i denne oppgaven.
-Zabbix /cite{http://www.zabbix.com/index.php} var en av de sterkeste kandidatene. Denne støtter mange punkter som vi er ute etter, men antall plugins utenfor selve programvaren er for få. Zabbix er også et mer monolitisk system, og ikke like modulært. Dette er veklagt i oppgavebeskrivelsen /cite{http://knowledge.oscc.org.my/practice-areas/rnd/benchmark-report/comparison-report-on-network-monitoring-system/at\_download/file}
+Observium har lagt mye vekt på å visualisere ytelsesdata. Dette vises med statistikk og grafer over hver enhet som overvåkes. Observium er ikke ment for å erstatte en såkalt “UP/Down overvåkning”, da alarmer og grenseverdier for tjenester og servere ikke støttes. \cite{observium}. Dette gjør at Observium ikke kunne benyttes i denne oppgaven.
+Zabbix \cite{zabbix} var en av de sterkeste kandidatene. Denne støtter mange punkter som vi er ute etter, men antall plugins utenfor selve programvaren er for få. Zabbix er også et mer monolitisk system, og ikke like modulært. Dette er veklagt i oppgavebeskrivelsen \cite{zabbixandnagios}
 
-Nagios er kjent som en av de mest utprøvde overvåkningsløsningene /cite{http://en.wikipedia.org/wiki/Nagios, http://www.linux.org/article/view/the-monitoring-setup-part-1-installing-centreon-nagios-ndoutils, http://www.cio.com.au/article/373428/5\_open\_source\_network\_management\_projects\_watch/}
-
-/cite{http://sectools.org/tag/traffic-monitors/}, og har et enormt antall brukere som aktivt bidrar til å utvikle plugins og moduler til Nagios-kjernen /cite{http://nagios.org/about/community}. Det finnes flere websider der brukere bidrar med og diskuterer plugin-er og moduler, blant annet Nagios Exchange (http://exchange.nagios.org) og Monitoring Exchange (https://www.monitoringexchange.org). Det som gjør Nagios spesielt interessant er fleksibiliteten Nagios har med tanke på konfigurasjon, integrasjon og plugin-er.
+Nagios er kjent som en av de mest utprøvde overvåkningsløsningene \cite{wiki:nagios} \cite{monitoringsetup} \cite{opensourcewatch} \cite{sectools}, og har et enormt antall brukere som aktivt bidrar til å utvikle plugins og moduler til Nagios-kjernen \cite{nagioscommunity}. Det finnes flere websider der brukere bidrar med og diskuterer plugin-er og moduler, blant annet Nagios Exchange \cite{nagiosexchange} og Monitoring Exchange \cite{monitoringexchange}. Det som gjør Nagios spesielt interessant er fleksibiliteten Nagios har med tanke på konfigurasjon, integrasjon og plugin-er.
 
 Icinga er en fork av Nagios, og har blitt utviklet videre siden 2004. Konfigurasjon, plugin-er og addons er kompatible med det som benyttes for Nagios. Forskjellen er selve arkitekturen som er nå består tre separate deler, og abstraksjon mot databaselaget. 
 
@@ -63,17 +61,17 @@ I Figur \ref{losninger} vises en oversikt over hvor ofte hver av disse har blitt
 \subsection{Valg av kjerneprogramvare}
 Valg av kjerneprogramvare var gruppens viktigste valg, da det la grunnmuren for restenu av prosjektet, og ville få stor innvirkning på sluttresultatet. Etter en vurdering av alternativene som nevnt over ble det besluttet å bygge overvåkningsløsningen på Icinga framfor nagios.
 
-Icinga sitt distribuerte system består av kjernen, som står for prossessering, et databaselag, og administrering av systemet via et webgrensesnitt. Dette er tilrettelagt for et distribuert oppsett. Nagios sin arkitektur har avhengigheter mellom web og lagring av status, som fører til at disse ikke kan separeres. Det er derimot mulig å separere MySQL-databasen som Nagios benytter. /ref https://www.icinga.org/about/architecture/
+Icinga sitt distribuerte system består av kjernen, som står for prossessering, et databaselag, og administrering av systemet via et webgrensesnitt. Dette er tilrettelagt for et distribuert oppsett. Nagios sin arkitektur har avhengigheter mellom web og lagring av status, som fører til at disse ikke kan separeres. Det er derimot mulig å separere MySQL-databasen som Nagios benytter \cite{icingaarchitecture}.
 
-For uthenting av informasjon i Icinga er det utviklet et API som brukes via Icinga-Web. Dette gir ett punkt for uthenting av data, med samme oppbygging for alle spørringer. I Nagios er det ikke noen standardisert måte å hente ut informasjon. /ref http://docs.icinga.org/latest/en/icinga-web-api.html
+For uthenting av informasjon i Icinga er det utviklet et API som brukes via Icinga-Web. Dette gir ett punkt for uthenting av data, med samme oppbygging for alle spørringer. I Nagios er det ikke noen standardisert måte å hente ut informasjon \cite{icingaapi}. 
 
-Et annet punkt er støtte for LDAP-autentisering integrert i Icinga Web, som videre kan benyttes til å styre aksess til ulik informasjon for brukere. Med Nagios kan en også innføre LDAP-støtte, men dette blir da autentisering via en web-server, og videre kontroll av aksess er ikke mulig. Nagios har noe aksessyring, men det er bare på et objekt kalt Contact-groups. Her har icinga aksesstyring på en rekke flere objekter. /ref https://www.icinga.org/about/icingaweb/
+Et annet punkt er støtte for LDAP-autentisering integrert i Icinga Web, som videre kan benyttes til å styre aksess til ulik informasjon for brukere. Med Nagios kan en også innføre LDAP-støtte, men dette blir da autentisering via en web-server, og videre kontroll av aksess er ikke mulig. Nagios har noe aksessyring, men det er bare på et objekt kalt Contact-groups. Her har icinga aksesstyring på en rekke flere objekter \cite{icingaweb}.
 
 For databaseoppsett støtter Icinga de tre databasemotorene PostgresSQL, Oracle og MySQL, i motsetning til Nagios som bare har støtte for MySQL. I oppgavebeskrivelsen er det krav om MySQL, men for fremtidig bruk av Icinga er det mulighet for å benyttet de to andre.
 
-(http://www.freesoftwaremagazine.com/articles/nagios\_and\_icinga)
+http://www.freesoftwaremagazine.com/articles/nagios\_and\_icinga \cite{nagiosvsicinga}
 
-https://www.icinga.org/nagios/
+https://www.icinga.org/nagios/ \cite{icinganagios}
 
 \subsection{Icinga}
 
@@ -92,10 +90,9 @@ Icinga består som i vist i Figur \ref{icingacomponents} av tre separate kompone
 \end{center}
 
 \paragraph{Core}
-Icinga Core håndterer planlegging av sjekker gjennom plugins og tar i mot resultatene av disse. Denne informasjonen sendes gjennom SSL-krypterte TCP-sockets videre til IDO2DB-prosessen (Icinga Data Out to Database) gjennom et interface kalt IDOMOD (Icinga Data Out Module). Ved å bruke disse abstraksjonslagene kan databasemotoren enkelt byttes ut. I dokumentasjonen er det laget veiledninger for MySQL, PostgreSQL og Oracle.
-https://www.icinga.org/about/architecture/
+Icinga Core håndterer planlegging av sjekker gjennom plugins og tar i mot resultatene av disse. Denne informasjonen sendes gjennom SSL-krypterte TCP-sockets videre til IDO2DB-prosessen (Icinga Data Out to Database) gjennom et interface kalt IDOMOD (Icinga Data Out Module). Ved å bruke disse abstraksjonslagene kan databasemotoren enkelt byttes ut. I dokumentasjonen er det laget veiledninger for MySQL, PostgreSQL og Oracle \cite{icingaarchitecture}.
 
-IDOMOD og IDO2DB kommer i en samlet pakke (IDOutils), men kan separeres ut for å skape et distribuert oppsett. CERN i Sveits har nylig implementert et et slikt oppsett med hjelp av lastbalansereren “modgearman”. (http://accelconf.web.cern.ch/accelconf/icalepcs2011/papers/wepmu035.pdf)
+IDOMOD og IDO2DB kommer i en samlet pakke (IDOutils), men kan separeres ut for å skape et distribuert oppsett. CERN i Sveits har nylig implementert et et slikt oppsett med hjelp av lastbalansereren “modgearman” \cite{cernthesis}.
 
 \paragraph{Web}
 
@@ -160,7 +157,7 @@ Sammenhengen mellom objektene er viktig å forstå for å skjønne hvordan sjekk
 \subsection{Plugins}
 Icinga i seg selv kommer uten noen overvåkningssjekker. Til dette benyttes plugins.
 
-Plugins i Icinga er eksterne programmer som kjøres der outputen hentes inn som data. Resultatet av sjekken hentes fra exit-koden (http://en.wikipedia.org/wiki/Exit\_code) og oversettes til en state etter Tabell \ref{state}.
+Plugins i Icinga er eksterne programmer som kjøres der outputen hentes inn som data. Resultatet av sjekken hentes fra exit-koden\cite{wiki:returncode} og oversettes til en state etter Tabell \ref{state}.
 
 
 \begin{table}
@@ -176,7 +173,7 @@ Plugins i Icinga er eksterne programmer som kjøres der outputen hentes inn som 
 	\end{tabular}
 	\begin{tablenotes}
 	\small
-	\item *Ved bruk av Aggressive host checking. (cite http://docs.icinga.org/1.8/en/pluginapi.html).
+	\item *Ved bruk av Aggressive host checking \cite{icingapluginapi}.
 	\end{tablenotes}
 	\caption{State oversikt}
 	\label{state}
@@ -229,7 +226,7 @@ define host {
 \end{lstlisting}
 
 \paragraph{Variabler}
-For å kunne gjøre konfigurasjon av Icinga mest mulig dynamisk er det en rekke forhåndsdefinerte variabler en kan bruke i konfigurasjonsfilene. Disse kalles makroer. En fullstendig liste over disse og hvor de kan benyttes finnes i Icinga-dokumentasjonen. /ref http://docs.icinga.org/latest/en/macrolist.html $HOSTADDRESS$ kan for eksempel benyttes i et command-objekt slik at den bare må skrives en gang, og ikke for hver host. En kan også definere egne variabler som f.eks “\_SSHPORT”. Disse kan også sendes videre til selve kommandoen som kjøres og benyttes som argumenter til programmet som kjører en sjekk, slik:
+For å kunne gjøre konfigurasjon av Icinga mest mulig dynamisk er det en rekke forhåndsdefinerte variabler en kan bruke i konfigurasjonsfilene. Disse kalles makroer. En fullstendig liste over disse og hvor de kan benyttes finnes i Icinga-dokumentasjonen \cite{icingamacro}. $HOSTADDRESS$ kan for eksempel benyttes i et command-objekt slik at den bare må skrives en gang, og ikke for hver host. En kan også definere egne variabler som f.eks “\_SSHPORT”. Disse kan også sendes videre til selve kommandoen som kjøres og benyttes som argumenter til programmet som kjører en sjekk, slik:
 
 \begin{lstlisting}
 define host {
@@ -388,10 +385,10 @@ En kan også erstatte host\_name og dependant\_host\_name med hostgroup og depen
 
 For å sette en avhengighet mellom to host-er benyttes “host dependency”. Dette må ikke forveksles med “parent”, som refererer til nettverksoppsettet. Mens en host dependency går på at en host er avhengig av en annen. Host dependency er bare nyttig i veldig spesielle tilfeller, da det for de fleste tilfeller vil være avhengigheter til en eller flere tjenester på hosten. 
 
-Her er det anbefalt å bruke parents i stedet. /cite Nagios-boka og http://docs.icinga.org/latest/en/dependencies.html.
+Her er det anbefalt å bruke parents i stedet \cite{hostandservicedep}. /cite Nagios-boka og .
 
 \subsection{Protokoller og agenter }
-For å kjøre sjekker på enheter må Icinga-serveren kunne kommunisere med operativsystemene på de ulike enhetene. Icinga henviser til protokollene SSH, SNMP, RPC (WMI) og agentene NRPE og NSCA (en del av pakken NSClient++). http://docs.icinga.org/1.8/en/ch09.html http://docs.icinga.org/1.8/en/ch10.html 
+For å kjøre sjekker på enheter må Icinga-serveren kunne kommunisere med operativsystemene på de ulike enhetene. Icinga henviser til protokollene SSH, SNMP, RPC (WMI) og agentene NRPE og NSCA (en del av pakken NSClient++) \cite{icingaintegration} \cite{icingaadditionalsoftware}. 
 
 \subsubsection{NRPE}
 NRPE (Nagios Remote Plugin Executor) består av en plugin (check\_nrpe) på Icinga-servern og en daemon som installeres på hver server som skal overvåkes. NRPE eksekverer lokale plugins på den eksterne serveren og returner dataen fra denne til check\_nrpe. Tillatelse for eksekveringer defineres i en config-fil på hver server, der en oppgir hvilke IP-er som kan koble seg til og hvilke kommandoer som er gyldige. 
@@ -429,7 +426,7 @@ iso(1). org(3). dod(6). internet(1). private(4). enterprises(1). apc(318). produ
 
 Denne OID-en er definert i APCs MIB-fil “PowerNet MIB”. Ved å laste inn denne kan en også benytte “PowerNet-MIB::upsAdvBatteryCapacity.0”.
 
-SNMP finnes i flere versjoner. I dag brukes for det meste versjon 2c og den nyeste, versjon 3.[f] v2c og v1 er ikke kompatible, men i praksis støtter det meste av utstyr som har støtter v3 eller v2c og v1 (cite http://tools.ietf.org/html/rfc3584). Hovedforskjellen mellom versjon 2c og 3 er at versjon 3 krypterer dataene over nettverket, men krever da også mer konfigurasjon og vedlikehold. Sikkerhetsaspektet ved disse er diskutert videre i sikkerhets kapittelet /ref{sikkerhet}. 
+SNMP finnes i flere versjoner. I dag brukes for det meste versjon 2c og den nyeste, versjon 3.[f] v2c og v1 er ikke kompatible, men i praksis støtter det meste av utstyr som har støtter v3 eller v2c og v1 \cite{rfc3584}. Hovedforskjellen mellom versjon 2c og 3 er at versjon 3 krypterer dataene over nettverket, men krever da også mer konfigurasjon og vedlikehold. Sikkerhetsaspektet ved disse er diskutert videre i sikkerhets kapittelet /ref{sikkerhet}. 
 
 Man har to muligheter når man skal overvåke med SNMP. Enten kan enhetene selv rapportere inn hendelelser via SNMP trap/inform, eller så kan serveren spørre enhetene via SNMP GetRequest. Valg av det første medfører at en kan gjøre varsling umiddelbart, men da må også hver enhet konfigureres med parametere for hvilke traps som skal sendes og hvor. Icinga har ingen støtte for å motta traps, men en kan installere en egen daemon for dette og rapportere inn data som passive sjekker. 
 
@@ -447,7 +444,7 @@ SNMP benytter seg av UDP for å levere traps. Fordi UDP er en såkalt upåliteli
 
 [g]
 
-For å benytte SNMP på Windows- og Linux-servere kreves installasjon av en SNMP-agent. http://technet.microsoft.com/en-us/library/bb726987.aspx http://www.net-snmp.org/ 
+For å benytte SNMP på Windows- og Linux-servere kreves installasjon av en SNMP-agent \cite{mssnmp} http://www.net-snmp.org/ .
 
 \subsubsection{WMI (Windows Management Instrumentation)}
 WMI er et grensesnitt som gjør det mulig å lage programmer eller script som utfører oppgaver mot operativsystemet Windows, enten lokalt eller mot eksterne maskiner. Disse oppgavene kan være alt fra å restarte maskinen til å hente ut logger over hendelser som har inntruffet på maskinen. I et overvåkningssytem vil det være mest relevant å kjøre kommandoer som henter ut informasjon om maskinen og tjenester som kjører på den. Dette kan for eksempel være hvilke prosesser som bruker mest CPU-tid.
