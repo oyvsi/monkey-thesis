@@ -1,10 +1,10 @@
-\subsubsection{Varsling}
+\section{Varsling}
 Varsling er en funksjon i overvåkningsløsningen som krever en del finjusteringer og balansering av parametere over tid. Det vil være en balansegang med å varsle for mye og filtrere for grovkornet. Et tegn på et godt overvåknsingssystem er at det er fokusert, og ikke gir oveflødig mengde informasjon /cite {Building a Monitoring Infrastructure with Nagios}. Dersom det ofte sendes ut “falske varsler” kan dette føre til at en alvorlig hendelse ikke blir oppdaget selv om det faktisk sendes ut varsel. Når varsler sendes ut er det til de som vil og trenger å få de.
 
-\subsubsection{Avhengigheter}
+\subsection{Avhengigheter}
 For å holde antallet varsler som sendes ut nede benyttes avhengigheter som beskrevet i /ref {servicedependency} og /ref {parent} for å ikke få mer enn en melding ved følgefeil. “Parent” har blitt benyttet til å reflektere det fysiske nettverksoppsettet. Service dependency-objekter er satt opp for noen tjenester. For eksempel tjenester som blir sjekket via NRPE vil være avhengig av at NRPE-daemonen på gitt host kan motta henvendelser.
 
-\subsubsection{Konfigurasjon}
+\subsection{Konfigurasjon}
 I Icinga kan man lage kontakter og legge disse i kontaktgrupper. Oppsettet følger samme logikk som at et hostgroup-objekt referer til en eller flere host-objekt i et service-objekt.
 Det vil si at contact- og contactgroup-objekter refereres til i et service- eller host-objekt. Disse kontaktene kan bli varslet om service-objektet får en annen status enn OK. Dette konfigureres i service-objektet sammen ved hvilke tilstander som skal varsles. Disse tilstandene er vist i tabell \ref{notications}.
 
@@ -33,7 +33,7 @@ Når en feil oppstår vil Icinga vurdere ulike konfigurasjonsopsjoner før det e
 \end{center}
 
 
-\subsubsection{Flapping}
+\subsection{Flapping}
 I Icinga defineres “flapping” som når et host- eller service-objekt skifter state for ofte, noe som resulterer i mange problem- og recoveryvarsler. cite{http://docs.icinga.org/1.8/en/flapping.html} Dersom detektering av flapping er konfigurert for objektet vil Icinga stoppe varsler for det dersom prosentandelen flapping overstiger en konfigurert grense. Objektet regnes som å ha startet å flappe når andelen for første gang overstiger en “høy”-grense og som å stoppe å flappe når andelen igjen er under en “lav”-grense.
 
 Denne prosentandelen er kalkulert ved at
@@ -57,7 +57,7 @@ define host {
 }
 \end{lstlisting}
 
-\subsubsection{Oppsett av kontakter og kontaktgrupper}
+\subsection{Oppsett av kontakter og kontaktgrupper}
 
 
 IKT-avdelingen ønsket å kunne styre kontaktinformasjon og kontaktgrupper fra Active Directory. Det ble bestemt at ansvarsforhold skulle gjenspeiles i kontaktgrupper /ref {vedlegg møte}, for eksempel “ts\_ansvarlig” eller “printer\_ansvarlig”. Icinga støtter ikke integrasjon mot LDAP i konfigurasjonsfilene, men siden disse er rene tekstfiler kan de enkelt opprettes og endres med script. Vi var i utgangspunktet skeptiske til å la et script gjøre endringer i konfigurasjonsfiler, da vi var redd for at dette kunne medføre en konfigurasjon med feil, som igjen ville føre til at Icinga ikke ville kunne lese ny konfigurasjon. 
@@ -139,7 +139,7 @@ define service contact_sync {
 }
 \end{lstlisting}
 
-\subsubsection{Timeperiod}
+\subsection{Timeperiod}
 
 Objektettypen timeperiod er sterkt knyttet til kontakter. Her kan en definere perioder for varsling. En har mulighet til å definere spesifikke dager, datoer eller hver n-te dag. 
 
@@ -169,7 +169,7 @@ define timeperiod {
 }
 \end{lstlisting}
 
-\subsubsection{Eskalering}
+\subsection{Eskalering}
 
 Når varsel har blitt sendt ut, og state-en til et host- eller service-objekt ikke har endret seg over en definert tidsperiode, kan et eskalerings varsel sendes. Contact- eller contactgroup-objektene som er referert til i et host- eller serviceescalation-objekt, vil da motta SMS eller e-mail om hendelsen .
 
@@ -190,21 +190,22 @@ Det samme kan benyttes på host-objekter ved at ikke service\_description define
 \begin{lstlisting}
 define hostescalation {
 	hostgroup_name		domain_controllers
-	contact_groups		big_bosses
-	first_notification	3 	last_notification	5 # When does escalation notifications stop
+	contact_groups		team_leaders
+	first_notification	3 	
+	last_notification	5 # When does escalation notifications stop
 	notification_interval	50
 	escalation_options	d #Only use escalation when host is D(own)
 }
 \end{lstlisting}
 
-\subsubsection{Varslingsmelding}
+\subsection{Varslingsmelding}
 
 Selve varslingsmeldingene sendes ut først når host- eller service-objekter er i en hardstate (/ref beskrevet i x.x). Et eksempel er om en brannmurs hostsjekk returnerer DOWN. Da er det ikke ønskelig å varsle over SMS eller e-post, dersom det er snakk om et par ping som mistes. For eksempel kan en sjekk som har returnert DOWN kjøres to ganger til, med et intervall på ett minutt, før en hardstate settes, slik:
 
 \begin{lstlisting}
 define host {
-   use 	generic_host     # Inherit basic config. check_ping for host_check
-   host_name	hig-fw1
+   use 				generic_host # Inherit basic config. check_ping for host_check
+   host_name			hig-fw1
    max_check_attempts           2 # Number of checks before hardstate
     retry_check_interval        1 # 60 seconds between each consecutive check
 }
@@ -215,11 +216,11 @@ For et contact-objekt kan det settes opp ett eller flere command-objekt for båd
 I eksempelet under brukes command-objektet notify-host-by-email og notify-host-by-sms for varslingsmeldinger:
 \begin{lstlisting}
 define contact {
-   contact_name Kari Sysadmin
-   email kari@company.org
-   pager 480 88 256 
+   contact_name 		 Kari Sysadmin
+   email 			 kari@firma.org
+   pager 			 480 88 256 
    host_notification_commands    host_problem_email, host_problem_sms
-   service_notification_commands service_problem_email, service_probleml_sms
+   service_notification_commands service_problem_email, service_problem_sms
 }
 \end{lstlisting}
 
@@ -236,11 +237,11 @@ Varslingsmelder som sendes over SMS vil være korte og lettfattede, mens de som 
 
 Alle varslingsmeldinger sendes fra en og samme e-post-server. Dette er ikke helt ideelt fordi en vil miste både SMS- og e-postvarsling, dersom e-post-serveren skulle slutte å fungere. Løsningen vil være å definere en fallback-server som ble brukt hvis Icinga ikke får kontakt med e-post-serveren. 
 
-\subsubsection{Kritisk Varsling}
+\subsection{Kritisk Varsling}
 
 For kritiske tjenester og utstyr er det i konfigurasjonen defineret et eget generisk objekt som brukes av de service- og host-objektene som anses som kritiske. Dette gjelder domenekontrollere, nettverksutstyr på hoveddatarommet, temperatursensorer og UPS-er. Disse objektene vil sjekkes oftere enn det som er satt som standard. Varslingsmelding vil også sendes til alle ved IKT-avdelingen om en hendelse skulle inntreffe, også utenom arbeidstid og i servicevinduet.
 
-\subsubsection{Statusvisning}
+\subsection{Statusvisning}
 
 Icinga har allerede som nevnt i x.x et webgrensesnitt. Dette er et verktøy for å utføre handlinger på hosts og servicer. Her finnes også et “tactical overview”, som vist i figur \ref{icingawebgui}. Det er ikke tilrettelagt for å få vist en kort, og beskrivende beskjed om hva som er galt på de host-ene og tjenestene med feil på en stor skjerm. Det vises et antall for de ulike statusene, men her krever det flere handlinger for å få en bedre oversikt, og er tilrettelagt for administrering. Det ble derfor besluttet å utvikle et webgrensesnitt som er tilpasset IKT-avdelings behov.
 
