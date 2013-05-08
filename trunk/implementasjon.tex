@@ -438,7 +438,7 @@ I tillegg til disse var det ønskelig med en sjekk som testet hele e-post-oppset
 Det sjekkes også at websiden for Outlook Web Access er tilgjengelig gjennom pluginen “check\_http”. Her burde en nok også sjekket om det var mulig å logge inn.
 
 \section{Databaser}
-Tre forskjellige databasemotorer benyttes av IKT-avdelingen. Disse er MySQL, MSSQL og Oracle DB. Disse opererer ikke helt på samme måten. \cite{databasecomparison}. Derfor blir ikke de samme parameterene overvåket på alle. Felles for alle er:
+Tre forskjellige databasemotorer benyttes av IKT-avdelingen. Disse er MySQL, MSSQL og Oracle DB. Disse har ulik arkitektur og virkemåte \cite{databasecomparison}, og derfor blir ikke de samme parameterene overvåket på alle. Felles for alle er:
 
 Connection time (tid det tar å koble til SQL serveren).
 Connected users (antall aktive sessioner mot SQL serveren).
@@ -625,7 +625,7 @@ Infrastrukturovervåkning er essensielt for å kunne levere IT-Tjenester. Det er
 
 
 \subsection{Switcher}
-Switcher er nettverksutstyr som opererer på lag 2 i OSI modellen. IKT-avdelingen benytter switcher med lag 3 funksjonalitet. Lag 3 funksjonalitet vil si at switchen kan kommunisere over IP. Alle switchene IKT-avdelingen benytter støtter SNMP-protokollen, som brukes til overvåkingen.
+Switcher er nettverksutstyr som jobber på lag 2 i OSI modellen. IKT-avdelingen benytter switcher med lag 3 funksjonalitet. Lag 3 funksjonalitet vil si at switchen kan kommunisere over IP. Alle switchene IKT-avdelingen benytter støtter SNMP-protokollen, som brukes til overvåkingen.
 
 På switchene overvåkes forskjellige sensorer avhengig av hva de inneholder. Alle switcher har for eksempel ikke vifter.
 
@@ -876,7 +876,7 @@ Relativ luftfuktighet er definert som “forholdet mellom partielltrykket til va
 
 Det er også mange enheter som overvåker duggpunkt, som vil si temperaturen en viss mengde luft må avkjøles til for at vanndamp skal kondensere. Ved en økning i relativ luftfuktighet vil duggpunktet nærme seg luftemperaturen. Ved 100\% relativ luftfuktighet vil temperaturen og duggpunktet være like. 
 
-I “Sun Microsystems Data Center Site Planning Guide” anbefales en luftfuktighet på 45 \% - 50 \%. Det meste av datautstyr kan operere innenfor et bredere intervall enn det, typisk 20 \% - 80 \%. Men de anbefalte verdiene er satt for at det skal være et buffer dersom en har klimaanlegg som kontrollerer luftfuktighet, og det slutter å fungere. /cite http://docs.oracle.com/cd/E19065-01/servers.e25k/805-5863-13/ch3.html\#98939 Andre, som “American Society of Heating, Refrigerating and Air-Conditioning Engineers” (ASHRAE) anbefaler at den relative luftfuktigheten ikke bør overstige 60 \%, mens den nedre gresen er basert på duggpunkt og satt til 5.5°C, der den relative luftfuktigheten vil variere mellom 25 \% og 45 \% /cite http://tc99.ashraetcs.org/documents/ASHRAE\_Extended\_Environmental\_Envelope\_Final\_Aug\_1\_2008.pdf. Disse verdiene er også anbefalt av Cisco cite http://www.cisco.com/en/US/solutions/collateral/ns340/ns517/ns224/ns944/white\_paper\_c11-680202.pdf, og omtalt som vidt akseptert. 
+I “Sun Microsystems Data Center Site Planning Guide” anbefales en luftfuktighet på 45 \% - 50 \%. Det meste av datautstyr kan fungere innenfor et bredere intervall enn det, typisk 20 \% - 80 \%. Men de anbefalte verdiene er satt for at det skal være et buffer dersom en har klimaanlegg som kontrollerer luftfuktighet, og det slutter å fungere. /cite http://docs.oracle.com/cd/E19065-01/servers.e25k/805-5863-13/ch3.html\#98939 Andre, som “American Society of Heating, Refrigerating and Air-Conditioning Engineers” (ASHRAE) anbefaler at den relative luftfuktigheten ikke bør overstige 60 \%, mens den nedre gresen er basert på duggpunkt og satt til 5.5°C, der den relative luftfuktigheten vil variere mellom 25 \% og 45 \% /cite http://tc99.ashraetcs.org/documents/ASHRAE\_Extended\_Environmental\_Envelope\_Final\_Aug\_1\_2008.pdf. Disse verdiene er også anbefalt av Cisco cite http://www.cisco.com/en/US/solutions/collateral/ns340/ns517/ns224/ns944/white\_paper\_c11-680202.pdf, og omtalt som vidt akseptert. 
 
 For høy luftfuktighet kan føre til kondens, som igjen kan føre til korrosjon på komponenter. Ved lavere luftfuktighet øker faren for utladninger av statisk elektrisitet (kritisk ved 30 \%), som kan føre til utladninger med ekstremt høye spenningsverdier, som kan ødelegge komponenter.
 
