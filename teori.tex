@@ -50,13 +50,12 @@ Icinga er en fork av Nagios, og har blitt utviklet videre siden 2004. Konfiguras
 
 I Figur \ref{losninger} vises en oversikt over hvor ofte hver av disse har blitt benyttet i et Google-søk i perioden januar 2008 - januar 2013. Hentet fra Google trends.
 
-\begin{center}
 \begin{figure}
+    \centering
     \includegraphics[scale=0.6]{img/monitoring_google_trends}
     \caption{Google Trends: Monitoring}
     \label{losninger}
 \end{figure}
-\end{center}
 
 \section{Valg av kjerneprogramvare}
 Valg av kjerneprogramvare var gruppens viktigste valg, da det la grunnmuren for restenu av prosjektet, og ville få stor innvirkning på sluttresultatet. Etter en vurdering av alternativene som nevnt over ble det besluttet å bygge overvåkningsløsningen på Icinga framfor nagios.
@@ -83,7 +82,7 @@ Icinga består som i vist i Figur \ref{icingacomponents} av tre separate kompone
 
 \begin{center}
 \begin{figure}
-    \includegraphics{img/icinga_architecture}
+    \includegraphics[scale=1.2]{img/icinga_architecture}
     \caption{Icingas tre komponenter}
     \label{icingacomponents}
 \end{figure}
@@ -146,13 +145,13 @@ Den siste objekttypen er module. Her spesifiseres konfigurasjon for en modul som
 
 Sammenhengen mellom objektene er viktig å forstå for å skjønne hvordan sjekker utføres i Icinga. I et serviceobjekt defineres hvilket command-objekt som skal benyttes for å teste tjenesten og hvilke host eller hostgroup dette skal sjekkes på. Dette er vist i Figur \ref{command_host_service}
 
-\begin{center}
+
 \begin{figure}
-    \includegraphics[scale=0.6]{img/command_host_service}
+    \centering
+    \includegraphics[scale=0.4]{img/command_host_service}
     \caption{Sammenhengen mellom host service og command objekt.}
     \label{command_host_service}
 \end{figure}
-\end{center}
 
 \section{Plugins}
 Icinga i seg selv kommer uten noen overvåkningssjekker. Til dette benyttes plugins.
@@ -189,26 +188,24 @@ Dersom en aktiv eller passiv sjekk resulterer i en annen state enn “OK” er d
 \subsubsection{Aktive sjekker}
 En aktiv sjekk defineres ut i fra et command-objekt med parametere og et tidsintervall i service- og host-objekter. I command-objektet defineres en plugin som skal kjøre og returverdien vil bestemme hvilken state service- eller host-objekter har. 
 
-\begin{center}
 \begin{figure}
-    \includegraphics{img/activechecks.png}
+   \centering 
+   \includegraphics{img/activechecks.png}
     \caption{Aktive Sjekker}
     \label{active_checks}
 \end{figure}
-\end{center}
 
 \subsubsection{Passive sjekker}
 Passive sjekker går motsatt vei av av en aktiv sjekk. Her vil hver host si ifra når verdier har overgått en satt grense eller en feil har oppstått. Dette gjøres ved at et eksternt program skriver en linje med informasjon om tjenesten og sjekkresultat til en fil som Icinga sjekker periodisk.
 
 Fordelen er at en får beskjed med en gang noe er galt og kan gi en raskere varsel. Det vil også avlaste Icinga-serveren da alle sjekker utelukkende vil bli kjørt lokalt. En vil da måtte åpne for at kommunikasjon kan initieres fra alle enheter som skal overvåkes til Icinga-serveren. Men en mister samtidig muligheten til å samle all konfigurasjon på ett sted \ref{passive_checks}.
 
-\begin{center}
 \begin{figure}
-    \includegraphics{img/passivechecks.png}
+    \centering
+    \includegraphics[scale=0.7]{img/passivechecks.png}
     \caption{Passive Sjekker}
     \label{passive_checks}
 \end{figure}
-\end{center}
 
 \subsubsection{Hostsjekk}
 
@@ -393,13 +390,12 @@ For å kjøre sjekker på enheter må Icinga-serveren kunne kommunisere med oper
 \subsubsection{NRPE}
 NRPE (Nagios Remote Plugin Executor) består av en plugin (check\_nrpe) på Icinga-servern og en daemon som installeres på hver server som skal overvåkes. NRPE eksekverer lokale plugins på den eksterne serveren og returner dataen fra denne til check\_nrpe. Tillatelse for eksekveringer defineres i en config-fil på hver server, der en oppgir hvilke IP-er som kan koble seg til og hvilke kommandoer som er gyldige. 
 
-\begin{center}
 \begin{figure}
-    \includegraphics{img/nrpe.png}
+    \centering
+    \includegraphics[scale=0.6]{img/nrpe.png}
     \caption{NRPE}
     \label{nrpe}
 \end{figure}
-\end{center}
 
 
 \subsubsection{SSH (Secure Shell)}
@@ -505,14 +501,22 @@ exit 0
 %\end{figure}
 %\end{center}
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.6]{img/nettverkstrafikk}
+    \caption{Nettverkstrafikk}
+    \label{network_traffic}
+\end{figure}
 
-\begin{center}
-\begin{figure}
-    \includegraphics{img/cpu_usage.png}
-    \caption{CPU bruk}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.6]{img/cpubruk}
+    \caption{CPU-bruk}
     \label{cpu_usage}
 \end{figure}
-\end{center}
+
+
+
 
 
 \begin{table}

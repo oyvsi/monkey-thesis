@@ -202,9 +202,15 @@ For kritiske tjenester og utstyr er det i konfigurasjonen defineret et eget gene
 
 \subsubsection{Statusvisning}
 
-Icinga har allerede som nevnt i x.x et webgrensesnitt. Dette er et verktøy for å utføre handlinger på hosts og servicer. Her finnes også et “tactical overview”, som vist i figure /ref. Det er ikke tilrettelagt for å få vist en kort, og beskrivende beskjed om hva som er galt på de host-ene og tjenestene med feil på en stor skjerm. Det vises et antall for de ulike statusene, men her krever det flere handlinger for å få en bedre oversikt, og er tilrettelagt for administrering. Det ble derfor besluttet å utvikle et webgrensesnitt som er tilpasset IKT-avdelings behov.
+Icinga har allerede som nevnt i x.x et webgrensesnitt. Dette er et verktøy for å utføre handlinger på hosts og servicer. Her finnes også et “tactical overview”, som vist i figur \ref{icingawebgui}. Det er ikke tilrettelagt for å få vist en kort, og beskrivende beskjed om hva som er galt på de host-ene og tjenestene med feil på en stor skjerm. Det vises et antall for de ulike statusene, men her krever det flere handlinger for å få en bedre oversikt, og er tilrettelagt for administrering. Det ble derfor besluttet å utvikle et webgrensesnitt som er tilpasset IKT-avdelings behov.
 
-%Bilde: Icinga Classic
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.6]{img/icinga_tactical}
+    \caption{En visning av "tactical overview" fra webgrensesnittet}
+    \label{icingawebgui}
+\end{figure}
+
 
 De som sitter på servicedesk og besvarer henvendelser vil være hovedbrukerene av statusvisningen. Den skal være et hjelpemiddel for å få et overblikk over tjenester og serveres tilstand.
 
@@ -238,21 +244,40 @@ Det ble også rapportert en bug om at datoen på skjermen ikke endret seg før e
 
 Etter at all funksjonalitet og design var på plass ble all kode gjennomgått av gruppen i fellesskap for å kvalitetssikre løsningen og sørge for at all ikke-triviell kode var kommentert.
 
-%Bilde Mockup
+I Figur \ref{statusvindu_mockup} vises en mockup av statusvisningen som vi la fram for IKT-avdelingen ved første møte.
 
-Nagdash med oversatte API-kall:
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.3]{img/statusvindu_mockup}}
+    \caption{Mockup av statusvindu}
+    \label{statusvindu_mockup}
+\end{figure}
 
-%Bilde Nagdash med oversatte API-kall:
+Figur \ref viser hvordan Nagdash ser ut med oversatte API-kall:
 
-Etter første iterasjon:
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.3]{img/statusvindu_oversatte_kall}}
+    \caption{Statusvindu med oversatte API-kall}
+    \label{statusvindu_mockup}
+\end{figure}
+
+
+Figur \ref{statusvindu_first} viser statusvisningen etter første iterasjon, her har følgende funksjonalitet blitt lagt til:
 \begin{itemize}
 	\item Temperatur fra serverrommet har blitt lagt til
 	\item Antall mottate og lukkede saker fra Footprints er lagt til
 \end{itemize}
 
-%Bilde Etter første iterasjon
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.3]{img/statusvindu_first}}
+    \caption{Statusvindu etter første iterasjon}
+    \label{statusvindu_first}
+\end{figure}
 
-Sluttresultat:
+Figur \ref{statusvindu_final} viser endelig statusvisningen, og her ble følgende funksjonalitet til fra første iterasjon:
+
 \begin{itemize}
 	\item Visualisering av retning på luftstrøm
 	\item Temperatur fra de sensorene som er konfigurert
@@ -263,7 +288,13 @@ Sluttresultat:
 	mottate saker i dag og totalt antall åpne saker.
 \end{itemize}
 
-%Bilde Sluttresultat
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.3]{img/statusvindu_final}}
+    \caption{Sluttresultatet av statusvinduet}
+    \label{statusvindu_final}
+\end{figure}
+
 
 \subsubsection{Arkitektur}
 
@@ -271,9 +302,15 @@ Statusvindu definerer strukturen for HTML og inkluderer CSS- og Javascript.
 
 Hver av modulene “footprints.php, netbotz.php og rss.php” retunerer et javascript-objekt med data ut fra ajax-kall fra external.js. Dataene bearbeides og settes inn i riktig “div” i html-en med javascript. Nagdash returnerer rå HTML, da denne inneholder tabeller og annen markup i tillegg til dataene.
 
-I filen external.js hentes data fra de ulike modulene og settes inn i statusvindu dynamisk gjennom Ajax i et bestemt intervall.
+I filen external.js hentes data fra de ulike modulene og settes inn i statusvindu dynamisk gjennom Ajax i et bestemt intervall.\ref{statusvindu_arkitektur}
 
-%Bilde Arkitektur
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.6]{img/statusvindu_arkitektur}}
+    \caption{Informasjonsflyt mellom modulene involvert i statusvinduet}
+    \label{statusvindu_arkitektur}
+\end{figure}
+
 
 \subsubsection{Nagdash}
 
@@ -345,7 +382,23 @@ Endring:
 lineHeight: "auto"
 \end{lstlisting}
 
-Figur(IE Bug) og Figur (IE Endring)  viser høydeforskjellen, høyre er før endring og venstre etter:
+Figur \ref{IE_bug} viser høydeforskjellen, høyre er før endring og venstre etter:
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}
+  \centering
+  \includegraphics[scale=0.7]{img/IE_footprints_bug}
+\end{subfigure}
+\begin{subfigure}
+  \centering
+  \includegraphics[scale=0.7]{img/IE_footprints_fix}
+\end{subfigure}
+\caption{Høydeforskjell for antall over hvert søylediagram i Internet Explorer 9.0}
+\label{IE_bug}
+\end{figure}
+
+
 
 \subsubsection{Netbotz}
 
