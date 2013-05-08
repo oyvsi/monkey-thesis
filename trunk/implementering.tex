@@ -584,7 +584,7 @@ For å overvåke båndbreddebruk ut av og inn på en port Cisco ASA og PIX finne
 
 \paragraph{Netflow}
 
-Funksjonen Netflow \cite{iscoiosnetflow} fungerer ved at enheten samler inn informasjon om og statistikk over alle pakker som går ut og inn av portene. Dette krevet at Netflow konfigureres på alle routerne og det vil også ta opp ekstra minne og CPU \cite{cisconetflowperf}. Derfor ble det avgjort å ikke benytte Netflow.
+Funksjonen Netflow \cite{ciscoiosnetflow} fungerer ved at enheten samler inn informasjon om og statistikk over alle pakker som går ut og inn av portene. Dette krevet at Netflow konfigureres på alle routerne og det vil også ta opp ekstra minne og CPU \cite{cisconetflowperf}. Derfor ble det avgjort å ikke benytte Netflow.
 
 \paragraph{Telle pakker}
 
@@ -593,7 +593,7 @@ Både Cisco Pix og ASA har tellere for antall byte som går ut og inn på en net
 Mange plugins benytter seg dette ved å lese ut “ifInOctets” og “ifOutOctets” over SNMP. Det er også disse som er benyttet i Ciscos notat “How to Calculate Bandwidth Using SNMP” \cite{ciscobandwidth}. 
 
 En stor ulempe med å benytte disse er at de er 32 bit, og vil dermed nullstilles kjapt ved høye hastigheter. For 1000Mbps vil tiden det vil ta til telleren går rundt være ((2\^32)-1) / ((10\^9)/8) = ca. 34 sekunder. Se Tabell /ref 
-
+\begin{table}
 \begin{center}
 \begin{tabular}{ | l | p{7cm} |} 
         \textbf{Hastighet} & \textbf{Tid}
@@ -604,9 +604,8 @@ En stor ulempe med å benytte disse er at de er 32 bit, og vil dermed nullstille
 	\hline
 \end{tabular}
 \label{kalkulering_teller}
-\end{table}
 \end{center}
-
+\end{table}
 Det er derfor anbefalt å bruke 64-bit-variablene ifHCOutOctets og ifHCInOctets i stedet \cite{ciscosnmpcounters}.
 
 Pluginen det er tatt utgangspunkt i for å hente ut båndbreddebruk heter check\_iftraffic64 \fnurl{Check Cisco IFtraffic}{http://exchange.nagios.org/directory/Plugins/Network-Connections,-Stats-and-Bandwidth}. Denne er noe omskrevet for å kunne sende inn absolutte verdier som grenseverdier for varsling. I generic-firewall er det satt opp to egendefinerte variabler “WANWARN” og “WANCRIT”, som setter standard grenseverdier for alle brannmurer. For brannmurer der det er normalt med høyere båndbreddebruk er disse variablene overstyrt i konfigurasjonen for host-objektet.
