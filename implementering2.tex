@@ -10,7 +10,28 @@ Det vil si at contact- og contactgroup-objekter refereres til i et service- elle
 
 Når en feil oppstår vil Icinga vurdere ulike konfigurasjonsopsjoner før det eventuelt sendes ut et varsel. Om konfigurasjonsopsjonene tilsier at det skal varsles, vil Icinga gå igjennom filtre som er ferdig definert, som for eksempel om kontakten eller gruppen skal ha varsel via sms eller email. 
 
-% TABELL KONFIG
+\begin{center}
+\begin{tabular}{| c | l | l | p{7cm} |}
+        \hline
+        \textbf{Objekt} & \textbf{Opsjon} & \textbf{State} & \textbf{Det sendes varsler om}
+        \\ \hline
+	\multirow{3}{*}{Host} 		    & d & DOWN 			& Host-objektet er nede 			\\ \cline{2-4}
+					    & u & UNREACHABLE 		& Et parent er nede eller unreachable.		\\ \cline{2-4}	
+					    & r & UP 			& Hosten går til UP				\\ \hline 
+        \multirow{3}{*}{Service} 	    & c & CRITICAL 		& Service-en er i CRITICAL 			\\ \cline{2-4}
+					    & w & WARNING  		& Service-en er i WARNING  			\\ \cline{2-4}
+					    & u & UNKNOWN  		& Service-en er i UNKNOWN  			\\ \hline
+	\multirow{4}{*}{Host eller Service} & f & FLAPPING           	& Flapping starter eller slutter 		\\ \cline{2-4}
+					    & s & Scheduled downtime 	& Planlagt nedetid starter eller slutter 	\\ \cline{2-4}
+				 	    & r & UP                 	& Objektet går til UP 				\\ \cline{2-4}  
+					    & n &                    	& Det skal ikke varsles ved noen tilfeller 	\\ \cline{2-4}
+
+	\hline
+\end{tabular}
+\label{objekt_varsling}
+\end{table}
+\end{center}
+
 
 \subsubsection{Flapping}
 I Icinga defineres “flapping” som når et host- eller service-objekt skifter state for ofte, noe som resulterer i mange problem- og recoveryvarsler. cite{http://docs.icinga.org/1.8/en/flapping.html} Dersom detektering av flapping er konfigurert for objektet vil Icinga stoppe varsler for det dersom prosentandelen flapping overstiger en konfigurert grense. Objektet regnes som å ha startet å flappe når andelen for første gang overstiger en “høy”-grense og som å stoppe å flappe når andelen igjen er under en “lav”-grense.
