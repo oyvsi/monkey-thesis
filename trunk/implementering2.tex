@@ -1,10 +1,10 @@
 \subsubsection{Varsling}
 Varsling er en funksjon i overvåkningsløsningen som krever en del finjusteringer og balansering av parametere over tid. Det vil være en balansegang med å varsle for mye og filtrere for grovkornet. Et tegn på et godt overvåknsingssystem er at det er fokusert, og ikke gir oveflødig mengde informasjon /cite {Building a Monitoring Infrastructure with Nagios}. Dersom det ofte sendes ut “falske varsler” kan dette føre til at en alvorlig hendelse ikke blir oppdaget selv om det faktisk sendes ut varsel. Når varsler sendes ut er det til de som vil og trenger å få de.
 
-\paragraph{Avhengigheter}
+\subsubsection{Avhengigheter}
 For å holde antallet varsler som sendes ut nede benyttes avhengigheter som beskrevet i /ref {servicedependency} og /ref {parent} for å ikke få mer enn en melding ved følgefeil. “Parent” har blitt benyttet til å reflektere det fysiske nettverksoppsettet. Service dependency-objekter er satt opp for noen tjenester. For eksempel tjenester som blir sjekket via NRPE vil være avhengig av at NRPE-daemonen på gitt host kan motta henvendelser.
 
-\paragraph{Konfigurasjon}
+\subsubsection{Konfigurasjon}
 I Icinga kan man lage kontakter og legge disse i kontaktgrupper. Oppsettet følger samme logikk som at et hostgroup-objekt referer til en eller flere host-objekt i et service-objekt.
 Det vil si at contact- og contactgroup-objekter refereres til i et service- eller host-objekt. Disse kontaktene kan bli varslet om service-objektet får en annen status enn OK. Dette konfigureres i service-objektet sammen ved hvilke tilstander som skal varsles. Disse tilstandene er vist i tabell \ref{notications}.
 
@@ -12,7 +12,7 @@ Når en feil oppstår vil Icinga vurdere ulike konfigurasjonsopsjoner før det e
 
 % TABELL KONFIG
 
-\paragraph{Flapping}
+\subsubsection{Flapping}
 I Icinga defineres “flapping” som når et host- eller service-objekt skifter state for ofte, noe som resulterer i mange problem- og recoveryvarsler. cite{http://docs.icinga.org/1.8/en/flapping.html} Dersom detektering av flapping er konfigurert for objektet vil Icinga stoppe varsler for det dersom prosentandelen flapping overstiger en konfigurert grense. Objektet regnes som å ha startet å flappe når andelen for første gang overstiger en “høy”-grense og som å stoppe å flappe når andelen igjen er under en “lav”-grense.
 
 Denne prosentandelen er kalkulert ved at
@@ -78,7 +78,7 @@ define service contact_sync {
 }
 \end{lstlisting}
 
-\paragraph{Timeperiod}
+\subsubsection{Timeperiod}
 
 Objektettypen timeperiod er sterkt knyttet til kontakter. Her kan en definere perioder for varsling. En har mulighet til å definere spesifikke dager, datoer eller hver n-te dag. 
 
@@ -108,7 +108,7 @@ define timeperiod {
 }
 \end{lstlisting}
 
-\paragraph{Eskalering}
+\subsubsection{Eskalering}
 
 Når varsel har blitt sendt ut, og state-en til et host- eller service-objekt ikke har endret seg over en definert tidsperiode, kan et eskalerings varsel sendes. Contact- eller contactgroup-objektene som er referert til i et host- eller serviceescalation-objekt, vil da motta SMS eller e-mail om hendelsen .
 
@@ -136,7 +136,7 @@ define hostescalation {
 }
 \end{lstlisting}
 
-\paragraph{Varslingsmelding}
+\subsubsection{Varslingsmelding}
 
 Selve varslingsmeldingene sendes ut først når host- eller service-objekter er i en hardstate (/ref beskrevet i x.x). Et eksempel er om en brannmurs hostsjekk returnerer DOWN. Da er det ikke ønskelig å varsle over SMS eller e-post, dersom det er snakk om et par ping som mistes. For eksempel kan en sjekk som har returnert DOWN kjøres to ganger til, med et intervall på ett minutt, før en hardstate settes, slik:
 
@@ -175,7 +175,7 @@ Varslingsmelder som sendes over SMS vil være korte og lettfattede, mens de som 
 
 Alle varslingsmeldinger sendes fra en og samme e-post-server. Dette er ikke helt ideelt fordi en vil miste både SMS- og e-postvarsling, dersom e-post-serveren skulle slutte å fungere. Løsningen vil være å definere en fallback-server som ble brukt hvis Icinga ikke får kontakt med e-post-serveren. 
 
-\paragraph{Kritisk Varsling}
+\subsubsection{Kritisk Varsling}
 
 For kritiske tjenester og utstyr er det i konfigurasjonen defineret et eget generisk objekt som brukes av de service- og host-objektene som anses som kritiske. Dette gjelder domenekontrollere, nettverksutstyr på hoveddatarommet, temperatursensorer og UPS-er. Disse objektene vil sjekkes oftere enn det som er satt som standard. Varslingsmelding vil også sendes til alle ved IKT-avdelingen om en hendelse skulle inntreffe, også utenom arbeidstid og i servicevinduet.
 
@@ -187,7 +187,7 @@ Icinga har allerede som nevnt i x.x et webgrensesnitt. Dette er et verktøy for 
 
 De som sitter på servicedesk og besvarer henvendelser vil være hovedbrukerene av statusvisningen. Den skal være et hjelpemiddel for å få et overblikk over tjenester og serveres tilstand.
 
-\paragraph{Design}
+\subsubsection{Design}
 
 For at statusvinduet skulle imøtekomme IKT-avdelingens ønsker, ble det besluttet å gjøre utviklingen i iterasjoner. Ofte vet ikke brukeren hva de vil ha før de ser et utkast og prosessen har begynt. For utviklingen av statusvinduet har designprosessen beskrevet i ISO 9241-210 blitt fulgt. Der er det beskrevet fire aktiviteter som går i syklus til en får et tilfredsstillende resultat:
 
@@ -244,7 +244,7 @@ Sluttresultat:
 
 %Bilde Sluttresultat
 
-\paragraph{Arkitektur}
+\subsubsection{Arkitektur}
 
 Statusvindu definerer strukturen for HTML og inkluderer CSS- og Javascript.
 
@@ -254,7 +254,7 @@ I filen external.js hentes data fra de ulike modulene og settes inn i statusvind
 
 %Bilde Arkitektur
 
-\paragraph{Nagdash}
+\subsubsection{Nagdash}
 
 For å hente ut data fra Icinga benyttes REST-api-et til Icinga-web. Her kan en sette opp en spørring som kan se slik ut:
 
@@ -272,7 +272,7 @@ Vi har totalt 6 spørringer og de ulike gjør følgende:
 	\item  servicePriorityQuery samme som 4., men henter her ut for en service
 \end{enumerate}
 
-\paragraph{Footprints}
+\subsubsection{Footprints}
 
 For uthenting av antallet saker innenfor ulike kategorier i Footprints ble det benyttet SQL-spørringer direkte mot databasen. IKT-avdelingen ønsket å få en graf om følgende antall om saker:
 \begin{itemize}
@@ -326,7 +326,7 @@ lineHeight: "auto"
 
 Figur(IE Bug) og Figur (IE Endring)  viser høydeforskjellen, høyre er før endring og venstre etter:
 
-\paragraph{Netbotz}
+\subsubsection{Netbotz}
 
 Det var ønskelig at det skulle være enkelt å legge til nye sensorer for temperatur og luftfuktighet. Alle sensorene oppdages automatisk av pluginen som utførerer sjekkene for Icinga. Via API-et til Icinga-web hentes siste verdi for denne sjekken ut. Samtidig får en ut hvilken ID hver av sensorene har fått. I Javascript mappes hver sensor til riktig rad.
 
@@ -349,11 +349,11 @@ Utdrag fra external.js
 
 Grafikken for servermiljø tilpasses automatisk etter den raden med flest antall sensorer, ved å lime sammen riktig antall bilder dynamisk gjennom GD i PHP. (se image.php i vedlegg x.x).
 
-\paragraph{RSS}
+\subsubsection{RSS}
 
 RSS-feeden hentes inn fra IKT-avdelingens egen driftsfeed, der meldinger til alle brukere legges ut. Dersom det ikke er noen meldinger vil det ikke vises noe. Hvis lengden på feeden overstiger det som får plass på én linje vil den begynne å scrolle bortover. Dette gjøres med jQuery-pluginen /ref http://plugins.jquery.com/marquee/.
 
-\paragraph{Prioritering}
+\subsubsection{Prioritering}
 
 Standard visning av et varsel er å vise den som kom inn sist øverst. Ved tilfeller der det er flere varsler, var det ønskelig å kunne gi en prioritering for å få de viktigste varslene til å komme øverst i listen. For å prioritere host-objekter som er DOWN eller UNREACHABLE og service-objekter som har WARNING eller CRITICAL i statusvisningen, ble to løsninger vurdert. 
 
