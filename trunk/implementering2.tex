@@ -75,7 +75,47 @@ Måten scriptet fungere på:
 	\item Det opprettes en egen service-template der kontaktgruppen er satt til å få meldinger, slik at tjenester kan arve fra denne.
 \end{enumerate}
 
-%Trestruktur i AD:
+\makeatletter
+\newcount\dirtree@lvl
+\newcount\dirtree@plvl
+\newcount\dirtree@clvl
+\def\dirtree@growth{%
+  \ifnum\tikznumberofcurrentchild=1\relax
+  \global\advance\dirtree@plvl by 1
+  \expandafter\xdef\csname dirtree@p@\the\dirtree@plvl\endcsname{\the\dirtree@lvl}
+  \fi
+  \global\advance\dirtree@lvl by 1\relax
+  \dirtree@clvl=\dirtree@lvl
+  \advance\dirtree@clvl by -\csname dirtree@p@\the\dirtree@plvl\endcsname
+  \pgf@xa=0.5cm\relax
+  \pgf@ya=-0.5cm\relax
+  \pgf@ya=\dirtree@clvl\pgf@ya
+  \pgftransformshift{\pgfqpoint{\the\pgf@xa}{\the\pgf@ya}}%
+  \ifnum\tikznumberofcurrentchild=\tikznumberofchildren
+  \global\advance\dirtree@plvl by -1
+  \fi
+}
+
+\tikzset{
+  dirtree/.style={
+    growth function=\dirtree@growth,
+    every node/.style={anchor=north},
+    every child node/.style={anchor=west},
+    edge from parent path={(\tikzparentnode\tikzparentanchor) |- (\tikzchildnode\tikzchildanchor)}
+  }
+}
+\makeatother
+\begin{document}
+\begin{tikzpicture}[dirtree]
+\node {OU: icinga\_kontakter}
+    child { node {Gruppe: alle\_kontakter} }
+    child { node {OU: Kontaktgrupper}
+        child { node {Gruppe: ts\_ansvarlig} }
+        child { node {Gruppe: exchange\_ansvarlig} }
+        child { node {Gruppe: mysql\_cluster\_ansvarlig} }
+    }
+\end{tikzpicture}
+
 
 
 For hver gang en konfigurasjonsfil skrives blir det først tatt en backup dersom en fil med gruppe- eller kontaktnavnet finnes fra før. Etter at den nye filen er skrevet, sjekkes konfigurasjonen og dersom det oppdages feil vil backupen bli kopiert tilbake. 
