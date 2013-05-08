@@ -345,18 +345,18 @@ I eksempelet under er tjenesten “Check SMB” på HiG3 avhengig av master tjen
 
 \begin{lstlisting}
 define servicedependency {
-	host_name                                         HiG3
-	service_description                         Check LDAP
-	dependent_host_name                         HiG3
-	dependent_service_description         Check SMB
+	host_name                          HiG3
+	service_description                Check LDAP
+	dependent_host_name                HiG3
+	dependent_service_description      Check SMB
 	execution_failure_criteria         c
-	notification_failure_criteria         c
+	notification_failure_criteria      c
 }
 \end{lstlisting}
 
-Ved standard konfigurasjon vil Icinga benytte siste hard state for master services. Det vil si at hvis denne er satt til 4 retries vil ikke Check SMB stoppes fra å kjøres før Check LDAP har blitt sjekket 4 ganger. 
+Ved standard konfigurasjon vil Icinga benytte siste tilstand som har vært hard for master service. Det vil si at hvis denne er satt til 4 retries vil ikke Check SMB stoppes fra å kjøres før Check LDAP har blitt sjekket 4 ganger. 
 
-På attributten notification\_failure\_criteria kan det settes hvilke service-state-er en ikke skal varsle for. Dette er hovedgrunnen til at det settes opp slike avhengigheter. Når denne er satt til ‘c’ vil skale det ikke varsles om master-servicen går til critical state.
+På attributten notification\_failure\_criteria kan det settes hvilke service-tilstander en ikke skal varsle for. Dette er hovedgrunnen til at det settes opp slike avhengigheter. Når denne er satt til ‘c’ vil skale det ikke varsles om master-servicen går til critical tilstand.
 
 Service-objekt har også muligheten til å arve avhengighetene til master-service ved å sette direktivet inherits\_parent 1. Da vil for eksempel Check SMB arve fra service-objektet som Check LDAP arver fra.
 
@@ -364,9 +364,9 @@ For å konfigurere avhengigheter mellom tjenester som kjører på samme host kan
 
 \begin{lstlisting}
 define servicedependency{
-#       dependent_host_name   ; Not defined to make dependancy on same host            
-        hostgroup_name           linux_servers
-        service_description         NRPE-daemon
+#       dependent_host_name   		; Not defined to make dependancy on same host            
+        hostgroup_name           	linux_servers
+        service_description         	NRPE-daemon
         dependent_service_description   NRPE Check *
         execution_failure_criteria      c
         notification_failure_criteria   c

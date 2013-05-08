@@ -401,7 +401,7 @@ En ordinær plugin henter status for en service som kjører på én host. Ved re
 
 For å overvåke redundante oppsett, har pluginene check\_multi og check\_cluster blitt vurdert.  Forskjellene mellom disse er at check\_cluster i motsetning til check\_multi parser den lokale status.dat filen og ser hvilken tilstand en service eller en host er ved siste sjekk. Pluginen check\_multi derimot kjører aktive sjekker mot spesifiserte hosts, og en kan definere comparison operator som vil bli sjekket mot de returnerte resultatene.
 
-Med check\_multi kan en benytte en eller flere egendefinerte kommandoer som parametere. Disse vil bli parses av check\_multi og kan inneholde alt i fra “echo Hello” til mer avanserte perl script, som kjøres ved hjelp av eval. For å evaluere resultatene kan en definere kriterier som gir et varsel (her brukes standard Icinga states). 
+Med check\_multi kan en benytte en eller flere egendefinerte kommandoer som parametere. Disse vil bli parses av check\_multi og kan inneholde alt i fra “echo Hello” til mer avanserte perl script, som kjøres ved hjelp av eval. For å evaluere resultatene kan en definere kriterier som gir et varsel (her brukes standard Icinga-tilstander). 
 
 Eksempel:
 \begin{lstlisting}

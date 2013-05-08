@@ -14,7 +14,7 @@ Når en feil oppstår vil Icinga vurdere ulike konfigurasjonsopsjoner før det e
 \begin{center}
 \begin{tabular}{| c | l | l | p{7cm} |}
         \hline
-        \textbf{Objekt} & \textbf{Opsjon} & \textbf{State} & \textbf{Det sendes varsler om}
+        \textbf{Objekt} & \textbf{Opsjon} & \textbf{Tilstand} & \textbf{Det sendes varsler om}
         \\ \hline
 	\multirow{3}{*}{Host} & d & DOWN 			& Host-objektet er nede 			\\ \cline{2-4}
 					    & u & UNREACHABLE 		& Et parent er nede eller unreachable.		\\ \cline{2-4}	
@@ -35,13 +35,13 @@ Når en feil oppstår vil Icinga vurdere ulike konfigurasjonsopsjoner før det e
 
 
 \subsubsection{Flapping}
-I Icinga defineres “flapping” som når et host- eller service-objekt skifter state for ofte, noe som resulterer i mange problem- og recoveryvarsler. \cite{icingaflapping} Dersom detektering av flapping er konfigurert for objektet vil Icinga stoppe varsler for det dersom prosentandelen flapping overstiger en konfigurert grense. Objektet regnes som å ha startet å flappe når andelen for første gang overstiger en “høy”-grense og som å stoppe å flappe når andelen igjen er under en “lav”-grense.
+I Icinga defineres “flapping” som når et host- eller service-objekt skifter tilstand for ofte, noe som resulterer i mange problem- og recoveryvarsler. \cite{icingaflapping} Dersom detektering av flapping er konfigurert for objektet vil Icinga stoppe varsler for det dersom prosentandelen flapping overstiger en konfigurert grense. Objektet regnes som å ha startet å flappe når andelen for første gang overstiger en “høy”-grense og som å stoppe å flappe når andelen igjen er under en “lav”-grense.
 
 Denne prosentandelen er kalkulert ved at
 \begin{itemize}
 	\item Lagrer resultatet for de siste 21 sjekkene.
-	\item Finner når state-endring skjer 
-	\item Kalkulerer flap prosent ut fra andelen state-endringer
+	\item Finner når tilstandsendring skjer 
+	\item Kalkulerer flap prosent ut fra andelen tilstandsendringer
 	\item Vekter nyeste sjekker mer
 \end{itemize}
 
@@ -172,7 +172,7 @@ define timeperiod {
 
 \subsubsection{Eskalering}
 
-Når varsel har blitt sendt ut, og state-en til et host- eller service-objekt ikke har endret seg over en definert tidsperiode, kan et eskalerings varsel sendes. Contact- eller contactgroup-objektene som er referert til i et host- eller serviceescalation-objekt, vil da motta SMS eller e-mail om hendelsen .
+Når varsel har blitt sendt ut, og tilstanden til et host- eller service-objekt ikke har endret seg over en definert tidsperiode, kan et eskalerings varsel sendes. Contact- eller contactgroup-objektene som er referert til i et host- eller serviceescalation-objekt, vil da motta SMS eller e-mail om hendelsen .
 
 Et eksempel på når dette kan være nyttig er om ledere for et driftsteam ønsker å bli varslet dersom temperaturen på serverrommet fortsatt ligger over varselsgrensen etter at 10 varsler er sendt ut til ansvarlige for kjølingen. Her får lederen mulighet til å ta nødvendige avgjørelser for at problemet skal løses. Dette er vist under:
 \begin{lstlisting}
@@ -200,7 +200,7 @@ define hostescalation {
 
 \subsubsection{Varslingsmelding}
 
-Selve varslingsmeldingene sendes ut først når host- eller service-objekter er i en hardstate (/ref beskrevet i x.x). Et eksempel er om en brannmurs hostsjekk returnerer DOWN. Da er det ikke ønskelig å varsle over SMS eller e-post, dersom det er snakk om et par ping som mistes. For eksempel kan en sjekk som har returnert DOWN kjøres to ganger til, med et intervall på ett minutt, før en hardstate settes, slik:
+Selve varslingsmeldingene sendes ut først når host- eller service-objekter er i en hard tilstand (/ref beskrevet i x.x). Et eksempel er om en brannmurs hostsjekk returnerer DOWN. Da er det ikke ønskelig å varsle over SMS eller e-post, dersom det er snakk om et par ping som mistes. For eksempel kan en sjekk som har returnert DOWN kjøres to ganger til, med et intervall på ett minutt, før en hard tilstand settes, slik:
 
 \begin{lstlisting}
 define host {
@@ -365,7 +365,7 @@ Vi har totalt 6 spørringer og de ulike gjør følgende:
 \begin{enumerate}
 	\item  hostQuery henter ut alle hosts som har status DOWN eller UNREACHABLE
 	\item  serviceQuery henter ut alle servicer som har en UP host, men en service som er enten WARNING eller CRITICAL
-	\item  hostTotalQuery henter ut alle hosts, med en kolonne som forteller hvilken state den er i. Dette blir brukt for å regne ut et antall innen for hver state.
+	\item  hostTotalQuery henter ut alle hosts, med en kolonne som forteller hvilken tilstand den er i. Dette blir brukt for å regne ut et antall innen for hver tilstand.
 	\item  serviceTotalQuery samme som 3., men henter alle servicer.
 	\item  hostPriorityQuery henter ut en og en host basert på objekt id. Informasjonen brukes videre for å sjekke om den har en prioritets variabel satt, som vil føre til at den blir prioritert ved fremvisning.
 	\item  servicePriorityQuery samme som 4., men henter her ut for en service
@@ -503,4 +503,4 @@ Metoden med egendefinert variabel ble valgt, fordi denne kan anvendes på alle s
 
 Implementasjonen av metode to blir gjort ved å spørre API-et for hver host eller service som er hentet ut fra det første kallet (ref x.x). Har hosten eller servicen variabelen \_PRIORITY definert, vil denne lagres, ellers blir det satt 0 som prioritetstall.
 
-Selve sorteringen av hosts og servicer blir gjort av PHP-funksjonen usort() med to egenskrevne sammenligningsfunksjoner. \cite{usort}. Grunnen til dette er at arrayet er flerdimensjonalt, så det må sorteres på verdien til en spesifikk nøkkel. Det skal også sorteres innenfor state-ene DOWN og UNREACHABLE, og CRITICAL og WARNING. DOWN skal gå foran UNREACHABLE for host-objekter, og CRITICAL foran WARNING for service-objekter, deretter sorteres det etter prioriteringsvariabelen.
+Selve sorteringen av hosts og servicer blir gjort av PHP-funksjonen usort() med to egenskrevne sammenligningsfunksjoner. \cite{usort}. Grunnen til dette er at arrayet er flerdimensjonalt, så det må sorteres på verdien til en spesifikk nøkkel. Det skal også sorteres innenfor tilstandene DOWN og UNREACHABLE, og CRITICAL og WARNING. DOWN skal gå foran UNREACHABLE for host-objekter, og CRITICAL foran WARNING for service-objekter, deretter sorteres det etter prioriteringsvariabelen.
