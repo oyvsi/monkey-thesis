@@ -28,6 +28,14 @@ Serverne er virtuelle maskiner plassert i et eget VLAN som er tilgjengelig på f
 
 I Figur \ref{laboppsett} vises det logiske oppsettet av labmiljøet og hvilke tjenester som kjører. Hig-fw, Hig-sw1 og Hig-sw2 er koblet i serie for å teste avhengigheter og følgefeil.
 
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.4]{img/labmiljo}
+    \caption{Labmiljø}
+    \label{laboppsett}
+\end{figure}
+
+
 \subsubsection{Produksjonsserveren}
 Spesifikasjonene på bladeserveren:
 \begin{itemize}
@@ -139,7 +147,16 @@ check_command check_mysql_health!connection-time!0.1!0.4
 }
 \end{lstlisting}
 
-Figur ref{sql} viser en visuel fremstilling av hvordan alt dette henger sammen for alle SQL-servere:
+Figur \ref{sql} viser en visuel fremstilling av hvordan alt dette henger sammen for alle SQL-servere:
+
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.6]{img/sql}
+    \caption{Visualerins av oppset for MySQL-server}
+    \label{sql}
+\end{figure}
+
+
 
 \subsubsection{Grafing}
 I utgangspunktet ble det bestemt at grafing og trenddata skulle holdes utenfor oppgaven. Det ble likevel satt opp grafing via programmet graphite for å motta ytelsesdata og grafe dette. Dette fordi det var ønskelig å kunne etablere en baseline for tjenestene slik at bedre grenseverdier kunne settes.
@@ -227,7 +244,7 @@ Check\_CPU
 \begin{lstlisting}
 ./check_nrpe -u -H 10.60.0.22 -p 5666 -c CheckCPU -a time=5m warn=80 crit=90
 \end{lstlisting}
-I Figur /ref{CPUSTRAIN} returnerer CPU-sjekken “OK”. Dette er hentet fra gjennomsnittsbruk av CPU over 5 minutter. Like under ser vi at testen er kritisk på grunn av et gjennomsnittsbruk av CPU på 96 \%. I Figur /ref{CPUSTRAIN} ser vi at alle de fire CPU-kjernene jobber oppmot maksimalt. Et batch-script ble kjørt lokalt på serveren som ble overvåket for å generere CPU-bruk.
+I Figur \ref{cpustrain} returnerer CPU-sjekken “OK”. Dette er hentet fra gjennomsnittsbruk av CPU over 5 minutter. Like under ser vi at testen er kritisk på grunn av et gjennomsnittsbruk av CPU på 96 \%. I Figur /ref{CPUSTRAIN} ser vi at alle de fire CPU-kjernene jobber oppmot maksimalt. Et batch-script ble kjørt lokalt på serveren som ble overvåket for å generere CPU-bruk.
 \begin{lstlisting}
 # winloop.bat
 @echo off
@@ -240,6 +257,15 @@ for /l %%x in (1, 1, 10) do (
 :loop
 GOTO loop
 \end{lstlisting}
+
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.6]{img/cpu_test_hig3}
+    \caption{CPU-bruk for HiG3}
+    \label{cpustrain}
+\end{figure}
+
+
 For Linux baserer sjekk av CPU-bruk seg på “load” \cite{loadavg} \cite{wiki:loadavg}. Dette er i hovedsak et gjennomsnitt for hvor mange prosesser som bruker eller venter på CPU, men disk- eller nettverks I/O kan også spille inn. For maskiner med flere kjerner og/eller CPU-er vil dette fortone seg annerledes da en kan utføre flere prosesser parallellt. Load-tallene må deles på antallet CPU-kjerner for at det skal kunne brukes samme grenseverdier uavhengig av hvor mange kjerner serveren har. Dette gjøres med opsjonen “r”.
 
 Tallene som hentes ut er gjennomsnittet for de siste 1, 5 og 15 minuttene. Det er mer interessant hvis load-en er høy over lengre tid, derfor er grenseverdiene lavere for 5 og 15 minutters intervallene.
@@ -312,13 +338,29 @@ Sjekkene for alle de tre tjenestene vil bli gjort direkte fra Icinga-serveren. D
 
 For å overvåke LDAP-tjenestene benyttes pluginen “check\_ldap” som følger med i pakken nagios-plugins-basic. Pluginen kobler til LDAP-tjenesten og prøver å autentisere en bruker. Her vil sjekken returnere OK, om den fikk autentisert. 
 
-Performancedata har blitt samlet inn for å sette grenseverdier for når Icinga skal gi varsel om treg innlogging. I Figur /ref{ldapauth-inv} ser vi at tjenesten sjekket på fire LDAP-servere, over en måneds periode bruker rundt 0.0044 sekunder på å autentisere. Ut ifra dataen som er samlet settes warning settes til 0.01 sekund, og kritisk settes til 0.02 sekunder.
+Performancedata har blitt samlet inn for å sette grenseverdier for når Icinga skal gi varsel om treg innlogging. I Figur \ref{ldapauth-inv} ser vi at tjenesten sjekket på fire LDAP-servere, over en måneds periode bruker rundt 0.0044 sekunder på å autentisere. Ut ifra dataen som er samlet settes warning settes til 0.01 sekund, og kritisk settes til 0.02 sekunder.
+
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.6]{img/ldap-auth-inv}
+    \caption{Data fra Graphite (sekund)}
+    \label{ldapauth-inv}
+\end{figure}
+
 
 \subsubsection{DNS}
 
 DNS overvåkes av pluginen “check\_dns”. Denne på samme måte som “check\_ldap” kobler til selve tjenesten. Denne fungerer ved å gjøre et DNS-oppslag på en spesifikk IP-adresse, og verifisere dette mot et satt hostname. Dersom dette stemmer vil plugin-en returnere OK, sammen med ytelses-data på hvor lang tid oppslaget tok.
 
-Figur /ref{dns-inv} viser data samlet inn fra to DNS servere over 30 dager. Disse dataene viser forventet tid for et oppslag, og utifra dette ble grenseverdien for WARNING satt til 0.01 sek og CRITICAL til 0.02 sek.
+Figur \ref{dns-inv} viser data samlet inn fra to DNS servere over 30 dager. Disse dataene viser forventet tid for et oppslag, og utifra dette ble grenseverdien for WARNING satt til 0.01 sek og CRITICAL til 0.02 sek.
+
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.6]{img/dns-inv}
+    \caption{Data fra Graphite (sekund)}
+    \label{dns-inv}
+\end{figure}
+
 
 \subsubsection{DHCP}
 
@@ -506,7 +548,15 @@ Det sjekkes også at websiden for Outlook Web Access er tilgjengelig gjennom plu
 Overvåkning av Applikasjoner
 Muligheten for å se om en applikasjon fungerer slik den skal er en viktig del av overvåkningen. Det er applikasjonene brukerne benytter seg av og vil sende inn feilmeldinger om. En applikasjons tilstand vil bestemmes av flere tjenesters status. I Icinga benyttes et servicegroup-objekt for å gruppere flere service-objekter.
 
-Et praktisk eksempel på dette vises i Figur /ref{servicegroup}. Her vil applikasjonen “Web App for ERP” være avhengig av webserveren for å vise web-grensesnittet til brukerne, en filserver for lesing og lagring av filer, en e-post-server for å sende og motta mail og en databaseserver som inneholder brukerinfo og andre tabeller. 
+Et praktisk eksempel på dette vises i Figur \ref{servicegroup_layout}. Her vil applikasjonen “Web App for ERP” være avhengig av webserveren for å vise web-grensesnittet til brukerne, en filserver for lesing og lagring av filer, en e-post-server for å sende og motta mail og en databaseserver som inneholder brukerinfo og andre tabeller. 
+
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.6]{img/servicegroup_layout}
+    \caption{Tjenester for servicegroup-objektet  ERP\_WEBAPP}
+    \label{servicegroup_layout}
+\end{figure}
+
 
 Konfigurasjonen for dette er vist under. Direktivet “Members” setter medemene i gruppen der hvert service-objekt er “host\_name,service\_description”.
 
@@ -520,14 +570,29 @@ define servicegroup {
 
 
 Her kjøres service-sjekker mot alle tjenestene. Service-objektene grupperes i en servicegroup. 
-Dette gjør at vi får et oversiktsbilde over applikasjonen i Icingas web-grensesnitt som vist i Figur /ref servicegroup. Slik blir det enklere for servicedesk å kunne gå inn for å se hva som er feil med “Web app for ERP” om brukere rapporterer om feil på applikasjonen.
+Dette gjør at vi får et oversiktsbilde over applikasjonen i Icingas web-grensesnitt som vist i Figur \ref{servicegroup_web}. Slik blir det enklere for servicedesk å kunne gå inn for å se hva som er feil med “Web app for ERP” om brukere rapporterer om feil på applikasjonen.
+
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.6]{img/servicegroup_web}
+    \caption{ Oversikt over servicegroup-objekt og status i webgrensesnittet}
+    \label{servicegroup_web}
+\end{figure}
 
 Det vil det også være naturlig å sette opp servicedependency-er mellom ERP Web1 og sjekkene for webserveren, filserveren, mailserveren og databaseserveren.
 
 \subsubsection{Infrastruktur}
 Infrastruktur består av de grunnleggende enhetene de andre serverne er avhengig av. I dette prosjektet er det definert til: switcher, routere, brannmurer, UPS, virtualiseringsteknologi og serverrommiljø.
 
-Infrastrukturovervåkning er essensielt for å kunne levere IT-Tjenester. Det er viktig at design av overvåkningen fører til at man raskt og effektivt skal kunne oppdage og presentere feil som oppstår. For å få til dette i Icinga benyttes “parent” /ref{parents}. De aller fleste enheter i infrastrukturen (untatt servermiljø) vil være parent for andre enheter. Dette reflekteres i et statuskart i icinga, som vist i Figur /ref{statusmap}.
+Infrastrukturovervåkning er essensielt for å kunne levere IT-Tjenester. Det er viktig at design av overvåkningen fører til at man raskt og effektivt skal kunne oppdage og presentere feil som oppstår. For å få til dette i Icinga benyttes “parent” /ref{parents}. De aller fleste enheter i infrastrukturen (untatt servermiljø) vil være parent for andre enheter. Dette reflekteres i et statuskart i icinga, som vist i Figur \ref{statusmap}.
+
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.6]{img/statusmap}
+    \caption{Kart som viser parent og host-relasjoner}
+    \label{statusmap}
+\end{figure}
+
 
 \subsubsection{Switcher}
 Switcher er nettverksutstyr som opererer på lag 2 i OSI modellen. IKT-avdelingen benytter switcher med lag 3 funksjonalitet. Lag 3 funksjonalitet vil si at switchen kan kommunisere over IP. Alle switchene IKT-avdelingen benytter støtter SNMP-protokollen, som brukes til overvåkingen.
@@ -555,7 +620,15 @@ I følge Cisco kan høytminneforbruk under vanlig operasjon indikere at brannmur
 
 \subsubsection{Failover}
 
-Cisco router / Brannmurer har en viktig funksjon som kalles failover. Denne fungerer slik at to like enheter settes opp, der en blir satt som “primary” og den andre som “secondary”, slik at denne kan overta for “primary” om det skulle bli nødvendig. Disse kobles sammen med en seriellkabel. Figur /ref{ciscoasafailover} viser hvordan et Cisco-failover er satt opp. 
+Cisco router / Brannmurer har en viktig funksjon som kalles failover. Denne fungerer slik at to like enheter settes opp, der en blir satt som “primary” og den andre som “secondary”, slik at denne kan overta for “primary” om det skulle bli nødvendig. Disse kobles sammen med en seriellkabel. Figur \ref{ciscoasafailover} viser hvordan et Cisco-failover er satt opp. 
+
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.6]{img/asafailover}
+    \caption{Oppsett for Cisco-failover funksjonalitet}
+    \label{ciscoasafailover}
+\end{figure}
+
 
 Dersom primary går ned vil secondary ta over nødvendige ruter, brannmurregler og konfigurasjon. Secondary vil dermed overta IP- og MAC-adressen til primary. Primary vil bli satt som passiv (trenger ikke nødvendigvis å ha en passiv IP adresse, fordi IP kommunikasjon går kun gjennom det aktive interfacet) helt til en manuelt endrer dette tilbake i konfigurasjonen. \cite{ciscofailover}. 
 
@@ -707,6 +780,7 @@ Et problem ble støtt på under implementeringen av check\_xenplugin.api som fik
 De trådløse kontrollerne som benyttes av IKT-avdelingen mangler støtter for SNMP-get for informasjon som hentes ut fra switcher og brannmurer som  CPU- og minnebruk. Dette vil i følge produsenten komme i en senere firmware-oppdatering.
 Noe av dette kan løses ved å bruke SNMP-traps i stedet og definere verdier for når disse skal sendes ut direkte på kontrollerne. Her ble traps som omhandler kontrollerne og var relevante for IKT-avdelingen satt opp:
 
+
 \begin{itemize}
 	\item Hardware feil med kontrolleren
 	\item Ressursmangel på kontrolleren
@@ -718,7 +792,16 @@ Noe av dette kan løses ved å bruke SNMP-traps i stedet og definere verdier for
 
 For å få til dette trengs et mellomledd som kan motta SNMP-traps på Icinga-serveren, tolke trap-meldingene og sende informasjonen videre til Icinga. 
 
-For å lytte etter SNMP-traps benyttes SNMPtrapd (http://www.net-snmp.org/docs/man/snmptrapd.html). Her mottas alle traps som sendes med riktig community. Disse sendes så videre til snmptt (SNMP Trap Translator - http://snmptt.sourceforge.net/). Her har defineres de traps-ene en er ute etter, informasjon om OID-ene og kommandoen som skal kjøres når denne mottas.
+For å lytte etter SNMP-traps benyttes SNMPtrapd (http://www.net-snmp.org/docs/man/snmptrapd.html). Her mottas alle traps som sendes med riktig community. Disse sendes så videre til snmptt (SNMP Trap Translator - http://snmptt.sourceforge.net/). Her har defineres de traps-ene en er ute etter, informasjon om OID-ene og kommandoen som skal kjøres når denne mottas. I Figur \ref{snmptrap} illustreres hvordan en trap blir prosessert. 
+
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.6]{img/SNMPtrap}
+    \caption{Informasjonsflyt ved en trap}
+    \label{snmptrap}
+\end{figure}
+
+
 
 SNMPtt trenger konfigurasjon for alle OID-ene som skal prosesseres. Disse kan opprettes med snmpttconvertmib ut i fra en MIB-fil slik:
 
