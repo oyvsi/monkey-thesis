@@ -23,7 +23,7 @@ Den enkleste formen for overvåkning av en server er å sende en ICMP echo reque
 En bedre løsning er å teste hver av tjenstene. For en webserver kan det være å prøve å hente ned forsiden av hjemmesiden som skal leveres og sjekke at man får reponsen “HTTP OK 200”. Da vil en vite at webserveren kjører og leverer ut sider riktig. Et skritt videre kan være å sjekke at siden inneholder riktig informasjon og at en ikke har blitt utsatt for f.eks en “defacing”.
 
 \section{Overvåkning i ITIL}
-ITIL (Information Technology Infrastucture Library) er et sett med standarder og konsepter som beskriver hvordan IT-tjenester kan kvalitetsikres innenfor leveranse, drift og support. ITIL er i dag i bruk i IT-bedrifter over hele verden og gir et felles rammeverk for hvordan en opererer innen IT-sektoren. ITIL blir definert i et sett med bøker som blir utgitt av Office of Government Commerce i Storbritannia.
+ITIL (Information Technology Infrastucture Library) er et sett med standarder og konsepter som beskriver hvordan IT-tjenester kan kvalitetsikres innenfor leveranse, drift og support. ITIL er i dag i bruk i IT-bedrifter over hele verden og gir et felles rammeverk for hvordan en bør praktisere innen IT-sektoren. ITIL blir definert i et sett med bøker som blir utgitt av Office of Government Commerce i Storbritannia.
 
 Innenfor ITIL er prossessflyt og involvering av ulike prosesser ved hendelser essensielt.  Overvåkning av systemer og infrastruktur bak forretningskritiske systemer, og overvåkning av forretningskritiske systemer i seg selv er viktig i ITIL-prosessen Service Operations. Overvåkning og varsling er et viktig ledd for kunne å registrere en hendelse som kan være et engangstilfelle, eller en indikasjon på et underliggende problem. 
 
@@ -193,7 +193,7 @@ En aktiv sjekk er en sjekk som initieres av Icinga, der en kommando kjøres på 
 \end{figure}
 
 \subsubsection{Passive sjekker}
-Passive sjekker går motsatt vei av av en aktiv sjekk. Her vil hver host si ifra når verdier har overgått en satt grense eller en feil har oppstått, dette kalles ofte for en "push"-modell. Dette gjøres ved at et eksternt program skriver en linje med informasjon om tjenesten og sjekkresultat til en fil som Icinga sjekker periodisk.
+Passive sjekker går motsatt vei av aktive sjekker. Her vil hver host si ifra når verdier har overgått en satt grense eller en feil har oppstått, dette kalles ofte for en "push"-modell. Dette gjøres ved at et eksternt program skriver en linje med informasjon om tjenesten og sjekkresultat til en fil som Icinga sjekker periodisk.
 
 Fordelen er at en får beskjed med en gang noe er galt og kan gi en raskere varsel. Det vil også avlaste Icinga-serveren da alle sjekker utelukkende vil bli kjørt lokalt. En vil da måtte åpne for at kommunikasjon kan initieres fra alle enheter som skal overvåkes til Icinga-serveren. Men en mister samtidig muligheten til å samle all konfigurasjon på ett sted \ref{passive_checks}.
 
