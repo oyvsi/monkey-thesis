@@ -1,14 +1,10 @@
 \subsubsection{Varsling}
-
 Varsling er en funksjon i overvåkningsløsningen som krever en del finjusteringer og balansering av parametere over tid. Det vil være en balansegang med å varsle for mye og filtrere for grovkornet. Et tegn på et godt overvåknsingssystem er at det er fokusert, og ikke gir oveflødig mengde informasjon /cite {Building a Monitoring Infrastructure with Nagios}. Dersom det ofte sendes ut “falske varsler” kan dette føre til at en alvorlig hendelse ikke blir oppdaget selv om det faktisk sendes ut varsel. Når varsler sendes ut er det til de som vil og trenger å få de.
 
 \paragraph{Avhengigheter}
-
 For å holde antallet varsler som sendes ut nede benyttes avhengigheter som beskrevet i /ref {servicedependency} og /ref {parent} for å ikke få mer enn en melding ved følgefeil. “Parent” har blitt benyttet til å reflektere det fysiske nettverksoppsettet. Service dependency-objekter er satt opp for noen tjenester. For eksempel tjenester som blir sjekket via NRPE vil være avhengig av at NRPE-daemonen på gitt host kan motta henvendelser.
 
-
 \paragraph{Konfigurasjon}
-
 I Icinga kan man lage kontakter og legge disse i kontaktgrupper. Oppsettet følger samme logikk som at et hostgroup-objekt referer til en eller flere host-objekt i et service-objekt.
 Det vil si at contact- og contactgroup-objekter refereres til i et service- eller host-objekt. Disse kontaktene kan bli varslet om service-objektet får en annen status enn OK. Dette konfigureres i service-objektet sammen ved hvilke tilstander som skal varsles. Disse tilstandene er vist i tabell \ref{notications}.
 
@@ -17,7 +13,6 @@ Når en feil oppstår vil Icinga vurdere ulike konfigurasjonsopsjoner før det e
 % TABELL KONFIG
 
 \paragraph{Flapping}
-
 I Icinga defineres “flapping” som når et host- eller service-objekt skifter state for ofte, noe som resulterer i mange problem- og recoveryvarsler. cite{http://docs.icinga.org/1.8/en/flapping.html} Dersom detektering av flapping er konfigurert for objektet vil Icinga stoppe varsler for det dersom prosentandelen flapping overstiger en konfigurert grense. Objektet regnes som å ha startet å flappe når andelen for første gang overstiger en “høy”-grense og som å stoppe å flappe når andelen igjen er under en “lav”-grense.
 
 Denne prosentandelen er kalkulert ved at
@@ -124,7 +119,7 @@ define serviceescalation {
 	service_description	Check Temperature
 	contact_groups		team_leaders
 	first_notification	10	# Ten notifications has to be sent before escalation
-	last_notification	15	# After fiftheen notifications, this escalation stops. “0” is forever.
+	last_notification	15	# After fiftheen notifications, this escalation stops. "0" is forever.
 	notification_interval	60 	# Escalation notifications are sent every 60 minutes (default 45)
 	escalation_options	c	# Only use escalation when service  is C(ritical)
 	escalation_period	op_hours  # Only escalate during hours of operations
