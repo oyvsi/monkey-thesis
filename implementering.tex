@@ -653,12 +653,12 @@ To counters har blitt tatt ut for overvåkning , og vil være eksempel på hvord
 
 \paragraph{CPU}
 
- /cite http://www.vmware.com/support/developer/vc-sdk/visdk400pubs/ReferenceGuide/cpu\_counters.html
+/cite http://www.vmware.com/support/developer/vc-sdk/visdk400pubs/ReferenceGuide/cpu\_counters.html
 
 
 Counter usage.average (\%) over siste 5 minutt -  warning: 75 critcal: 90 
 
-“Actively used CPU of the host, as a percentage of the total available CPU. Active CPU is approximately equal to the ratio of the used CPU to the available CPU. available CPU = # of physical CPUs x clock rate”
+``Actively used CPU of the host, as a percentage of the total available CPU. Active CPU is approximately equal to the ratio of the used CPU to the available CPU. available CPU = \# of physical CPUs x clock rate''
 
 Grenseverdier her er satt til samme nivå som tilsvarende alarm i vCenter, og gir indikasjon på at det kan være en eller flere virtuelle maskiner som krever for mye CPU i forhold til hva hosten har tilgjengelig. Det kan også være et for stort antall virtuelle maskiner på hosten. 
 
@@ -737,7 +737,7 @@ A rogue AP is detected. The AP id, mac address, and other information are descri
 EDESC
 \end{lstlisting}
 
-Her benyttes variabler i snmptt (cite http://snmptt.sourceforge.net/docs/snmptt.shtml#Variable-substitutions):
+Her benyttes variabler i snmptt (cite http://snmptt.sourceforge.net/docs/snmptt.shtml\#Variable-substitutions):
 \begin{itemize}
 	\item IP-adressen til snmp agenten, altså kontrollereren
 	\item Navnet på trap-en
@@ -777,9 +777,9 @@ For høy luftfuktighet kan føre til kondens, som igjen kan føre til korrosjon 
 
 \paragraph{Temperatur}
 
-Det er mye uenighet rundt anbefalte verdier for temperatur i serverrom. I et studie utført ved University of Toronto /cite http://dl.acm.org/citation.cfm?id=2254778, ble det samlet inn data fra tre forskjellige organisasjoners datasentre, deriblant Googles. I studiet ble det konkludert med at faren for hardware-feil ved høyere temperatur øker mindre enn det som har vært vanlig å basere seg på. For DRAM-feil og “node outages” fant de ingen korrelasjon til temperaturøkning for intervallet i testen (15°C - 60°C). I dette studiet ble det ikke målt eller tatt hensyn til luftfuktighet. 
+Det er mye uenighet rundt anbefalte verdier for temperatur i serverrom. I et studie utført ved University of Toronto /cite http://dl.acm.org/citation.cfm?id=2254778, ble det samlet inn data fra tre forskjellige organisasjoners datasentre, deriblant Googles. I studiet ble det konkludert med at faren for hardware-feil ved høyere temperatur øker mindre enn det som har vært vanlig å basere seg på. For DRAM-feil og ``node outages'' fant de ingen korrelasjon til temperaturøkning for intervallet i testen (15°C - 60°C). I dette studiet ble det ikke målt eller tatt hensyn til luftfuktighet. 
 
-ASHRAE anbefaler en inntakstemperatur 18°C - 27°C, mens Sun anbefaling er 20°C - 23°C. Sun bregrunner sin anbefaling med at det er lettere å opprettholde trygge verdier for relativ luftfuktighet. ASHRAE viser også til studier som viser at det totale strømforbruket kan gå opp ved høyere temperaturer fordi enheter øker frekvensen på egne vifter. http://ieeexplore.ieee.org/xpl/login.jsp?tp=&arnumber=4544393&url=http\%3A\%2F\%2Fieeexplore.ieee.org\%2Fxpls\%2Fabs\_all.jsp\%3Farnumber\%3D4544393
+ASHRAE anbefaler en inntakstemperatur 18°C - 27°C, mens Sun anbefaling er 20°C - 23°C. Sun bregrunner sin anbefaling med at det er lettere å opprettholde trygge verdier for relativ luftfuktighet. ASHRAE viser også til studier som viser at det totale strømforbruket kan gå opp ved høyere temperaturer fordi enheter øker frekvensen på egne vifter. http://ieeexplore.ieee.org/xpl/login.jsp?tp=\&arnumber=4544393\&url=http\%3A\%2F\%2Fieeexplore.ieee.org\%2Fxpls\%2Fabs\_all.jsp\%3Farnumber\%3D4544393
 
 \paragraph{Plugin for overvåkning av temperatur og luftfuktighet i Icinga}
 
