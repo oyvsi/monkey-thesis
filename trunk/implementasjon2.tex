@@ -1,21 +1,22 @@
-\section{Varsling}
+\subsubsection{Varsling}
 Varsling er en funksjon i overvåkningsløsningen som krever en del finjusteringer og balansering av parametere over tid. Det vil være en balansegang med å varsle for mye og filtrere for grovkornet. Et tegn på et godt overvåknsingssystem er at det er fokusert, og ikke gir oveflødig mengde informasjon /cite {Building a Monitoring Infrastructure with Nagios}. Dersom det ofte sendes ut “falske varsler” kan dette føre til at en alvorlig hendelse ikke blir oppdaget selv om det faktisk sendes ut varsel. Når varsler sendes ut er det til de som vil og trenger å få de.
 
-\subsection{Avhengigheter}
+\subsubsection{Avhengigheter}
 For å holde antallet varsler som sendes ut nede benyttes avhengigheter som beskrevet i /ref {servicedependency} og /ref {parent} for å ikke få mer enn en melding ved følgefeil. “Parent” har blitt benyttet til å reflektere det fysiske nettverksoppsettet. Service dependency-objekter er satt opp for noen tjenester. For eksempel tjenester som blir sjekket via NRPE vil være avhengig av at NRPE-daemonen på gitt host kan motta henvendelser.
 
-\subsection{Konfigurasjon}
+\subsubsection{Konfigurasjon}
 I Icinga kan man lage kontakter og legge disse i kontaktgrupper. Oppsettet følger samme logikk som at et hostgroup-objekt referer til en eller flere host-objekt i et service-objekt.
 Det vil si at contact- og contactgroup-objekter refereres til i et service- eller host-objekt. Disse kontaktene kan bli varslet om service-objektet får en annen status enn OK. Dette konfigureres i service-objektet sammen ved hvilke tilstander som skal varsles. Disse tilstandene er vist i tabell \ref{notications}.
 
 Når en feil oppstår vil Icinga vurdere ulike konfigurasjonsopsjoner før det eventuelt sendes ut et varsel. Om konfigurasjonsopsjonene tilsier at det skal varsles, vil Icinga gå igjennom filtre som er ferdig definert, som for eksempel om kontakten eller gruppen skal ha varsel via sms eller email. 
 
+\begin{table}
 \begin{center}
 \begin{tabular}{| c | l | l | p{7cm} |}
         \hline
         \textbf{Objekt} & \textbf{Opsjon} & \textbf{State} & \textbf{Det sendes varsler om}
         \\ \hline
-	\multirow{3}{*}{Host} 		    & d & DOWN 			& Host-objektet er nede 			\\ \cline{2-4}
+	\multirow{3}{*}{Host} & d & DOWN 			& Host-objektet er nede 			\\ \cline{2-4}
 					    & u & UNREACHABLE 		& Et parent er nede eller unreachable.		\\ \cline{2-4}	
 					    & r & UP 			& Hosten går til UP				\\ \hline 
         \multirow{3}{*}{Service} 	    & c & CRITICAL 		& Service-en er i CRITICAL 			\\ \cline{2-4}
@@ -29,12 +30,12 @@ Når en feil oppstår vil Icinga vurdere ulike konfigurasjonsopsjoner før det e
 	\hline
 \end{tabular}
 \label{objekt_varsling}
-\end{table}
 \end{center}
+\end{table}
 
 
-\subsection{Flapping}
-I Icinga defineres “flapping” som når et host- eller service-objekt skifter state for ofte, noe som resulterer i mange problem- og recoveryvarsler. cite{http://docs.icinga.org/1.8/en/flapping.html} Dersom detektering av flapping er konfigurert for objektet vil Icinga stoppe varsler for det dersom prosentandelen flapping overstiger en konfigurert grense. Objektet regnes som å ha startet å flappe når andelen for første gang overstiger en “høy”-grense og som å stoppe å flappe når andelen igjen er under en “lav”-grense.
+\subsubsection{Flapping}
+I Icinga defineres “flapping” som når et host- eller service-objekt skifter state for ofte, noe som resulterer i mange problem- og recoveryvarsler. \cite{icingaflapping} Dersom detektering av flapping er konfigurert for objektet vil Icinga stoppe varsler for det dersom prosentandelen flapping overstiger en konfigurert grense. Objektet regnes som å ha startet å flappe når andelen for første gang overstiger en “høy”-grense og som å stoppe å flappe når andelen igjen er under en “lav”-grense.
 
 Denne prosentandelen er kalkulert ved at
 \begin{itemize}
@@ -57,7 +58,7 @@ define host {
 }
 \end{lstlisting}
 
-\subsection{Oppsett av kontakter og kontaktgrupper}
+\subsubsection{Oppsett av kontakter og kontaktgrupper}
 
 
 IKT-avdelingen ønsket å kunne styre kontaktinformasjon og kontaktgrupper fra Active Directory. Det ble bestemt at ansvarsforhold skulle gjenspeiles i kontaktgrupper /ref {vedlegg møte}, for eksempel “ts\_ansvarlig” eller “printer\_ansvarlig”. Icinga støtter ikke integrasjon mot LDAP i konfigurasjonsfilene, men siden disse er rene tekstfiler kan de enkelt opprettes og endres med script. Vi var i utgangspunktet skeptiske til å la et script gjøre endringer i konfigurasjonsfiler, da vi var redd for at dette kunne medføre en konfigurasjon med feil, som igjen ville føre til at Icinga ikke ville kunne lese ny konfigurasjon. 
@@ -139,11 +140,11 @@ define service contact_sync {
 }
 \end{lstlisting}
 
-\subsection{Timeperiod}
+\subsubsection{Timeperiod}
 
 Objektettypen timeperiod er sterkt knyttet til kontakter. Her kan en definere perioder for varsling. En har mulighet til å definere spesifikke dager, datoer eller hver n-te dag. 
 
-Det var ønskelig at det ikke skulle sendes ut varsler når IKT-avdelingen har servicevindu, den første onsdagen etter andre tirsdagen i hver måned (dagen etter Patch-Tuesday fotnote http://en.wikipedia.org/wiki/Patch\_tuesday). For å få til dette ble det først prøvd å definere det slik:
+Det var ønskelig at det ikke skulle sendes ut varsler når IKT-avdelingen har servicevindu, den første onsdagen etter andre tirsdagen i hver måned (dagen etter Patch-Tuesday fotnote \cite{wiki:patch}). For å få til dette ble det først prøvd å definere det slik:
 
 \begin{lstlisting}
 define timeperiod {
@@ -169,7 +170,7 @@ define timeperiod {
 }
 \end{lstlisting}
 
-\subsection{Eskalering}
+\subsubsection{Eskalering}
 
 Når varsel har blitt sendt ut, og state-en til et host- eller service-objekt ikke har endret seg over en definert tidsperiode, kan et eskalerings varsel sendes. Contact- eller contactgroup-objektene som er referert til i et host- eller serviceescalation-objekt, vil da motta SMS eller e-mail om hendelsen .
 
@@ -190,22 +191,21 @@ Det samme kan benyttes på host-objekter ved at ikke service\_description define
 \begin{lstlisting}
 define hostescalation {
 	hostgroup_name		domain_controllers
-	contact_groups		team_leaders
-	first_notification	3 	
-	last_notification	5 # When does escalation notifications stop
+	contact_groups		big_bosses
+	first_notification	3 	last_notification	5 # When does escalation notifications stop
 	notification_interval	50
 	escalation_options	d #Only use escalation when host is D(own)
 }
 \end{lstlisting}
 
-\subsection{Varslingsmelding}
+\subsubsection{Varslingsmelding}
 
 Selve varslingsmeldingene sendes ut først når host- eller service-objekter er i en hardstate (/ref beskrevet i x.x). Et eksempel er om en brannmurs hostsjekk returnerer DOWN. Da er det ikke ønskelig å varsle over SMS eller e-post, dersom det er snakk om et par ping som mistes. For eksempel kan en sjekk som har returnert DOWN kjøres to ganger til, med et intervall på ett minutt, før en hardstate settes, slik:
 
 \begin{lstlisting}
 define host {
-   use 				generic_host # Inherit basic config. check_ping for host_check
-   host_name			hig-fw1
+   use 	generic_host     # Inherit basic config. check_ping for host_check
+   host_name	hig-fw1
    max_check_attempts           2 # Number of checks before hardstate
     retry_check_interval        1 # 60 seconds between each consecutive check
 }
@@ -216,15 +216,15 @@ For et contact-objekt kan det settes opp ett eller flere command-objekt for båd
 I eksempelet under brukes command-objektet notify-host-by-email og notify-host-by-sms for varslingsmeldinger:
 \begin{lstlisting}
 define contact {
-   contact_name 		 Kari Sysadmin
-   email 			 kari@firma.org
-   pager 			 480 88 256 
+   contact_name Kari Sysadmin
+   email kari@company.org
+   pager 480 88 256 
    host_notification_commands    host_problem_email, host_problem_sms
-   service_notification_commands service_problem_email, service_problem_sms
+   service_notification_commands service_problem_email, service_probleml_sms
 }
 \end{lstlisting}
 
-I eksempelet under vises et command-objekt fra selve implementasjonen. Her benyttes sendmail ref/{http://en.wikipedia.org/wiki/Sendmail} til å sende en epost til en SMS-gateway.
+I eksempelet under vises et command-objekt fra selve implementasjonen. Her benyttes sendmail \cite{wiki:sendmail} til å sende en epost til en SMS-gateway.
 
 \begin{lstlisting}
 define command {
@@ -233,15 +233,15 @@ define command {
 }
 \end{lstlisting}
 
-Varslingsmelder som sendes over SMS vil være korte og lettfattede, mens de som sendes til e-post gjerne er lengre og inkluderer mer utfyllende informasjon. Informasjonen som sendes ut hentes ut ved hjelp av makroer i Icinga /ref{http://docs.icinga.org/latest/en/macrolist.html}. 
+Varslingsmelder som sendes over SMS vil være korte og lettfattede, mens de som sendes til e-post gjerne er lengre og inkluderer mer utfyllende informasjon. Informasjonen som sendes ut hentes ut ved hjelp av makroer i Icinga \cite{icingamacro}. 
 
 Alle varslingsmeldinger sendes fra en og samme e-post-server. Dette er ikke helt ideelt fordi en vil miste både SMS- og e-postvarsling, dersom e-post-serveren skulle slutte å fungere. Løsningen vil være å definere en fallback-server som ble brukt hvis Icinga ikke får kontakt med e-post-serveren. 
 
-\subsection{Kritisk Varsling}
+\subsubsection{Kritisk Varsling}
 
 For kritiske tjenester og utstyr er det i konfigurasjonen defineret et eget generisk objekt som brukes av de service- og host-objektene som anses som kritiske. Dette gjelder domenekontrollere, nettverksutstyr på hoveddatarommet, temperatursensorer og UPS-er. Disse objektene vil sjekkes oftere enn det som er satt som standard. Varslingsmelding vil også sendes til alle ved IKT-avdelingen om en hendelse skulle inntreffe, også utenom arbeidstid og i servicevinduet.
 
-\subsection{Statusvisning}
+\subsubsection{Statusvisning}
 
 Icinga har allerede som nevnt i x.x et webgrensesnitt. Dette er et verktøy for å utføre handlinger på hosts og servicer. Her finnes også et “tactical overview”, som vist i figur \ref{icingawebgui}. Det er ikke tilrettelagt for å få vist en kort, og beskrivende beskjed om hva som er galt på de host-ene og tjenestene med feil på en stor skjerm. Det vises et antall for de ulike statusene, men her krever det flere handlinger for å få en bedre oversikt, og er tilrettelagt for administrering. Det ble derfor besluttet å utvikle et webgrensesnitt som er tilpasset IKT-avdelings behov.
 
@@ -268,9 +268,9 @@ For at statusvinduet skulle imøtekomme IKT-avdelingens ønsker, ble det beslutt
 
 Utviklingsprosessen ble startet med et møte med hele IKT-avdelingen for å presentere gruppens forslag til utkast på designet, som vist i  /ref mockup. Her kom det frem forslag om å vise temperaturene fra serverrom-sensorene som en terning der det fysiske oppsettet kom frem.
 
-Eksisterende programvare for denne type fremvisning ble funnet etter litt søk, og det ble besluttet å gjenbruke Nagdash cite https://github.com/lozzd/Nagdash. Løsningen var et godt utgangspunkt for det visuelle, og er skrevet i språket PHP, noe gruppemedlemmene føler seg komfortable med og IKT-avdelingen har benyttet seg av i tidligere prosjekter. 
+Eksisterende programvare for denne type fremvisning ble funnet etter litt søk, og det ble besluttet å gjenbruke Nagdash cite \cite{nagdash}. Løsningen var et godt utgangspunkt for det visuelle, og er skrevet i språket PHP, noe gruppemedlemmene føler seg komfortable med og IKT-avdelingen har benyttet seg av i tidligere prosjekter. 
 
-Nagdash baserer uthenting av informasjon om host- og serviceobjekter på nagios-api cite https://github.com/xb95/nagios-api, som er en tjeneste som må installeres på Icinga-serveren og setter opp et API over HTTP. Icinga har sitt eget API som det var ønskelig å benytte. Uthenting av informasjon måtte derfor endres til å bruke kall til API-et som Icinga-web tilbyr /cite https://wiki.icinga.org/display/Dev/Icinga-Web+REST+API.
+Nagdash baserer uthenting av informasjon om host- og serviceobjekter på nagios-api \cite{nagiosapi}, som er en tjeneste som må installeres på Icinga-serveren og setter opp et API over HTTP. Icinga har sitt eget API som det var ønskelig å benytte. Uthenting av informasjon måtte derfor endres til å bruke kall til API-et som Icinga-web tilbyr \cite{icingarestapi}.
 
 Gjennom to iterasjoner kom det frem flere ønsker som ble lagt inn:
 \begin{itemize}
@@ -289,16 +289,16 @@ I Figur \ref{statusvindu_mockup} vises en mockup av statusvisningen som vi la fr
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.3]{img/statusvindu_mockup}}
+    \includegraphics[scale=0.3]{img/statusvindu_mockup}
     \caption{Mockup av statusvindu}
     \label{statusvindu_mockup}
 \end{figure}
 
-Figur \ref viser hvordan Nagdash ser ut med oversatte API-kall:
+Figur \ref{statusvindu_mockup} viser hvordan Nagdash ser ut med oversatte API-kall:
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.3]{img/statusvindu_oversatte_kall}}
+    \includegraphics[scale=0.3]{img/statusvindu_oversatte_kall}
     \caption{Statusvindu med oversatte API-kall}
     \label{statusvindu_mockup}
 \end{figure}
@@ -312,7 +312,7 @@ Figur \ref{statusvindu_first} viser statusvisningen etter første iterasjon, her
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.3]{img/statusvindu_first}}
+    \includegraphics[scale=0.3]{img/statusvindu_first}
     \caption{Statusvindu etter første iterasjon}
     \label{statusvindu_first}
 \end{figure}
@@ -331,7 +331,7 @@ Figur \ref{statusvindu_final} viser endelig statusvisningen, og her ble følgend
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.3]{img/statusvindu_final}}
+    \includegraphics[scale=0.3]{img/statusvindu_final}
     \caption{Sluttresultatet av statusvinduet}
     \label{statusvindu_final}
 \end{figure}
@@ -347,7 +347,7 @@ I filen external.js hentes data fra de ulike modulene og settes inn i statusvind
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.6]{img/statusvindu_arkitektur}}
+    \includegraphics[scale=0.6]{img/statusvindu_arkitektur}
     \caption{Informasjonsflyt mellom modulene involvert i statusvinduet}
     \label{statusvindu_arkitektur}
 \end{figure}
@@ -415,7 +415,7 @@ dataLabels: {
                }
 \end{lstlisting}
 
-Standard font-størrelse var for liten, så denne ble justert opp. I Internet Explorer 9.0 ble da tallet flyttet for høyt over søylen i forhold til standard høyde. En løsning på dette ble funnet via siden for rapportering av feil til Highcharts /cite https://github.com/highslide-software/highcharts.com/issues/1567
+Standard font-størrelse var for liten, så denne ble justert opp. I Internet Explorer 9.0 ble da tallet flyttet for høyt over søylen i forhold til standard høyde. En løsning på dette ble funnet via siden for rapportering av feil til Highcharts \cite{iebug} 
 
 Endring:
 
@@ -466,7 +466,7 @@ Grafikken for servermiljø tilpasses automatisk etter den raden med flest antall
 
 \subsubsection{RSS}
 
-RSS-feeden hentes inn fra IKT-avdelingens egen driftsfeed, der meldinger til alle brukere legges ut. Dersom det ikke er noen meldinger vil det ikke vises noe. Hvis lengden på feeden overstiger det som får plass på én linje vil den begynne å scrolle bortover. Dette gjøres med jQuery-pluginen /ref http://plugins.jquery.com/marquee/.
+RSS-feeden hentes inn fra IKT-avdelingens egen driftsfeed, der meldinger til alle brukere legges ut. Dersom det ikke er noen meldinger vil det ikke vises noe. Hvis lengden på feeden overstiger det som får plass på én linje vil den begynne å scrolle bortover. Dette gjøres med jQuery-pluginen \cite{jqmarquee}.
 
 \subsubsection{Prioritering}
 
@@ -474,7 +474,7 @@ Standard visning av et varsel er å vise den som kom inn sist øverst. Ved tilfe
 
 Den ene metoden var å bruke et severity-tall som Icinga kalkulerer basert på hvor mange child-hosts og child-servicer som hører til et gitt host-objekt som er nede. Dette vises som “network outages” i Icinga Classic Web der hver host får et “severity”-tall. Det eksisterte ikke noen dokumentasjon om dette kunne hentes ut via API-et eller hvordan “severity” kalkuleres. 
 
-Utrekningen skjer i outages.cgi, som ble funnet etter å lese gjennom HTML-koden og lese kildekoden for outages.c /ref https://github.com/dnsmichi/icinga/blob/master/cgi/outages.c : 
+Utrekningen skjer i outages.cgi, som ble funnet etter å lese gjennom HTML-koden og lese kildekoden for outages.c \cite{dnsmichi} : 
 Child-servicer blir delt på et forhåndsdefinert tall (service\_severity\_divisor) som brukes for å angi hvor kritisk det er i forhold til child-hosts.
 
 \begin{lstlisting}
@@ -503,4 +503,4 @@ Metoden med egendefinert variabel ble valgt, fordi denne kan anvendes på alle s
 
 Implementasjonen av metode to blir gjort ved å spørre API-et for hver host eller service som er hentet ut fra det første kallet (ref x.x). Har hosten eller servicen variabelen \_PRIORITY definert, vil denne lagres, ellers blir det satt 0 som prioritetstall.
 
-Selve sorteringen av hosts og servicer blir gjort av PHP-funksjonen usort() med to egenskrevne sammenligningsfunksjoner. http://php.net/manual/en/function.usort.php. Grunnen til dette er at arrayet er flerdimensjonalt, så det må sorteres på verdien til en spesifikk nøkkel. Det skal også sorteres innenfor state-ene DOWN og UNREACHABLE, og CRITICAL og WARNING. DOWN skal gå foran UNREACHABLE for host-objekter, og CRITICAL foran WARNING for service-objekter, deretter sorteres det etter prioriteringsvariabelen.
+Selve sorteringen av hosts og servicer blir gjort av PHP-funksjonen usort() med to egenskrevne sammenligningsfunksjoner. \cite{usort}. Grunnen til dette er at arrayet er flerdimensjonalt, så det må sorteres på verdien til en spesifikk nøkkel. Det skal også sorteres innenfor state-ene DOWN og UNREACHABLE, og CRITICAL og WARNING. DOWN skal gå foran UNREACHABLE for host-objekter, og CRITICAL foran WARNING for service-objekter, deretter sorteres det etter prioriteringsvariabelen.
