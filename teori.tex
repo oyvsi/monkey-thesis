@@ -144,27 +144,27 @@ Det er også to objekter med metainformasjon, “hostextinfo” og “serviceext
 
 Den siste objekttypen er module. Her spesifiseres konfigurasjon for en modul som utvider funksjonalitet i Icinga-Web.
 
-Sammenhengen mellom objektene er viktig å forstå for å skjønne hvordan sjekker utføres i Icinga. I et serviceobjekt defineres hvilket command-objekt som skal benyttes for å teste tjenesten og hvilke host eller hostgroup dette skal sjekkes på. Dette er vist i Figur \ref{command_host_service}
-
+Sammenhengen mellom objektene er viktig å forstå for å skjønne hvordan sjekker utføres i Icinga. I et service-objekt defineres hvilket command-objekt som skal benyttes for å teste tjenesten og hvilke host- eller hostgroup-objekter dette skal sjekkes på. Dette er vist i Figur \ref{command_host_service}
 
 \begin{figure}
     \centering
     \includegraphics[scale=0.4]{img/command_host_service}
-    \caption{Sammenhengen mellom host service og command objekt.}
+    \caption{Sammenhengen mellom host-, service- og command-objekter.}
     \label{command_host_service}
 \end{figure}
 
-\section{Plugins}
-Icinga i seg selv kommer uten noen overvåkningssjekker. Til dette benyttes plugins.
+\section{Plugin-er}
+Icinga i seg selv kommer uten noen overvåkningssjekker. Til dette benyttes plugin-er.
 
-Plugins i Icinga er eksterne programmer som kjøres der outputen hentes inn som data. Resultatet av sjekken hentes fra exit-koden\cite{wiki:returncode} og oversettes til en state etter Tabell \ref{state}.
+En plugin i Icinga er et eksternt program som kjøres og outputen hentes inn som data. Resultatet av sjekken hentes fra exit-koden\cite{wiki:returncode} og oversettes til en tilstand etter Tabell \ref{state}.
 
+Det finnes et sett med offisielle plugin-er til Nagios som utgis av "Nagios Plugins project" \cite{http://nagiosplugins.org}. Pakken finnes i en rekke pakkebehandlere og inneholder over 50 plugin-er som er ment for å dekke grunnleggende overvåkningsbehov.
 
 \begin{table}
 	\begin{center}
 	\begin{threeparttable}
 	\begin{tabular}{ | l | l | l |} \hline
-    \textbf{Plugin Return Code} & \textbf{Service State} & \textbf{Host State} \\ \hline
+    \textbf{Retur kode fra plugin} & \textbf{Service tilstand} & \textbf{Host tilstand} \\ \hline
 	0 & OK & UP \\ \hline
 	1 & WARNING & UP or DOWN/UNREACHABLE* \\ \hline
 	2 & CRITICAL & DOWN/UNREACHABLE \\ \hline
@@ -175,19 +175,19 @@ Plugins i Icinga er eksterne programmer som kjøres der outputen hentes inn som 
 	\small
 	\item *Ved bruk av Aggressive host checking \cite{icingapluginapi}.
 	\end{tablenotes}
-	\caption{State oversikt}
+	\caption{Tilstandsoversikt}
 	\label{state}
 	\end{threeparttable}
 	\end{center}
 \end{table}
 
 \section{Sjekker}
-Staten for en service eller en host vil bestemmes ut i fra et returnert resultat av en aktiv eller passiv sjekk, forskjellen på disse to vil bli forklart i de neste delkapitlene.
+Tilstanden for et service- eller en host-objekt vil bestemmes ut i fra et returnert resultat av en aktiv eller passiv sjekk. Forskjellen på disse to vil bli forklart i de neste delkapitlene.
 
-Dersom en aktiv eller passiv sjekk resulterer i en annen state enn “OK” er det to typer av state-en, “soft” og “hard”. Første gang en plugin returnerer en feil vil staten bli satt til “soft” i tillegg til service- eller host-staten. Etter dette vil sjekken kjøres hyppigere for å sjekke om det er snakk om et forbigående problem. Etter et satt antall ganger der pluginen fortsatt ikke returnerer “OK”, vil staten skifte til “hard” og det sendes ut varslingsmelding /ref {varslingsmelding}.
+Dersom en aktiv eller passiv sjekk resulterer i en annen tilstand enn “OK” er det to typer av tilstanden, “soft” og “hard”. Første gang en plugin returnerer en feil vil tilstanden bli satt til “soft” i tillegg til service- eller host-tilstanden. Etter dette vil sjekken kjøres hyppigere for å finne ut om det er snakk om et forbigående problem. Etter et satt antall ganger der pluginen fortsatt ikke returnerer “OK”, vil tilstanden skifte til “hard” og det sendes ut varslingsmelding /ref {varslingsmelding}.
 
 \subsubsection{Aktive sjekker}
-En aktiv sjekk defineres ut i fra et command-objekt med parametere og et tidsintervall i service- og host-objekter. I command-objektet defineres en plugin som skal kjøre og returverdien vil bestemme hvilken state service- eller host-objekter har. 
+En aktiv sjekk er en sjekk som initieres av Icinga, der en kommando kjøres på Icinga-serveren. Dette er også kjent som en "poll"-modell". En aktiv sjekk defineres ut i fra et command-objekt med parametere og et tidsintervall i service- og host-objekter. I command-objektet defineres en plugin som skal kjøre og returverdien vil bestemme hvilken tilstand service- eller host-objekter har. 
 
 \begin{figure}
    \centering 
@@ -197,7 +197,7 @@ En aktiv sjekk defineres ut i fra et command-objekt med parametere og et tidsint
 \end{figure}
 
 \subsubsection{Passive sjekker}
-Passive sjekker går motsatt vei av av en aktiv sjekk. Her vil hver host si ifra når verdier har overgått en satt grense eller en feil har oppstått. Dette gjøres ved at et eksternt program skriver en linje med informasjon om tjenesten og sjekkresultat til en fil som Icinga sjekker periodisk.
+Passive sjekker går motsatt vei av av en aktiv sjekk. Her vil hver host si ifra når verdier har overgått en satt grense eller en feil har oppstått, dette kalles ofte for en "push"-modell. Dette gjøres ved at et eksternt program skriver en linje med informasjon om tjenesten og sjekkresultat til en fil som Icinga sjekker periodisk.
 
 Fordelen er at en får beskjed med en gang noe er galt og kan gi en raskere varsel. Det vil også avlaste Icinga-serveren da alle sjekker utelukkende vil bli kjørt lokalt. En vil da måtte åpne for at kommunikasjon kan initieres fra alle enheter som skal overvåkes til Icinga-serveren. Men en mister samtidig muligheten til å samle all konfigurasjon på ett sted \ref{passive_checks}.
 
@@ -210,9 +210,9 @@ Fordelen er at en får beskjed med en gang noe er galt og kan gi en raskere vars
 
 \subsubsection{Hostsjekk}
 
-Resultatet av en host-sjekk vil avgjøre om en host er i state “UP” eller “DOWN”. 
+Resultatet av en host-sjekk vil avgjøre om tilstanden til host-objektet er “UP” eller “DOWN”. 
 
-Det er ikke et fast tidsintervall for en hostsjekk [d]med mindre check\_interval er definert. Icinga vil kjøre denne sjekken om en service som er satt opp for host-en skifter state. Servicer som er definert for en host som er i “DOWN” vil automatisk bli satt som “ Known service problems”, og ingen sjekker vil bli kjørt på dem før host-en er “OK” igjen.
+Det er ikke et fast tidsintervall for en hostsjekk [d]med mindre check\_interval er definert. Icinga vil kjøre denne sjekken om en service som er satt opp for host-en skifter tilstand. Servicer som er definert for en host som er i “DOWN” vil automatisk bli satt som “Known service problems”, og ingen sjekker vil bli kjørt på dem før host-en er “OK” igjen.
 
 Grunnsjekken for en host defineres i host-konfigurasjonen med “check\_command”.
 
@@ -302,7 +302,7 @@ define host {
 \end{lstlisting}
 
 \subsubsection{Regulære uttrykk}
-Ved å sette "use regular expressions" i konfigurasjonen for Icinga, kan en benytte regulære uttrykk i attributter i et objekt, der en refererer til andre objekter. Icinga vil automatisk tolke navnet som et regulært uttrykk dersom det inneholder "*", "?", "+", eller "\".
+Ved å sette "use regular expressions" i konfigurasjonen for Icinga, kan en benytte regulære uttrykk i attributter i et objekt, der en refererer til andre objekter. Icinga støtter standarden POSIX Extended Regular Expressions, og vil automatisk tolke navnet som et regulært uttrykk dersom det inneholder "*", "?", "+", eller "\".
 
 Dette kan være nyttig dersom en for eksempel vil legge alle hoster i en hostgroup, som har en navnekonvensjon som gjør at hver av hostene unikt kan identifiseres ved å bytte ut deler av navnet med en variabel.
 
