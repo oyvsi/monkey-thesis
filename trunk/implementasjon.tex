@@ -435,7 +435,7 @@ Gjennom perfmon har en tilgang til en rekke viktige tall \cite{exchange} for å 
 
 Microsoft har gitt ut egne anbefalinger til grenseverdier \cite{exchangethresholds}.
 
-I tillegg til disse var det ønskelig med en sjekk som testet hele e-post-oppsettet. Til dette benyttes pluginen “check\_email\_delivery” \fnurl{Check email delivery}{http://exchange.nagios.org/directory/Plugins/Email-and-Groupware/check\_email\_delivery/}. Her sjekkes det at en e-post kan sendes fra SMTP-serveren. E-posten som sendes ut inneholder en unik ID. Videre kobler pluginen seg til IMAP-tjenesten og sjekker om e-posten med den unike ID-en kom frem. Antall sekunder for hele round-tripen blir målt. Helst skulle en her koblet til en SMTP-server som står utenfor nettverket, men dette var det ikke andledning til.
+I tillegg til disse var det ønskelig med en sjekk som testet hele e-post-oppsettet. Til dette benyttes pluginen “check\_email\_delivery” \cite{exchange}. Her sjekkes det at en e-post kan sendes fra SMTP-serveren. E-posten som sendes ut inneholder en unik ID. Videre kobler pluginen seg til IMAP-tjenesten og sjekker om e-posten med den unike ID-en kom frem. Antall sekunder for hele round-tripen blir målt. Helst skulle en her koblet til en SMTP-server som står utenfor nettverket, men dette var det ikke andledning til.
 
 Det sjekkes også at websiden for Outlook Web Access er tilgjengelig gjennom pluginen “check\_http”. Her burde en nok også sjekket om det var mulig å logge inn.
 
@@ -473,7 +473,7 @@ MySQL databasene til IKT-avdelingen lagrer all database data i minnet, så her v
 For at Icinga-serveren skal kunne snakke med de forskjellige database-motorene trengs en klient for hver av de. 
 
 \subsubsection{Oracle}
-Databaseklienten finnes på Oracle sine nettsider \fnurl{Linux Oracle Databaseclient}{http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html}. Den finnes ikke som en deb-pakke, som som brukes for Debian. Det finnes derimot en rpm-pakke, som brukes av blant annet Red Hat. Alien /cite\cite{debian:alien} ble brukt til å konvertere rpm-pakken over til deb-pakke før installasjon på Icinga-serveren. 
+Databaseklienten finnes på Oracle sine nettsider \cite{oracleclient}. Den finnes ikke som en deb-pakke, som som brukes for Debian. Det finnes derimot en rpm-pakke, som brukes av blant annet Red Hat. Alien /cite\cite{debian:alien} ble brukt til å konvertere rpm-pakken over til deb-pakke før installasjon på Icinga-serveren. 
 \begin{lstlisting}
 alien oracle-instantclient11.2-basic-11.2.0.3.0-1.x86_64.rpm 
 dpkg -i oracle-instantclient11.2-basic-11.2.0.3.0-1.x86_64.deb
@@ -518,10 +518,10 @@ eeval [ oracle_health ] =
 \subsubsection{MySQL}
 For MySQL ligger de nødvendige pakkene i Debians pakkebrønnen og kan installeres med apt. De nødvendige pakkene er “mysql-client”, for database koblingen og “libclass-dbi-mysql-perl”, som er en Perl-modul for å kunne koble til en MySQL-server. 
 MSSQL
-For MSSQL var det vanskelig å finne en databaseklient som er opensource. Her endte vi opp med FreeTDS \fnurl{FreeTDS}{http://www.freetds.org/}, sammen med Perl-modulen “libdbd-sybase-perl”
+For MSSQL var det vanskelig å finne en databaseklient som er opensource. Her endte vi opp med FreeTDS \cite{freetds}, sammen med Perl-modulen “libdbd-sybase-perl”
 
 Plugin
-Plugin-ene som blir benyttet for databaser er skrevet av firmaet “Consulting \& Solutions” og heter “Check\_MySQL\_Health”, “Check\_Oracle\_Health” og “Check\_MSSQL\_Health” \fnurl{Consol Open Source Monitoring}{http://www.consol.com/open-source-monitoring/database-monitoring/}
+Plugin-ene som blir benyttet for databaser er skrevet av firmaet “Consulting \& Solutions” og heter “Check\_MySQL\_Health”, “Check\_Oracle\_Health” og “Check\_MSSQL\_Health” \cite{consol}
 
 Disse må kompileres fra kildekoden. For å gjøre dette må en først konfigurere de med riktige parametere. Dette er de samme for alle tre plugin-ene.
 
@@ -560,9 +560,9 @@ MySQL Cluster er et distribuert oppsett for MySQL. Ved IKT-avdelingen benyttes e
 	\item SQL - MySQL servere som kobler seg til data-nodene for å hente og lagre data.
 \end{itemize}
 
-Den enkleste måten å hente ut statistikk om et MySQL Cluster er å benytte seg av mangement programmet “ndb\_adm” som kan hentes ut fra installasjonspakken til mysql-cluster \fnurl{NDB Cluster download}{http://dev.mysql.com/downloads/cluster}. I ndb\_adm kan en se hvor mange noder av hver type som er tilkoblet og minneforbruket til hver av datanodene. De plugin-ene som benyttes baserer seg på output fra “ndb\_adm”.
+Den enkleste måten å hente ut statistikk om et MySQL Cluster er å benytte seg av mangement programmet “ndb\_adm” som kan hentes ut fra installasjonspakken til mysql-cluster \cite{ndbdownload}. I ndb\_adm kan en se hvor mange noder av hver type som er tilkoblet og minneforbruket til hver av datanodene. De plugin-ene som benyttes baserer seg på output fra “ndb\_adm”.
 
-Antallet noder tilkoblet overvåkes med pluginen check\_ndbd \fnurl{MySQL NDB Node Monitoring}{https://www.monitoringexchange.org/inventory/Check-Plugins/Database/MySQL/NDB-node-monitoring}. Her ble det gjort en endring i koden slik at serveren som ndb\_adm kobler seg til kan spesifiseres som en parameter.
+Antallet noder tilkoblet overvåkes med pluginen check\_ndbd \cite{ndbnode}. Her ble det gjort en endring i koden slik at serveren som ndb\_adm kobler seg til kan spesifiseres som en parameter.
 
 For minnebruk ble det skrevet en egen plugin, da ingen eksisterende plugin ble funnet som tillot å spesifisere hvilke noder som skulle sjekkes. ID-ene til nodene som skal sjekkes ble satt opp som en egendefinert variabel i host-konfigurasjonen. Denne sendes til pluginen via service- og kommando-objektene, som vist under.
 
@@ -635,7 +635,7 @@ Det er laget et generisk oppsett som overvåker temperatur, PSU og viftestatus. 
 
 Dersom en vifte eller PSU raporteres som defekt vil det raporteres som en CRITICAL-status i Icinga. For temperatur er grenseverdiene satt til xx for WARNING og xx for CRITICAL.
 
-Switchene IKT-Avdelingen bruker er forskjellige modeller fra leverandørne Cisco, Dell og HP. Disse overvåkes med plugin-ene "check\_nwc\_health" \fnurl{Check NWC Health}{http://labs.consol.de/nagios/check\_nwc\_health/} for Cisco og HP og check\_snmp\_powerconnect for Dell \fnurl{Check SNMP Powerconnect}{http://exchange.nagios.org/directory/Plugins/Hardware/Network-Gear/Dell/Check-PowerConnect-Switch/details}.
+Switchene IKT-Avdelingen bruker er forskjellige modeller fra leverandørne Cisco, Dell og HP. Disse overvåkes med plugin-ene "check\_nwc\_health" \cite{nwchealth} for Cisco og HP og check\_snmp\_powerconnect for Dell \cite{checkpowerconnect}.
 
 \subsection{Routere og brannmurer}
 IKT-avdelinger benytter Cisco ASA og Cisco PIX routere mellom forskjellige subnettverk. I tillegg utfører de gjerne oppgaver som pakkefiltrering, NAT og IPsec-tunneler.
@@ -672,7 +672,7 @@ Sjekkene som settes opp for å verifisere at failover funksjonaliteten fungerer 
 \item Hvis failover ikke er konfigurert returneres UNKNOWN. 
 \end{itemize}
 
-Til dette benyttes pluginen “check\_cisco\_firewall” \fnurl{Nagios Exhange - Check Firewall ASA-PIX}{http://exchange.nagios.org/directory/Plugins/Hardware/Network-Gear/Cisco/Cisco--2D-Check-firewall-ASA-and-PIX/details}
+Til dette benyttes pluginen “check\_cisco\_firewall” \cite{checkciscofirewall}.
 
 Hvis brannmurene deler management IP på primary og secondary, er det ingen mulighet for å hente ut informasjon fra den passive brannmuren. Da sjekkes failover status bare for primary. I et ideelt miljø burde både passiv og aktiv ha hver sin IP adresse, slik at fysiske feil kan avdekkes på den passive brannmuren.
 
@@ -680,7 +680,7 @@ Begge brannmurene legges i en hostgroup som er lagt på service-objektet for “
 
 \subsubsection{VPN}
 
-For brannmurer som har VPN-tjeneste sjekkes antall oppkoblede bruker opp mot det antallet brannmuren er lisensiert for. Begge disse verdiene finnes som SNMP OID-er definert i CISCO-FIREWALL-MIB. Det fantes allerede en plugin som sjekker antall tilkoblede brukere \fnurl{Check Cisco ASA VPN Sessions}{http://exchange.nagios.org/directory/Plugins/Uncategorized/Software/SNMP/cisco\_asa\_sessions/details}. Denne ble endret til å også hente ut det maksimale antallet og sammeligne brukt kapasitet i prosent mot grenseverdier som kommer inn som argumenter.
+For brannmurer som har VPN-tjeneste sjekkes antall oppkoblede bruker opp mot det antallet brannmuren er lisensiert for. Begge disse verdiene finnes som SNMP OID-er definert i CISCO-FIREWALL-MIB. Det fantes allerede en plugin som sjekker antall tilkoblede brukere \cite{checkciscovpn}. Denne ble endret til å også hente ut det maksimale antallet og sammeligne brukt kapasitet i prosent mot grenseverdier som kommer inn som argumenter.
 
 \subsubsection{Båndbredde}
 
@@ -712,7 +712,7 @@ En stor ulempe med å benytte disse er at de er 32 bit, og vil dermed nullstille
 \end{table}
 Det er derfor anbefalt å bruke 64-bit-variablene ifHCOutOctets og ifHCInOctets i stedet \cite{ciscosnmpcounters}.
 
-Pluginen det er tatt utgangspunkt i for å hente ut båndbreddebruk heter check\_iftraffic64 \fnurl{Check Cisco IFtraffic}{http://exchange.nagios.org/directory/Plugins/Network-Connections,-Stats-and-Bandwidth}. Denne er noe omskrevet for å kunne sende inn absolutte verdier som grenseverdier for varsling. I generic-firewall er det satt opp to egendefinerte variabler “WANWARN” og “WANCRIT”, som setter standard grenseverdier for alle brannmurer. For brannmurer der det er normalt med høyere båndbreddebruk er disse variablene overstyrt i konfigurasjonen for host-objektet.
+Pluginen det er tatt utgangspunkt i for å hente ut båndbreddebruk heter check\_iftraffic64 \cite{checkciscoif}. Denne er noe omskrevet for å kunne sende inn absolutte verdier som grenseverdier for varsling. I generic-firewall er det satt opp to egendefinerte variabler “WANWARN” og “WANCRIT”, som setter standard grenseverdier for alle brannmurer. For brannmurer der det er normalt med høyere båndbreddebruk er disse variablene overstyrt i konfigurasjonen for host-objektet.
 
 \subsection{VMware og Citrix Xen}
 
