@@ -1,4 +1,5 @@
-\chapter{Implementering}
+\chapter{Implementasjon}
+I dette kapittelet står det om hvordan gruppen har utført implementasjonen av overvåkningsløsningen for IKT-avdelingen, hvilke valg som er tatt underveis og hvordan enheter overvåkes.
 \section{Utstyr}
 \subsubsection{Labmiljø}
 Et labmiljø har vært brukt for å teste plugins og script før de blir implementert på produksjonsserveren. Ved å teste i lab først, kan en se hvordan sjekker oppfører seg før de implementeres i større skala i produksjon. Labmiljøet inneholder utstyr og tjenester som gjenspeiler det IKT-avdelingen benytter, og på den måten kan ulike scenarier og utstyr testes før dette settes i produksjon.
@@ -59,18 +60,17 @@ Programvare:
 For å overvåke temperatur og luftfuktighet på serverrommet ble det kjøpt inn en NetBotz 200 med støtte for opp til 12 eksterne sensorer \cite{netbotz},
 som oppfyller kravene gitt i oppgavebeskrivelsen. 
 
-\section{Overvåkning med Icinga}
-\subsubsection{Produksjonsserver}
+\section{Produksjonsserver}
 “Quis custodiet ipsos custodes?” er et latinsk uttrykk som kan oversettes med “hvem passer på de som passer på?”. I en overvåkningsløsning er det viktig å stille spørsmålet; hva skjer hvis overvåkningsserveren går ned? Et forslag under prosjektet var å legge overvåkingsserveren på et Xen/Vmware-cluster. Men dette ble etter noe omtanke stemplet som en dårlig ide. Dersom clusteret gikk ned ville også overvåkingsserveren gå ned. Det ble derfor bestemt at denne skulle være en egen fysisk boks. 
 
 For å sikre tilgjengeligheten til Icinga ytterligere, er det også mulig å sette opp et redundant oppsett der alle Icinga-installasjoner kan dele resultater av sjekker mellom seg. Ekstra viktig vil et slikt oppsett være dersom man knytter overvåkningssystemet mot SLA-er. Dersom en mister data om oppetid og tilgjenglighet på en tjeneste, vil man ikke lenger kunne vise hva den har vært.
 
 En annen utfordring var å vite hvor kraftig hardware serveren trengte. Her ble referanselisten til Icinga lagt til grunn \cite{icingainaction}, hvor mange organisasjoner har lagt inn informasjon om sine oppsett. Etter avtale med oppgragsgiver ble det bestemt å sette opp en bladeserver, som eventuelt kunne byttes med noe kraftigere dersom det skulle bli nødvendig. 
 
-\subsubsection{Installasjon}
+\subsection{Installasjon}
 I pakkebrønnen for debian-stable fantes bare versjon 1.0.2 av Icinga, i backports lå 1.7.1. Icinga opprettholder en egen pakkebrønn - “The Debian Monitoring Prosject” \cite{debmon}. Fra denne kunne versjon 1.8.4 installeres. I samråd med teknisk kontakt ved IKT-avdelingen ble det bestemt å bruke versjon 1.8.4 fra debmon.
 
-\subsubsection{Konfigurasjonsfiler}
+\subsection{Konfigurasjonsfiler}
 Ved standard installasjon av Icinga er konfigurasjonen delt opp i objekttyper med flere objekter i hver fil:
 \begin{itemize}
 \item contacts\_icinga.cfg  
@@ -134,33 +134,9 @@ Dette var uoversiktelig og en oppdelt konfigurasjon var ønskelig, som også er 
     child { node {services} };
 \end{tikzpicture}
 
-
-
-% NILS, WTF TO DO?
-%\begin{lstlisting}
-%├── objects
-%│   ├── commands
-%│   │   ├── firewalls
-%│   │   ├── servers
-%│   │   ├── snmp.cfg
-%│   │   └── switches
-%│   ├── contactgroups
-%│   ├── contacts
-%│   ├── escalations
-%│   ├── generics
-%│   ├── hostdependencies
-%│   ├── hostgroups
-%│   ├── hosts
-%│   ├── modules
-%│   ├── servicedependencies
-%│   ├── services
-%\end{lstlisting}
-
 Det ble testet ut et par verktøy for å administrere konfigurasjonsfilene NConf \cite{nconf} og NagiosQL \cite{nagiosql}. Disse ble valgt bort til fordel for manuel konfigurering da det ikke støttet oppdeling av konfigurasjon og kunne ikke kombineres med manuell konfigurasjon. I samråd med oppdragsgiver ble det avgjort av manuell konfigurasjon oppfyller kravet “Det skal være enkelt å legge til nye enheter for overvåking”.
 
-
-
-\subsubsection{Bruk av hostgroup}
+\subsection{Bruk av hostgroup}
 Som nevnt i /ref{der vi snakker om det} knyttes et service-objekt til et host-objekt og et command-objekt for at det skal kjøres en sjekk. For å slippe å skrive et service-objekt for hvert host-objekt benyttes gruppering av host-objekter i hostgroup. For å vise hvordan dette er satt opp vises et eksempel for hvordan dette er satt opp for MySQL-servere:
 
 \begin{lstlisting}
@@ -212,10 +188,10 @@ Figur \ref{sql} viser en visuel fremstilling av hvordan alt dette henger sammen 
 
 
 
-\subsubsection{Grafing}
-I utgangspunktet ble det bestemt at grafing og trenddata skulle holdes utenfor oppgaven. Det ble likevel satt opp grafing via programmet graphite for å motta ytelsesdata og grafe dette. Dette fordi det var ønskelig å kunne etablere en baseline for tjenestene slik at bedre grenseverdier kunne settes.
+\section{Generering av grafer}
+I utgangspunktet ble det bestemt at ytelsesdata skulle holdes utenfor oppgaven. Det ble likevel satt opp en løsning for å visualisere ytelsesdata fra sjekkene med programmet graphite. Dette ble gjort fordi det var ønskelig å kunne etablere en baseline for tjenestene slik at bedre grenseverdier kunne settes.
 
-For å gjøre dette benyttes et vanlig command-objekt i Icinga. Dette defineres på vanlig vis slik:
+For å sette opp eksportering av ytelsesdataen benyttes et vanlig command-objekt i Icinga:
 
 \begin{lstlisting}
 define command {
@@ -223,7 +199,7 @@ command_name            rotate_perf_service
     command_line            /bin/mv /usr/local/icinga/var/perfdata/service-perfdata /usr/local/icinga/var/perfdata/logs/service-perfdata.$TIMET$
 }
 \end{lstlisting}
-Videre må denne konfigureres i Icinga.cfg:
+ Icinga.cfg må konfigureres til å benytte dette:
 
 \begin{lstlisting}
 process_performance_data=1
@@ -232,19 +208,19 @@ service_perfdata_file_processing_command=rotate_perf_service
 service_perfdata_file_template=[SERVICEPERFDATA]\tDATATYPE::SERVICEPERFDATA\tTIMET::$TIMET$\tHOSTNAME::$HOSTNAME$\tSERVICEDESC::$SERVICEDESC$\tSERVICEPERFDATA::$SERVICEPERFDATA$service_perfdata_file_processing_interval=200
 \end{lstlisting}
 
-For å transformere performance-dataen til riktig format for graphite benyttes metricinga \cite{metricinga}. Dette scriptet sjekker spool-mappen én gang i minuttet etter filer som enda ikke er prosessert og sender data inn til carbon (graphite). 
+For å transformere ytelsesdataene til riktig format for graphite benyttes metricinga \cite{metricinga}. Dette scriptet sjekker spool-mappen én gang i minuttet etter filer som enda ikke er prosessert og sender data inn til carbon (graphite). 
 Gjennom graphite vil det dermed grafes basert på performance data på riktig format fra alle service-checks som kjører en command.
 
-Det ble også testet å modifisere scriptet til å legge outputen til service-sjekkene direkte til en mysql-database, som vist i vedlegg /ref{metricinga diff}. Dette ble gjort for å oppfylle kravet fra oppgavebeskrivelsen om at alle henvendelser skal lagres i database. Men det viste seg at dette ville bli så mange rader at dette ble avgjort til ikke å være hensiktsmessig i samråd med oppdragsgiver. Som et alternativ til dette kan en ta inn all data til graphite, men aggrigere det etter en viss tid. Dataen kan så eksporteres fra graphite.
+Det ble også testet å modifisere scriptet til å legge outputen til service-sjekkene direkte til en mysql-database, som vist i vedlegg /ref{metricinga diff}. Dette ble gjort for å oppfylle kravet fra oppgavebeskrivelsen om at alle henvendelser skal lagres i database. Men det viste seg at dette ville bli så mange rader at dette ble avgjort til ikke å være hensiktsmessig i samråd med oppdragsgiver. Som et alternativ til dette kan en ta inn all data til graphite, men aggrigere det etter en viss tid. Dataene kan da eksporteres fra graphite til videre bruk.
 
-\subsubsection{Overvåkning av Windows-servere}
+\section{Overvåkning av Windows-servere}
 For overvåkning av Windows vil NSClient++ bli brukt. NSClient++ er et program som brukes for  å kommunisere med ulike agenter og over ulike protokoller på en ekstern server. I dette prosjektet brukes den for å hente ut informasjon via NRPE-agenten og å kjøre WMI-spørringer mot en Windows-server. NSClient har en konfig fil som genereres under installering. 
 
 NSClient++ er valgt fordi klienten oppdateres hyppig \cite{nsclient}, og det er den agenten som blir referert i Icinga/Nagios dokumentasjon \cite{icingawin}. Med NSClient++ kommer også forhåndskonfigurerte plugin-er, for eksempel for å sjekke minne, CPU, og harddisk.
 
 For installering av NRPE-agenten og mulighet for WMI-spørringer ble det laget en veiledning /cite{nsclientguide} som forklarer hva som skal installeres. Her er det laget en egen konfig fil som har kun funksjonaliteten vi trenger. 
 
-\subsubsection{Overvåkning av Linux-servere}
+\section{Overvåkning av Linux-servere}
 Overvåkning av standard Linux-servere skjer utelukkende ved bruk av NRPE. 
 
 For Debian-servere kan denne installers fra pakkebrønnen “stable” med kommandoen:
@@ -255,18 +231,18 @@ For Red Hat og CentOS må det benyttes en tredjeparts “pakketing” som EPEL e
 
 Konfigurasjonen er lik som ved Windows. Det følger ikke med noen plugin-er når en installerer nagios-nrpe-server, derfor installeres også pakken “nagios-plugins-basic”.
 
-\subsubsection{Utrulling av agenter}
+\section{Utrulling av agenter}
 NSclient++ kan lastes ned som en MSI-pakke, som kan pushes til servere med en GPO. Konfigurasjonsfilen må enten legges inn i MSI-pakken eller pushes over GPO for seg selv. Grunnen til dett ikke er benyttet er at IKT-avdelingen ønsket å gjøre installasjonen manuelt for å ha mest mulig kontroll og gjøre utrulling i faser, for å sikre at installasjonen ikke medførte uforutsette probemer. Det ble laget en veiledning på hvordan denne klienten skal installeres, og hvilke opsjoner som er relevant. Denne finnes i vedlegg \ref{nsclient++}.
 
 For Linux servere installeres pakkene via pakkebehandleren, som nevnt i xx. IKT-avdelingen har for tiden ikke så mange Linux-servere, så noen automatisk utrulling vil ikke være så besparende. Dersom dette skulle være ønskelig kan et enkelt script som kobler seg til og kjører kommandoen for installering skrives. Konfigurasjonsfilen kan pushes over SCP.
 
 For annen infrastruktur brukes for det meste SNMP for å hente ut informasjon. Dette konfigureres på hver enkelt enhet, og krever vanligvis ikke noe ekstra programvare installert. I noen spesielle tilfeller brukes egne API-er for å hente ut informasjon, som for eksempel for VMware. Her må Icinga serveren ha tilgang til å bruke API-et, som vanligvis konfigureres på hosten.
 
-\subsubsection{Lokale ressurser}
+\section{Lokale ressurser}
 For både Linux- og Windows-servere er det satt opp noen grunnsjekker som skal kjøres på alle servere. Dette er CPU-last, harddiskplass og minnebruk. Hver sjekk er definert i et service-objekt der hostgroup-ene er satt til “windows\_servers” og “linux\_servers”. 
 
 For alle disse sjekkene er det mulig å anngi grenseverdier både som prosentandel og absolutte tall og sjekke mot både andel ledig eller andel brukt. 
-\subsubsection{Disk}
+\subsection{Disk}
 Lav diskplass kan skape problemer for applikasjoner som lagrer data, logging kan stoppe, og ved høyt minneforbruk og bruk av virtuelt minne vil ikke diskplass kunne utnyttes og applikasjoner kan stoppe å fungere.
 
 Linux:
@@ -286,7 +262,7 @@ For windows servere med mange disker brukes oppsjonen -CHECKALL som gir en overs
 
 -CheckDisk fra nsclient++
 
-\subsubsection{CPU}
+\subsection{CPU}
 
 Overvåkning av CPU vil kunne hjelpe til med å indikere problem som ressursproblemer, flere CPU-krevende applikasjoner på samme server eller at en applikasjon bruker all CPU-kraft.  
 wtf is this: http://www.microsoft.com/en-us/download/details.aspx?id=9296
@@ -333,7 +309,7 @@ check_command                   check_nrpe!check_dist_load!0.9,0.7,0.5 1.2,1.0,0
 command[check_dist_load]=/usr/lib/nagios/plugins/check_load -r -w $ARG1$ -c $ARG2$
 \end{lstlisting}
 
-\subsubsection{Minne}
+\subsection{Minne}
 Datamaskiner som bruker opp tilgjengelig minne må skrive til disk for å få plass til mellomlagrede data. Data som må hentes fra disk vil ha en betydelig høyere aksesstid enn når fysisk minne brukes til mellomlagring \cite{wiki:mem}. 
 Kontinuerlig høyt minneforbruk kan være en indikasjon på flere minnekrevende applikasjoner på samme server, en applikasjon har minnelekkasje, eller at mengden minne ikke strekker til.
 
@@ -351,7 +327,7 @@ Opsjoner sendes med som gjør at sjekken gir warning når mer enn 80 \% av fysis
 
 For Linux benyttes plugin: https://raw.github.com/jasonhancock/nagios-memory/master/plugins/check\_mem
 
-\subsubsection{Tjenester}
+\section{Tjenester}
 IKT-avdelingen ønsket å overvåke tjenester og prosesser på serverne. Prossesser er instanser av programmer som kjører. Tjenester er prosesser som kjører i bakgrunnen. 
 
 Overvåkning av tjenester vil innebære å se på om én eller flere prosesser kjører
@@ -375,7 +351,7 @@ linux-plugin fra nagios-plugins: check\_procs
 
 Å se at en tjeneste kjører via Windows kan gi falsk informasjon. Et eksempel her er Microsoft's terminal services. Tjenesten står som kjørende i Windows, men brukere får ikke koblet til. Dette kommer av at tjenesten har hengt seg, uten at den står som “stoppet”. Dette merkes ikke før brukere ringer inn og beskriver problemet \cite{serviceproblem}. Som nevnt i x.x vil en bedre sjekk være å teste selve tjenesten, som i neste delkapittel.
 
-\subsubsection{LDAP, DNS og DHCP}
+\subsection{LDAP, DNS og DHCP}
 
 Tjenester som LDAP-autentisering, DNS-oppslag og DHCP-leasing er en viktig del av tjenestene IKT-avdelingen leverer.
 
@@ -388,7 +364,7 @@ Når en ny enhet kobles til nettverket vil denne få tildelt en IP-adresse av DH
 Sjekkene for alle de tre tjenestene vil bli gjort direkte fra Icinga-serveren. Denne står i et eget nettverk. Derfor vil det kunne oppstå situasjoner der Icinga rapporterer at tjenestene fungerer, men det ikke fungerer for brukere tilkoblet andre nettverk. En løsning på dette kan være å kjøre sjekkene via en server i hvert nettverk brukere er tilkoblet.
 
 
-\subsubsection{LDAP}
+\subsubsection*{LDAP}
 
 For å overvåke LDAP-tjenestene benyttes pluginen “check\_ldap” som følger med i pakken nagios-plugins-basic. Pluginen kobler til LDAP-tjenesten og prøver å autentisere en bruker. Her vil sjekken returnere OK, om den fikk autentisert. 
 
@@ -402,7 +378,7 @@ Performancedata har blitt samlet inn for å sette grenseverdier for når Icinga 
 \end{figure}
 
 
-\subsubsection{DNS}
+\subsubsection*{DNS}
 
 DNS overvåkes av pluginen “check\_dns”. Denne på samme måte som “check\_ldap” kobler til selve tjenesten. Denne fungerer ved å gjøre et DNS-oppslag på en spesifikk IP-adresse, og verifisere dette mot et satt hostname. Dersom dette stemmer vil plugin-en returnere OK, sammen med ytelses-data på hvor lang tid oppslaget tok.
 
@@ -416,7 +392,7 @@ Figur \ref{dns-inv} viser data samlet inn fra to DNS servere over 30 dager. Diss
 \end{figure}
 
 
-\subsubsection{DHCP}
+\subsubsection*{DHCP}
 
 DHCP tjenesten overvåkes med pluginen “check\_dhcp”. Denne sender en DHCPDISCOVER-pakke til DHCP-serveren. Hvis DHCP-tjenesten fungerer får pluginen en DHCPOFFER-pakke som respons. Dersom denne inneholder en korrekt lease, returnerer pluginen OK til Icinga sammen med tiden det tok.
 
@@ -444,7 +420,26 @@ Under vises et eksempel hvor servicen Check HTTP for host-objektene localhost, H
 check_cluster --service -l "Check HTTP"  -d $SERVICESTATEID:localhost:Check HTTP$, $SERVICESTATEID:HiG2:Check HTTP$ ,$SERVICESTATEID:HiG4:Check HTTP$  -w @1 -c @2
 \end{lstlisting}
 
-\subsubsection{Databaser}
+\subsection{Microsoft Exchange}
+
+Exchange er en kritisk tjeneste for fylkeskommunen. Her routes og lagres all e-post som sendes ut og inn av alle brukere. 
+
+Gjennom perfmon har en tilgang til en rekke viktige tall \cite{exchange} for å måle ytelsen i Exchange. Disse kan overvåkes over NRPE med check\_counter i NSClient++.
+\begin{itemize}
+	\item Antall tilkoblinger
+	\item Gjennomsnittlig responstid
+	\item Antall meldinger sendt per sekund. Ved høye tall kan det være mistanke om at mail-serveren blir brukt til spam, eller at det er zombier på nettverket.
+	\item Antall LDAP-søk som gir timeout. Feil mot AD.
+	\item Økning i SMTP-køen
+\end{itemize}
+
+Microsoft har gitt ut egne anbefalinger til grenseverdier \cite{exchangethresholds}.
+
+I tillegg til disse var det ønskelig med en sjekk som testet hele e-post-oppsettet. Til dette benyttes pluginen “check\_email\_delivery” \fnurl{Check email delivery}{http://exchange.nagios.org/directory/Plugins/Email-and-Groupware/check\_email\_delivery/}. Her sjekkes det at en e-post kan sendes fra SMTP-serveren. E-posten som sendes ut inneholder en unik ID. Videre kobler pluginen seg til IMAP-tjenesten og sjekker om e-posten med den unike ID-en kom frem. Antall sekunder for hele round-tripen blir målt. Helst skulle en her koblet til en SMTP-server som står utenfor nettverket, men dette var det ikke andledning til.
+
+Det sjekkes også at websiden for Outlook Web Access er tilgjengelig gjennom pluginen “check\_http”. Her burde en nok også sjekket om det var mulig å logge inn.
+
+\section{Databaser}
 Tre forskjellige databasemotorer benyttes av IKT-avdelingen. Disse er MySQL, MSSQL og Oracle DB. Disse opererer ikke helt på samme måten. \cite{databasecomparison}. Derfor blir ikke de samme parameterene overvåket på alle. Felles for alle er:
 
 Connection time (tid det tar å koble til SQL serveren).
@@ -454,29 +449,30 @@ Cache hit rate (antall spørringer som blir hentet fra cache i et tidsinterval).
 Disse er valgt
 
 Spesifikke
-MySQL: Slow queries (antall trege spørringer SQL serveren utfører i et tidsinterval).
-MSSQL: Lazy writes
-Oracle: Free table space (Plass ledig for tabellene).
-Oracle: Switch interval (Overvåker load).
+\begin{itemize}
+\item MySQL: Slow queries (antall trege spørringer SQL serveren utfører i et tidsinterval).
+\item MSSQL: Lazy writes
+\item Oracle: Free table space (Plass ledig for tabellene).
+\item Oracle: Switch interval (Overvåker load).
+\end{itemize}
 
-
-Connection time
+\subsection*{Connection time}
 Connection time gir beskjed dersom det ikke er mulig å koble til SQL serveren. Hvis denne sjekken gir en timeout, er det fordi sjekken ikke får kontakt på porten til SQL tjenesten. Her definerers det parametere for hvor lang tid det burde ta å koble til. Hvis tilkoblingstiden blir for lang varsler Icinga om dette. Grenseverdier her er valgt ut fra gjennomsnittlig tid det har tatt å koble til i perioden denne har vært operativ. Data for tilkoblingstiden har blitt samplet over 30 dager.
 
-Connected users
+\subsection*{Connected users}
 Connected users sjekker hvor mange sessioner som er koblet til database tjenesten (per instanse for Oracle DB). Antall aktive sessioner blir samlet inn om hver enkelt database. Derfor defineres thresholds ut fra hvor mange brukere som er koblet til over en periode. Da plukkes uvanlige bruksmøstre opp og kan videre studeres.
 
-Cache hit
+\subsection*{Cache hit}
 Cache hit er hvor ofte data hentes ut fra databasemotorens egen cache, slik at dataen ikke leses fra disk, Dette sparer diskene for I/O operasjoner. Hvis cache hit ligger på et høyt nivå (90-100 \%), indikerer dette at tabellene det spørringes mest mot lagres i cache. Når cache hit ligger under 90 \% kan dette være et resultat av at serveren ikke har nok minne til å lagre tabellene i cache. Dette kan indikere et minneproblem.
 
 Cache hiten er anbefalt fra Oracle sin side å ligge over 90 \% \cite{oraclecachehit}. 
 For MSSQL er så nærme 100 \% cache hit et godt utgangspunkt. Dette indikerer at MSSQL klarer å lagre de mest brukte tabellene i minne. \cite{sqlmonitoring}
 MySQL databasene til IKT-avdelingen lagrer all database data i minnet, så her vil det ikke være relevant å sjekke cache hit. Sjekken er satt opp slik at ordinære MySQL-servere vil kunne settes opp med denne sjekken i etterkant.
 
-Basis installering av plugin 
-For at Icinga serveren skal kunne snakke med de forskjellige database-motorene trengs en klient for hver av de. 
+\subsection{Plugin} %???
+For at Icinga-serveren skal kunne snakke med de forskjellige database-motorene trengs en klient for hver av de. 
 
-Oracle
+\subsubsection{Oracle}
 Databaseklienten finnes på Oracle sine nettsider \fnurl{Linux Oracle Databaseclient}{http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html}. Den finnes ikke som en deb-pakke, som som brukes for Debian. Det finnes derimot en rpm-pakke, som brukes av blant annet Red Hat. Alien /cite\cite{debian:alien} ble brukt til å konvertere rpm-pakken over til deb-pakke før installasjon på Icinga-serveren. 
 \begin{lstlisting}
 alien oracle-instantclient11.2-basic-11.2.0.3.0-1.x86_64.rpm 
@@ -519,8 +515,8 @@ eeval [ oracle_health ] =
 
 \end{lstlisting}
 
-MySQL
-I MySQL ligger de nødvendige pakkene i Debians pakkebrønnen og kan installeres med apt. De nødvendige pakkene er “mysql-client”, for database koblingen og “libclass-dbi-mysql-perl”, som er en Perl-modul for å kunne koble til en MySQL-server. 
+\subsubsection{MySQL}
+For MySQL ligger de nødvendige pakkene i Debians pakkebrønnen og kan installeres med apt. De nødvendige pakkene er “mysql-client”, for database koblingen og “libclass-dbi-mysql-perl”, som er en Perl-modul for å kunne koble til en MySQL-server. 
 MSSQL
 For MSSQL var det vanskelig å finne en databaseklient som er opensource. Her endte vi opp med FreeTDS \fnurl{FreeTDS}{http://www.freetds.org/}, sammen med Perl-modulen “libdbd-sybase-perl”
 
@@ -554,7 +550,7 @@ Her brukes MySQL som eksempel men dette vil være lik på de andre forskjellige 
 \begin{lstlisting}
 command_line $USER1$/check_truedatabase-motor>_health --hostname=$HOSTADDRESS$ --username=$USER5$ --password=$USER4$ --mode $ARG1$ --warning $ARG2$ --critical $ARG3$
 \end{lstlisting}
-MySQL Cluster
+\subsubsection{MySQL Cluster}
 
 MySQL Cluster er et distribuert oppsett for MySQL. Ved IKT-avdelingen benyttes et MySQL Cluster med NDB som lagringsmotor, der databasene kjører i minnet. Et MySQL Cluster består av tre forskjellige nodetyper:
 
@@ -581,25 +577,7 @@ define command {
 	command_line   $USER1$/libexec/check_ndb_mem.pl --host $HOSTADDRESS$ --nodes $ARG1$ --warning $ARG2$ --critical $ARG3$
 }
 \end{lstlisting}
-\subsubsection{Microsoft Exchange}
-
-Exchange er en kritisk tjeneste for fylkeskommunen. Her routes og lagres all e-post som sendes ut og inn av alle brukere. 
-
-Gjennom perfmon har en tilgang til en rekke viktige tall \cite{exchange} for å måle ytelsen i Exchange. Disse kan overvåkes over NRPE med check\_counter i NSClient++.
-\begin{itemize}
-	\item Antall tilkoblinger
-	\item Gjennomsnittlig responstid
-	\item Antall meldinger sendt per sekund. Ved høye tall kan det være mistanke om at mail-serveren blir brukt til spam, eller at det er zombier på nettverket.
-	\item Antall LDAP-søk som gir timeout. Feil mot AD.
-	\item Økning i SMTP-køen
-\end{itemize}
-
-Microsoft har gitt ut egne anbefalinger til grenseverdier \cite{exchangethresholds}.
-
-I tillegg til disse var det ønskelig med en sjekk som testet hele e-post-oppsettet. Til dette benyttes pluginen “check\_email\_delivery” \fnurl{Check email delivery}{http://exchange.nagios.org/directory/Plugins/Email-and-Groupware/check\_email\_delivery/}. Her sjekkes det at en e-post kan sendes fra SMTP-serveren. E-posten som sendes ut inneholder en unik ID. Videre kobler pluginen seg til IMAP-tjenesten og sjekker om e-posten med den unike ID-en kom frem. Antall sekunder for hele round-tripen blir målt. Helst skulle en her koblet til en SMTP-server som står utenfor nettverket, men dette var det ikke andledning til.
-
-Det sjekkes også at websiden for Outlook Web Access er tilgjengelig gjennom pluginen “check\_http”. Her burde en nok også sjekket om det var mulig å logge inn.
-Overvåkning av Applikasjoner
+\section{Applikasjoner}
 Muligheten for å se om en applikasjon fungerer slik den skal er en viktig del av overvåkningen. Det er applikasjonene brukerne benytter seg av og vil sende inn feilmeldinger om. En applikasjons tilstand vil bestemmes av flere tjenesters status. I Icinga benyttes et servicegroup-objekt for å gruppere flere service-objekter.
 
 Et praktisk eksempel på dette vises i Figur \ref{servicegroup_layout}. Her vil applikasjonen “Web App for ERP” være avhengig av webserveren for å vise web-grensesnittet til brukerne, en filserver for lesing og lagring av filer, en e-post-server for å sende og motta mail og en databaseserver som inneholder brukerinfo og andre tabeller. 
@@ -635,7 +613,7 @@ Dette gjør at vi får et oversiktsbilde over applikasjonen i Icingas web-grense
 
 Det vil det også være naturlig å sette opp servicedependency-er mellom ERP Web1 og sjekkene for webserveren, filserveren, mailserveren og databaseserveren.
 
-\subsubsection{Infrastruktur}
+\section{Infrastruktur}
 Infrastruktur består av de grunnleggende enhetene de andre serverne er avhengig av. I dette prosjektet er det definert til: switcher, routere, brannmurer, UPS, virtualiseringsteknologi og serverrommiljø.
 
 Infrastrukturovervåkning er essensielt for å kunne levere IT-Tjenester. Det er viktig at design av overvåkningen fører til at man raskt og effektivt skal kunne oppdage og presentere feil som oppstår. For å få til dette i Icinga benyttes “parent” /ref{parents}. De aller fleste enheter i infrastrukturen (untatt servermiljø) vil være parent for andre enheter. Dette reflekteres i et statuskart i icinga, som vist i Figur \ref{statusmap}.
@@ -648,7 +626,7 @@ Infrastrukturovervåkning er essensielt for å kunne levere IT-Tjenester. Det er
 \end{figure}
 
 
-\subsubsection{Switcher}
+\subsection{Switcher}
 Switcher er nettverksutstyr som opererer på lag 2 i OSI modellen. IKT-avdelingen benytter switcher med lag 3 funksjonalitet. Lag 3 funksjonalitet vil si at switchen kan kommunisere over IP. Alle switchene IKT-avdelingen benytter støtter SNMP-protokollen, som brukes til overvåkingen.
 
 På switchene overvåkes forskjellige sensorer avhengig av hva de inneholder. Alle switcher har for eksempel ikke vifter.
@@ -659,7 +637,7 @@ Dersom en vifte eller PSU raporteres som defekt vil det raporteres som en CRITIC
 
 Switchene IKT-Avdelingen bruker er forskjellige modeller fra leverandørne Cisco, Dell og HP. Disse overvåkes med plugin-ene "check\_nwc\_health" \fnurl{Check NWC Health}{http://labs.consol.de/nagios/check\_nwc\_health/} for Cisco og HP og check\_snmp\_powerconnect for Dell \fnurl{Check SNMP Powerconnect}{http://exchange.nagios.org/directory/Plugins/Hardware/Network-Gear/Dell/Check-PowerConnect-Switch/details}.
 
-\subsubsection{Routere og brannmurer}
+\subsection{Routere og brannmurer}
 IKT-avdelinger benytter Cisco ASA og Cisco PIX routere mellom forskjellige subnettverk. I tillegg utfører de gjerne oppgaver som pakkefiltrering, NAT og IPsec-tunneler.
 % TODO: Sjekk at dette er riktig mot docs
 \subsubsection{Ressurser}
@@ -668,7 +646,6 @@ Som for switcher \ref{switch} brukes check\_nwc\_health til å se at sensorer er
 sjekkes CPU-bruk og minneforbruk gjennom samme plugin. 
 
 For CPU-bruk sjekkes gjennomsnittet over 5 minutter. Grenseverdier er satt til 80 \% på WARNING og 90 \% på CRITICAL, i henhold til det cisco anbefaler \cite{ciscounifiedcommunication}. Høy CPU-bruk kan føre til dårligere ytelse, høy rate av buffer-feil og generelle feil med responsivitet \cite{ciscocpurouters}
-
 
 I følge Cisco kan høytminneforbruk under vanlig operasjon indikere at brannmuren er under angrep. \cite{ciscomem}. Dersom en router bruker opp tilgjengelig minne kan det føre til at routeren slutter å svare på kommandoer, telnet-tilkoblinger eller henger \cite{ciscomemproblem} . Cisco anbefaler en grenseverdi på 15 \% ledig minne \cite{ciscounifiedcommunication}. Grenseverdier for minne er derfor satt til 20 \% for WARNING og 15 \% for CRITICAL.
 
@@ -709,11 +686,11 @@ For brannmurer som har VPN-tjeneste sjekkes antall oppkoblede bruker opp mot det
 
 For å overvåke båndbreddebruk ut av og inn på en port Cisco ASA og PIX finnes to muligheter:
 
-\subsubsection{Netflow}
+\subsubsection*{Netflow}
 
 Funksjonen Netflow \cite{ciscoiosnetflow} fungerer ved at enheten samler inn informasjon om og statistikk over alle pakker som går ut og inn av portene. Dette krevet at Netflow konfigureres på alle routerne og det vil også ta opp ekstra minne og CPU \cite{cisconetflowperf}. Derfor ble det avgjort å ikke benytte Netflow.
 
-\subsubsection{Telle pakker}
+\subsubsection*{Telle pakker}
 
 Både Cisco Pix og ASA har tellere for antall byte som går ut og inn på en nettverksport. For å kalkulere båndbredde bruk over et intervall kan en hente ut disse, vente en gitt periode og hente ut nye verdier. Da vil bruken være ((målepunkt2 - målepunkt1)*8) / antall sekunder.
 
@@ -737,8 +714,7 @@ Det er derfor anbefalt å bruke 64-bit-variablene ifHCOutOctets og ifHCInOctets 
 
 Pluginen det er tatt utgangspunkt i for å hente ut båndbreddebruk heter check\_iftraffic64 \fnurl{Check Cisco IFtraffic}{http://exchange.nagios.org/directory/Plugins/Network-Connections,-Stats-and-Bandwidth}. Denne er noe omskrevet for å kunne sende inn absolutte verdier som grenseverdier for varsling. I generic-firewall er det satt opp to egendefinerte variabler “WANWARN” og “WANCRIT”, som setter standard grenseverdier for alle brannmurer. For brannmurer der det er normalt med høyere båndbreddebruk er disse variablene overstyrt i konfigurasjonen for host-objektet.
 
-\subsubsection{VMware og Citrix Xen}
-
+\subsection{VMware og Citrix Xen}
 
 Ved IKT-avdelingen er det både et Citrix Xen-miljø og et VMware-miljø. Disse består av servere som kjører hypervisorene ESX 5.1 og Xen 6. Begge er av typen 1 (direkte på hardware) og står for administering av virtuelle maskiner, som er operativsystemer med applikasjoner. Hypervisoren introduserer altså  et nytt lag mellom hardware og applikasjonene brukeren benytter. Host-ene har ansvaret for at de virtuelle maskinene får tilstrekkelig med ressurser for å kunne kjøre applikasjoner installert. 
 
@@ -778,7 +754,7 @@ To counters har blitt tatt ut for overvåkning , og vil være eksempel på hvord
 /citehttp://docwiki.cisco.com/wiki/Troubleshooting\_and\_Performance\_Monitoring\_Virtualized\_Environments
 /citehttp://pubs.vmware.com/vsphere-51/topic/com.vmware.ICbase/PDF/vsphere-esxi-vcenter-server-51-monitoring-performance-guide.pdf
 
-\subsubsection{CPU}
+\subsubsection*{CPU}
 
 /cite http://www.vmware.com/support/developer/vc-sdk/visdk400pubs/ReferenceGuide/cpu\_counters.html
 
@@ -789,7 +765,7 @@ Counter usage.average (\%) over siste 5 minutt -  warning: 75 critcal: 90
 
 Grenseverdier her er satt til samme nivå som tilsvarende alarm i vCenter, og gir indikasjon på at det kan være en eller flere virtuelle maskiner som krever for mye CPU i forhold til hva hosten har tilgjengelig. Det kan også være et for stort antall virtuelle maskiner på hosten. 
 
-\subsubsection{Minne}
+\subsubsection*{Minne}
 
 Counters 
 
@@ -826,14 +802,10 @@ Totalt allokert minne - ledig minne
 
 Et problem ble støtt på under implementeringen av check\_xenplugin.api som fikk stor innvirkning på returnert resultat fra RRD-databasen. Etter å ha lest gjennom koden til selve pluginen og “biblioteket” XenAPI som også er skrevet av op5, ble det oppdaget at denne pluginen bruker siste datapunkt fra intervall nr.1 nevnt over. Resultatet vil da bare være ett datapunkt. Dette er vanskelig å sette varsel på, da en spike kan skje når gitt sjekk kjører. Her ble det avgjort å legge til en ny opsjon for å angi over hvor lang tidsperiode en skal hente ut data. Returnert resultat fra gitt tidsperiode blir gått gjennom og en gjennomsnittsverdi av dette returnert. Dette er foreløpig bare implementert for CPU- og minnebruk for en host.
 
-\subsubsection{Xen}
-
-
-\subsubsection{Trådløse kontrollere}
+\subsection{Trådløse kontrollere}
 
 De trådløse kontrollerne som benyttes av IKT-avdelingen mangler støtter for SNMP-get for informasjon som hentes ut fra switcher og brannmurer som  CPU- og minnebruk. Dette vil i følge produsenten komme i en senere firmware-oppdatering.
 Noe av dette kan løses ved å bruke SNMP-traps i stedet og definere verdier for når disse skal sendes ut direkte på kontrollerne. Her ble traps som omhandler kontrollerne og var relevante for IKT-avdelingen satt opp:
-
 
 \begin{itemize}
 	\item Hardware feil med kontrolleren
@@ -854,8 +826,6 @@ For å lytte etter SNMP-traps benyttes SNMPtrapd (http://www.net-snmp.org/docs/m
     \caption{Informasjonsflyt ved en trap}
     \label{snmptrap}
 \end{figure}
-
-
 
 SNMPtt trenger konfigurasjon for alle OID-ene som skal prosesseres. Disse kan opprettes med snmpttconvertmib ut i fra en MIB-fil slik:
 
@@ -896,7 +866,7 @@ Scriptet vil så skrive dette sammen med et timestamp til icinga.cmd som Icinga 
 
 En ting å merke seg her er at en ikke vil få informasjon når tjenesten er OK igjen, og må sette tjenestene til OK manuelt i Icingas webgrensesnitt.
 
-\subsubsection{Serverrommiljø}
+\subsection{Serverrommiljø}
 
 For å overvåke temperatur og luftfuktighet på serverrommet ble det kjøpt inn en APC NetBotz 200 \ref{https://www.apc.com/products/family/index.cfm?id=346} med fire eksterne sensorer. Disse ble plassert slik at det er to sensorer på hver side av rack-raden. En vil dermed kunne se temperaturforskjellen mellom forsiden av serverne, ved luftinntak og baksiden, der varmluft går ut.
 
