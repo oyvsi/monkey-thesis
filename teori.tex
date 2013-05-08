@@ -301,11 +301,11 @@ define host {
 \end{lstlisting}
 
 \subsubsection{Regulære uttrykk}
-%Ved å sette “use regular expressions” i konfigurasjonen for Icinga, kan en benytte regulære uttrykk i attributter i et objekt, der en refererer til andre objekter. Icinga vil automatisk tolke navnet som et regulært uttrykk dersom det inneholder ‘*’, ‘?’, ‘+’, eller ’\’.
+Ved å sette "use regular expressions" i konfigurasjonen for Icinga, kan en benytte regulære uttrykk i attributter i et objekt, der en refererer til andre objekter. Icinga vil automatisk tolke navnet som et regulært uttrykk dersom det inneholder "*", "?", "+", eller "\".
 
 Dette kan være nyttig dersom en for eksempel vil legge alle hoster i en hostgroup, som har en navnekonvensjon som gjør at hver av hostene unikt kan identifiseres ved å bytte ut deler av navnet med en variabel.
 
-%I eksempelet nedenfor brukes det regulære uttrykket “\^HiG\[0-9\]+\$” i attributten “members” til å legge til alle konfgurerte hosts der navnet starter på “HiG” etterfulgt og avsluttet med ett eller flere siffer mellom 0 og 9, i hostgroup-objektet “all\_servers”.
+I eksempelet nedenfor brukes det regulære uttrykket \verb|"^HiG\[0-9\]+\$"| i attributten “members” til å legge til alle konfgurerte hosts der navnet starter på “HiG” etterfulgt og avsluttet med ett eller flere siffer mellom 0 og 9, i hostgroup-objektet "all\_servers".
 
 \begin{lstlisting}
 define hostgroup {
