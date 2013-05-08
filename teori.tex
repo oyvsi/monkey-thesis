@@ -1,5 +1,5 @@
-\section{Teori}
-\subsection{Hvorfor Overvåke}
+\chapter{Teori}
+\section{Hvorfor Overvåke}
 Nesten alle bedrifter i dag bruker IT-systemer for å gjøre bedriften mer effektiv og konkurransedyktig i dagens marked. Mange av disse systemene blir ofte tatt for gitt, fordi de rett og slett bare fungerer. Men hva skjer om e-posten en dag ikke virker, eller månedens lønn ikke kommer når den skal? I slike tilfeller kan en overvåkningsløsning være viktig for å oppdage og identifisere problemet tidlig.
 
 Der en har avtaler knyttet til IT-tjenestene som blir levert kan et overvåkningssystem være med på å dokumentere at tjenestene har vært i henhold til SLA. Overvåkning kan også bidra til et bedre bilde av hvor pålitelige systemer og utstyr er, og kan hjelpe til med å kartlegge hvor systemene er sårbare. Dette kan igjen benyttes ved kapasistetsplanlegging. For de ansatte ved en driftsavdeling kan det også skape en trygghetsfølelse at det er noe som sjekker systemer, og gir beskjed om noe er galt.
@@ -8,7 +8,7 @@ Når en leverer tjenester innenfor IT er det viktig at det ikke er kunden som va
 
 I “The Practice of System and Network Administration” sier forfatteren det godt: ``If you aren’t monitoring it, you aren’t managing it''
 
-\subsection{Generelt om overvåkning}
+\section{Generelt om overvåkning}
 Overvåkning deles ofte inn i de to kategoriene historisk overvåkning og sanntidsovervåkning /cite Practice of System and network adm  . 
 
 Ved historisk overvåkning blir data samlet inn for å ha statistikk over oppetid, ytelse og bruk. Ut fra disse dataene vil en kunne dra konklusjoner som for eksempel at VPN-tjenesten har hatt en oppetid på 99,9 \% over det siste året og gjennomsnittlig antall brukere har vært 100, med en økning på 10 \% den siste måneden. Dermed kan en få et overblikk over hvor lang nedetid en har hatt, og en har dokumentasjon på hvordan leveransen har vært opp mot avtalt leveranse.
@@ -21,7 +21,7 @@ Den enkleste formen for overvåkning av en server er å sende en ICMP echo reque
 
 En bedre løsning er å teste hver av tjenstene. For en webserver kan det være å prøve å hente ned forsiden av hjemmesiden som skal leveres og sjekke at man får reponsen “HTTP OK 200”. Da vil en vite at webserveren kjører og leverer ut sider riktig. Et skritt videre kan være å sjekke at siden inneholder riktig informasjon og at en ikke har blitt utsatt for f.eks en “defacing”.
 
-\subsection{Overvåkning i ITIL}
+\section{Overvåkning i ITIL}
 ITIL (Information Technology Infrastucture Library) er et sett med standarder og konsepter som beskriver hvordan IT-tjenester kan kvalitetsikres innenfor leveranse, drift og support. ITIL er i dag i bruk i IT-bedrifter over hele verden og gir et felles rammeverk for hvordan en opererer innen IT-sektoren. ITIL blir definert i et sett med bøker som blir utgitt av Office of Government Commerce i Storbritannia.
 
 Innenfor ITIL er prossessflyt og involvering av ulike prosesser ved hendelser essensielt.  Overvåkning av systemer og infrastruktur bak forretningskritiske systemer, og overvåkning av forretningskritiske systemer i seg selv er viktig i ITIL-prosessen Service Operations. Overvåkning og varsling er et viktig ledd for kunne å registrere en hendelse som kan være et engangstilfelle, eller en indikasjon på et underliggende problem. 
@@ -34,7 +34,7 @@ Overvåkning er også en del av komponenten “Capacity Management” innenfor k
 \cite{itil2}
 \cite{events}
 
-\subsection{Hvilke Overvåkingsløsninger finnes}
+\section{Hvilke Overvåkingsløsninger finnes}
 Det finnes i dag mange løsninger for overvåkning av IT-systemer og infrastruktur \cite{wiki:networkmonitoring}. Det ble tatt utgangspunkt prosjektets rammer og krav til fuksjonalitet, og plukket ut noen løsninger som ble sett nærmere på. Punktene om ønsket funksjonalitet ble også vektlagt slik at skulle være lettere å implementere dette i senere faser av prosjektetet eller senere prosjekter. 
 
 Det ble også gjort en gjennomgang med oppdragsgiver og med diskusjon rundt de ulike løsningene. De som ble vurdert nærmere etter den første runden med research har alle en open source lisens og en utbredt brukermasse. 
@@ -58,7 +58,7 @@ I Figur \ref{losninger} vises en oversikt over hvor ofte hver av disse har blitt
 \end{figure}
 \end{center}
 
-\subsection{Valg av kjerneprogramvare}
+\section{Valg av kjerneprogramvare}
 Valg av kjerneprogramvare var gruppens viktigste valg, da det la grunnmuren for restenu av prosjektet, og ville få stor innvirkning på sluttresultatet. Etter en vurdering av alternativene som nevnt over ble det besluttet å bygge overvåkningsløsningen på Icinga framfor nagios.
 
 Icinga sitt distribuerte system består av kjernen, som står for prossessering, et databaselag, og administrering av systemet via et webgrensesnitt. Dette er tilrettelagt for et distribuert oppsett. Nagios sin arkitektur har avhengigheter mellom web og lagring av status, som fører til at disse ikke kan separeres. Det er derimot mulig å separere MySQL-databasen som Nagios benytter \cite{icingaarchitecture}.
@@ -73,7 +73,7 @@ http://www.freesoftwaremagazine.com/articles/nagios\_and\_icinga \cite{nagiosvsi
 
 https://www.icinga.org/nagios/ \cite{icinganagios}
 
-\subsection{Icinga}
+\section{Icinga}
 
 For å kunne forstå implementasjonsdelen av prosjektrapporten behøves noe innsikt i hvordan Icinga fungerer. I dette delkapittelet er det viktigste forklart.
 
@@ -89,12 +89,12 @@ Icinga består som i vist i Figur \ref{icingacomponents} av tre separate kompone
 \end{figure}
 \end{center}
 
-\paragraph{Core}
+\subsubsection{Core}
 Icinga Core håndterer planlegging av sjekker gjennom plugins og tar i mot resultatene av disse. Denne informasjonen sendes gjennom SSL-krypterte TCP-sockets videre til IDO2DB-prosessen (Icinga Data Out to Database) gjennom et interface kalt IDOMOD (Icinga Data Out Module). Ved å bruke disse abstraksjonslagene kan databasemotoren enkelt byttes ut. I dokumentasjonen er det laget veiledninger for MySQL, PostgreSQL og Oracle \cite{icingaarchitecture}.
 
 IDOMOD og IDO2DB kommer i en samlet pakke (IDOutils), men kan separeres ut for å skape et distribuert oppsett. CERN i Sveits har nylig implementert et et slikt oppsett med hjelp av lastbalansereren “modgearman” \cite{cernthesis}.
 
-\paragraph{Web}
+\subsubsection{Web}
 
 I utgangspunktet kommer ikke Icinga med noe webgrensesnitt. Men det er mulig å installere to forskjellige pakker for å få dette. I begge kan en få en oversikt over tilstanden til hosts og services, se konfigurasjon og utsendte varsler, samt utføre kommandoer.
 
@@ -108,7 +108,7 @@ Icinga-web er en total omskrivning av webgrensesnittet. Det er Ajax-drevet og en
 	\item Command Control Interface utfører kommandoer.
 \end{itemize}
 
-\subsection{Objekter}
+\section{Objekter}
 All konfigurasjon av Icinga gjøres i rene tekstfiler. I selve konfigurasjonsfilen icinga.cfg settes banen til der konfigurasjonsfilene finnes. Icinga vil da ved oppstart lete rekursivt gjennom mappen etter filer som ender med “.cfg”.
 
 Konfigurasjonsdataene er bygget rundt det som i Icinga kalles objekter. Dette er en samling av konfigurasjon som hører sammen. Selv om en ikke kan si at Icingas objekter er det samme som objekter i programmeringsverden, benyttes mange av de samme begrepene og konseptene.
@@ -154,7 +154,7 @@ Sammenhengen mellom objektene er viktig å forstå for å skjønne hvordan sjekk
 \end{figure}
 \end{center}
 
-\subsection{Plugins}
+\section{Plugins}
 Icinga i seg selv kommer uten noen overvåkningssjekker. Til dette benyttes plugins.
 
 Plugins i Icinga er eksterne programmer som kjøres der outputen hentes inn som data. Resultatet av sjekken hentes fra exit-koden\cite{wiki:returncode} og oversettes til en state etter Tabell \ref{state}.
@@ -181,7 +181,7 @@ Plugins i Icinga er eksterne programmer som kjøres der outputen hentes inn som 
 	\end{center}
 \end{table}
 
-\subsection{Sjekker}
+\section{Sjekker}
 Staten for en service eller en host vil bestemmes ut i fra et returnert resultat av en aktiv eller passiv sjekk, forskjellen på disse to vil bli forklart i de neste delkapitlene.
 
 Dersom en aktiv eller passiv sjekk resulterer i en annen state enn “OK” er det to typer av state-en, “soft” og “hard”. Første gang en plugin returnerer en feil vil staten bli satt til “soft” i tillegg til service- eller host-staten. Etter dette vil sjekken kjøres hyppigere for å sjekke om det er snakk om et forbigående problem. Etter et satt antall ganger der pluginen fortsatt ikke returnerer “OK”, vil staten skifte til “hard” og det sendes ut varslingsmelding /ref {varslingsmelding}.
@@ -225,7 +225,7 @@ define host {
 }
 \end{lstlisting}
 
-\paragraph{Variabler}
+\subsubsection{Variabler}
 For å kunne gjøre konfigurasjon av Icinga mest mulig dynamisk er det en rekke forhåndsdefinerte variabler en kan bruke i konfigurasjonsfilene. Disse kalles makroer. En fullstendig liste over disse og hvor de kan benyttes finnes i Icinga-dokumentasjonen \cite{icingamacro}. $HOSTADDRESS$ kan for eksempel benyttes i et command-objekt slik at den bare må skrives en gang, og ikke for hver host. En kan også definere egne variabler som f.eks “\_SSHPORT”. Disse kan også sendes videre til selve kommandoen som kjøres og benyttes som argumenter til programmet som kjører en sjekk, slik:
 
 \begin{lstlisting}
@@ -241,7 +241,7 @@ define command {
 
 Her benyttes de innebygde variablene “USER1” for banen til pluginen som kjøres, “HOSTADDRESS” for IP-en til den hosten som sjekken skal kjøres på og den egendefinerte variabelen “\_SSHPORT” som defineres på hosten.
 
-\paragraph{Templates}
+\subsubsection{Templates}
 
 En template er ikke et objekt i seg selv, men en mal for et objekt. Med direktivet “register 0” vil ikke Icinga registrere dette som noe som skal overvåkes. Ved å bruke direktivet “use” kan en i et annet objekt “arve” konfigurasjonen fra templaten. Templates kan også arve, og en kan dermed sette opp et hierarki der en spesifiserer generell konfigurasjon og arver nedover til mer spesiell. 
 
@@ -330,18 +330,18 @@ use                generic_service
 }
 \end{lstlisting}
 
-\subsection{Avhengigheter}
+\section{Avhengigheter}
 
 I Icinga kan man definere de tre ulike typene avhengighetene “Parent”, “Service dependency”, “Host dependency“. Disse har innvirkning på hvilke varsler som sendes ut og statusen de ulike service-ene og host-ene får. Alle er definert som egne objekttyper og krever egen konfigurasjon. 
 
-\subsection{Parent}
+\section{Parent}
 Et host-objekt kan settes som en “parent” til et annet host-objekt. Host-objekter som har et parent blir betegnet som en child-host eller child-service. Dette brukes primært for å unngå varsler om alle hosts som har en gitt host som parent om denne går ned. For eksempel hvis kjernerouteren går ned, ønskes ikke varsler for eventuelle host-er som har denne som parent. Disse vil ikke lengre bli sjekket og blir markert som “UNREACHABLE”. Tjenester som tilhører host-ene vil bli markert som “UNKNOWN”.
 
 For redundante oppsett kan et host-objekt ha flere “parents” definert. Host-objektet vil da være UP så lenge en “parent”-host er UP.
 
 Ut ifra “parent”-relasjonene mellom host-objekter i konfigurasjonsfilene genereres også et “Status Map” over nettverket, som vist i Figur /ref{statusmap}. Dette brukes til å visualisere alle relasjonene, og vil gjengi redundante oppsett og hvilke host-objekter som er påvirket av at “parent”-hosten er DOWN.
 
-\subsection{Service dependency}
+\section{Service dependency}
 
 Service dependency er en egen objekttype der en kan sette opp avhengighet mellom to service-er. Formålet med dette er å unngå varsel hvis en tjeneste går til DOWN, som følge av at en annen tjeneste er nede. For eksempel bør det ikke varsles at tjenester som er avhengig av autentisering via LDAP-serveren får “access denied”-feilmeldinger, hvis LDAP-serveren er DOWN. 
 
@@ -381,13 +381,13 @@ define servicedependency{
 
 En kan også erstatte host\_name og dependant\_host\_name med hostgroup og dependant\_host\_group for å lage avhengigheter på alle hoster som tilhører gruppen.
 
-\subsection{Host dependency}
+\section{Host dependency}
 
 For å sette en avhengighet mellom to host-er benyttes “host dependency”. Dette må ikke forveksles med “parent”, som refererer til nettverksoppsettet. Mens en host dependency går på at en host er avhengig av en annen. Host dependency er bare nyttig i veldig spesielle tilfeller, da det for de fleste tilfeller vil være avhengigheter til en eller flere tjenester på hosten. 
 
 Her er det anbefalt å bruke parents i stedet \cite{hostandservicedep}. /cite Nagios-boka og .
 
-\subsection{Protokoller og agenter }
+\section{Protokoller og agenter }
 For å kjøre sjekker på enheter må Icinga-serveren kunne kommunisere med operativsystemene på de ulike enhetene. Icinga henviser til protokollene SSH, SNMP, RPC (WMI) og agentene NRPE og NSCA (en del av pakken NSClient++) \cite{icingaintegration} \cite{icingaadditionalsoftware}. 
 
 \subsubsection{NRPE}

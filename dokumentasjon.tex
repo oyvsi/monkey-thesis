@@ -1,4 +1,4 @@
-\section{Dokumentasjon}
+\chapter{Dokumentasjon}
 
 I Figur \ref{hostfigur} ser vi hvilken generics de forskjellige hostene skal ha.
 
@@ -29,11 +29,11 @@ I Figur \ref{hostgroupfigur} ser vi hvilke hostgroups de forskjellige hostene sk
         \item Scheduled downtime
         \item Filhierarkiet
 \end{itemize}
-\subsection{Legge til mange host-objekter}
+\section{Legge til mange host-objekter}
 \begin{itemize}
 	\item Et selvlaget script ref gen.bash brukes for å effektivt legge til mange hosts med Nils to reference his fancy smancy addhost-script med mulighet til å legge til hosts fra CSV-fil /ref{kildekode}
 \end{itemize}
-\subsection{Autentisering mot Active Directory} 
+\section{Autentisering mot Active Directory} 
 LDAP-autentisering brukes for å styre hvem som skal ha tilgang til web-grensesnittene, ved hjelp av grupper og brukere i Active Directory. Dette er støttet direkte i Icinga-web, men må konfigureres på andre måter for Icinga Classic. Det kan opprettes en sikkerhetsgruppe i AD som inkluderer medlemmene som skal få tilgang. Alle som er med i denne gruppen vil få tilgang til Icinga Web, der det også kan defineres hvilken informasjon hver bruker skal kunne se. 
 
 Selve LDAP-binden gjøres via PHP-modulen “php-ldap”. Når en bruker logger inn sjekkes først AD, dersom brukeren ikke finnes der, vil Icinga-web prøve sin egen database over brukere. Hvis brukeren finnes her og passordet er riktig vil brukeren bli logget inn. Når brukeren har logget inn for første gang via AD, vil brukeren bli lagret i Icinga-Web databasen. Om brukeren endrer passord i Icinga-Web vil uansett AD først bli spurt før Icinga-Web spør om passordet er riktig i sin egen database
@@ -67,7 +67,7 @@ Icinga classic autentiserer mot AD gjennom modulene ldap og authnz\_ldap.
         </ae:parameter>
 \end{lstlisting}
 
-\subsection{Kontrakter og kontaktgrupper}
+\section{Kontrakter og kontaktgrupper}
 
 For å opprette en ny kontakt i Icinga meldes brukeren inn i gruppen icinga\_kontakter (se synkronisering). Den vil trenge å ha e-postadresse og telefonnummer satt.
 

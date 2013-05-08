@@ -1,5 +1,5 @@
-\section{Innledning}
-\subsection{Bakgrunn}
+\chapter{Innledning}
+\section{Bakgrunn}
 Serviceenheten IKT ved Hedmark Fylkeskommune (heretter kalt IKT-avdelingen) har det overordnede ansvaret for alt datautstyr som tilhører fylkeskommunen og datanettverket for sentraladministrasjonen og øvrige lokasjoner. Dette omfatter blant annet videregående skoler, tannklinikker, Hedmark Trafikk m.fl. Totalt benyttes IT-løsningene av over 10 000 brukere.
 
 Datasystemene er kritiske for daglig drift av de mange funksjonene fylkeskommunen har. Det er derfor mange brukere som berøres dersom en feil skulle inntreffe i systemene. Det er viktig at de ansvarlige får beskjed så raskt og effektivt som mulig når et system går ned eller ikke fungerer som det skal.
@@ -10,7 +10,7 @@ IKT-avdelingen har lenge arbeidet med å finne en bedre overvåkningsløsning fo
 
 De har imidlertid for hver runde konkludert med at de ikke har de nødvendige ressursene til å sette i gang et slikt prosjekt. Da vi forespurte IKT-avdelingen om de hadde noen mulige bachelorprosjekter, var de veldig interessert i at en bachelorgruppe kunne ta tak i denne problemstillingen.
 
-\subsection{Oppgavebeskrivelse}
+\section{Oppgavebeskrivelse}
 Det skal settes opp et overvåkningssystem som skal varsle feil og hendelser på enheter i fylkeskommunes datanettverk. Dette innebefatter servere med tjenester, og nettverksenheter som switcher, routere og brannmurer. Dette systemet må være modulært med mulighet for å enkelt kunne legge til nye moduler i ettertid. Følgende krav er satt til løsningen:
 
 \begin{itemize}
@@ -42,13 +42,13 @@ IKT-avdelingen har også en liste over moduler de ønsker implementert i løsnin
 	\item Telefoni - Overvåking av telefonlinjer opp mot Trio og Asterisk.
 \end{itemize}
 
-\subsection{Avgrensninger}
+\section{Avgrensninger}
 Siden vi har både må-krav og ønsket-krav til funksjonalitet, må vi avgrense oss slik at vi overholder tidsrammer i forhold til må-krav. Om vi ser at vi ligger foran tidsskjema og har fått på plass alle må-kravene til implementasjonen, vil vi begynne å se på ønsket funksjonalitet.
 
-\subsection{Målgruppe}
+\section{Målgruppe}
 Overvåkningsløsningen utvikles for IKT-avdelingen, og ansatte her vil være en av målgruppene. Selve rapporten vil vinkles slik at sensor, medstudenter, veileder, oppdragsgiver og ellers andre interesserte kan få et innblikk i hvordan prossessen med å implementere en open source overvåkningsløsning har vært. Det faglige nivået på rapporten vil legges slik at medstudenter skjønner og kan lære noe av stoffet.
 
-\subsection{Prosjektmål}
+\section{Prosjektmål}
 \subsubsection{Effektmål}
 I forhold til dagens løsning skal den nye løsningen:
 \begin{itemize}
@@ -70,7 +70,7 @@ I forhold til dagens løsning skal den nye løsningen:
 	\item Kunne tilpasse og implementere en overvåkningsløsning for små og mellomstore bedrifter.
 \end{itemize}
 
-\subsection{Rammer}
+\section{Rammer}
 Følgende krav er gitt i oppgaven:
 \begin{itemize}
 	\item Dersom eksisterende programvare benyttes må denne være open source.
@@ -79,7 +79,7 @@ Følgende krav er gitt i oppgaven:
 	\item Det skal kjøpes inn en enhet for å overvåke luftfuktighet og temperaturer. Innkjøp av denne skal skje i henhold til fylkeskommunens innkjøpsrutiner.
 \end{itemize}
 
-\subsection{Faglig bakgrunn}
+\section{Faglig bakgrunn}
 
 
 Bjørn-Erik og Øyvind er 3. års studenter på Drift av nettverk og datasystemer, mens Nils går 3. året på Dataingeniør. Gjennom to og et halvt år på Høgskolen i Gjøvik har vi tatt fag innenfor programmering, nettverk, databaser, sikkerhet og forskjellig grad av matematikk, inkludert statistikk. Nils og Øyvind har tidligere vært lærlinger ved henholdsvis Hedmark Fylkeskommune og Hamar Katedralskole der de fikk kunnskap om deres applikasjoner og infrastruktur.
@@ -88,31 +88,31 @@ Bjørn-Erik og Øyvind har også tidligere skrevet en rapport om bruk av ITIL ve
 
 En overvåkningsoppgave med denne oppgavebeskrivelsen følte vi hadde potensiale til å komme innom de fleste temaene vi har vært innom gjennom studiet. Her er det også områder der gruppen har delvis eller manglende kunnskap, både om hvilke teknologier som finnes og hvordan vi bruker disse i et større datamiljø.
 
-\subsection{Roller}
-\paragraph{Prosjektleder}
+\section{Roller}
+\subsubsection{Prosjektleder}
 Prosjektleder vil være Øyvind Sigerstad. Denne rollen vil være fast under hele prosjektet. Lederens hovedansvar er å se nødvendigheten for møter, samt ha et overordnet ansvar for arbeidsfordelingen. Prosjektlederen vil også ta endelige avgjørelser dersom gruppen ikke kan komme til enighet, som stipulert i gruppereglene.
 
-\paragraph{Kommunikasjonsansvarlig}
+\subsubsection{Kommunikasjonsansvarlig}
 Vår kontaktperson er Nils Slåen. All kontakt med oppdragsgiver og annen utgående kommunikasjon vil gå via ham. Kommunikasjonsansvarlig har også ansvar for å avtale møter.
 
-\paragraph{Webansvarlig}
+\subsubsection{Webansvarlig}
 Vår webansvarlig er Bjørn-Erik Strand. Hans hovedansvar er å sette websiden vår i drift før fristen. Webansvarlig har også et overordnet ansvar for å få oppdateringer publisert. De andre medlemmene i gruppen skal også ha tilgang til å utføre oppdateringer.
 
-\paragraph{Oppdragsgiver}
+\subsubsection{Oppdragsgiver}
 Vår oppdragsgiver er Svein-Inge Kvalø (Fungerende driftsleder ved IKT-avdelingen, Hedmark fylkeskommune). Han er vårt kontaktpunkt ved Hedmark fylkeskommune. Lasse Odden er vår tekniske kontakt (IT-konsulent ved IKT-avdelingen - Hedmark fylkeskommune). Han vil være en ressurs vi kan bruke om vi lurer på noe teknisk ved IKT-avdelingens eget oppsett.
 
-\paragraph{Veileder}
+\subsubsection{Veileder}
 Erik Hjelmås (Førsteamanuensis, Dr. scient ved HiG), er vår veileder gjennom bacheloroppgaven.
 
-\subsection{Rutiner og regler i gruppa}
+\section{Rutiner og regler i gruppa}
 Et eget dokument er utarbeidet med grupperegler som alle gruppens medlemmer er enige i og har skrevet under på. Dette finnes under som vedlegg xxx.
 
-\subsection{Verktøy}
+\section{Verktøy}
 Alt av egenutviklet kildekode og konfigurasjonsfiler vil bli lagt under et SVN repository. Dette for å få versjonskontroll og samle alt på et sted, som vi kan ta backup av. Google Docs vil bli brukt for å enkelt kunne samarbeide på dokumenter. Når den endelige rapporten skal genereres, vil vi importere Google Docs-dokumentet til LaTeX. Dropbox vil bli benyttet til å dele filer og dokumenter innad i prosjektgruppen, og med oppdragsgiver. Vi vil bruke Wordpress som publiseringsverktøy for hjemmesiden.
 
 Av andre verktøy har vi benyttet Microsoft Visio til å lage illustrasjoner. Grafene er generert av Graphite.
 
-\subsection{Utviklingsmodell/rammeverk}
+\section{Utviklingsmodell/rammeverk}
 For å tilpasse overvåkningssystemet til IKT-avdelingens krav, vil det med stor sannsynlighet komme endringer etterhvert. Det vil kunne oppstå ulike situasjoner som er vanskelige å forutse. Eksempler på dette er at en plugin som kreves ikke eksiterer, webgrensesnittet må endres på grunn av mer informasjon eller omorganisering, eller oppdragsgiver har innspill som fører til endring av funksjonalitet i ettertid. Dette fører til at vi må ha en fleksibel modell med tanke på endringer og tilbakefall, men med begrensninger på hvor mye tid vi kan bruke ved uforutsette problemer.
 
 På grunn av en naturlig sammenheng og avhengigheter mellom kravene som er satt, har vi valgt å gruppere funksjonalitet i moduler. De forskjellige modulene er “Kjerneprogramvare”, “Server”, “Infrastruktur”, “Servermiljø”, “Varsling” og “Statusvindu” (visualisert i punk x.x). Med nærliggende sammenheng mener vi at funksjonalitet som CPU, RAM, disk og prosesser er i samme kategori. Planen er også å gjennomføre disse i en gitt rekkefølge. Varsling kan settes opp uten noe input, men med tanke på redundans i systemene, avhengigheter mellom objektene, og testing av funksjonene som går inn under varsling, ser vi på dette som en avhengighet av “Server” og “Infrastruktur”. “Statusvindu” har vi valgt å legge sist fordi vi ser for oss at modulene “Server”, “Infrastruktur, “Servermiljø”, og “Varsling” må være på plass før en varslingsskjerm kan ferdigstilles.

@@ -1,5 +1,5 @@
-\section{Implementering}
-\subsection{Utstyr}
+\chapter{Implementering}
+\section{Utstyr}
 \subsubsection{Labmiljø}
 Et labmiljø har vært brukt for å teste plugins og script før de blir implementert på produksjonsserveren. Ved å teste i lab først, kan en se hvordan sjekker oppfører seg før de implementeres i større skala i produksjon. Labmiljøet inneholder utstyr og tjenester som gjenspeiler det IKT-avdelingen benytter, og på den måten kan ulike scenarier og utstyr testes før dette settes i produksjon.
 
@@ -51,7 +51,7 @@ Programvare:
 For å overvåke temperatur og luftfuktighet på serverrommet ble det kjøpt inn en NetBotz 200 med støtte for opp til 12 eksterne sensorer \cite{netbotz},
 som oppfyller kravene gitt i oppgavebeskrivelsen. 
 
-\subsection{Overvåkning med Icinga}
+\section{Overvåkning med Icinga}
 \subsubsection{Produksjonsserver}
 “Quis custodiet ipsos custodes?” er et latinsk uttrykk som kan oversettes med “hvem passer på de som passer på?”. I en overvåkningsløsning er det viktig å stille spørsmålet; hva skjer hvis overvåkningsserveren går ned? Et forslag under prosjektet var å legge overvåkingsserveren på et Xen/Vmware-cluster. Men dette ble etter noe omtanke stemplet som en dårlig ide. Dersom clusteret gikk ned ville også overvåkingsserveren gå ned. Det ble derfor bestemt at denne skulle være en egen fysisk boks. 
 
@@ -195,7 +195,7 @@ For annen infrastruktur brukes for det meste SNMP for å hente ut informasjon. D
 For både Linux- og Windows-servere er det satt opp noen grunnsjekker som skal kjøres på alle servere. Dette er CPU-last, harddiskplass og minnebruk. Hver sjekk er definert i et service-objekt der hostgroup-ene er satt til “windows\_servers” og “linux\_servers”. 
 
 For alle disse sjekkene er det mulig å anngi grenseverdier både som prosentandel og absolutte tall og sjekke mot både andel ledig eller andel brukt. 
-\paragraph{Disk}
+\subsubsection{Disk}
 Lav diskplass kan skape problemer for applikasjoner som lagrer data, logging kan stoppe, og ved høyt minneforbruk og bruk av virtuelt minne vil ikke diskplass kunne utnyttes og applikasjoner kan stoppe å fungere.
 
 Linux:
@@ -215,7 +215,7 @@ For windows servere med mange disker brukes oppsjonen -CHECKALL som gir en overs
 
 -CheckDisk fra nsclient++
 
-\paragraph{CPU}
+\subsubsection{CPU}
 
 Overvåkning av CPU vil kunne hjelpe til med å indikere problem som ressursproblemer, flere CPU-krevende applikasjoner på samme server eller at en applikasjon bruker all CPU-kraft.  
 wtf is this: http://www.microsoft.com/en-us/download/details.aspx?id=9296
@@ -253,7 +253,7 @@ check_command                   check_nrpe!check_dist_load!0.9,0.7,0.5 1.2,1.0,0
 command[check_dist_load]=/usr/lib/nagios/plugins/check_load -r -w $ARG1$ -c $ARG2$
 \end{lstlisting}
 
-\paragraph{Minne}
+\subsubsection{Minne}
 Datamaskiner som bruker opp tilgjengelig minne må skrive til disk for å få plass til mellomlagrede data. Data som må hentes fra disk vil ha en betydelig høyere aksesstid enn når fysisk minne brukes til mellomlagring \cite{wiki:mem}. 
 Kontinuerlig høyt minneforbruk kan være en indikasjon på flere minnekrevende applikasjoner på samme server, en applikasjon har minnelekkasje, eller at mengden minne ikke strekker til.
 
@@ -295,7 +295,7 @@ linux-plugin fra nagios-plugins: check\_procs
 
 Å se at en tjeneste kjører via Windows kan gi falsk informasjon. Et eksempel her er Microsoft's terminal services. Tjenesten står som kjørende i Windows, men brukere får ikke koblet til. Dette kommer av at tjenesten har hengt seg, uten at den står som “stoppet”. Dette merkes ikke før brukere ringer inn og beskriver problemet \cite{serviceproblem}. Som nevnt i x.x vil en bedre sjekk være å teste selve tjenesten, som i neste delkapittel.
 
-\paragraph{LDAP, DNS og DHCP}
+\subsubsection{LDAP, DNS og DHCP}
 
 Tjenester som LDAP-autentisering, DNS-oppslag og DHCP-leasing er en viktig del av tjenestene IKT-avdelingen leverer.
 
@@ -308,23 +308,23 @@ Når en ny enhet kobles til nettverket vil denne få tildelt en IP-adresse av DH
 Sjekkene for alle de tre tjenestene vil bli gjort direkte fra Icinga-serveren. Denne står i et eget nettverk. Derfor vil det kunne oppstå situasjoner der Icinga rapporterer at tjenestene fungerer, men det ikke fungerer for brukere tilkoblet andre nettverk. En løsning på dette kan være å kjøre sjekkene via en server i hvert nettverk brukere er tilkoblet.
 
 
-\paragraph{LDAP}
+\subsubsection{LDAP}
 
 For å overvåke LDAP-tjenestene benyttes pluginen “check\_ldap” som følger med i pakken nagios-plugins-basic. Pluginen kobler til LDAP-tjenesten og prøver å autentisere en bruker. Her vil sjekken returnere OK, om den fikk autentisert. 
 
 Performancedata har blitt samlet inn for å sette grenseverdier for når Icinga skal gi varsel om treg innlogging. I Figur /ref{ldapauth-inv} ser vi at tjenesten sjekket på fire LDAP-servere, over en måneds periode bruker rundt 0.0044 sekunder på å autentisere. Ut ifra dataen som er samlet settes warning settes til 0.01 sekund, og kritisk settes til 0.02 sekunder.
 
-\paragraph{DNS}
+\subsubsection{DNS}
 
 DNS overvåkes av pluginen “check\_dns”. Denne på samme måte som “check\_ldap” kobler til selve tjenesten. Denne fungerer ved å gjøre et DNS-oppslag på en spesifikk IP-adresse, og verifisere dette mot et satt hostname. Dersom dette stemmer vil plugin-en returnere OK, sammen med ytelses-data på hvor lang tid oppslaget tok.
 
 Figur /ref{dns-inv} viser data samlet inn fra to DNS servere over 30 dager. Disse dataene viser forventet tid for et oppslag, og utifra dette ble grenseverdien for WARNING satt til 0.01 sek og CRITICAL til 0.02 sek.
 
-\paragraph{DHCP}
+\subsubsection{DHCP}
 
 DHCP tjenesten overvåkes med pluginen “check\_dhcp”. Denne sender en DHCPDISCOVER-pakke til DHCP-serveren. Hvis DHCP-tjenesten fungerer får pluginen en DHCPOFFER-pakke som respons. Dersom denne inneholder en korrekt lease, returnerer pluginen OK til Icinga sammen med tiden det tok.
 
-\paragraph{Counters}
+\subsubsection{Counters}
 Mange interne applikasjoner lar brukes via Terminalservere, her er det viktig å kunne levere et stabilt system til brukerne, 
 Sjekk av redundante oppsett
 En ordinær plugin henter status for en service som kjører på én host. Ved redundante oppsett vil det ikke nødvendigvis være kritisk om en av nodene er nede. For å vurdere statusen av et cluster kan en kjøre en sjekk på hver enkelt host som kjører den gitte servicen, få tilbake resultat fra hver, og ta en vurdering basert på disse resultatene samlet.
@@ -529,7 +529,7 @@ Infrastruktur består av de grunnleggende enhetene de andre serverne er avhengig
 
 Infrastrukturovervåkning er essensielt for å kunne levere IT-Tjenester. Det er viktig at design av overvåkningen fører til at man raskt og effektivt skal kunne oppdage og presentere feil som oppstår. For å få til dette i Icinga benyttes “parent” /ref{parents}. De aller fleste enheter i infrastrukturen (untatt servermiljø) vil være parent for andre enheter. Dette reflekteres i et statuskart i icinga, som vist i Figur /ref{statusmap}.
 
-\paragraph{Switcher}
+\subsubsection{Switcher}
 Switcher er nettverksutstyr som opererer på lag 2 i OSI modellen. IKT-avdelingen benytter switcher med lag 3 funksjonalitet. Lag 3 funksjonalitet vil si at switchen kan kommunisere over IP. Alle switchene IKT-avdelingen benytter støtter SNMP-protokollen, som brukes til overvåkingen.
 
 På switchene overvåkes forskjellige sensorer avhengig av hva de inneholder. Alle switcher har for eksempel ikke vifter.
@@ -540,10 +540,10 @@ Dersom en vifte eller PSU raporteres som defekt vil det raporteres som en CRITIC
 
 Switchene IKT-Avdelingen bruker er forskjellige modeller fra leverandørne Cisco, Dell og HP. Disse overvåkes med plugin-ene "check\_nwc\_health" \fnurl{Check NWC Health}{http://labs.consol.de/nagios/check\_nwc\_health/} for Cisco og HP og check\_snmp\_powerconnect for Dell \fnurl{Check SNMP Powerconnect}{http://exchange.nagios.org/directory/Plugins/Hardware/Network-Gear/Dell/Check-PowerConnect-Switch/details}.
 
-\paragraph{Routere og brannmurer}
+\subsubsection{Routere og brannmurer}
 IKT-avdelinger benytter Cisco ASA og Cisco PIX routere mellom forskjellige subnettverk. I tillegg utfører de gjerne oppgaver som pakkefiltrering, NAT og IPsec-tunneler.
 % TODO: Sjekk at dette er riktig mot docs
-\paragraph{Ressurser}
+\subsubsection{Ressurser}
 
 Som for switcher \ref{switch} brukes check\_nwc\_health til å se at sensorer er OK. I tillegg
 sjekkes CPU-bruk og minneforbruk gjennom samme plugin. 
@@ -553,7 +553,7 @@ For CPU-bruk sjekkes gjennomsnittet over 5 minutter. Grenseverdier er satt til 8
 
 I følge Cisco kan høytminneforbruk under vanlig operasjon indikere at brannmuren er under angrep. \cite{ciscomem}. Dersom en router bruker opp tilgjengelig minne kan det føre til at routeren slutter å svare på kommandoer, telnet-tilkoblinger eller henger \cite{ciscomemproblem} . Cisco anbefaler en grenseverdi på 15 \% ledig minne \cite{ciscounifiedcommunication}. Grenseverdier for minne er derfor satt til 20 \% for WARNING og 15 \% for CRITICAL.
 
-\paragraph{Failover}
+\subsubsection{Failover}
 
 Cisco router / Brannmurer har en viktig funksjon som kalles failover. Denne fungerer slik at to like enheter settes opp, der en blir satt som “primary” og den andre som “secondary”, slik at denne kan overta for “primary” om det skulle bli nødvendig. Disse kobles sammen med en seriellkabel. Figur /ref{ciscoasafailover} viser hvordan et Cisco-failover er satt opp. 
 
@@ -574,19 +574,19 @@ Hvis brannmurene deler management IP på primary og secondary, er det ingen muli
 
 Begge brannmurene legges i en hostgroup som er lagt på service-objektet for “cisco\_health” slik at lokale ressurser sjekkes på samme måte som switcher. Brannmurene legges også inn i en hostgroup som heter Cisco-failover som benyttes i service-objektet for failover.
 
-\paragraph{VPN}
+\subsubsection{VPN}
 
 For brannmurer som har VPN-tjeneste sjekkes antall oppkoblede bruker opp mot det antallet brannmuren er lisensiert for. Begge disse verdiene finnes som SNMP OID-er definert i CISCO-FIREWALL-MIB. Det fantes allerede en plugin som sjekker antall tilkoblede brukere \fnurl{Check Cisco ASA VPN Sessions}{http://exchange.nagios.org/directory/Plugins/Uncategorized/Software/SNMP/cisco\_asa\_sessions/details}. Denne ble endret til å også hente ut det maksimale antallet og sammeligne brukt kapasitet i prosent mot grenseverdier som kommer inn som argumenter.
 
-\paragraph{Båndbredde}
+\subsubsection{Båndbredde}
 
 For å overvåke båndbreddebruk ut av og inn på en port Cisco ASA og PIX finnes to muligheter:
 
-\paragraph{Netflow}
+\subsubsection{Netflow}
 
 Funksjonen Netflow \cite{ciscoiosnetflow} fungerer ved at enheten samler inn informasjon om og statistikk over alle pakker som går ut og inn av portene. Dette krevet at Netflow konfigureres på alle routerne og det vil også ta opp ekstra minne og CPU \cite{cisconetflowperf}. Derfor ble det avgjort å ikke benytte Netflow.
 
-\paragraph{Telle pakker}
+\subsubsection{Telle pakker}
 
 Både Cisco Pix og ASA har tellere for antall byte som går ut og inn på en nettverksport. For å kalkulere båndbredde bruk over et intervall kan en hente ut disse, vente en gitt periode og hente ut nye verdier. Da vil bruken være ((målepunkt2 - målepunkt1)*8) / antall sekunder.
 
@@ -617,7 +617,7 @@ Ved IKT-avdelingen er det både et Citrix Xen-miljø og et VMware-miljø. Disse 
 
 For overvåkning av virtuelle maskiner brukes NRPE, det overvåkes da som en “egen” server. Overvåkning av servere som kjører hypervisor-ene vil bestå av å sjekke om ressurser strekker til etterspørselen fra de virtuelle maskinene. En eller flere virtuelle maskiner kan kreve mer ressurser enn en server har fysisk. Dette stjeler både CPU-tid, minne og I/O for å håndtere, noe som vil gå utover gjeste-operativsystem og applikasjoners responstid. Videre vil overvåkning av hvor mye ressurser som brukes gi muligheten for å kalkulere når eventuelle skaleringstiltak må innføres. /ref http://pubs.vmware.com/vsphere-51/topic/com.vmware.ICbase/PDF/vsphere-esxi-vcenter-server-51-monitoring-performance-guide.pdf
 
-\paragraph{VMware}
+\subsubsection{VMware}
 
 Pluginen “check\_vmware\_api.pl”, som er utviklet av et open source firmaet op5 /ref http://www.op5.com/, er brukt for å hente ut informasjonen fra VMware vCenter. Denne pluginen bruker et SDK-bibliotek i Perl /ref http://www.vmware.com/support/developer/viperltoolkit/ for å utføre API-kall til vCenter. Autentisering skjer ved å sende med brukernavn og passord for en brukerkonto som opprettet i vCenter-serveren med read-rettigheter. For å utveksle informasjon blir SOAP-protokollen benyttet/ref http://en.wikipedia.org/wiki/SOAP via HTTPS. 
 
@@ -651,7 +651,7 @@ To counters har blitt tatt ut for overvåkning , og vil være eksempel på hvord
 /citehttp://docwiki.cisco.com/wiki/Troubleshooting\_and\_Performance\_Monitoring\_Virtualized\_Environments
 /citehttp://pubs.vmware.com/vsphere-51/topic/com.vmware.ICbase/PDF/vsphere-esxi-vcenter-server-51-monitoring-performance-guide.pdf
 
-\paragraph{CPU}
+\subsubsection{CPU}
 
 /cite http://www.vmware.com/support/developer/vc-sdk/visdk400pubs/ReferenceGuide/cpu\_counters.html
 
@@ -662,7 +662,7 @@ Counter usage.average (\%) over siste 5 minutt -  warning: 75 critcal: 90
 
 Grenseverdier her er satt til samme nivå som tilsvarende alarm i vCenter, og gir indikasjon på at det kan være en eller flere virtuelle maskiner som krever for mye CPU i forhold til hva hosten har tilgjengelig. Det kan også være et for stort antall virtuelle maskiner på hosten. 
 
-\paragraph{Minne}
+\subsubsection{Minne}
 
 Counters 
 
@@ -672,7 +672,7 @@ Counters
 
 Grenseverdier her er satt til samme nivå som vCenter, og vil gi indikasjon på om virtuelle maskiner krever mer minne enn hosten har tilgjengelig. Når det er igjen 6\% minne (free) vil hosten iverksetter enten ballooning og eventuelt swapping. Disse to reallokeringsteknikken krever CPU kraft og er en indikasjon på at minneforbruket er for høyt
 
-\paragraph{Xen}
+\subsubsection{Xen}
 
 For overvåkning av Xen-miljøet er det foreløpig en plugin etter det vi fant som gir muligheten til å hente ut informasjon fra hosts og virtuelle maskiner. Pluginen check\_xen\_api.pl, utnytter kall via url mot en RRD-database hvor xapi lagrer data /cite http://wiki.xen.org/wiki/XAPI\_RRDs. 
 Antall parametere som er tilgjengelige er ikke like stort som for eksempel VMware. I/O data er foreløpig ikke tilgjengelig, og relevant data er CPU og minnebruk.
@@ -699,7 +699,7 @@ Totalt allokert minne - ledig minne
 
 Et problem ble støtt på under implementeringen av check\_xenplugin.api som fikk stor innvirkning på returnert resultat fra RRD-databasen. Etter å ha lest gjennom koden til selve pluginen og “biblioteket” XenAPI som også er skrevet av op5, ble det oppdaget at denne pluginen bruker siste datapunkt fra intervall nr.1 nevnt over. Resultatet vil da bare være ett datapunkt. Dette er vanskelig å sette varsel på, da en spike kan skje når gitt sjekk kjører. Her ble det avgjort å legge til en ny opsjon for å angi over hvor lang tidsperiode en skal hente ut data. Returnert resultat fra gitt tidsperiode blir gått gjennom og en gjennomsnittsverdi av dette returnert. Dette er foreløpig bare implementert for CPU- og minnebruk for en host.
 
-\paragraph{Xen}
+\subsubsection{Xen}
 
 
 \subsubsection{Trådløse kontrollere}
@@ -765,7 +765,7 @@ For å overvåke temperatur og luftfuktighet på serverrommet ble det kjøpt inn
 
 Hver sensor måler både temperatur og luftfuktighet. For luftfuktighet støttes bare relativ luftfuktighet.
 
-\paragraph{Luftfuktighet}
+\subsubsection{Luftfuktighet}
 
 Relativ luftfuktighet er definert som “forholdet mellom partielltrykket til vanndamp, i en gassblanding av luft og vann, og vanndampens metningstrykk ved en viss temperatur. som gir oss prosentandelen av vann i luften. (cite http://no.wikipedia.org/wiki/Luftfuktighet). 
 
@@ -775,17 +775,17 @@ I “Sun Microsystems Data Center Site Planning Guide” anbefales en luftfuktig
 
 For høy luftfuktighet kan føre til kondens, som igjen kan føre til korrosjon på komponenter. Ved lavere luftfuktighet øker faren for utladninger av statisk elektrisitet (kritisk ved 30 \%), som kan føre til utladninger med ekstremt høye spenningsverdier, som kan ødelegge komponenter.
 
-\paragraph{Temperatur}
+\subsubsection{Temperatur}
 
 Det er mye uenighet rundt anbefalte verdier for temperatur i serverrom. I et studie utført ved University of Toronto /cite http://dl.acm.org/citation.cfm?id=2254778, ble det samlet inn data fra tre forskjellige organisasjoners datasentre, deriblant Googles. I studiet ble det konkludert med at faren for hardware-feil ved høyere temperatur øker mindre enn det som har vært vanlig å basere seg på. For DRAM-feil og ``node outages'' fant de ingen korrelasjon til temperaturøkning for intervallet i testen (15°C - 60°C). I dette studiet ble det ikke målt eller tatt hensyn til luftfuktighet. 
 
 ASHRAE anbefaler en inntakstemperatur 18°C - 27°C, mens Sun anbefaling er 20°C - 23°C. Sun bregrunner sin anbefaling med at det er lettere å opprettholde trygge verdier for relativ luftfuktighet. ASHRAE viser også til studier som viser at det totale strømforbruket kan gå opp ved høyere temperaturer fordi enheter øker frekvensen på egne vifter. http://ieeexplore.ieee.org/xpl/login.jsp?tp=\&arnumber=4544393\&url=http\%3A\%2F\%2Fieeexplore.ieee.org\%2Fxpls\%2Fabs\_all.jsp\%3Farnumber\%3D4544393
 
-\paragraph{Plugin for overvåkning av temperatur og luftfuktighet i Icinga}
+\subsubsection{Plugin for overvåkning av temperatur og luftfuktighet i Icinga}
 
 Det fantes allerede en plugin for å sjekke sensorverdiene på APC NetBotz (http://exchange.nagios.org/directory/Plugins/Hardware/UPS/APC/check\_netbotz/details). Men denne sammenlignet verdiene med grenseverdier satt i konfigurasjonen på enheten. Det var ønskelig å samle mest mulig av konfigurasjon på Icinga-serveren, derfor ble pluginen omskrevet til å kunne ta inn øvre og nedre grenseverdier som argumenter.
 
-\paragraph{UPS (Uninterruptible Power Supply)}
+\subsubsection{UPS (Uninterruptible Power Supply)}
 
 UPS, på norsk ofte kalt avbruddsfri strømforsyning blir benyttet til å opprettholde strøm til alle enheter på IKT-avdelingens serverrom, dersom strømnettet skulle falle ut og filtrere den strømen slik at utstyr ikke vil bli skadet om spenningen skulle spike.
 
