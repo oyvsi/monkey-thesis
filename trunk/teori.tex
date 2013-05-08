@@ -428,13 +428,14 @@ Man har to muligheter når man skal overvåke med SNMP. Enten kan enhetene selv 
 
 For å benytte SNMP trap/inform må en tillate tilkoblinger til overvåkingsserveren i stedet for bare fra. Hvilke trap meldinger som skal sendes må også konfigureres på hver enhet, og en vil da ikke kunne ha all konfigurasjon er på ett sted.
 
-%\begin{center}
-%\begin{figure}
-%    \includegraphics{img/snmp.gif}
-%    \caption{SNMP}
-%    \label{SNMP}
-%\end{figure}
-%\end{center}
+
+\begin{figure}
+    \centralize
+    \includegraphics{img/SNMP}
+    \caption{SNMP}
+    \label{SNMP}
+\end{figure}
+
 
 SNMP benytter seg av UDP for å levere traps. Fordi UDP er en såkalt upålitelig protokol, det vil si at det ikke er noen omsending av pakker eller noen tilbakemelding (ack) for at pakkene kommer fram. Derfor kan en risikere å miste en trap. SNMP inform, som kom i SNMPv3, løser dette ved at agenten vil sende en ny inform-pakke i et intervall, helt til manageren gir beskjed om at trap-en er mottatt.
 
