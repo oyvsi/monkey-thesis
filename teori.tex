@@ -180,7 +180,7 @@ Det finnes et sett med offisielle plugin-er til Nagios som utgis av "Nagios Plug
 \section{Sjekker}
 Tilstanden for et service- eller en host-objekt vil bestemmes ut i fra et returnert resultat av en aktiv eller passiv sjekk. Forskjellen på disse to vil bli forklart i de neste delkapitlene.
 
-Dersom en aktiv eller passiv sjekk resulterer i en annen tilstand enn “OK” er det to typer av tilstanden, “soft” og “hard”. Første gang en plugin returnerer en feil vil tilstanden bli satt til “soft” i tillegg til service- eller host-tilstanden. Etter dette vil sjekken kjøres hyppigere for å finne ut om det er snakk om et forbigående problem. Etter et satt antall ganger der pluginen fortsatt ikke returnerer “OK”, vil tilstanden skifte til “hard” og det sendes ut varslingsmelding /ref {varslingsmelding}.
+Dersom en aktiv eller passiv sjekk resulterer i en annen tilstand enn “OK” er det to typer av tilstanden, “soft” og “hard”. Første gang en plugin returnerer en feil vil tilstanden bli satt til “soft” i tillegg til service- eller host-tilstanden. Etter dette vil sjekken kjøres hyppigere for å finne ut om det er snakk om et forbigående problem. Etter et satt antall ganger der pluginen fortsatt ikke returnerer “OK”, vil tilstanden skifte til “hard” og det sendes ut varslingsmelding /ref  varslingsmelding .
 
 \subsubsection{Aktive sjekker}
 En aktiv sjekk er en sjekk som initieres av Icinga, der en kommando kjøres på Icinga-serveren. Dette er også kjent som en "poll"-modell". En aktiv sjekk defineres ut i fra et command-objekt med parametere og et tidsintervall i service- og host-objekter. I command-objektet defineres en plugin som skal kjøre og returverdien vil bestemme hvilken tilstand service- eller host-objekter har. 
@@ -208,7 +208,7 @@ Fordelen er at en får beskjed med en gang noe er galt og kan gi en raskere vars
 
 Resultatet av en host-sjekk vil avgjøre om tilstanden til host-objektet er “UP” eller “DOWN”. 
 
-Det er ikke et fast tidsintervall for en hostsjekk [d]med mindre check\_interval er definert. Icinga vil kjøre denne sjekken om en service som er satt opp for host-en skifter tilstand. Servicer som er definert for en host som er i “DOWN” vil automatisk bli satt som “Known service problems”, og ingen sjekker vil bli kjørt på dem før host-en er “OK” igjen.
+Det er ikke et fast tidsintervall for en hostsjekk med mindre check\_interval er definert. Icinga vil kjøre denne sjekken om en service som er satt opp for host-en skifter tilstand. Servicer som er definert for en host som er i “DOWN” vil automatisk bli satt som “Known service problems”, og ingen sjekker vil bli kjørt på dem før host-en er “OK” igjen.
 
 Grunnsjekken for en host defineres i host-konfigurasjonen med “check\_command”.
 
@@ -220,7 +220,7 @@ define host {
 \end{lstlisting}
 
 \subsubsection{Variabler}
-For å kunne gjøre konfigurasjon av Icinga mest mulig dynamisk er det en rekke forhåndsdefinerte variabler en kan bruke i konfigurasjonsfilene. Disse kalles makroer. En fullstendig liste over disse og hvor de kan benyttes finnes i Icinga-dokumentasjonen \cite{icingamacro}. $HOSTADDRESS$ kan for eksempel benyttes i et command-objekt slik at den bare må skrives en gang, og ikke for hver host. En kan også definere egne variabler som f.eks “\_SSHPORT”. Disse kan også sendes videre til selve kommandoen som kjøres og benyttes som argumenter til programmet som kjører en sjekk, slik:
+For å kunne gjøre konfigurasjon av Icinga mest mulig dynamisk er det en rekke forhåndsdefinerte variabler en kan bruke i konfigurasjonsfilene. Disse kalles makroer. En fullstendig liste over disse og hvor de kan benyttes finnes i Icinga-dokumentasjonen \cite{icingamacro}. \$HOSTADDRESS\$ kan for eksempel benyttes i et command-objekt slik at den bare må skrives en gang, og ikke for hver host. En kan også definere egne variabler som f.eks “\_SSHPORT”. Disse kan også sendes videre til selve kommandoen som kjøres og benyttes som argumenter til programmet som kjører en sjekk, slik:
 
 \begin{lstlisting}
 define host {
@@ -298,7 +298,7 @@ define host {
 \end{lstlisting}
 
 \subsubsection{Regulære uttrykk}
-Ved å sette "use regular expressions" i konfigurasjonen for Icinga, kan en benytte regulære uttrykk i attributter i et objekt, der en refererer til andre objekter. Icinga støtter standarden POSIX Extended Regular Expressions, og vil automatisk tolke navnet som et regulært uttrykk dersom det inneholder "*", "?", "+", eller "\".
+Ved å sette "use regular expressions" i konfigurasjonen for Icinga, kan en benytte regulære uttrykk i attributter i et objekt, der en refererer til andre objekter. Icinga støtter standarden POSIX Extended Regular Expressions, og vil automatisk tolke navnet som et regulært uttrykk dersom det inneholder \verb|"*", "?", "+", eller "\"|.
 
 Dette kan være nyttig dersom en for eksempel vil legge alle hoster i en hostgroup, som har en navnekonvensjon som gjør at hver av hostene unikt kan identifiseres ved å bytte ut deler av navnet med en variabel.
 
@@ -333,7 +333,7 @@ Et host-objekt kan settes som en “parent” til et annet host-objekt. Host-obj
 
 For redundante oppsett kan et host-objekt ha flere “parents” definert. Host-objektet vil da være UP så lenge en “parent”-host er UP.
 
-Ut ifra “parent”-relasjonene mellom host-objekter i konfigurasjonsfilene genereres også et “Status Map” over nettverket, som vist i Figur /ref{statusmap}. Dette brukes til å visualisere alle relasjonene, og vil gjengi redundante oppsett og hvilke host-objekter som er påvirket av at “parent”-hosten er DOWN.
+Ut ifra “parent”-relasjonene mellom host-objekter i konfigurasjonsfilene genereres også et “Status Map” over nettverket, som vist i Figur /ref statusmap . Dette brukes til å visualisere alle relasjonene, og vil gjengi redundante oppsett og hvilke host-objekter som er påvirket av at “parent”-hosten er DOWN.
 
 \section{Service dependency}
 
@@ -381,7 +381,7 @@ For å sette en avhengighet mellom to host-er benyttes “host dependency”. De
 
 Her er det anbefalt å bruke parents i stedet \cite{hostandservicedep}. /cite Nagios-boka og .
 
-\section{Protokoller og agenter }
+\section{Protokoller og agenter}
 For å kjøre sjekker på enheter må Icinga-serveren kunne kommunisere med operativsystemene på de ulike enhetene. Icinga henviser til protokollene SSH, SNMP, RPC (WMI) og agentene NRPE og NSCA (en del av pakken NSClient++) \cite{icingaintegration} \cite{icingaadditionalsoftware}. 
 
 \subsubsection{NRPE}
@@ -401,7 +401,7 @@ Gjennom en tilkobling til en SSH-server kan en spesifisere en kommando som skal 
 
 Ulempen med å kjøre sjekker over SSH er at man må sette opp nøkkelbasert innlogging mellom Icinga-serveren og alle Linux-serverne som skal overvåkes. En kan selvsagt begrense rettigheter for nagios-brukeren som kjører sjekkene, men den vil fortsatt ha muligheten til å logge inn til et shell og eksekvere kommandoer. Dette kan føre til at en potensiell angriper via Icinga-serveren har en vei inn til alle servere som overvåkes.
 
-SSH gir også endel overhead[e] (ref man page) både på nettverkstrafikk og i CPU-tid. En måte å minske dette på er å benytte SSH med ControlMaster. Dette innebærer en endring i SSH-konfigurasjonen på serveren der SSH-klienten lagrer informasjon om hver utgående TCP- tilkobling slik at denne kan benyttes om nye tilkoblinger blir forsøkt mot samme host. Dermed unngår en å sette opp en ny TCP-tilkobling for hver ny sjekk som skal utføres på hosten.  
+SSH gir også endel overhead (ref man page) både på nettverkstrafikk og i CPU-tid. En måte å minske dette på er å benytte SSH med ControlMaster. Dette innebærer en endring i SSH-konfigurasjonen på serveren der SSH-klienten lagrer informasjon om hver utgående TCP- tilkobling slik at denne kan benyttes om nye tilkoblinger blir forsøkt mot samme host. Dermed unngår en å sette opp en ny TCP-tilkobling for hver ny sjekk som skal utføres på hosten.  
 
 \subsubsection{SNMP (Simple Network Management Protocol)}
 
@@ -419,7 +419,7 @@ iso(1). org(3). dod(6). internet(1). private(4). enterprises(1). apc(318). produ
 
 Denne OID-en er definert i APCs MIB-fil “PowerNet MIB”. Ved å laste inn denne kan en også benytte “PowerNet-MIB::upsAdvBatteryCapacity.0”.
 
-SNMP finnes i flere versjoner. I dag brukes for det meste versjon 2c og den nyeste, versjon 3.[f] v2c og v1 er ikke kompatible, men i praksis støtter det meste av utstyr som har støtter v3 eller v2c og v1 \cite{rfc3584}. Hovedforskjellen mellom versjon 2c og 3 er at versjon 3 krypterer dataene over nettverket, men krever da også mer konfigurasjon og vedlikehold. Sikkerhetsaspektet ved disse er diskutert videre i sikkerhets kapittelet /ref{sikkerhet}. 
+SNMP finnes i flere versjoner. I dag brukes for det meste versjon 2c og den nyeste, versjon 3. v2c og v1 er ikke kompatible, men i praksis støtter det meste av utstyr som har støtter v3 eller v2c og v1 \cite{rfc3584}. Hovedforskjellen mellom versjon 2c og 3 er at versjon 3 krypterer dataene over nettverket, men krever da også mer konfigurasjon og vedlikehold. Sikkerhetsaspektet ved disse er diskutert videre i sikkerhets kapittelet /ref sikkerhet . 
 
 Man har to muligheter når man skal overvåke med SNMP. Enten kan enhetene selv rapportere inn hendelelser via SNMP trap/inform, eller så kan serveren spørre enhetene via SNMP GetRequest. Valg av det første medfører at en kan gjøre varsling umiddelbart, men da må også hver enhet konfigureres med parametere for hvilke traps som skal sendes og hvor. Icinga har ingen støtte for å motta traps, men en kan installere en egen daemon for dette og rapportere inn data som passive sjekker. 
 
@@ -427,7 +427,7 @@ For å benytte SNMP trap/inform må en tillate tilkoblinger til overvåkingsserv
 
 
 \begin{figure}
-    \centralize
+    \centering
     \includegraphics{img/SNMP}
     \caption{SNMP}
     \label{SNMP}
@@ -436,14 +436,13 @@ For å benytte SNMP trap/inform må en tillate tilkoblinger til overvåkingsserv
 
 SNMP benytter seg av UDP for å levere traps. Fordi UDP er en såkalt upålitelig protokol, det vil si at det ikke er noen omsending av pakker eller noen tilbakemelding (ack) for at pakkene kommer fram. Derfor kan en risikere å miste en trap. SNMP inform, som kom i SNMPv3, løser dette ved at agenten vil sende en ny inform-pakke i et intervall, helt til manageren gir beskjed om at trap-en er mottatt.
 
-[g]
 
 For å benytte SNMP på Windows- og Linux-servere kreves installasjon av en SNMP-agent \cite{mssnmp} \cite{netsnmp}.
 
 \subsubsection{WMI (Windows Management Instrumentation)}
 WMI er et grensesnitt som gjør det mulig å lage programmer eller script som utfører oppgaver mot operativsystemet Windows, enten lokalt eller mot eksterne maskiner. Disse oppgavene kan være alt fra å restarte maskinen til å hente ut logger over hendelser som har inntruffet på maskinen. I et overvåkningssytem vil det være mest relevant å kjøre kommandoer som henter ut informasjon om maskinen og tjenester som kjører på den. Dette kan for eksempel være hvilke prosesser som bruker mest CPU-tid.
 
-For å benytte WMI-spørringer fra en ekstern enhet må det konfigureres brukertilgang og brannmurregler /cite http://msdn.microsoft.com/en-us/library/windows/desktop/aa822854(v=vs.85).aspx. Med NSclient[h]++ har en mulighet til å kjøre WMI-queries over NRPE.
+For å benytte WMI-spørringer fra en ekstern enhet må det konfigureres brukertilgang og brannmurregler /cite http://msdn.microsoft.com/en-us/library/windows/desktop/aa822854(v=vs.85).aspx. Med NSclient++ har en mulighet til å kjøre WMI-queries over NRPE.
 
 \subsubsection{Valg av Agenter}
 Valg av protokoll eller agenter har basert seg på følgende punkter:
