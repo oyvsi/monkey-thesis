@@ -68,7 +68,7 @@ For å sikre tilgjengeligheten til Icinga ytterligere, er det også mulig å set
 En annen utfordring var å vite hvor kraftig hardware serveren trengte. Her ble referanselisten til Icinga lagt til grunn \cite{icingainaction}, hvor mange organisasjoner har lagt inn informasjon om sine oppsett. Etter avtale med oppgragsgiver ble det bestemt å sette opp en bladeserver, som eventuelt kunne byttes med noe kraftigere dersom det skulle bli nødvendig. 
 
 \subsection{Installasjon}
-I pakkebrønnen for debian-stable fantes bare versjon 1.0.2 av Icinga, i backports lå 1.7.1. Icinga opprettholder en egen pakkebrønn - “The Debian Monitoring Prosject” \cite{debmon}. Fra denne kunne versjon 1.8.4 installeres. I samråd med teknisk kontakt ved IKT-avdelingen ble det bestemt å bruke versjon 1.8.4 fra debmon.
+I pakkebrønnen for debian-stable fantes bare versjon 1.0.2 av Icinga, i backports lå 1.7.1. Icinga opprettholder en egen pakkebrønn - ``The Debian Monitoring Prosject'' \cite{debmon}. Fra denne kunne versjon 1.8.4 installeres. I samråd med teknisk kontakt ved IKT-avdelingen ble det bestemt å bruke versjon 1.8.4 fra debmon.
 
 \subsection{Konfigurasjonsfiler}
 Ved standard installasjon av Icinga er konfigurasjonen delt opp i objekttyper med flere objekter i hver fil:
@@ -117,7 +117,7 @@ Dette var uoversiktelig og en oppdelt konfigurasjon var ønskelig, som også er 
 \makeatother
 \begin{document}
 \begin{tikzpicture}[dirtree]
-\node {objects} 
+\node {Objects} 
     child { node {commands}
             child { node {firewalls} }
             child { node {servers} }
@@ -179,13 +179,15 @@ check_command check_mysql_health!connection-time!0.1!0.4
 
 Figur \ref{sql} viser en visuel fremstilling av hvordan alt dette henger sammen for alle SQL-servere:
 
+\begin{changemargin}{-1cm}{-1cm}
 \begin{figure}
     \centering
-    \includegraphics[scale=0.6]{img/sql}
+    \includegraphics[scale=0.55]{img/sql}
     \caption{Visualerins av oppset for MySQL-server}
     \label{sql}
 \end{figure}
-
+\end{changemargin}
+\clearpage
 
 
 \section{Generering av grafer}
@@ -225,7 +227,9 @@ Overvåkning av standard Linux-servere skjer utelukkende ved bruk av NRPE.
 
 For Debian-servere kan denne installers fra pakkebrønnen “stable” med kommandoen:
 
+\begin{lstlisting}
 apt-get install nagios-nrpe-server nagios-plugins-basic
+\end{lstlisting}
 
 For Red Hat og CentOS må det benyttes en tredjeparts “pakketing” som EPEL eller DAG før nrpe-server kan installeres med yum.
 
@@ -272,9 +276,12 @@ Check\_CPU
 \begin{lstlisting}
 ./check_nrpe -u -H 10.60.0.22 -p 5666 -c CheckCPU -a time=5m warn=80 crit=90
 \end{lstlisting}
-I Figur \ref{cpustrain} returnerer CPU-sjekken “OK”. Dette er hentet fra gjennomsnittsbruk av CPU over 5 minutter. Like under ser vi at testen er kritisk på grunn av et gjennomsnittsbruk av CPU på 96 \%. I Figur /ref{CPUSTRAIN} ser vi at alle de fire CPU-kjernene jobber oppmot maksimalt. Et batch-script ble kjørt lokalt på serveren som ble overvåket for å generere CPU-bruk.
+I Figur \ref{cpustrain} returnerer CPU-sjekken “OK”. Dette er hentet fra gjennomsnittsbruk av CPU over 5 minutter. Like under ser vi at testen er kritisk på grunn av et gjennomsnittsbruk av CPU på 96 \%. I Figur \ref{CPUSTRAIN} ser vi at alle de fire CPU-kjernene jobber oppmot maksimalt. Et batch-script ble kjørt lokalt på serveren som ble overvåket for å generere CPU-bruk.
 \begin{lstlisting}
-# winloop.bat
+## winloop.bat
+##
+# Kjører loop.bat 10 ganger.
+#
 @echo off
 for /l %%x in (1, 1, 10) do (
     start loop.bat
@@ -323,7 +330,7 @@ OK memory within bounds.|'physical memory %'=16%;80;90 'physical memory'=1G;4;5;
 
 Opsjoner sendes med som gjør at sjekken gir warning når mer enn 80 \% av fysisk minne er brukt, når minneforbruket overstiger 90 \% blir minneforbruket kritisk.
 
-For Linux benyttes plugin: https://raw.github.com/jasonhancock/nagios-memory/master/plugins/check\_mem
+For Linux benyttes plugin check\_mem \cite{checklinuxmem}
 
 \section{Tjenester}
 IKT-avdelingen ønsket å overvåke tjenester og prosesser på serverne. Prossesser er instanser av programmer som kjører. Tjenester er prosesser som kjører i bakgrunnen. 
@@ -370,7 +377,7 @@ Performancedata har blitt samlet inn for å sette grenseverdier for når Icinga 
 
 \begin{figure}
     \centering
-    \includegraphics[scale=0.6]{img/ldap-auth-inv}
+    \includegraphics[width=1.0\textwidth]{img/ldap-auth-inv}
     \caption{Data fra Graphite (sekund)}
     \label{ldapauth-inv}
 \end{figure}
@@ -384,7 +391,7 @@ Figur \ref{dns-inv} viser data samlet inn fra to DNS servere over 30 dager. Diss
 
 \begin{figure}
     \centering
-    \includegraphics[scale=0.6]{img/dns-inv}
+    \includegraphics[width=1.0\textwidth]{img/dns-inv}
     \caption{Data fra Graphite (sekund)}
     \label{dns-inv}
 \end{figure}
@@ -395,8 +402,15 @@ Figur \ref{dns-inv} viser data samlet inn fra to DNS servere over 30 dager. Diss
 DHCP tjenesten overvåkes med pluginen “check\_dhcp”. Denne sender en DHCPDISCOVER-pakke til DHCP-serveren. Hvis DHCP-tjenesten fungerer får pluginen en DHCPOFFER-pakke som respons. Dersom denne inneholder en korrekt lease, returnerer pluginen OK til Icinga sammen med tiden det tok.
 
 \subsubsection{Counters}
-Mange interne applikasjoner lar brukes via Terminalservere, her er det viktig å kunne levere et stabilt system til brukerne, 
-Sjekk av redundante oppsett
+Mange interne applikasjoner brukes via Terminalservere, her er det viktig å kunne levere et stabilt system til brukerne, ofte kan terminalservere belastes mer i perioder, det blir da naturlig å overvåke hvor mange som bruker disse serverne, for å kunne sette inn nye servere, og se hvem som blir belastet mest.
+
+Ved å bruke NRPE sjekkes windows performance counters direkte. I Figur /ref checkterminalservices er bruken for en uke samlet inn og kan brukes videre til å evalure terminalserver lasten.
+
+Kommando som er brukt for å samle denne datoen er følgende:
+
+
+
+\subsection{Sjekk av redundante oppsett}
 En ordinær plugin henter status for en service som kjører på én host. Ved redundante oppsett vil det ikke nødvendigvis være kritisk om en av nodene er nede. For å vurdere statusen av et cluster kan en kjøre en sjekk på hver enkelt host som kjører den gitte servicen, få tilbake resultat fra hver, og ta en vurdering basert på disse resultatene samlet.
 
 For å overvåke redundante oppsett, har pluginene check\_multi og check\_cluster blitt vurdert.  Forskjellene mellom disse er at check\_cluster i motsetning til check\_multi parser den lokale status.dat filen og ser hvilken tilstand en service eller en host er ved siste sjekk. Pluginen check\_multi derimot kjører aktive sjekker mot spesifiserte hosts, og en kan definere comparison operator som vil bli sjekket mot de returnerte resultatene.

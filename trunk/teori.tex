@@ -442,7 +442,7 @@ For å benytte SNMP på Windows- og Linux-servere kreves installasjon av en SNMP
 \subsubsection{WMI (Windows Management Instrumentation)}
 WMI er et grensesnitt som gjør det mulig å lage programmer eller script som utfører oppgaver mot operativsystemet Windows, enten lokalt eller mot eksterne maskiner. Disse oppgavene kan være alt fra å restarte maskinen til å hente ut logger over hendelser som har inntruffet på maskinen. I et overvåkningssytem vil det være mest relevant å kjøre kommandoer som henter ut informasjon om maskinen og tjenester som kjører på den. Dette kan for eksempel være hvilke prosesser som bruker mest CPU-tid.
 
-For å benytte WMI-spørringer fra en ekstern enhet må det konfigureres brukertilgang og brannmurregler /cite http://msdn.microsoft.com/en-us/library/windows/desktop/aa822854(v=vs.85).aspx. Med NSclient++ har en mulighet til å kjøre WMI-queries over NRPE.
+For å benytte WMI-spørringer fra en ekstern enhet må det konfigureres brukertilgang og brannmurregler \cite{wmiremote}. Med NSclient++ har en mulighet til å kjøre WMI-queries over NRPE.
 
 \subsubsection{Valg av Agenter}
 Valg av protokoll eller agenter har basert seg på følgende punkter:
