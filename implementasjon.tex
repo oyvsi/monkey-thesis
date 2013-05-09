@@ -591,9 +591,11 @@ MySQL Cluster er et distribuert oppsett for MySQL. Ved IKT-avdelingen benyttes e
 
 \begin{itemize}
 	\item Management - her konfigureres clusteret og en setter opp hvor mange Data- og SQL-noder som kan kobles til.
-	\item Data - oppbevarer dataene i RAM. Disse håndterer lastbalasering, replikering, failover og gjenoppbygging automatisk i mellom hverandre.
+	\item Data - oppbevarer tabeller og tabelldata i RAM. Disse håndterer lastbalasering, replikering, failover og gjenoppbygging automatisk i mellom hverandre.
 	\item SQL - MySQL servere som kobler seg til data-nodene for å hente og lagre data.
 \end{itemize}
+
+\cite{ndbinformation}
 
 Den enkleste måten å hente ut statistikk om et MySQL Cluster er å benytte seg av mangement programmet “ndb\_adm” som kan hentes ut fra installasjonspakken til mysql-cluster \cite{ndbdownload}. I ndb\_adm kan en se hvor mange noder av hver type som er tilkoblet og minneforbruket til hver av datanodene. De plugin-ene som benyttes baserer seg på output fra “ndb\_adm”.
 
