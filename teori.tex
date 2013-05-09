@@ -9,7 +9,7 @@ Når en leverer tjenester innenfor IT er det viktig at det ikke er kunden som va
 
 I "The Practice of System and Network Administration" sier forfatteren det godt: ``If you aren’t monitoring it, you aren’t managing it''
 
-\section{Generelt om overvåkning}
+\section{Generelt om overvåkning}\label{sec:omovervakning}
 Overvåkning deles ofte inn i de to kategoriene historisk overvåkning og sanntidsovervåkning /cite Practice of System and network adm  . 
 
 Ved historisk overvåkning blir data samlet inn for å ha statistikk over oppetid, ytelse og bruk. Ut fra disse dataene vil en kunne dra konklusjoner som for eksempel at VPN-tjenesten har hatt en oppetid på 99,9 \% over det siste året og gjennomsnittlig antall brukere har vært 100, med en økning på 10 \% den siste måneden. Dermed kan en få et overblikk over hvor lang nedetid en har hatt, og en har dokumentasjon på hvordan leveransen har vært opp mot avtalt leveranse.
@@ -104,7 +104,7 @@ Icinga-web er en total omskrivning av webgrensesnittet. Det er Ajax-drevet og en
 	\item Command Control Interface utfører kommandoer.
 \end{itemize}
 
-\section{Objekter}
+\section{Objekter}\label{sec:objekter}
 All konfigurasjon av Icinga gjøres i rene tekstfiler. I selve konfigurasjonsfilen icinga.cfg settes banen til der konfigurasjonsfilene finnes. Icinga vil da ved oppstart lete rekursivt gjennom mappen etter filer som ender med “.cfg”.
 
 Konfigurasjonsdataene er bygget rundt det som i Icinga kalles objekter. Dette er en samling av konfigurasjon som hører sammen. Selv om en ikke kan si at Icingas objekter er det samme som objekter i programmeringsverden, benyttes mange av de samme begrepene og konseptene.
@@ -140,7 +140,7 @@ Det er også to objekter med metainformasjon, “hostextinfo” og “serviceext
 
 Den siste objekttypen er module. Her spesifiseres konfigurasjon for en modul som utvider funksjonalitet i Icinga-Web.
 
-Sammenhengen mellom objektene er viktig å forstå for å skjønne hvordan sjekker utføres i Icinga. I et service-objekt defineres hvilket command-objekt som skal benyttes for å teste tjenesten og hvilke host- eller hostgroup-objekter dette skal sjekkes på. Dette er vist i Figur \ref{command_host_service}
+Sammenhengen mellom objektene er viktig å forstå for å skjønne hvordan sjekker utføres i Icinga. I et service-objekt defineres hvilket command-objekt som skal benyttes for å teste tjenesten og hvilke host- eller hostgroup-objekter dette skal sjekkes på. Dette er vist i Figur \ref{command_host_service}.
 
 \begin{figure}
     \centering
@@ -154,7 +154,7 @@ Icinga i seg selv kommer uten noen overvåkningssjekker. Til dette benyttes plug
 
 En plugin i Icinga er et eksternt program som kjøres og outputen hentes inn som data. Resultatet av sjekken hentes fra exit-koden\cite{wiki:returncode} og oversettes til en tilstand etter Tabell \ref{state}.
 
-Det finnes et sett med offisielle plugin-er til Nagios som utgis av "Nagios Plugins project" \cite{http://nagiosplugins.org}. Pakken finnes i en rekke pakkebehandlere og inneholder over 50 plugin-er som er ment for å dekke grunnleggende overvåkningsbehov.
+Det finnes et sett med offisielle plugin-er til Nagios som utgis av "Nagios Plugins project" \cite{nagiosplugins}. Pakken finnes i en rekke pakkebehandlere og inneholder over 50 plugin-er som er ment for å dekke grunnleggende overvåkningsbehov.
 
 \begin{table}
 	\begin{center}
@@ -333,7 +333,7 @@ Et host-objekt kan settes som en “parent” til et annet host-objekt. Host-obj
 
 For redundante oppsett kan et host-objekt ha flere “parents” definert. Host-objektet vil da være UP så lenge en “parent”-host er UP.
 
-Ut ifra “parent”-relasjonene mellom host-objekter i konfigurasjonsfilene genereres også et “Status Map” over nettverket, som vist i Figur /ref statusmap . Dette brukes til å visualisere alle relasjonene, og vil gjengi redundante oppsett og hvilke host-objekter som er påvirket av at “parent”-hosten er DOWN.
+Ut ifra “parent”-relasjonene mellom host-objekter i konfigurasjonsfilene genereres også et “Status Map” over nettverket, som vist i Figur \ref{statusmap} . Dette brukes til å visualisere alle relasjonene, og vil gjengi redundante oppsett og hvilke host-objekter som er påvirket av at “parent”-hosten er DOWN.
 
 \section{Service dependency}
 
@@ -419,7 +419,7 @@ iso(1). org(3). dod(6). internet(1). private(4). enterprises(1). apc(318). produ
 
 Denne OID-en er definert i APCs MIB-fil “PowerNet MIB”. Ved å laste inn denne kan en også benytte “PowerNet-MIB::upsAdvBatteryCapacity.0”.
 
-SNMP finnes i flere versjoner. I dag brukes for det meste versjon 2c og den nyeste, versjon 3. v2c og v1 er ikke kompatible, men i praksis støtter det meste av utstyr som har støtter v3 eller v2c og v1 \cite{rfc3584}. Hovedforskjellen mellom versjon 2c og 3 er at versjon 3 krypterer dataene over nettverket, men krever da også mer konfigurasjon og vedlikehold. Sikkerhetsaspektet ved disse er diskutert videre i sikkerhets kapittelet /ref sikkerhet . 
+SNMP finnes i flere versjoner. I dag brukes for det meste versjon 2c og den nyeste, versjon 3. v2c og v1 er ikke kompatible, men i praksis støtter det meste av utstyr som har støtter v3 eller v2c og v1 \cite{rfc3584}. Hovedforskjellen mellom versjon 2c og 3 er at versjon 3 krypterer dataene over nettverket, men krever da også mer konfigurasjon og vedlikehold. Sikkerhetsaspektet ved disse er diskutert videre i sikkerhets kapittelet \ref{chap:sikkerhet}. 
 
 Man har to muligheter når man skal overvåke med SNMP. Enten kan enhetene selv rapportere inn hendelelser via SNMP trap/inform, eller så kan serveren spørre enhetene via SNMP GetRequest. Valg av det første medfører at en kan gjøre varsling umiddelbart, men da må også hver enhet konfigureres med parametere for hvilke traps som skal sendes og hvor. Icinga har ingen støtte for å motta traps, men en kan installere en egen daemon for dette og rapportere inn data som passive sjekker. 
 
