@@ -420,7 +420,7 @@ Kommando som er brukt for å sjekke antall aktive brukere på ``terminal service
 \end{figure}
 
 \subsection{Webservere}
-IKT-avdelingen drifter mange webservere som benyttes av eller gir informasjon til brukere. Pluginen "check\_http"\cite{http://nagiosplugins.org/man/check_http} fra nagios-plugins benyttes for å sjekke at tilkoblingen til webserveren svarer på henvendelsen. Deler av forventet innhold sjekkes for å se at websiden ikke har blitt endret av uvedkommende.
+IKT-avdelingen drifter mange webservere som benyttes av eller gir informasjon til brukere. Pluginen "check\_http" \cite{checkhttp} fra nagios-plugins benyttes for å sjekke at tilkoblingen til webserveren svarer på henvendelsen. Deler av forventet innhold sjekkes for å se at websiden ikke har blitt endret av uvedkommende.
 
 Kommandoen for å gjøre dette er for siden http://portal.hedmark.org:
 \begin{lstlisting}
@@ -476,13 +476,14 @@ Det sjekkes også at websiden for Outlook Web Access er tilgjengelig gjennom plu
 \section{Databaser}
 Tre forskjellige databasemotorer benyttes av IKT-avdelingen. Disse er MySQL, MSSQL og Oracle DB. Disse har ulik arkitektur og virkemåte \cite{databasecomparison}, og derfor blir ikke de samme parameterene overvåket på alle. Felles for alle er:
 
-Connection time (tid det tar å koble til SQL serveren).
-Connected users (antall aktive sessioner mot SQL serveren).
-Cache hit rate (antall spørringer som blir hentet fra cache i et tidsinterval).
+\begin{itemize}
+	\item Connection time (tid det tar å koble til SQL serveren).
+	\item Connected users (antall aktive sessioner mot SQL serveren).
+	\item Cache hit rate (antall spørringer som blir hentet fra cache i et tidsinterval).
+\end{itemize}
 
-Disse er valgt
+Disse sjekke er spesifikke for hver databasemotor, og er valgt for å få en oversikt over trege spørringer som utføre.
 
-Spesifikke
 \begin{itemize}
 \item MySQL: Slow queries (antall trege spørringer SQL serveren utfører i et tidsinterval).
 \item MSSQL: Lazy writes
@@ -526,7 +527,7 @@ ORA11 =
  )
 )
 \end{lstlisting}
-Check\_multi brukes så for å samle en Oracle servers instanser under samme service. Eksempelvis når cache hit sjekken kjøres, vil check\_multi utføre sjekken for alle instansene. Deretter vil svarene fra instansene samles under samme check cache hit sjekk i Icinga. Dette gjør det mer oversiktlig å overvåke oracle servere.
+Check\_multi brukes så for å samle en Oracle servers instanser under samme service. Eksempelvis når cache hit sjekken kjøres, vil check\_multi utføre sjekken for alle instansene. Deretter vil svarene fra instansene samles under samme check cache hit sjekk i Icinga. Dette gjør det mer oversiktlig å overvåke oracle servere. I tilegg blir konfigurasjonen mer dynamisk, på grunn av at hver Oracle instanse ikke trenger å defineres som en egen service.
 
 \begin{lstlisting}
 define service {
@@ -572,10 +573,10 @@ For å koble til databaseserverne trengs servicebrukere i hver av de. Her holder
 
 I MySQL brukes følgende kode for å opprette denne brukeren:
 \begin{lstlisting}[language=SQL]
-GRANT USAGE ON *.* TO 'icinga'@'10.60.0.20' IDENTIFIED BY 'Bachel0r'; 
+GRANT USAGE ON *.* TO 'icinga'@'10.60.0.20' IDENTIFIED BY 'Password'; 
 \end{lstlisting}
 
-Script for å opprette brukere i Oracle og MSSQL finnes i Vedlegg \ref{oracledb.sql}\ref{mssqldb.sql}.
+Script for å opprette brukere i Oracle og MSSQL finnes i Vedlegg \ref{oracledb.sql} og \ref{mssqldb.sql}.
 
 Konfigurasjonen
 Kommandoen konfigureres med muligheten for å bestemme hvilken sjekk som skal kjøre i \$ARG1\$.

@@ -26,7 +26,9 @@ I Figur \ref{hostgroupfigur} ser vi hvilke hostgroups de forskjellige hostene sk
 \section{Legge til mange host-objekter}
 I utrullingsfaser er det naturlig å legge til mange hosts i samme slengen, dette sparer mye tid og scriptet sørger også for at hostfilene genereres syntaktisk korrekte
 
-Her er det laget et script som kan generere hosts med atributtene  ``hostname'', ``address'', ``hostgroup'' og ``generic''
+Her er det laget et script som kan generere hosts med atributtene  ``hostname'', ``address'', ``hostgroup'' og ``generic''. Som vist i kode eksemplet under blir ikke hosts med feil verdier tatt med. Hosts uten hostgroup eller generic vil bruke standardverdier definert i scriptet.
+
+
 
 \begin{lstlisting}
 monkey@hig1:~/script$ vim servers.csv
@@ -94,7 +96,7 @@ Icinga classic autentiserer mot AD gjennom modulene ldap og authnz\_ldap.
             <ae:parameter name="ldap_start_tls">false</ae:parameter>
             <ae:parameter name="ldap_basedn">DC=monkey,DC=local</ae:parameter>
             <ae:parameter name="ldap_binddn">icingawebauth@monkey.local</ae:parameter>
-            <ae:parameter name="ldap_bindpw"><![CDATA[Bachel0r]]></ae:parameter>
+            <ae:parameter name="ldap_bindpw"><![CDATA[Password]]></ae:parameter>
             <ae:parameter name="ldap_userattr">sAMAccountName</ae:parameter>
             <ae:parameter name="ldap_filter_user"><![CDATA[(&(sAMAccountName=__USERNAME__)(memberOf=CN=icinga-login,OU=icinga,DC=monkey,DC=local))]]></ae:parameter>
         </ae:parameter>
