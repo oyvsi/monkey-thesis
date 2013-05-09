@@ -404,9 +404,16 @@ DHCP tjenesten overvåkes med pluginen “check\_dhcp”. Denne sender en DHCPDI
 \subsubsection{Counters}
 Mange interne applikasjoner brukes via Terminalservere, her er det viktig å kunne levere et stabilt system til brukerne, ofte kan terminalservere belastes mer i perioder, det blir da naturlig å overvåke hvor mange som bruker disse serverne, for å kunne sette inn nye servere, og se hvem som blir belastet mest.
 
-Ved å bruke NRPE sjekkes windows performance counters direkte. I Figur /ref checkterminalservices er bruken for en uke samlet inn og kan brukes videre til å evalure terminalserver lasten.
+Ved å bruke NRPE sjekkes windows performance counters direkte. I Figur \ref{ts-skole-usage} checkterminalservices er bruken for en uke samlet inn og kan brukes videre til å evalure terminalserver lasten.
 
 Kommando som er brukt for å samle denne datoen er følgende:
+
+\begin{figure}
+	\centering
+	\includegraphics[width=1.0\textwidth]{img/ts-skole-usage-inv}
+	\caption{Data fra Graphite (Terminal service aktive brukere)}
+	\label{ts-skole-usage}
+\end{figure}
 
 
 
