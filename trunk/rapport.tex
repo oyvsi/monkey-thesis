@@ -1,8 +1,9 @@
 \documentclass[a4paper,twoside,11pt,pdftex,norsk]{report}
-%\documentclass[11pt,norsk,a4paper]{article}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 % MonKey bachelors thesis %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \usepackage{multirow}
 \usepackage{parskip}
 \usepackage{float}
@@ -27,10 +28,6 @@
 \definecolor{mymauve}{rgb}{0.58,0,0.82}
 
 % xleftmargin=17pt, framexleftmargin=17pt, framexrightmargin=5pt, framexbottommargin=4pt
-%basicstyle=\footnotesize
-%captionpos=b		cation on bottom
-%numbersep=5pt
-%stepnumber=2		noclue
 \lstset{ 
 backgroundcolor=\color{white}, 
 basicstyle=\scriptsize, breakatwhitespace=false, 
@@ -43,6 +40,7 @@ rulecolor=\color{black}, showspaces=false, showstringspaces=false,
 showtabs=false, stringstyle=\color{mymauve}, tabsize=2, title=\lstname, 
 xleftmargin=3em, framexrightmargin=5pt, framexbottommargin=4pt 
 }
+% Norwegian characters for code
 \lstset{literate=%
 {æ}{{\ae}}1
 {å}{{\aa}}1
@@ -62,7 +60,7 @@ xleftmargin=3em, framexrightmargin=5pt, framexbottommargin=4pt
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \newcommand\fnurl[2]{%
-  \href{#2}{#1}\footnote{\url{#2}}%
+	\href{#2}{#1}\footnote{\url{#2}}%
 }
 
 \newcounter{includepdfpage}
@@ -168,10 +166,6 @@ Erik Hjelmås
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \input{innledning}
-%yo dudes!\ref{gen.bash}
-%yo again dudes! \ref{ad_sync.pl}
-%\\
-%reftest2 \\
 %yo doodsters \ref{opplaering}
 %yo dood \ref{kartlegging}
 %ja sann kan det gaaaa\cite{servers}
@@ -197,29 +191,30 @@ Erik Hjelmås
 % Appendixes
 
 \begin{appendices}
-\chapter{Arbeidslogg}
+
+\chapter{Arbeidslogg}\label{app:arbeidslogg}
 \includepdf[pages=-]{vedlegg/GruppeLogg.pdf}
 
-\chapter{Møtereferater}
+\chapter{Møtereferater}\label{app:motereferat}
 I dette vedlegget ligger møtereferater fra prosjektperioden.
 
-\chapter{Presentasjoner}
+\chapter{Presentasjoner}\label{app:presentasjoner}
 I dette vedlegget ligger presentasjoner som ble holdt for IKT avdelingen gjennom prosjektet.
 \includepdf[pages=-,landscape=true]{vedlegg/15_01_2013forprosjektmote.pdf}
 \includepdf[pages=-,landscape=true]{vedlegg/29_01_2013Icinga.pdf}
 \includepdf[pages=-,landscape=true]{vedlegg/05_03_2013ServerogInfrastruktur.pdf}
 
-\chapter{Dokumenter}
+\chapter{Dokumenter}\label{app:dokumenter}
 I dette vedlegget finnes:\\ 
 \indent Kartlegging av behov, som ble laget av MonKey og utredet sammen med IKT-avdelingen.\\
 \indent Opplæringsdokument som ble gjennomgått sammen med Oppdragsgiver og Teknisk kontakt ved slutten av prosjektperioden.
 \includepdf[pages=-, pagecommand={\label{kartlegging}}]{vedlegg/kartlegging}
 \includepdf[pages=-, pagecommand={\label{opplaering}}]{vedlegg/Opplaering}
 
-\chapter{Statusrapporter}
+\chapter{Statusrapporter}\label{app:statusrapporter}
 I dette vedlegget finnes statusrapporter skrevet for hver iterasjon.
-\modifiedincludepdf{-}{status1}{status/status1.pdf}
-\modifiedincludepdf{-}{status2}{status/status2.pdf}
+%\modifiedincludepdf{-}{status1}{status/status1.pdf}
+%\modifiedincludepdf{-}{status2}{status/status2.pdf}
 
 \includepdf[pages=-]{status/status1.pdf}
 \includepdf[pages=-]{status/status2.pdf}
@@ -228,30 +223,26 @@ I dette vedlegget finnes statusrapporter skrevet for hver iterasjon.
 \includepdf[pages=-]{status/status5.pdf}
 \includepdf[pages=-]{status/status6.pdf}
 
-\chapter{Forprosjekt}
+\chapter{Forprosjekt}\label{app:forprosjekt}
 I dette vedlegget finnes forprosjektet for MonKey
+%\modifiedincludepdf{-}{forprosjekt}{forprosjekt.pdf}
 \includepdf[pages=-]{forprosjekt.pdf}
 
-\chapter{Kildekode}
+\chapter{Kildekode}\label{app:kildekode}
 Selvskrevene kildekode er lagt ved under dette vedlegget. Innholder plugins og generering av hosts script.
 
 \begin{changemargin}{-1cm}{-1cm}
 \lstinputlisting[language=Bash, label={gen.bash}]{script/gen.bash}
 \lstinputlisting[language=Perl, label={ad_sync.pl}]{script/ad_sync.pl}
+\lstinputlisting[language=sql, label={oracledb.sql}]{script/oracledb.sql}
+\lstinputlisting[language=sql, label={mssqldb.sql}]{script/mssqldb.sql}
 \end{changemargin}
-%\end{lstlisting}
 
-\chapter{Epost}
+\chapter{Epost}\label{epost}
 Eposter av relevans for rapporten
 
-\chapter{test}
+\chapter{test}\label{test}
 
 \end{appendices}
-
-
-
-
-
-
 
 \end{document}
