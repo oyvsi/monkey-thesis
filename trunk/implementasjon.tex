@@ -420,6 +420,19 @@ Kommando som er brukt for å sjekke antall aktive brukere på ``terminal service
 	\label{ts-skole-usage}
 \end{figure}
 
+\subsection{Webservere}
+IKT-avdelingen drifter mange webservere som benyttes av eller gir informasjon til brukere. Pluginen "check\_http"\cite{http://nagiosplugins.org/man/check_http} fra nagios-plugins benyttes for å sjekke at tilkoblingen til webserveren svarer på henvendelsen. Deler av forventet innhold sjekkes for å se at websiden ikke har blitt endret av uvedkommende.
+
+Kommandoen for å gjøre dette er for siden http://portal.hedmark.org:
+\begin{lstlisting}
+./check_http -H portal.hedmark.org -s "Velkommen til Hedmark fylkeskommunes portal" -S 
+\end{lstlisting}
+
+For websider som skal svare på HTTPS sjekkes også utløpsdato for SSL-sertifikatet. I eksempelet under vil plugin-en gi en WARNING om sertifikatet utløper innen 50 dager:
+\begin{lstlisting}
+./check_http -H portal.hedmark.org -C 50
+\end{lstlisting}
+
 \subsection{Sjekk av redundante oppsett}
 En ordinær plugin henter status for en service som kjører på én host. Ved redundante oppsett vil det ikke nødvendigvis være kritisk om en av nodene er nede. For å vurdere statusen av et cluster kan en kjøre en sjekk på hver enkelt host som kjører den gitte servicen, få tilbake resultat fra hver, og ta en vurdering basert på disse resultatene samlet.
 
