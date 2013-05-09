@@ -193,7 +193,7 @@ Figur \ref{sql} viser en visuel fremstilling av hvordan alt dette henger sammen 
 
 
 \section{Generering av grafer}
-I utgangspunktet ble det bestemt at ytelsesdata skulle holdes utenfor oppgaven. Det ble likevel satt opp en løsning for å visualisere ytelsesdata fra sjekkene med programmet graphite\cite{graphite}. Dette ble gjort fordi det var ønskelig å kunne etablere en baseline for tjenestene slik at bedre grenseverdier kunne settes.
+I utgangspunktet ble det bestemt at ytelsesdata skulle holdes utenfor oppgaven. Det ble likevel satt opp en løsning for å visualisere ytelsesdata fra sjekkene med programmet Graphite\cite{graphite}. Dette ble gjort fordi det var ønskelig å kunne etablere en baseline for tjenestene slik at bedre grenseverdier kunne settes.
 
 For å sette opp eksportering av ytelsesdataen benyttes et vanlig command-objekt i Icinga:
 
@@ -278,7 +278,7 @@ Check\_CPU
 \begin{lstlisting}
 ./check_nrpe -u -H 10.60.0.22 -p 5666 -c CheckCPU -a time=5m warn=80 crit=90
 \end{lstlisting}
-I Figur \ref{CPUSTRAIN} returnerer CPU-sjekken “OK”. Dette er hentet fra gjennomsnittsbruk av CPU over 5 minutter. Like under ser vi at testen er kritisk på grunn av et gjennomsnittsbruk av CPU på 96 \%. I Figur \ref{CPUSTRAIN} ser vi at alle de fire CPU-kjernene jobber oppmot maksimalt. Et batch-script ble kjørt lokalt på serveren som ble overvåket for å generere CPU-bruk.
+I Figur \ref{cpustrain} returnerer CPU-sjekken “OK”. Dette er hentet fra gjennomsnittsbruk av CPU over 5 minutter. Like under ser vi at testen er kritisk på grunn av et gjennomsnittsbruk av CPU på 96 \%. I Figur \ref{cpustrain} ser vi at alle de fire CPU-kjernene jobber oppmot maksimalt. Et batch-script ble kjørt lokalt på serveren som ble overvåket for å generere CPU-bruk.
 \begin{lstlisting}
 ## winloop.bat
 ##
@@ -736,21 +736,22 @@ Både Cisco Pix og ASA har tellere for antall byte som går ut og inn på en net
 
 Mange plugins benytter seg dette ved å lese ut “ifInOctets” og “ifOutOctets” over SNMP. Det er også disse som er benyttet i Ciscos notat “How to Calculate Bandwidth Using SNMP” \cite{ciscobandwidth}. 
 
-En stor ulempe med å benytte disse er at de er 32 bit, og vil dermed nullstilles kjapt ved høye hastigheter. For 1000Mbps vil tiden det vil ta til telleren går rundt være ((2\^32)-1) / ((10\^9)/8) = ca. 34 sekunder. Se Tabell /ref 
+En stor ulempe med å benytte disse er at de er 32 bit, og vil dermed nullstilles kjapt ved høye hastigheter. For 1000Mbps vil tiden det vil ta til telleren går rundt være ((2\^32)-1) / ((10\^9)/8) = ca. 34 sekunder. Se Tabell \ref{kalkulering_teller}.
+
+Det er derfor anbefalt å bruke 64-bit-variablene ifHCOutOctets og ifHCInOctets i stedet \cite{ciscosnmpcounters}.
+
 \begin{table}
 \begin{center}
-\begin{tabular}{ | l | p{7cm} |} 
-        \textbf{Hastighet} & \textbf{Tid}
-	\\ \hline
-        10 Mbps & 57 minutter og 15.97 sekunder \\ \hline  
-        100 Mbps & 5 minutter og 43.60 sekunder \\ \hline
-	1000 Mbps & 34.36 sekunder \\ 
-	\hline
+\begin{tabular}{ | l | p{7cm} |} \hline
+    \textbf{Hastighet} & \textbf{Tid} \\ \hline
+    10 Mbps & 57 minutter og 15.97 sekunder \\ \hline
+    100 Mbps & 5 minutter og 43.60 sekunder \\ \hline
+    1000 Mbps & 34.36 sekunder \\ \hline
 \end{tabular}
+\caption{Kalkuleringsteller}
 \label{kalkulering_teller}
 \end{center}
 \end{table}
-Det er derfor anbefalt å bruke 64-bit-variablene ifHCOutOctets og ifHCInOctets i stedet \cite{ciscosnmpcounters}.
 
 Pluginen det er tatt utgangspunkt i for å hente ut båndbreddebruk heter check\_iftraffic64 \cite{checkciscoif}. Denne er noe omskrevet for å kunne sende inn absolutte verdier som grenseverdier for varsling. I generic-firewall er det satt opp to egendefinerte variabler “WANWARN” og “WANCRIT”, som setter standard grenseverdier for alle brannmurer. For brannmurer der det er normalt med høyere båndbreddebruk er disse variablene overstyrt i konfigurasjonen for host-objektet.
 
