@@ -1,8 +1,8 @@
 \subsubsection{Varsling}
-Varsling er en funksjon i overvåkningsløsningen som krever en del finjusteringer og balansering av parametere over tid. Det vil være en balansegang med å varsle for mye og filtrere for grovkornet. Et tegn på et godt overvåknsingssystem er at det er fokusert, og ikke gir oveflødig mengde informasjon /cite {Building a Monitoring Infrastructure with Nagios}. Dersom det ofte sendes ut “falske varsler” kan dette føre til at en alvorlig hendelse ikke blir oppdaget selv om det faktisk sendes ut varsel. Når varsler sendes ut er det til de som vil og trenger å få de.
+Varsling er en funksjon i overvåkningsløsningen som krever en del finjusteringer og balansering av parametere over tid. Det vil være en balansegang med å varsle for mye og filtrere for grovkornet. Et tegn på et godt overvåknsingssystem er at det er fokusert, og ikke gir oveflødig mengde informasjon /cite  Building a Monitoring Infrastructure with Nagios . Dersom det ofte sendes ut “falske varsler” kan dette føre til at en alvorlig hendelse ikke blir oppdaget selv om det faktisk sendes ut varsel. Når varsler sendes ut er det til de som vil og trenger å få de.
 
 \subsubsection{Avhengigheter}
-For å holde antallet varsler som sendes ut nede benyttes avhengigheter som beskrevet i /ref {servicedependency} og /ref {parent} for å ikke få mer enn en melding ved følgefeil. “Parent” har blitt benyttet til å reflektere det fysiske nettverksoppsettet. Service dependency-objekter er satt opp for noen tjenester. For eksempel tjenester som blir sjekket via NRPE vil være avhengig av at NRPE-daemonen på gitt host kan motta henvendelser.
+For å holde antallet varsler som sendes ut nede benyttes avhengigheter som beskrevet i \ref{sec:servicedependency}  og \ref{sec:parent} for å ikke få mer enn en melding ved følgefeil. “Parent” har blitt benyttet til å reflektere det fysiske nettverksoppsettet. Service dependency-objekter er satt opp for noen tjenester. For eksempel tjenester som blir sjekket via NRPE vil være avhengig av at NRPE-daemonen på gitt host kan motta henvendelser.
 
 \subsubsection{Konfigurasjon}
 I Icinga kan man lage kontakter og legge disse i kontaktgrupper. Oppsettet følger samme logikk som at et hostgroup-objekt referer til en eller flere host-objekt i et service-objekt.
@@ -61,7 +61,7 @@ define host {
 \subsubsection{Oppsett av kontakter og kontaktgrupper}
 
 
-IKT-avdelingen ønsket å kunne styre kontaktinformasjon og kontaktgrupper fra Active Directory. Det ble bestemt at ansvarsforhold skulle gjenspeiles i kontaktgrupper /ref {vedlegg møte}, for eksempel “ts\_ansvarlig” eller “printer\_ansvarlig”. Icinga støtter ikke integrasjon mot LDAP i konfigurasjonsfilene, men siden disse er rene tekstfiler kan de enkelt opprettes og endres med script. Vi var i utgangspunktet skeptiske til å la et script gjøre endringer i konfigurasjonsfiler, da vi var redd for at dette kunne medføre en konfigurasjon med feil, som igjen ville føre til at Icinga ikke ville kunne lese ny konfigurasjon. 
+IKT-avdelingen ønsket å kunne styre kontaktinformasjon og kontaktgrupper fra Active Directory. Det ble bestemt at ansvarsforhold skulle gjenspeiles i kontaktgrupper /ref vedlegg møte, for eksempel “ts\_ansvarlig” eller “printer\_ansvarlig”. Icinga støtter ikke integrasjon mot LDAP i konfigurasjonsfilene, men siden disse er rene tekstfiler kan de enkelt opprettes og endres med script. Vi var i utgangspunktet skeptiske til å la et script gjøre endringer i konfigurasjonsfiler, da vi var redd for at dette kunne medføre en konfigurasjon med feil, som igjen ville føre til at Icinga ikke ville kunne lese ny konfigurasjon. 
 
 Icinga har en funksjon som gjør at en kan teste konfigurasjonen etter feil med en opsjon på binærfilen (--verify-config). Icinga vil da ta utgangspunkt i rot-konfigurasjonsfilen (icinga.cfg) for å sjekke alle konfigurasjonsfilene. Dette gjør at alle konfigurasjonsfilene må sjekkes og ikke bare de som lages for kontakter. Dermed vil ikke kontakter og kontaktgrupper bli oppdatert dersom det allerede er en feil i konfigurasjonen. 
 
@@ -116,8 +116,6 @@ Måten scriptet fungere på:
         child { node {Gruppe: mysql\_cluster\_ansvarlig} }
     }
 \end{tikzpicture}
-
-
 
 For hver gang en konfigurasjonsfil skrives blir det først tatt en backup dersom en fil med gruppe- eller kontaktnavnet finnes fra før. Etter at den nye filen er skrevet, sjekkes konfigurasjonen og dersom det oppdages feil vil backupen bli kopiert tilbake. 
 
@@ -198,9 +196,9 @@ define hostescalation {
 }
 \end{lstlisting}
 
-\subsubsection{Varslingsmelding}
+\subsubsection{Varslingsmelding}\label{sec:varslingsmelding}
 
-Selve varslingsmeldingene sendes ut først når host- eller service-objekter er i en hard tilstand (/ref beskrevet i x.x). Et eksempel er om en brannmurs hostsjekk returnerer DOWN. Da er det ikke ønskelig å varsle over SMS eller e-post, dersom det er snakk om et par ping som mistes. For eksempel kan en sjekk som har returnert DOWN kjøres to ganger til, med et intervall på ett minutt, før en hard tilstand settes, slik:
+Selve varslingsmeldingene sendes ut først når host- eller service-objekter er i en hard tilstand (beskrevet i \ref{sec:sjekker}). Et eksempel er om en brannmurs hostsjekk returnerer DOWN. Da er det ikke ønskelig å varsle over SMS eller e-post, dersom det er snakk om et par ping som mistes. For eksempel kan en sjekk som har returnert DOWN kjøres to ganger til, med et intervall på ett minutt, før en hard tilstand settes, slik:
 
 \begin{lstlisting}
 define host {
@@ -243,7 +241,7 @@ For kritiske tjenester og utstyr er det i konfigurasjonen defineret et eget gene
 
 \subsubsection{Statusvisning}
 
-Icinga har allerede som nevnt i x.x et webgrensesnitt. Dette er et verktøy for å utføre handlinger på hosts og servicer. Her finnes også et “tactical overview”, som vist i figur \ref{icingawebgui}. Det er ikke tilrettelagt for å få vist en kort, og beskrivende beskjed om hva som er galt på de host-ene og tjenestene med feil på en stor skjerm. Det vises et antall for de ulike statusene, men her krever det flere handlinger for å få en bedre oversikt, og er tilrettelagt for administrering. Det ble derfor besluttet å utvikle et webgrensesnitt som er tilpasset IKT-avdelings behov.
+Icinga har allerede som nevnt i \ref{sec:teoriweb} et webgrensesnitt. Dette er et verktøy for å utføre handlinger på hosts og servicer. Her finnes også et “tactical overview”, som vist i Figur \ref{icingawebgui}. Det er ikke tilrettelagt for å få vist en kort, og beskrivende beskjed om hva som er galt på de host-ene og tjenestene med feil på en stor skjerm. Det vises et antall for de ulike statusene, men her krever det flere handlinger for å få en bedre oversikt, og er tilrettelagt for administrering. Det ble derfor besluttet å utvikle et webgrensesnitt som er tilpasset IKT-avdelings behov.
 
 \begin{figure}[H]
     \centering
@@ -266,7 +264,7 @@ For at statusvinduet skulle imøtekomme IKT-avdelingens ønsker, ble det beslutt
 	\item Evaluate designs against requirements.
 \end{itemize}
 
-Utviklingsprosessen ble startet med et møte med hele IKT-avdelingen for å presentere gruppens forslag til utkast på designet, som vist i  /ref mockup. Her kom det frem forslag om å vise temperaturene fra serverrom-sensorene som en terning der det fysiske oppsettet kom frem.
+Utviklingsprosessen ble startet med et møte med hele IKT-avdelingen for å presentere gruppens forslag til utkast på designet, som vist i Figur \ref{statusvindu_mockup} mockup. Her kom det frem forslag om å vise temperaturene fra serverrom-sensorene som en terning der det fysiske oppsettet kom frem.
 
 Eksisterende programvare for denne type fremvisning ble funnet etter litt søk, og det ble besluttet å gjenbruke Nagdash cite \cite{nagdash}. Løsningen var et godt utgangspunkt for det visuelle, og er skrevet i språket PHP, noe gruppemedlemmene føler seg komfortable med og IKT-avdelingen har benyttet seg av i tidligere prosjekter. 
 
@@ -343,7 +341,7 @@ Statusvindu definerer strukturen for HTML og inkluderer CSS- og Javascript.
 
 Hver av modulene “footprints.php, netbotz.php og rss.php” retunerer et javascript-objekt med data ut fra ajax-kall fra external.js. Dataene bearbeides og settes inn i riktig “div” i html-en med javascript. Nagdash returnerer rå HTML, da denne inneholder tabeller og annen markup i tillegg til dataene.
 
-I filen external.js hentes data fra de ulike modulene og settes inn i statusvindu dynamisk gjennom Ajax i et bestemt intervall.\ref{statusvindu_arkitektur}
+I filen external.js hentes data fra de ulike modulene og settes inn i statusvindu dynamisk gjennom Ajax i et bestemt intervall \ref{statusvindu_arkitektur}.
 
 \begin{figure}[H]
     \centering
@@ -484,16 +482,18 @@ temp_hostoutage->severity = (temp_hostoutage->affected_child_hosts + (temp_hosto
 Det kalkulerte tallet baseres på at hosten som er nede er parent til en eller flere andre hosts. Dette er ikke alltid tilfellet, og metoden vil da ignorere alle host-objekter som ikke er en parent. En annen svakhet er at antall services vil bli kalkulert mot en statisk variabel, som ikke nødvendigvis gjengir viktigheten.
 
 Eksempel:
-
+\begin{equation}
 service\_severity\_divisor = 4 
-
+\end{equation}
 En host med en child-host som kjører to servicer som er viktige
-
+\begin{equation}
 Severity = 1 + (2/4) = 1.5
+\end{equation}
 
 En host med to child-hosts som kjører to servicer hver, men er ikke like viktige som nr. 1
-
+\begin{equation}
 Severity = 1 + (4/4) = 2
+\end{equation}
 
 Metoden er ikke anvendelig for prioriteringen, da det skal kunne settes på hvilken som helst service eller host, og den gjengir ikke viktigheten godt nok.     
 

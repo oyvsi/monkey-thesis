@@ -93,7 +93,7 @@ Icinga Core håndterer planlegging av sjekker gjennom plugins og tar i mot resul
 
 IDOMOD og IDO2DB kommer i en samlet pakke (IDOutils), men kan separeres ut for å skape et distribuert oppsett. CERN i Sveits har nylig implementert et et slikt oppsett med hjelp av lastbalansereren “modgearman” \cite{cernthesis}.
 
-\subsubsection{Web}
+\subsubsection{Web}\label{sec:teoriweb}
 
 I utgangspunktet kommer ikke Icinga med noe webgrensesnitt. Men det er mulig å installere to forskjellige pakker for å få dette. I begge kan en få en oversikt over tilstanden til hosts og services, se konfigurasjon og utsendte varsler, samt utføre kommandoer.
 
@@ -180,10 +180,10 @@ Det finnes et sett med offisielle plugin-er til Nagios som utgis av "Nagios Plug
 	\end{center}
 \end{table}
 
-\section{Sjekker}
+\section{Sjekker}\label{sec:sjekker}
 Tilstanden for et service- eller en host-objekt vil bestemmes ut i fra et returnert resultat av en aktiv eller passiv sjekk. Forskjellen på disse to vil bli forklart i de neste delkapitlene.
 
-Dersom en aktiv eller passiv sjekk resulterer i en annen tilstand enn “OK” er det to typer av tilstanden, “soft” og “hard”. Første gang en plugin returnerer en feil vil tilstanden bli satt til “soft” i tillegg til service- eller host-tilstanden. Etter dette vil sjekken kjøres hyppigere for å finne ut om det er snakk om et forbigående problem. Etter et satt antall ganger der pluginen fortsatt ikke returnerer “OK”, vil tilstanden skifte til “hard” og det sendes ut varslingsmelding /ref  varslingsmelding .
+Dersom en aktiv eller passiv sjekk resulterer i en annen tilstand enn “OK” er det to typer av tilstanden, “soft” og “hard”. Første gang en plugin returnerer en feil vil tilstanden bli satt til “soft” i tillegg til service- eller host-tilstanden. Etter dette vil sjekken kjøres hyppigere for å finne ut om det er snakk om et forbigående problem. Etter et satt antall ganger der pluginen fortsatt ikke returnerer “OK”, vil tilstanden skifte til “hard” og det sendes ut varslingsmelding. Senere beskrevet i \ref{sec:varslingsmelding}.
 
 \subsubsection{Aktive sjekker}
 En aktiv sjekk er en sjekk som initieres av Icinga, der en kommando kjøres på Icinga-serveren. Dette er også kjent som en "poll"-modell". En aktiv sjekk defineres ut i fra et command-objekt med parametere og et tidsintervall i service- og host-objekter. I command-objektet defineres en plugin som skal kjøre og returverdien vil bestemme hvilken tilstand service- eller host-objekter har. 
@@ -331,14 +331,14 @@ use                generic_service
 
 I Icinga kan man definere de tre ulike typene avhengighetene “Parent”, “Service dependency”, “Host dependency“. Disse har innvirkning på hvilke varsler som sendes ut og statusen de ulike service-ene og host-ene får. Alle er definert som egne objekttyper og krever egen konfigurasjon. 
 
-\section{Parent}
+\section{Parent}\label{sec:parent}
 Et host-objekt kan settes som en “parent” til et annet host-objekt. Host-objekter som har et parent blir betegnet som en child-host eller child-service. Dette brukes primært for å unngå varsler om alle hosts som har en gitt host som parent om denne går ned. For eksempel hvis kjernerouteren går ned, ønskes ikke varsler for eventuelle host-er som har denne som parent. Disse vil ikke lengre bli sjekket og blir markert som “UNREACHABLE”. Tjenester som tilhører host-ene vil bli markert som “UNKNOWN”.
 
 For redundante oppsett kan et host-objekt ha flere “parents” definert. Host-objektet vil da være UP så lenge en “parent”-host er UP.
 
 Ut ifra “parent”-relasjonene mellom host-objekter i konfigurasjonsfilene genereres også et “Status Map” over nettverket, som vist i Figur \ref{statusmap} . Dette brukes til å visualisere alle relasjonene, og vil gjengi redundante oppsett og hvilke host-objekter som er påvirket av at “parent”-hosten er DOWN.
 
-\section{Service dependency}
+\section{Service dependency}\label{sec:servicedependency}
 
 Service dependency er en egen objekttype der en kan sette opp avhengighet mellom to service-er. Formålet med dette er å unngå varsel hvis en tjeneste går til DOWN, som følge av at en annen tjeneste er nede. For eksempel bør det ikke varsles at tjenester som er avhengig av autentisering via LDAP-serveren får “access denied”-feilmeldinger, hvis LDAP-serveren er DOWN. 
 
