@@ -47,7 +47,7 @@ Icinga er en fork av Nagios, og har blitt utviklet videre siden 2004. Konfiguras
 
 I Figur \ref{losninger} vises en oversikt over hvor ofte hver av disse har blitt benyttet i et Google-søk i perioden januar 2008 - januar 2013. Hentet fra Google trends.
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[scale=0.6]{img/monitoring_google_trends}
     \caption{Google Trends: Monitoring}
@@ -80,13 +80,14 @@ For å kunne forstå implementasjonsdelen av prosjektrapporten behøves noe inns
 
 Icinga består som i vist i Figur \ref{icingacomponents} av tre separate komponenter som sammen danner en overvåkningsløsning.
 
-\begin{center}
-\begin{figure}
+
+\begin{figure}[H]
+    \centering
     \includegraphics[scale=1.2]{img/icinga_architecture}
     \caption{Icingas tre komponenter}
     \label{icingacomponents}
 \end{figure}
-\end{center}
+
 
 \subsubsection{Core}
 Icinga Core håndterer planlegging av sjekker gjennom plugins og tar i mot resultatene av disse. Denne informasjonen sendes gjennom SSL-krypterte TCP-sockets videre til IDO2DB-prosessen (Icinga Data Out to Database) gjennom et interface kalt IDOMOD (Icinga Data Out Module). Ved å bruke disse abstraksjonslagene kan databasemotoren enkelt byttes ut. I dokumentasjonen er det laget veiledninger for MySQL, PostgreSQL og Oracle \cite{icingaarchitecture}.
@@ -145,7 +146,7 @@ Den siste objekttypen er module. Her spesifiseres konfigurasjon for en modul som
 
 Sammenhengen mellom objektene er viktig å forstå for å skjønne hvordan sjekker utføres i Icinga. I et service-objekt defineres hvilket command-objekt som skal benyttes for å teste tjenesten og hvilke host- eller hostgroup-objekter dette skal sjekkes på. Dette er vist i Figur \ref{command_host_service}.
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[scale=0.4]{img/command_host_service}
     \caption{Sammenhengen mellom host-, service- og command-objekter.}
@@ -188,7 +189,7 @@ Dersom en aktiv eller passiv sjekk resulterer i en annen tilstand enn “OK” e
 \subsubsection{Aktive sjekker}
 En aktiv sjekk er en sjekk som initieres av Icinga, der en kommando kjøres på Icinga-serveren. Dette er også kjent som en "poll"-modell". En aktiv sjekk defineres ut i fra et command-objekt med parametere og et tidsintervall i service- og host-objekter. I command-objektet defineres en plugin som skal kjøre og returverdien vil bestemme hvilken tilstand service- eller host-objekter har. 
 
-\begin{figure}
+\begin{figure}[H]
    \centering 
    \includegraphics{img/activechecks.png}
     \caption{Aktive Sjekker}
@@ -200,7 +201,7 @@ Passive sjekker går motsatt vei av aktive sjekker. Her vil hver host si ifra n�
 
 Fordelen er at en får beskjed med en gang noe er galt og kan gi en raskere varsel. Det vil også avlaste Icinga-serveren da alle sjekker utelukkende vil bli kjørt lokalt. En vil da måtte åpne for at kommunikasjon kan initieres fra alle enheter som skal overvåkes til Icinga-serveren. Men en mister samtidig muligheten til å samle all konfigurasjon på ett sted \ref{passive_checks}.
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[scale=0.7]{img/passivechecks.png}
     \caption{Passive Sjekker}
@@ -390,7 +391,7 @@ For å kjøre sjekker på enheter må Icinga-serveren kunne kommunisere med oper
 \subsubsection{NRPE}
 NRPE (Nagios Remote Plugin Executor) består av en plugin (check\_nrpe) på Icinga-servern og en daemon som installeres på hver server som skal overvåkes. NRPE eksekverer lokale plugins på den eksterne serveren og returner dataen fra denne til check\_nrpe. Tillatelse for eksekveringer defineres i en config-fil på hver server, der en oppgir hvilke IP-er som kan koble seg til og hvilke kommandoer som er gyldige. 
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[scale=0.6]{img/nrpe.png}
     \caption{NRPE}
@@ -429,7 +430,7 @@ Man har to muligheter når man skal overvåke med SNMP. Enten kan enhetene selv 
 For å benytte SNMP trap/inform må en tillate tilkoblinger til overvåkingsserveren i stedet for bare fra. Hvilke trap meldinger som skal sendes må også konfigureres på hver enhet, og en vil da ikke kunne ha all konfigurasjon er på ett sted.
 
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics{img/SNMP}
     \caption{SNMP}
