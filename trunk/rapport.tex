@@ -20,7 +20,6 @@
 \usepackage{fancyhdr}
 \pagestyle{fancy}
 \usepackage{color}
-
 \geometry{a4paper, top=2.0cm, left=3.0cm, right=3.0cm, bottom=2.5cm, includehead, includefoot}
 
 \definecolor{mygreen}{rgb}{0,0.6,0}
@@ -58,6 +57,7 @@ xleftmargin=3em, framexrightmargin=5pt, framexbottommargin=4pt
 %\usepackage{backref}
 %\renewcommand{\backrefpagesname}{Cited on}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 \newcommand\fnurl[2]{%
 	\href{#2}{#1}\footnote{\url{#2}}%
@@ -184,7 +184,7 @@ Erik Hjelmås
 
 \clearpage
 \bibliographystyle{ieeetr}
-\bibliography{rapport}
+\small{\bibliography{rapport}}
 \addcontentsline{toc}{chapter}{Referanser}
 \clearpage
 

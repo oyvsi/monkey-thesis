@@ -753,14 +753,11 @@ Pluginen det er tatt utgangspunkt i for å hente ut båndbreddebruk heter check\
 
 Ved IKT-avdelingen er det både et Citrix Xen-miljø og et VMware-miljø. Disse består av servere som kjører hypervisorene ESX 5.1 og Xen 6. Begge er av typen 1 (direkte på hardware) og står for administering av virtuelle maskiner, som er operativsystemer med applikasjoner. Hypervisoren introduserer altså  et nytt lag mellom hardware og applikasjonene brukeren benytter. Host-ene har ansvaret for at de virtuelle maskinene får tilstrekkelig med ressurser for å kunne kjøre applikasjoner installert. 
 
-For overvåkning av virtuelle maskiner brukes NRPE, det overvåkes da som en “egen” server. Overvåkning av servere som kjører hypervisor-ene vil bestå av å sjekke om ressurser strekker til etterspørselen fra de virtuelle maskinene. En eller flere virtuelle maskiner kan kreve mer ressurser enn en server har fysisk. Dette stjeler både CPU-tid, minne og I/O for å håndtere, noe som vil gå utover gjeste-operativsystem og applikasjoners responstid. Videre vil overvåkning av hvor mye ressurser som brukes gi muligheten for å kalkulere når eventuelle skaleringstiltak må innføres. /ref http://pubs.vmware.com/vsphere-51/topic/com.vmware.ICbase/PDF/vsphere-esxi-vcenter-server-51-monitoring-performance-guide.pdf
+For overvåkning av virtuelle maskiner brukes NRPE, det overvåkes da som en “egen” server. Overvåkning av servere som kjører hypervisor-ene vil bestå av å sjekke om ressurser strekker til etterspørselen fra de virtuelle maskinene. En eller flere virtuelle maskiner kan kreve mer ressurser enn en server har fysisk. Dette stjeler både CPU-tid, minne og I/O for å håndtere, noe som vil gå utover gjeste-operativsystem og applikasjoners responstid. Videre vil overvåkning av hvor mye ressurser som brukes gi muligheten for å kalkulere når eventuelle skaleringstiltak må innføres \cite{vmwaremonitoring}. 
 
 \subsubsection{VMware}
 
-Pluginen “check\_vmware\_api.pl”, som er utviklet av et open source firmaet op5 /ref http://www.op5.com/, er brukt for å hente ut informasjonen fra VMware vCenter. Denne pluginen bruker et SDK-bibliotek i Perl /ref http://www.vmware.com/support/developer/viperltoolkit/ for å utføre API-kall til vCenter. Autentisering skjer ved å sende med brukernavn og passord for en brukerkonto som opprettet i vCenter-serveren med read-rettigheter. For å utveksle informasjon blir SOAP-protokollen benyttet/ref http://en.wikipedia.org/wiki/SOAP via HTTPS. 
-
-http://docwiki.cisco.com/wiki/Troubleshooting\_and\_Performance\_Monitoring\_Virtualized\_Environments
-
+Pluginen “check\_vmware\_api.pl”, som er utviklet av et open source firmaet op5 \cite{op5}, er brukt for å hente ut informasjonen fra VMware vCenter. Denne pluginen bruker et SDK-bibliotek i Perl \cite{vmwareperl} for å utføre API-kall til vCenter. Autentisering skjer ved å sende med brukernavn og passord for en brukerkonto som opprettet i vCenter-serveren med read-rettigheter. For å utveksle informasjon blir SOAP-protokollen benyttet \cite{wiki:soap} via HTTPS \cite{ciscovirtual}. 
 \begin{enumerate}
 	\item hvert 5 minutt over en dag 
 	\item hvert 30 minutt i en uke
@@ -785,20 +782,15 @@ Etter analyse av output fra pluginen ble det observert at dette var innstillinge
 
 To counters har blitt tatt ut for overvåkning , og vil være eksempel på hvordan en setter opp sjekker. Disse kan brukes som referanse for utvidelse av overvåkningen av VMware. 
 
- Parametere som nå overvåkes: : 
-/citehttp://docwiki.cisco.com/wiki/Troubleshooting\_and\_Performance\_Monitoring\_Virtualized\_Environments
-/citehttp://pubs.vmware.com/vsphere-51/topic/com.vmware.ICbase/PDF/vsphere-esxi-vcenter-server-51-monitoring-performance-guide.pdf
-
+Parametere som nå overvåkes \cite{ciscovirtual} \cite{vmwaremonitoring}:
+ 
 \subsubsection*{CPU}
-
-/cite http://www.vmware.com/support/developer/vc-sdk/visdk400pubs/ReferenceGuide/cpu\_counters.html
-
 
 Counter usage.average (\%) over siste 5 minutt -  warning: 75 critcal: 90 
 
 ``Actively used CPU of the host, as a percentage of the total available CPU. Active CPU is approximately equal to the ratio of the used CPU to the available CPU. available CPU = \# of physical CPUs x clock rate''
 
-Grenseverdier her er satt til samme nivå som tilsvarende alarm i vCenter, og gir indikasjon på at det kan være en eller flere virtuelle maskiner som krever for mye CPU i forhold til hva hosten har tilgjengelig. Det kan også være et for stort antall virtuelle maskiner på hosten. 
+Grenseverdier her er satt til samme nivå som tilsvarende alarm i vCenter, og gir indikasjon på at det kan være en eller flere virtuelle maskiner som krever for mye CPU i forhold til hva hosten har tilgjengelig. Det kan også være et for stort antall virtuelle maskiner på hosten \cite{vmwarecounters}. 
 
 \subsubsection*{Minne}
 
@@ -812,7 +804,7 @@ Grenseverdier her er satt til samme nivå som vCenter, og vil gi indikasjon på 
 
 \subsubsection{Xen}
 
-For overvåkning av Xen-miljøet er det foreløpig en plugin etter det vi fant som gir muligheten til å hente ut informasjon fra hosts og virtuelle maskiner. Pluginen check\_xen\_api.pl, utnytter kall via url mot en RRD-database hvor xapi lagrer data /cite http://wiki.xen.org/wiki/XAPI\_RRDs. 
+For overvåkning av Xen-miljøet er det foreløpig en plugin etter det vi fant som gir muligheten til å hente ut informasjon fra hosts og virtuelle maskiner. Pluginen check\_xen\_api.pl, utnytter kall via url mot en RRD-database hvor xapi lagrer data \cite{xenwiki}. 
 Antall parametere som er tilgjengelige er ikke like stort som for eksempel VMware. I/O data er foreløpig ikke tilgjengelig, og relevant data er CPU og minnebruk.
 
 RRD-databasen lagrer data i følgende intervall:
@@ -853,7 +845,7 @@ Noe av dette kan løses ved å bruke SNMP-traps i stedet og definere verdier for
 
 For å få til dette trengs et mellomledd som kan motta SNMP-traps på Icinga-serveren, tolke trap-meldingene og sende informasjonen videre til Icinga. 
 
-For å lytte etter SNMP-traps benyttes SNMPtrapd (http://www.net-snmp.org/docs/man/snmptrapd.html). Her mottas alle traps som sendes med riktig community. Disse sendes så videre til snmptt (SNMP Trap Translator - http://snmptt.sourceforge.net/). Her har defineres de traps-ene en er ute etter, informasjon om OID-ene og kommandoen som skal kjøres når denne mottas. I Figur \ref{snmptrap} illustreres hvordan en trap blir prosessert. 
+For å lytte etter SNMP-traps benyttes SNMPtrapd \cite{snmptraps2}. Her mottas alle traps som sendes med riktig community. Disse sendes så videre til snmptt (SNMP Trap Translator \cite{traptranselator}). Her har defineres de traps-ene en er ute etter, informasjon om OID-ene og kommandoen som skal kjøres når denne mottas. I Figur \ref{snmptrap} illustreres hvordan en trap blir prosessert. 
 
 \begin{figure}
     \centering
@@ -879,7 +871,7 @@ A rogue AP is detected. The AP id, mac address, and other information are descri
 EDESC
 \end{lstlisting}
 
-Her benyttes variabler i snmptt (cite http://snmptt.sourceforge.net/docs/snmptt.shtml\#Variable-substitutions):
+Her benyttes variabler i snmptt \cite{snmptrans}:
 \begin{itemize}
 	\item IP-adressen til snmp agenten, altså kontrollereren
 	\item Navnet på trap-en
@@ -903,29 +895,29 @@ En ting å merke seg her er at en ikke vil få informasjon når tjenesten er OK 
 
 \subsection{Serverrommiljø}
 
-For å overvåke temperatur og luftfuktighet på serverrommet ble det kjøpt inn en APC NetBotz 200 \ref{https://www.apc.com/products/family/index.cfm?id=346} med fire eksterne sensorer. Disse ble plassert slik at det er to sensorer på hver side av rack-raden. En vil dermed kunne se temperaturforskjellen mellom forsiden av serverne, ved luftinntak og baksiden, der varmluft går ut.
+For å overvåke temperatur og luftfuktighet på serverrommet ble det kjøpt inn en APC NetBotz 200 \cite{netbotz2} med fire eksterne sensorer. Disse ble plassert slik at det er to sensorer på hver side av rack-raden. En vil dermed kunne se temperaturforskjellen mellom forsiden av serverne, ved luftinntak og baksiden, der varmluft går ut.
 
 Hver sensor måler både temperatur og luftfuktighet. For luftfuktighet støttes bare relativ luftfuktighet.
 
 \subsubsection{Luftfuktighet}
 
-Relativ luftfuktighet er definert som “forholdet mellom partielltrykket til vanndamp, i en gassblanding av luft og vann, og vanndampens metningstrykk ved en viss temperatur. som gir oss prosentandelen av vann i luften. (cite http://no.wikipedia.org/wiki/Luftfuktighet). 
+Relativ luftfuktighet er definert som “forholdet mellom partielltrykket til vanndamp, i en gassblanding av luft og vann, og vanndampens metningstrykk ved en viss temperatur. som gir oss prosentandelen av vann i luften \cite{wiki:luftfuktighet}. 
 
 Det er også mange enheter som overvåker duggpunkt, som vil si temperaturen en viss mengde luft må avkjøles til for at vanndamp skal kondensere. Ved en økning i relativ luftfuktighet vil duggpunktet nærme seg luftemperaturen. Ved 100\% relativ luftfuktighet vil temperaturen og duggpunktet være like. 
 
-I “Sun Microsystems Data Center Site Planning Guide” anbefales en luftfuktighet på 45 \% - 50 \%. Det meste av datautstyr kan fungere innenfor et bredere intervall enn det, typisk 20 \% - 80 \%. Men de anbefalte verdiene er satt for at det skal være et buffer dersom en har klimaanlegg som kontrollerer luftfuktighet, og det slutter å fungere. /cite http://docs.oracle.com/cd/E19065-01/servers.e25k/805-5863-13/ch3.html\#98939 Andre, som “American Society of Heating, Refrigerating and Air-Conditioning Engineers” (ASHRAE) anbefaler at den relative luftfuktigheten ikke bør overstige 60 \%, mens den nedre gresen er basert på duggpunkt og satt til 5.5°C, der den relative luftfuktigheten vil variere mellom 25 \% og 45 \% /cite http://tc99.ashraetcs.org/documents/ASHRAE\_Extended\_Environmental\_Envelope\_Final\_Aug\_1\_2008.pdf. Disse verdiene er også anbefalt av Cisco cite http://www.cisco.com/en/US/solutions/collateral/ns340/ns517/ns224/ns944/white\_paper\_c11-680202.pdf, og omtalt som vidt akseptert. 
+I “Sun Microsystems Data Center Site Planning Guide” anbefales en luftfuktighet på 45 \% - 50 \%. Det meste av datautstyr kan fungere innenfor et bredere intervall enn det, typisk 20 \% - 80 \%. Men de anbefalte verdiene er satt for at det skal være et buffer dersom en har klimaanlegg som kontrollerer luftfuktighet, og det slutter å fungere \cite{planningserver}. Andre, som “American Society of Heating, Refrigerating and Air-Conditioning Engineers” (ASHRAE) anbefaler at den relative luftfuktigheten ikke bør overstige 60 \%, mens den nedre gresen er basert på duggpunkt og satt til 5.5°C, der den relative luftfuktigheten vil variere mellom 25 \% og 45 \% \cite{envguide}. Disse verdiene er også anbefalt av Cisco \cite{ciscoenvguide}, og omtalt som vidt akseptert. 
 
 For høy luftfuktighet kan føre til kondens, som igjen kan føre til korrosjon på komponenter. Ved lavere luftfuktighet øker faren for utladninger av statisk elektrisitet (kritisk ved 30 \%), som kan føre til utladninger med ekstremt høye spenningsverdier, som kan ødelegge komponenter.
 
 \subsubsection{Temperatur}
 
-Det er mye uenighet rundt anbefalte verdier for temperatur i serverrom. I et studie utført ved University of Toronto /cite http://dl.acm.org/citation.cfm?id=2254778, ble det samlet inn data fra tre forskjellige organisasjoners datasentre, deriblant Googles. I studiet ble det konkludert med at faren for hardware-feil ved høyere temperatur øker mindre enn det som har vært vanlig å basere seg på. For DRAM-feil og ``node outages'' fant de ingen korrelasjon til temperaturøkning for intervallet i testen (15°C - 60°C). I dette studiet ble det ikke målt eller tatt hensyn til luftfuktighet. 
+Det er mye uenighet rundt anbefalte verdier for temperatur i serverrom. I et studie utført ved University of Toronto \cite{torontopaper}, ble det samlet inn data fra tre forskjellige organisasjoners datasentre, deriblant Googles. I studiet ble det konkludert med at faren for hardware-feil ved høyere temperatur øker mindre enn det som har vært vanlig å basere seg på. For DRAM-feil og ``node outages'' fant de ingen korrelasjon til temperaturøkning for intervallet i testen (15°C - 60°C). I dette studiet ble det ikke målt eller tatt hensyn til luftfuktighet. 
 
-ASHRAE anbefaler en inntakstemperatur 18°C - 27°C, mens Sun anbefaling er 20°C - 23°C. Sun bregrunner sin anbefaling med at det er lettere å opprettholde trygge verdier for relativ luftfuktighet. ASHRAE viser også til studier som viser at det totale strømforbruket kan gå opp ved høyere temperaturer fordi enheter øker frekvensen på egne vifter. http://ieeexplore.ieee.org/xpl/login.jsp?tp=\&arnumber=4544393\&url=http\%3A\%2F\%2Fieeexplore.ieee.org\%2Fxpls\%2Fabs\_all.jsp\%3Farnumber\%3D4544393
+ASHRAE anbefaler en inntakstemperatur 18°C - 27°C, mens Sun anbefaling er 20°C - 23°C. Sun bregrunner sin anbefaling med at det er lettere å opprettholde trygge verdier for relativ luftfuktighet. ASHRAE viser også til studier som viser at det totale strømforbruket kan gå opp ved høyere temperaturer fordi enheter øker frekvensen på egne vifter \cite{datacentertemp}.
 
 \subsubsection{Plugin for overvåkning av temperatur og luftfuktighet i Icinga}
 
-Det fantes allerede en plugin for å sjekke sensorverdiene på APC NetBotz (http://exchange.nagios.org/directory/Plugins/Hardware/UPS/APC/check\_netbotz/details). Men denne sammenlignet verdiene med grenseverdier satt i konfigurasjonen på enheten. Det var ønskelig å samle mest mulig av konfigurasjon på Icinga-serveren, derfor ble pluginen omskrevet til å kunne ta inn øvre og nedre grenseverdier som argumenter.
+Det fantes allerede en plugin for å sjekke sensorverdiene på APC NetBotz \cite{checknetbotz}. Men denne sammenlignet verdiene med grenseverdier satt i konfigurasjonen på enheten. Det var ønskelig å samle mest mulig av konfigurasjon på Icinga-serveren, derfor ble pluginen omskrevet til å kunne ta inn øvre og nedre grenseverdier som argumenter.
 
 \subsubsection{UPS (Uninterruptible Power Supply)}
 
