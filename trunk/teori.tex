@@ -55,7 +55,7 @@ I Figur \ref{losninger} vises en oversikt over hvor ofte hver av disse har blitt
 \end{figure}
 
 \section{Valg av kjerneprogramvare}
-Valg av kjerneprogramvare var gruppens viktigste valg, da det la grunnmuren for restenu av prosjektet, og ville få stor innvirkning på sluttresultatet. Etter en vurdering av alternativene som nevnt over ble det besluttet å bygge overvåkningsløsningen på Icinga framfor nagios.
+Valg av kjerneprogramvare var gruppens viktigste valg, da det la grunnmuren for restenu av prosjektet, og ville få stor innvirkning på sluttresultatet. Etter en vurdering av alternativene som nevnt over ble det besluttet å benyttet bygge overvåkningsløsningen på Icinga framfor Nagios.
 
 Icinga sitt distribuerte system består av kjernen, som står for prossessering, et databaselag, og administrering av systemet via et webgrensesnitt. Dette er tilrettelagt for et distribuert oppsett. Nagios sin arkitektur har avhengigheter mellom web og lagring av status, som fører til at disse ikke kan separeres. Det er derimot mulig å separere MySQL-databasen som Nagios benytter \cite{icingaarchitecture}.
 
@@ -64,6 +64,9 @@ For uthenting av informasjon i Icinga er det utviklet et API som brukes via Icin
 Et annet punkt er støtte for LDAP-autentisering integrert i Icinga Web, som videre kan benyttes til å styre aksess til ulik informasjon for brukere. Med Nagios kan en også innføre LDAP-støtte, men dette blir da autentisering via en web-server, og videre kontroll av aksess er ikke mulig. Nagios har noe aksessyring, men det er bare på et objekt kalt Contact-groups. Her har icinga aksesstyring på en rekke flere objekter \cite{icingaweb}.
 
 For databaseoppsett støtter Icinga de tre databasemotorene PostgresSQL, Oracle og MySQL, i motsetning til Nagios som bare har støtte for MySQL. I oppgavebeskrivelsen er det krav om MySQL, men for fremtidig bruk av Icinga er det mulighet for å benyttet de to andre.
+
+For Icinga eksisterer det også Icinga-Mobile som er en tilleggsmodul som kan implementeres. Denne gir tilrettelagt grensesnitt for mobile-enheter, og kan brukes for å gi en mer fleksibel løsning tilstandsvisning. Ved utsendelse av SMS eller e-post til en eller flere ansatte, kan Icinga-Mobile brukes via samme enhet for å se mer utfyllende informasjon om problemet, og gjøre administrative handlinger.
+
 
 http://www.freesoftwaremagazine.com/articles/nagios\_and\_icinga \cite{nagiosvsicinga}
 
