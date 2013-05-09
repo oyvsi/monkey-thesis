@@ -21,14 +21,9 @@ I Figur \ref{hostgroupfigur} ser vi hvilke hostgroups de forskjellige hostene sk
     \label{hostgroupfigur}
 \end{figure}
 
-
 \begin{itemize}
-	\item Fremgang for nye enheter (host, hostgroup, templates osv)
-        \item Arv og dependency
         \item Oversikt over services, commands og thresholds
-        \item Acknowledgement av hosts og services
-        \item Scheduled downtime
-        \item Filhierarkiet
+        \item Filhierarkiet. Configfiler?
 \end{itemize}
 \section{Legge til mange host-objekter}
 I utrullingsfaser er det naturlig å legge til mange hosts i samme slengen, dette sparer mye tid og scriptet sørger også for at hostfilene genereres syntaktisk korrekte
@@ -49,7 +44,7 @@ monkey@hig1:~/script$ ./gen.bash servers.csv
 
 	Done
 	Successfully created 4 hosts
-	4 hosts where not create because of errors.
+	4 hosts where not created because of errors.
 monkey@hig1:~/script$ ls
 gen.bash  servers.csv  test1.cfg  test2.cfg  test3.cfg  test4.cfg
 monkey@hig1:~/script$
@@ -69,10 +64,10 @@ monkey@hig1:~/script$
 
 Scriptet er vedlagt i Vedlegg \ref{gen.bash}.
 
-
-\begin{itemize}
-	\item Et selvlaget script ref gen.bash brukes for å effektivt legge til mange hosts med Nils to reference his fancy smancy addhost-script med mulighet til å legge til hosts fra CSV-fil /ref{kildekode}
-\end{itemize}
+\section{Forventet nedtid}
+Schedule downtime. Er det nevnt under varsling?
+\section{Stoppe varsling}
+acknowledge, stopper gjenvarsling??
 \section{Autentisering mot Active Directory} 
 LDAP-autentisering brukes for å styre hvem som skal ha tilgang til web-grensesnittene, ved hjelp av grupper og brukere i Active Directory. Dette er støttet direkte i Icinga-web, men må konfigureres på andre måter for Icinga Classic. Det kan opprettes en sikkerhetsgruppe i AD som inkluderer medlemmene som skal få tilgang. Alle som er med i denne gruppen vil få tilgang til Icinga Web, der det også kan defineres hvilken informasjon hver bruker skal kunne se. 
 
