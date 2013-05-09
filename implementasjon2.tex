@@ -65,7 +65,7 @@ IKT-avdelingen ønsket å kunne styre kontaktinformasjon og kontaktgrupper fra A
 
 Icinga har en funksjon som gjør at en kan teste konfigurasjonen etter feil med en opsjon på binærfilen (--verify-config). Icinga vil da ta utgangspunkt i rot-konfigurasjonsfilen (icinga.cfg) for å sjekke alle konfigurasjonsfilene. Dette gjør at alle konfigurasjonsfilene må sjekkes og ikke bare de som lages for kontakter. Dermed vil ikke kontakter og kontaktgrupper bli oppdatert dersom det allerede er en feil i konfigurasjonen. 
 
-Det ble skrivet et Perl-script (ref vedlegg X) som henter ut kontakter og kontaktgrupper fra en bestemt OU i Active Directory. Perl ble benyttet fordi det ble funnet et godt sett med LDAP-moduler, "perl-ldap" \cite{http://ldap.perl.org} som gjorde tilkobling og søk enkelt. Scriptet kalles fra et bash-script (ref vedlegg X) som henter resultatet fra synkroniseringen og sender dette til Icinga. En cron-jobb er satt opp for å kjøre synkroniseringen én gang i timen.
+Det ble skrivet et Perl-script (ref vedlegg X) som henter ut kontakter og kontaktgrupper fra en bestemt OU i Active Directory. Perl ble benyttet fordi det ble funnet et godt sett med LDAP-moduler, "perl-ldap" \cite{perlldap} som gjorde tilkobling og søk enkelt. Scriptet kalles fra et bash-script (ref vedlegg X) som henter resultatet fra synkroniseringen og sender dette til Icinga. En cron-jobb er satt opp for å kjøre synkroniseringen én gang i timen.
 
 Måten scriptet fungere på:
 \begin{enumerate}
@@ -422,7 +422,7 @@ dataLabels: {
                }
 \end{lstlisting}
 
-Standard font-størrelse var for liten, så denne ble justert opp. I Internet Explorer 9.0 ble da tallet flyttet for høyt over søylen i forhold til standard høyde. En løsning på dette ble funnet via siden for rapportering av feil til Highcharts \cite{iebug} 
+Standard font-størrelse var for liten, så denne ble justert opp. I Internet Explorer 9.0 ble da tallet flyttet for høyt over søylen i forhold til standard høyde. En løsning på dette ble funnet via siden for rapportering av feil til Highcharts \cite{iebug}. 
 
 Endring:
 
