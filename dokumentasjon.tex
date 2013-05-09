@@ -30,6 +30,45 @@ I Figur \ref{hostgroupfigur} ser vi hvilke hostgroups de forskjellige hostene sk
         \item Filhierarkiet
 \end{itemize}
 \section{Legge til mange host-objekter}
+I utrullingsfaser er det naturlig å legge til mange hosts i samme slengen, dette sparer mye tid og scriptet sørger også for at hostfilene genereres syntaktisk korrekte
+
+Her er det laget et script som kan generere hosts med atributtene  ``hostname'', ``address'', ``hostgroup'' og ``generic''
+
+\begin{lstlisting}
+monkey@hig1:~/script$ vim servers.csv
+monkey@hig1:~/script$ ./gen.bash servers.csv
+
+	Generating hosts from servers.csv into working directory
+
+	Hostname and Address are mandatory.
+	Missing for host on line nr: 4
+	Missing for host on line nr: 6
+	Missing for host on line nr: 7
+	Missing for host on line nr: 8
+
+	Done
+	Successfully created 4 hosts
+	4 hosts where not create because of errors.
+monkey@hig1:~/script$ ls
+gen.bash  servers.csv  test1.cfg  test2.cfg  test3.cfg  test4.cfg
+monkey@hig1:~/script$
+\end{lstlisting}
+
+\begin{lstlisting}
+
+10.0.0.1,test1,windows;,generic1
+10.0.0.1,test2,,jekrjekr
+10.0.0.1,test3
+,,,
+10.0.0.1,test4
+1,
+,
+,
+\end{lstlisting}
+
+Scriptet er vedlagt i Vedlegg \ref{gen.bash}.
+
+
 \begin{itemize}
 	\item Et selvlaget script ref gen.bash brukes for å effektivt legge til mange hosts med Nils to reference his fancy smancy addhost-script med mulighet til å legge til hosts fra CSV-fil /ref{kildekode}
 \end{itemize}
