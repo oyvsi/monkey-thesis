@@ -6,7 +6,8 @@ For å holde antallet varsler som sendes ut nede benyttes avhengigheter som besk
 
 \subsection{Konfigurasjon}
 I Icinga kan man lage kontakter og legge disse i kontaktgrupper. Oppsettet følger samme logikk som at et hostgroup-objekt referer til en eller flere host-objekt i et service-objekt.
-Det vil si at contact- og contactgroup-objekter refereres til i et service- eller host-objekt. Disse kontaktene kan bli varslet om service-objektet får en annen status enn OK. Dette konfigureres i service-objektet sammen ved hvilke tilstander som skal varsles. Disse tilstandene er vist i tabell \ref{notications}.
+
+Det vil si at contact- og contactgroup-objekter refereres til i et service- eller host-objekt. Disse kontaktene kan bli varslet om service-objektet får en annen status enn OK. Dette konfigureres i service-objektet sammen ved hvilke tilstander som skal varsles. Disse tilstandene er vist i tabell \ref{objekt_varsling}.
 
 Når en feil oppstår vil Icinga vurdere ulike konfigurasjonsopsjoner før det eventuelt sendes ut et varsel. Om konfigurasjonsopsjonene tilsier at det skal varsles, vil Icinga gå igjennom filtre som er ferdig definert, som for eksempel om kontakten eller gruppen skal ha varsel via sms eller email. 
 
@@ -65,7 +66,7 @@ IKT-avdelingen ønsket å kunne styre kontaktinformasjon og kontaktgrupper fra A
 
 Icinga har en funksjon som gjør at en kan teste konfigurasjonen etter feil med en opsjon på binærfilen (--verify-config). Icinga vil da ta utgangspunkt i rot-konfigurasjonsfilen (icinga.cfg) for å sjekke alle konfigurasjonsfilene. Dette gjør at alle konfigurasjonsfilene må sjekkes og ikke bare de som lages for kontakter. Dermed vil ikke kontakter og kontaktgrupper bli oppdatert dersom det allerede er en feil i konfigurasjonen. 
 
-Det ble skrivet et Perl-script (ref vedlegg X) som henter ut kontakter og kontaktgrupper fra en bestemt OU i Active Directory. Perl ble benyttet fordi det ble funnet et godt sett med LDAP-moduler, "perl-ldap" \cite{perlldap} som gjorde tilkobling og søk enkelt. Scriptet kalles fra et bash-script (ref vedlegg X) som henter resultatet fra synkroniseringen og sender dette til Icinga. En cron-jobb er satt opp for å kjøre synkroniseringen én gang i timen.
+Det ble skrivet et Perl-script \ref{ad_sync.pl}  som henter ut kontakter og kontaktgrupper fra en bestemt OU i Active Directory. Perl ble benyttet fordi det ble funnet et godt sett med LDAP-moduler, "perl-ldap" \cite{perlldap} som gjorde tilkobling og søk enkelt. Scriptet kalles fra et bash-script (ref vedlegg X) som henter resultatet fra synkroniseringen og sender dette til Icinga. En cron-jobb er satt opp for å kjøre synkroniseringen én gang i timen.
 
 Måten scriptet fungere på:
 \begin{enumerate}
@@ -338,7 +339,7 @@ Figur \ref{statusvindu_final} viser endelig statusvisningen, og her ble følgend
 
 Statusvindu definerer strukturen for HTML og inkluderer CSS- og Javascript.
 
-Hver av modulene “footprints.php, netbotz.php og rss.php” retunerer et javascript-objekt med data ut fra ajax-kall fra external.js. Dataene bearbeides og settes inn i riktig “div” i html-en med javascript. Nagdash returnerer rå HTML, da denne inneholder tabeller og annen markup i tillegg til dataene.
+Hver av modulene “footprints.php \ref{footprints.php}, netbotz.php \ref{netbotz.php} og rss.php \ref{rss.php}” retunerer et javascript-objekt med data ut fra ajax-kall fra external.js \ref{external.js}. Dataene bearbeides og settes inn i riktig “div” i html-en med javascript. Nagdash returnerer rå HTML, da denne inneholder tabeller og annen markup i tillegg til dataene.
 
 I filen external.js hentes data fra de ulike modulene og settes inn i statusvindu dynamisk gjennom Ajax i et bestemt intervall \ref{statusvindu_arkitektur}.
 
@@ -468,7 +469,7 @@ Utdrag fra external.js
    room.src = "image.php?sensor_cols=" + columns;
 \end{lstlisting}
 
-Grafikken for servermiljø tilpasses automatisk etter den raden med flest antall sensorer, ved å lime sammen riktig antall bilder dynamisk gjennom GD i PHP. (se image.php i vedlegg x.x).
+Grafikken for servermiljø tilpasses automatisk etter den raden med flest antall sensorer, ved å lime sammen riktig antall bilder dynamisk gjennom GD i PHP. (se image.php i vedlegg \ref{image.php}).
 
 \subsection{RSS}
 
