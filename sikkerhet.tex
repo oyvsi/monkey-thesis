@@ -1,4 +1,6 @@
 \chapter{Sikkerhet}
+Informasjon som brukes av overvåkningsserveren til å avgjøre tilstanden til en enhet eller tjeneste kommer fra eksterne kilder. Aksesstilgang må eksistere både på de eksterne enhetene som overvåkes, og på overvåkningsserveren for muligheten til å ta i bruk traps. Plugin-er vil ha eksekveringstillatelse på eksterne enheter, og SNMP trap-meldinger sender informasjon via en port på overvåkningsserveren. Ulike sikkerhetsrisikoer og hvordan dette kan håndteres for å minske graden av sårbarhet vil bli gått igjennom i dette kapittelet.
+
 \section{Pluginintetegritet}
 Flere plugin-er har blitt installert i etterkant av Icinga, og her er det en viss sikkerhetsrisiko. En god del plugin-er har et omfang på 1000-5000 linjer og det blir en tidkrevende prosess å kvalitetsikre alle. De sjekkene som eksekverers på hosts, og ikke på selve Icinga-serveren, er plugin-er som kommer med nagios-plugins og NSclient++. Disse blir brukt av et stort antall organisasjoner og andre. Gruppen har også fulgt med på fora og kommentarfelt for de ulike plugin-ene og for å kunne være trygge på de som kjører på hver enkelt host. 
 
@@ -19,6 +21,15 @@ I SNMP v3 er det mange muligheter for økt sikkerhet:
 
 \subsubsection{NRPE}
 For kryptering og gjenkjenning av hosts har NRPE implementert OpenSSL med en anonymous Diffie-Hellmann. Pluginen bruker h-filen dh.h til å generere base-nummer og prim-nummer for diffie-hellmann nøkkelutveksling. Disse blir satt statisk ved kompilering av kildekoden, noe som vil si at det er likt for alle debian-pakkene. Etter autentisering av host og Icinga-serveren brukes AES 256 bit for kryptering av trafikk. cite https://github.com/KristianLyng/nrpe/blob/master/README.SSL
+
+NRPE blir som nevnt tidligere i x.x brukt for å eksekvere kommandoer på eksterne maskiner, og kan være en angrepsvektor både fra overvåkningsservern og via andre enheter til de den er installert på. Den eksterne maksinen som NRPE blir installert på vil åpne opp for sikkerhetsrisikoer, men det er fortsatt tilpasninger som kan gjøres for å unngå ubudne gjester til å utføre ondsinnede handlinger. I konfigurasjonen må en definere hvilke hosts som skal kunne kommunisere med serveren, en må da vite hvilke IP-er som er definert i denne listen. Her vil overvåkningsserveren  i de fleste tilfeller være en definert IP, og da kan det spoofes om denne er kjent for en angriper. En kan også via konfigurasjonen endre porten eksterne enheter skal lytte på. Standardisert port kan finnes i dokumentasjonen så denne bør endres for å øke arbeidet med å kunne koble seg til.
+
+For Windows som bruker NSClient++ kan det settes opp passord som i tillegg kreves for kommunikasjon, dette legger enda et lag med sikkerthet.
+
+Videre utvidelse av implementasjonen av NRPE vil være å ta i bruk forhåndssignerte sertifikater 
+som NSClient++ støtter, det vil da føre til en sikrere nøkkelutveksling enn dagens som bare baseres på et prim og basenummer som er definert ved kompilering.
+
+
 \subsubsection{NSClient++}
 allow\_nasty\_meta\_chars, gjør at WMI-spørringer kan sendes som parameter til check\_nrpe og ikke blir regnet som skadelige når NSclient++ mottar de. Serverporten defineres slik at kun Icinga-serveren har tilgang til å koble til via NRPE.
 \subsubsection{Brukerkontoer}
