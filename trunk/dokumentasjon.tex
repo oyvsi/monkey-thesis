@@ -133,3 +133,61 @@ define service {
         check_command check_network_component!cpu-load
 }
 \end{lstlisting}
+
+Tabell med sjekker og tilhørende parametere:
+
+\begin{table}
+\begin{center}
+\begin{tabular}{| l | l | l | l |}
+ \hline
+        \textbf{Utstyr} & \textbf{Service navn} & \textbf{Warning} & \textbf{Critical}
+	\\ \hline
+	APC UPS 		& UPS Capacity			& 90:	& 80: \\ \hline
+	APC UPS			& Internal Temp			& 30	& 32 \\ \hline
+	APC UPS			& Load				& 50	& 60 \\ \hline
+	APC UPS			& Voltage In			& 225:239 & 220:245 \\ \hline
+	APC UPS			& Voltage Out			& 225:239 & 220:245 \\ \hline 
+	HP UPS			& Battery Time Remaining 	& 3000: & 2700: \\ \hline
+	HP UPS			& Battery capacity		& 90: 	& 80: \\ \hline
+	HP UPS			& Battery current		& 	& \\ \hline
+	HP UPS			& Voltage In			& 225:239 & 220:245 \\ \hline 
+	HP UPS			& Voltage Out			& 225:239 & 220:245 \\ \hline
+	Windows Server		& Check DNS			& 0.1	& 0.2 \\ \hline
+	Windows Server		& Check LDAP			& 0.05	& 0.1 \\ \hline 
+	Windows Server		& All Disks			& 94\%	& 96\% \\ \hline
+	Windows Server		& Disk Space			& 90\%	& 95\% \\ \hline
+	Windows Server		& CPU Load			& 90	& 95 \\ \hline
+	Windows Server		& Memory Usage			& 94\%	& 98\% \\ \hline
+	Windows Server		& RDP-Sessions: Active		& 20	& 25 \\ \hline
+	Windows Server		& RDP-Sessions: Inactive	& 15	& 20 \\ \hline
+	Cisco ASA / PIX		& CPU Load			& 93	& 96 \\ \hline
+	Cisco ASA / PIX		& Hardware Health		& N/A	& N/A \\ \hline
+	Cisco ASA / PIX		& Memory Usage			& 93	& 96 \\ \hline
+	Cisco ASA / PIX		& Failover Status		& N/A	& N/A \\ \hline
+	Cisco ASA / PIX		& VPN Sessions			& 80 (\% av lisens) & 90 (\% av lisens) \\ \hline
+	Dell Blade Chassis	& Dell Blade Server Health	& N/A	& N/A \\ \hline
+	Dell Powerconnect	& Assets			& N/A	& N/A \\ \hline
+	Dell Powerconnect	& Uptime			& N/A	& N/A \\ \hline
+	Dell Powerconnect	& Fans				& N/A	& N/A \\ \hline
+	Dell Powerconnect	& Power supply			& N/A	& N/A \\ \hline
+	Dell Powerconnect	& Temperature			& 34	& 36 \\ \hline
+	HP Procurve		& Environment Status		& N/A	& N/A \\ \hline
+	MySQL			& Cache Hit			& 60: 	& 50: \\ \hline
+	MySQL			& Health			& 0.1	& 0.2 \\ \hline
+	MySQL			& Slow Queries			& 0.1	& 1 \\ \hline 
+	MySQL			& User Connections		& 50	& 80 \\ \hline
+	MSSQL			& Cache Hit			& 90:	& 80: \\ \hline
+	MSSQL			& Health			& 0.05	& 0.15 \\ \hline
+	MSSQL			& Lazy Writes			& 20	& 0 \\ \hline
+	MSSQL			& User Connections		& 2000	& 2200 \\ \hline
+	Oracle			& Cache Hit			& 93:	& 90: \\ \hline
+	Oracle			& Connected Users		& 50	& 80 \\ \hline
+	Oracle			& Connection Time		& 0.1	& 0.2 \\ \hline
+	Oracle			& Free Tablespace		& 5:	& 2: \\ \hline
+\end{tabular}
+\label{objekt_varsling}
+\end{center}
+\end{table}
+
+
+
