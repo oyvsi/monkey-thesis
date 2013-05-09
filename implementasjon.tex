@@ -30,7 +30,7 @@ Serverne er virtuelle maskiner plassert i et eget VLAN som er tilgjengelig på f
 
 I Figur \ref{laboppsett} vises det logiske oppsettet av labmiljøet og hvilke tjenester som kjører. Hig-fw, Hig-sw1 og Hig-sw2 er koblet i serie for å teste avhengigheter og følgefeil.
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[scale=0.4]{img/labmiljo}
     \caption{Labmiljø}
@@ -180,7 +180,7 @@ check_command check_mysql_health!connection-time!0.1!0.4
 Figur \ref{sql} viser en visuel fremstilling av hvordan alt dette henger sammen for alle SQL-servere:
 
 \begin{changemargin}{-1cm}{-1cm}
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[scale=0.55]{img/sql}
     \caption{Visualerins av oppset for MySQL-server}
@@ -293,7 +293,7 @@ for /l %%x in (1, 1, 10) do (
 GOTO loop
 \end{lstlisting}
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[scale=0.6]{img/cpu_test_hig3}
     \caption{CPU-bruk for HiG3}
@@ -375,7 +375,7 @@ For å overvåke LDAP-tjenestene benyttes pluginen “check\_ldap” som følger
 
 Performancedata har blitt samlet inn for å sette grenseverdier for når Icinga skal gi varsel om treg innlogging. I Figur \ref{ldapauth-inv} ser vi at tjenesten sjekket på fire LDAP-servere, over en måneds periode bruker rundt 0.0044 sekunder på å autentisere. Ut ifra dataen som er samlet settes warning settes til 0.01 sekund, og kritisk settes til 0.02 sekunder.
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[width=1.0\textwidth]{img/ldap-auth-inv}
     \caption{Data fra Graphite (sekund)}
@@ -389,7 +389,7 @@ DNS overvåkes av pluginen “check\_dns”. Denne på samme måte som “check\
 
 Figur \ref{dns-inv} viser data samlet inn fra to DNS servere over 30 dager. Disse dataene viser forventet tid for et oppslag, og utifra dette ble grenseverdien for WARNING satt til 0.01 sek og CRITICAL til 0.02 sek.
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[width=1.0\textwidth]{img/dns-inv}
     \caption{Data fra Graphite (sekund)}
@@ -413,7 +413,7 @@ Kommando som er brukt for å sjekke antall aktive brukere på ``terminal service
 \end{lstlisting}
 
 
-\begin{figure}
+\begin{figure}[H]
 	\centering
 	\includegraphics[width=1.0\textwidth]{img/ts-skole-usage-inv}
 	\caption{Data fra Graphite (Antall)}
@@ -617,7 +617,7 @@ Muligheten for å se om en applikasjon fungerer slik den skal er en viktig del a
 
 Et praktisk eksempel på dette vises i Figur \ref{servicegroup_layout}. Her vil applikasjonen “Web App for ERP” være avhengig av webserveren for å vise web-grensesnittet til brukerne, en filserver for lesing og lagring av filer, en e-post-server for å sende og motta mail og en databaseserver som inneholder brukerinfo og andre tabeller. 
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[scale=0.6]{img/servicegroup_layout}
     \caption{Tjenester for servicegroup-objektet  ERP\_WEBAPP}
@@ -639,7 +639,7 @@ define servicegroup {
 Her kjøres service-sjekker mot alle tjenestene. Service-objektene grupperes i en servicegroup. 
 Dette gjør at vi får et oversiktsbilde over applikasjonen i Icingas web-grensesnitt som vist i Figur \ref{servicegroup_web}. Slik blir det enklere for servicedesk å kunne gå inn for å se hva som er feil med “Web app for ERP” om brukere rapporterer om feil på applikasjonen.
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[scale=0.6]{img/servicegroup_web}
     \caption{ Oversikt over servicegroup-objekt og status i webgrensesnittet}
@@ -653,7 +653,7 @@ Infrastruktur består av de grunnleggende enhetene de andre serverne er avhengig
 
 Infrastrukturovervåkning er essensielt for å kunne levere IT-Tjenester. Det er viktig at design av overvåkningen fører til at man raskt og effektivt skal kunne oppdage og presentere feil som oppstår. For å få til dette i Icinga benyttes “parent” \ref{sec:parents}. De aller fleste enheter i infrastrukturen (untatt servermiljø) vil være parent for andre enheter. Dette reflekteres i et statuskart i icinga, som vist i Figur \ref{statusmap}.
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[scale=0.6]{img/statusmap}
     \caption{Kart som viser parent og host-relasjoner}
@@ -688,7 +688,7 @@ I følge Cisco kan høytminneforbruk under vanlig operasjon indikere at brannmur
 
 Cisco router / Brannmurer har en viktig funksjon som kalles failover. Denne fungerer slik at to like enheter settes opp, der en blir satt som “primary” og den andre som “secondary”, slik at denne kan overta for “primary” om det skulle bli nødvendig. Disse kobles sammen med en seriellkabel. Figur \ref{ciscoasafailover} viser hvordan et Cisco-failover er satt opp. 
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[scale=0.6]{img/asafailover}
     \caption{Oppsett for Cisco-failover funksjonalitet}
@@ -847,9 +847,9 @@ For å få til dette trengs et mellomledd som kan motta SNMP-traps på Icinga-se
 
 For å lytte etter SNMP-traps benyttes SNMPtrapd \cite{snmptraps2}. Her mottas alle traps som sendes med riktig community. Disse sendes så videre til snmptt (SNMP Trap Translator \cite{traptranselator}). Her har defineres de traps-ene en er ute etter, informasjon om OID-ene og kommandoen som skal kjøres når denne mottas. I Figur \ref{snmptrap} illustreres hvordan en trap blir prosessert. 
 
-\begin{figure}
+\begin{figure}[H]
     \centering
-    \includegraphics[scale=0.6]{img/SNMPtrap}
+    \includegraphics[scale=0.4]{img/SNMPtrap}
     \caption{Informasjonsflyt ved en trap}
     \label{snmptrap}
 \end{figure}
