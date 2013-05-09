@@ -115,7 +115,6 @@ Dette var uoversiktelig og en oppdelt konfigurasjon var ønskelig, som også er 
   }
 }
 \makeatother
-\begin{document}
 \begin{tikzpicture}[dirtree]
 \node {Objects} 
     child { node {commands}
@@ -919,7 +918,7 @@ ASHRAE anbefaler en inntakstemperatur 18°C - 27°C, mens Sun anbefaling er 20°
 
 Det fantes allerede en plugin for å sjekke sensorverdiene på APC NetBotz \cite{checknetbotz}. Men denne sammenlignet verdiene med grenseverdier satt i konfigurasjonen på enheten. Det var ønskelig å samle mest mulig av konfigurasjon på Icinga-serveren, derfor ble pluginen omskrevet til å kunne ta inn øvre og nedre grenseverdier som argumenter.
 
-\subsubsection{UPS (Uninterruptible Power Supply)}
+\subsection{UPS (Uninterruptible Power Supply)}
 
 UPS, på norsk ofte kalt avbruddsfri strømforsyning blir benyttet til å opprettholde strøm til alle enheter på IKT-avdelingens serverrom, dersom strømnettet skulle falle ut og filtrere den strømen slik at utstyr ikke vil bli skadet om spenningen skulle spike.
 
