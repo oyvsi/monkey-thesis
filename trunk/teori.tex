@@ -316,7 +316,7 @@ define hostgroup {
 }
 \end{lstlisting}
 
-Det kan også være nyttig for å ekskludere en host fra en servicesjekk som den ellers skulle kjørt. I eksempelet nedenfor er HiG3 medlem av hostgroup-en “windows-servers”, men blir ekskludert fra å kjøre sjekken på diskplass ved å sette “!HiG3”:
+Det kan også være nyttig for å ekskludere en host fra en servicesjekk som den ellers skulle kjørt. I eksempelet nedenfor er HiG3 medlem av hostgroup-en “windows\_servers”, men blir ekskludert fra å kjøre sjekken på diskplass ved å sette “!HiG3”:
 
 \begin{lstlisting}
 define service {
@@ -477,7 +477,7 @@ exit 0
 
 Både serveren og klienten stod i et eget nettverk i Virtualbox sammen med en Windows-maskin med et nettverkskort satt i promiscious mode, for å kunne sniffe nettverkstrafikken. Denne fanget nettverkstrafikken med WireShark. SSH-trafikken mellom de to maskinene ble hentet ut og data for hver “samtale” kunne analyseres.  
 
-Analyse av hvor mye CPU-tid NRPE og SSH trenger for å utføre sjekker ble også gjennomført. Fordi hver sjekk går veldig raskt ble det kjørt 100 disksjekker, 100 ganger. Time-kommandoen ble brukt for å se på tiden brukt i user- og kernel-mode ved 100 sjekker. Dette ble gjort ved å bruke et bash-script som kjører scriptet i x.x.
+Analyse av hvor mye CPU-tid NRPE og SSH trenger for å utføre sjekker ble også gjennomført. Fordi hver sjekk går veldig raskt ble det kjørt 100 disksjekker, 100 ganger. Time-kommandoen ble brukt for å se på tiden brukt i user- og kernel-mode ved 100 sjekker. Dette ble gjort ved å bruke et bash-script som kjører scriptet nedenfor.
 
 \begin{lstlisting}
 #!/usr/bin/env bash

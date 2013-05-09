@@ -1,5 +1,7 @@
 \chapter{Implementasjon}
-I dette kapittelet står det om hvordan gruppen har utført implementasjonen av overvåkningsløsningen for IKT-avdelingen, hvilke valg som er tatt underveis og hvordan enheter overvåkes.
+%I dette kapittelet står det om hvordan gruppen har utført implementasjonen av overvåkningsløsningen for IKT-avdelingen, hvilke valg som er tatt underveis og hvordan enheter overvåkes.
+
+Dette kapittelet handler om hvordan gruppen har utført implementasjonen av overvåkningsløsningen for IKT-avdelingen, hvilke valg som er tatt underveris og hvordan de forskjellige enhetene overvåkes
 \section{Utstyr}
 
 \subsubsection{Labmiljø}
@@ -57,8 +59,9 @@ Programvare:
 \item Metricinga 
 \item sendmail
 \end{itemize}
+
 \subsubsection{Enhet for overvåkning av servermiljø}
-For å overvåke temperatur og luftfuktighet på serverrommet ble det kjøpt inn en NetBotz 200 med støtte for opp til 12 eksterne sensorer \cite{netbotz}, som oppfyller kravene gitt i oppgavebeskrivelsen. 
+For å overvåke temperatur og luftfuktighet på serverrommet ble det i samsvar med IKT-avdelingen kjøpt inn en NetBotz 200 med støtte for opp til 12 eksterne sensorer \cite{netbotz}. Denne oppfyller kravene som er gitt i oppgavebeskrivelsen. 
 
 \section{Produksjonsserver}
 “Quis custodiet ipsos custodes?” er et latinsk uttrykk som kan oversettes med “hvem passer på de som passer på?”. I en overvåkningsløsning er det viktig å stille spørsmålet; hva skjer hvis overvåkningsserveren går ned? Et forslag under prosjektet var å legge overvåkingsserveren på et Xen/Vmware-cluster. Men dette ble etter noe omtanke stemplet som en dårlig ide. Dersom clusteret gikk ned ville også overvåkingsserveren gå ned. Det ble derfor bestemt at denne skulle være en egen fysisk boks. 
@@ -83,7 +86,7 @@ Ved standard installasjon av Icinga er konfigurasjonen delt opp i objekttyper me
 \item services\_icinga.cfg
 \item commands.cfg
 \end{itemize}
-Dette var uoversiktelig og en oppdelt konfigurasjon var ønskelig, som også er anbefalt ved større installasjoner.. \cite{sysadmin} + nagios-boka. Det ble bestemt å sette opp følgdende hovedinndeling, med undermapper videre der det var hensiktsmessig:
+Dette var uoversiktelig og en oppdelt konfigurasjon var ønskelig, som også er anbefalt ved større installasjoner.. \cite{sysadmin} + nagios-boka. Derfor ble det bestemt å sette opp følgdende hovedinndeling (med undermapper videre der det var hensiktsmessig):
 
 \makeatletter
 \newcount\dirtree@lvl
@@ -148,8 +151,8 @@ Dette vil si at alle hosts som er medlem i hostgroupen vil få utført sjekkene 
 
 \begin{lstlisting}
 define host {
-use		generic_windows_host
-address	10.60.0.21
+use			generic_windows_host
+address		10.60.0.21
 host_name	HiG2
 alias		HiG2
 hostgroups	debian_servers, mysql_servers
@@ -159,19 +162,19 @@ For å legge alle SQL serverne i en felles gruppe er det laget en egen SQL\_Serv
 
 \begin{lstlisting}
 define hostgroup {
-hostgroup_name sql_servers
-alias SQL Servers
-hostgroup_members mysql_servers, mssql_servers, oracle_servers
+hostgroup_name		sql_servers
+alias 				SQL Servers
+hostgroup_members	mysql_servers, mssql_servers, oracle_servers
 }
 \end{lstlisting}
 Da kommandoene er definert lages servicen som som binder SQL serverens hostgroup og kommandoen.
 
 \begin{lstlisting}
 define service {
-service_description MySQL Connection Time
-use generic-service
-name mysql_connection_time
-hostgroup_name mysql-servers
+service_description	MySQL Connection Time
+use 				generic_service
+name 				mysql_connection_time
+hostgroup_name 		mysql_servers
 check_command check_mysql_health!connection-time!0.1!0.4
 }
 \end{lstlisting}
@@ -190,7 +193,7 @@ Figur \ref{sql} viser en visuel fremstilling av hvordan alt dette henger sammen 
 
 
 \section{Generering av grafer}
-I utgangspunktet ble det bestemt at ytelsesdata skulle holdes utenfor oppgaven. Det ble likevel satt opp en løsning for å visualisere ytelsesdata fra sjekkene med programmet graphite. Dette ble gjort fordi det var ønskelig å kunne etablere en baseline for tjenestene slik at bedre grenseverdier kunne settes.
+I utgangspunktet ble det bestemt at ytelsesdata skulle holdes utenfor oppgaven. Det ble likevel satt opp en løsning for å visualisere ytelsesdata fra sjekkene med programmet graphite\cite{graphite}. Dette ble gjort fordi det var ønskelig å kunne etablere en baseline for tjenestene slik at bedre grenseverdier kunne settes.
 
 For å sette opp eksportering av ytelsesdataen benyttes et vanlig command-objekt i Icinga:
 
@@ -215,13 +218,13 @@ Gjennom graphite vil det dermed grafes basert på performance data på riktig fo
 Det ble også testet å modifisere scriptet til å legge outputen til service-sjekkene direkte til en mysql-database, som vist i vedlegg /ref metricinga diff . Dette ble gjort for å oppfylle kravet fra oppgavebeskrivelsen om at alle henvendelser skal lagres i database. Men det viste seg at dette ville bli så mange rader at dette ble avgjort til ikke å være hensiktsmessig i samråd med oppdragsgiver. Som et alternativ til dette kan en ta inn all data til graphite, men aggrigere det etter en viss tid. Dataene kan da eksporteres fra graphite til videre bruk.
 
 \section{Overvåkning av Windows-servere}
-For overvåkning av Windows vil NSClient++ bli brukt. NSClient++ er et program som brukes for  å kommunisere med ulike agenter og over ulike protokoller på en ekstern server. I dette prosjektet brukes den for å hente ut informasjon via NRPE-agenten og å kjøre WMI-spørringer mot en Windows-server. NSClient har en konfig fil som genereres under installering. 
+For overvåkning av Windows vil NSClient++ bli brukt \cite{nsclientmain}. NSClient++ er et program som brukes for  å kommunisere med ulike agenter og over ulike protokoller på en ekstern server. I dette prosjektet brukes den for å hente ut informasjon via NRPE-agenten og å kjøre WMI-spørringer mot en Windows-server. NSClient har en konfig fil som genereres under installering. 
 
 NSClient++ er valgt fordi klienten oppdateres hyppig \cite{nsclient}, og det er den agenten som blir referert i Icinga/Nagios dokumentasjon \cite{icingawin}. Med NSClient++ kommer også forhåndskonfigurerte plugin-er, for eksempel for å sjekke minne, CPU, og harddisk.
 
-For installering av NRPE-agenten og mulighet for WMI-spørringer ble det laget en veiledning /cite nsclientguide  som forklarer hva som skal installeres. Her er det laget en egen konfig fil som har kun funksjonaliteten vi trenger. 
+For installering av NRPE-agenten og mulighet for WMI-spørringer ble det laget en veiledning \cite{agentguide}  som forklarer hva som skal installeres. Her er det laget en egen konfig fil som har kun funksjonaliteten vi trenger. 
 
-\section{Overvåkning av Linux-servere}
+\section{Overvåkning av Linux-servere}\label{sec:overvaklinux}
 Overvåkning av standard Linux-servere skjer utelukkende ved bruk av NRPE. 
 
 For Debian-servere kan denne installers fra pakkebrønnen “stable” med kommandoen:
@@ -235,9 +238,9 @@ For Red Hat og CentOS må det benyttes en tredjeparts “pakketing” som EPEL e
 Konfigurasjonen er lik som ved Windows. Det følger ikke med noen plugin-er når en installerer nagios-nrpe-server, derfor installeres også pakken “nagios-plugins-basic”.
 
 \section{Utrulling av agenter}
-NSclient++ kan lastes ned som en MSI-pakke, som kan pushes til servere med en GPO. Konfigurasjonsfilen må enten legges inn i MSI-pakken eller pushes over GPO for seg selv. Grunnen til dett ikke er benyttet er at IKT-avdelingen ønsket å gjøre installasjonen manuelt for å ha mest mulig kontroll og gjøre utrulling i faser, for å sikre at installasjonen ikke medførte uforutsette probemer. Det ble laget en veiledning på hvordan denne klienten skal installeres, og hvilke opsjoner som er relevant. Denne finnes i vedlegg \ref{nsclient++}.
+NSclient++ kan lastes ned som en MSI-pakke, som kan pushes til servere med en GPO. Konfigurasjonsfilen må enten legges inn i MSI-pakken eller pushes over GPO for seg selv. Grunnen til dett ikke er benyttet er at IKT-avdelingen ønsket å gjøre installasjonen manuelt for å ha mest mulig kontroll og gjøre utrulling i faser, for å sikre at installasjonen ikke medførte uforutsette probemer. Det ble laget en veiledning på hvordan denne klienten skal installeres, og hvilke opsjoner som er relevant. Denne finnes i vedlegg \ref{agentguide}.
 
-For Linux servere installeres pakkene via pakkebehandleren, som nevnt i xx. IKT-avdelingen har for tiden ikke så mange Linux-servere, så noen automatisk utrulling vil ikke være så besparende. Dersom dette skulle være ønskelig kan et enkelt script som kobler seg til og kjører kommandoen for installering skrives. Konfigurasjonsfilen kan pushes over SCP.
+For Linux servere installeres pakkene via pakkebehandleren, som nevnt i \ref{sec:overvaklinux}. IKT-avdelingen har for tiden ikke så mange Linux-servere, så noen automatisk utrulling vil ikke være så besparende. Dersom dette skulle være ønskelig kan et enkelt script som kobler seg til og kjører kommandoen for installering skrives. Konfigurasjonsfilen kan pushes over SCP.
 
 For annen infrastruktur brukes for det meste SNMP for å hente ut informasjon. Dette konfigureres på hver enkelt enhet, og krever vanligvis ikke noe ekstra programvare installert. I noen spesielle tilfeller brukes egne API-er for å hente ut informasjon, som for eksempel for VMware. Her må Icinga serveren ha tilgang til å bruke API-et, som vanligvis konfigureres på hosten.
 
@@ -275,7 +278,7 @@ Check\_CPU
 \begin{lstlisting}
 ./check_nrpe -u -H 10.60.0.22 -p 5666 -c CheckCPU -a time=5m warn=80 crit=90
 \end{lstlisting}
-I Figur \ref{cpustrain} returnerer CPU-sjekken “OK”. Dette er hentet fra gjennomsnittsbruk av CPU over 5 minutter. Like under ser vi at testen er kritisk på grunn av et gjennomsnittsbruk av CPU på 96 \%. I Figur \ref{CPUSTRAIN} ser vi at alle de fire CPU-kjernene jobber oppmot maksimalt. Et batch-script ble kjørt lokalt på serveren som ble overvåket for å generere CPU-bruk.
+I Figur \ref{CPUSTRAIN} returnerer CPU-sjekken “OK”. Dette er hentet fra gjennomsnittsbruk av CPU over 5 minutter. Like under ser vi at testen er kritisk på grunn av et gjennomsnittsbruk av CPU på 96 \%. I Figur \ref{CPUSTRAIN} ser vi at alle de fire CPU-kjernene jobber oppmot maksimalt. Et batch-script ble kjørt lokalt på serveren som ble overvåket for å generere CPU-bruk.
 \begin{lstlisting}
 ## winloop.bat
 ##
@@ -351,7 +354,7 @@ define service {
   check_command        check_nrpe!check_process!sshd 1:40
 }
 \end{lstlisting}
-linux-plugin fra nagios-plugins: check\_procs 
+Linux-plugin fra nagios-plugins: check\_procs 
 
 Å se at en tjeneste kjører via Windows kan gi falsk informasjon. Et eksempel her er Microsoft's terminal services. Tjenesten står som kjørende i Windows, men brukere får ikke koblet til. Dette kommer av at tjenesten har hengt seg, uten at den står som “stoppet”. Dette merkes ikke før brukere ringer inn og beskriver problemet \cite{serviceproblem}. Som nevnt i \ref{sec:omovervakning} vil en bedre sjekk være å teste selve tjenesten, som i neste delkapittel.
 
@@ -435,7 +438,7 @@ For websider som skal svare på HTTPS sjekkes også utløpsdato for SSL-sertifik
 \subsection{Sjekk av redundante oppsett}
 En ordinær plugin henter status for en service som kjører på én host. Ved redundante oppsett vil det ikke nødvendigvis være kritisk om en av nodene er nede. For å vurdere statusen av et cluster kan en kjøre en sjekk på hver enkelt host som kjører den gitte servicen, få tilbake resultat fra hver, og ta en vurdering basert på disse resultatene samlet.
 
-For å overvåke redundante oppsett, har pluginene check\_multi og check\_cluster blitt vurdert.  Forskjellene mellom disse er at check\_cluster i motsetning til check\_multi parser den lokale status.dat filen og ser hvilken tilstand en service eller en host er ved siste sjekk. Pluginen check\_multi derimot kjører aktive sjekker mot spesifiserte hosts, og en kan definere comparison operator som vil bli sjekket mot de returnerte resultatene.
+For å overvåke redundante oppsett, har pluginene check\_multi \cite{checkmulti} og check\_cluster \cite{checkcluster} blitt vurdert.  Forskjellene mellom disse er at check\_cluster i motsetning til check\_multi parser den lokale status.dat filen og ser hvilken tilstand en service eller en host er ved siste sjekk. Pluginen check\_multi derimot kjører aktive sjekker mot spesifiserte hosts, og en kan definere comparison operator som vil bli sjekket mot de returnerte resultatene.
 
 Med check\_multi kan en benytte en eller flere egendefinerte kommandoer som parametere. Disse vil bli parses av check\_multi og kan inneholde alt i fra “echo Hello” til mer avanserte perl script, som kjøres ved hjelp av eval. For å evaluere resultatene kan en definere kriterier som gir et varsel (her brukes standard Icinga-tilstander). 
 
