@@ -353,9 +353,18 @@ I filen external.js hentes data fra de ulike modulene og settes inn i statusvind
 
 \subsubsection{Nagdash}
 
-For å hente ut data fra Icinga benyttes REST-api-et til Icinga-web. Her kan en sette opp en spørring som kan se slik ut:
+For å hente ut data fra Icinga benyttes REST-api-et til Icinga-web. I eksempelet under vises en spørring som henter alle host-objekter som har state-en DOWN (HOST\_CURRENT\_STATE|=|1) eller UNREACHABLE (HOST\_CURRENT\_STATE|=|2). Viktige parametere:
+\begin{itemize}
+	\item <host>: hostnavn eller IP til hosten som kjører Icinga-web
+	\item <objekt>: Objekttypen spørringen skal kjøres mot (f.eks host eller service)
+	\item filter: Kolonner som skal brukes i sammen med de logiske operatorene AND og/eller OR
+	\item columns: kolonner som skal returneres i resultatet
+	\item authkey: Nøkkelen brukt for å autentisere til API-et
+\end{itemize}
 
-service/filter[(blalba)]/columns[(jadda jadda)]/api\_key=test\_api\_key/json
+\begin{lstlisting}
+http://<host>/icinga-web/web/api/<objekt>/filter[OR(HOST_CURRENT_STATE|=|1;HOST_CURRENT_STATE|=|2)]/columns[HOST_ID|HOST_CURRENT_CHECK_ATTEMPT|...]/authkey=<apikey>/json
+\end{lstlisting}
 
 Da får en et javascript objekt ut med de kolonnene en har bedt om.
 
