@@ -1,6 +1,7 @@
 \chapter{Implementasjon}
 I dette kapittelet står det om hvordan gruppen har utført implementasjonen av overvåkningsløsningen for IKT-avdelingen, hvilke valg som er tatt underveis og hvordan enheter overvåkes.
 \section{Utstyr}
+
 \subsubsection{Labmiljø}
 Et labmiljø har vært brukt for å teste plugins og script før de blir implementert på produksjonsserveren. Ved å teste i lab først, kan en se hvordan sjekker oppfører seg før de implementeres i større skala i produksjon. Labmiljøet inneholder utstyr og tjenester som gjenspeiler det IKT-avdelingen benytter, og på den måten kan ulike scenarier og utstyr testes før dette settes i produksjon.
 
@@ -57,8 +58,7 @@ Programvare:
 \item sendmail
 \end{itemize}
 \subsubsection{Enhet for overvåkning av servermiljø}
-For å overvåke temperatur og luftfuktighet på serverrommet ble det kjøpt inn en NetBotz 200 med støtte for opp til 12 eksterne sensorer \cite{netbotz},
-som oppfyller kravene gitt i oppgavebeskrivelsen. 
+For å overvåke temperatur og luftfuktighet på serverrommet ble det kjøpt inn en NetBotz 200 med støtte for opp til 12 eksterne sensorer \cite{netbotz}, som oppfyller kravene gitt i oppgavebeskrivelsen. 
 
 \section{Produksjonsserver}
 “Quis custodiet ipsos custodes?” er et latinsk uttrykk som kan oversettes med “hvem passer på de som passer på?”. I en overvåkningsløsning er det viktig å stille spørsmålet; hva skjer hvis overvåkningsserveren går ned? Et forslag under prosjektet var å legge overvåkingsserveren på et Xen/Vmware-cluster. Men dette ble etter noe omtanke stemplet som en dårlig ide. Dersom clusteret gikk ned ville også overvåkingsserveren gå ned. Det ble derfor bestemt at denne skulle være en egen fysisk boks. 
@@ -213,14 +213,14 @@ service_perfdata_file_template=[SERVICEPERFDATA]\tDATATYPE::SERVICEPERFDATA\tTIM
 For å transformere ytelsesdataene til riktig format for graphite benyttes metricinga \cite{metricinga}. Dette scriptet sjekker spool-mappen én gang i minuttet etter filer som enda ikke er prosessert og sender data inn til carbon (graphite). 
 Gjennom graphite vil det dermed grafes basert på performance data på riktig format fra alle service-checks som kjører en command.
 
-Det ble også testet å modifisere scriptet til å legge outputen til service-sjekkene direkte til en mysql-database, som vist i vedlegg /ref{metricinga diff}. Dette ble gjort for å oppfylle kravet fra oppgavebeskrivelsen om at alle henvendelser skal lagres i database. Men det viste seg at dette ville bli så mange rader at dette ble avgjort til ikke å være hensiktsmessig i samråd med oppdragsgiver. Som et alternativ til dette kan en ta inn all data til graphite, men aggrigere det etter en viss tid. Dataene kan da eksporteres fra graphite til videre bruk.
+Det ble også testet å modifisere scriptet til å legge outputen til service-sjekkene direkte til en mysql-database, som vist i vedlegg /ref metricinga diff . Dette ble gjort for å oppfylle kravet fra oppgavebeskrivelsen om at alle henvendelser skal lagres i database. Men det viste seg at dette ville bli så mange rader at dette ble avgjort til ikke å være hensiktsmessig i samråd med oppdragsgiver. Som et alternativ til dette kan en ta inn all data til graphite, men aggrigere det etter en viss tid. Dataene kan da eksporteres fra graphite til videre bruk.
 
 \section{Overvåkning av Windows-servere}
 For overvåkning av Windows vil NSClient++ bli brukt. NSClient++ er et program som brukes for  å kommunisere med ulike agenter og over ulike protokoller på en ekstern server. I dette prosjektet brukes den for å hente ut informasjon via NRPE-agenten og å kjøre WMI-spørringer mot en Windows-server. NSClient har en konfig fil som genereres under installering. 
 
 NSClient++ er valgt fordi klienten oppdateres hyppig \cite{nsclient}, og det er den agenten som blir referert i Icinga/Nagios dokumentasjon \cite{icingawin}. Med NSClient++ kommer også forhåndskonfigurerte plugin-er, for eksempel for å sjekke minne, CPU, og harddisk.
 
-For installering av NRPE-agenten og mulighet for WMI-spørringer ble det laget en veiledning /cite{nsclientguide} som forklarer hva som skal installeres. Her er det laget en egen konfig fil som har kun funksjonaliteten vi trenger. 
+For installering av NRPE-agenten og mulighet for WMI-spørringer ble det laget en veiledning /cite nsclientguide  som forklarer hva som skal installeres. Her er det laget en egen konfig fil som har kun funksjonaliteten vi trenger. 
 
 \section{Overvåkning av Linux-servere}
 Overvåkning av standard Linux-servere skjer utelukkende ved bruk av NRPE. 
@@ -515,7 +515,7 @@ dpkg -i oracle-instantclient11.2-basic-11.2.0.3.0-1.x86_64.deb
 \end{lstlisting}
 Videre trengs også en databasedriver, som gjør det mulig for Perl å benytte klienten. For oracle databaser brukes perl DBI driver for Oracle “libdbd-oracle-perl”.
 
-På en Oracle server vil hver database ha sin egen instans \cite{oraclefaq}. Det vil si at parametre som overvåkes vil være forskjellig fra database til database. Navnene til instansene legges derfor inn som en egendefinert variabel i hver enkel Oracle-servers host-objekt. Når pluginen kjøres sjekkes filen tnsnames.ora /ref{tnsnames} som inneholder tilkoblingsinformasjon for hver enkelt instans.
+På en Oracle server vil hver database ha sin egen instans \cite{oraclefaq}. Det vil si at parametre som overvåkes vil være forskjellig fra database til database. Navnene til instansene legges derfor inn som en egendefinert variabel i hver enkel Oracle-servers host-objekt. Når pluginen kjøres sjekkes filen tnsnames.ora /ref tnsnames  som inneholder tilkoblingsinformasjon for hver enkelt instans.
 \begin{lstlisting}
 ORA11 =
  (DESCRIPTION = 
@@ -651,7 +651,7 @@ Det vil det også være naturlig å sette opp servicedependency-er mellom ERP We
 \section{Infrastruktur}
 Infrastruktur består av de grunnleggende enhetene de andre serverne er avhengig av. I dette prosjektet er det definert til: switcher, routere, brannmurer, UPS, virtualiseringsteknologi og serverrommiljø.
 
-Infrastrukturovervåkning er essensielt for å kunne levere IT-Tjenester. Det er viktig at design av overvåkningen fører til at man raskt og effektivt skal kunne oppdage og presentere feil som oppstår. For å få til dette i Icinga benyttes “parent” /ref{parents}. De aller fleste enheter i infrastrukturen (untatt servermiljø) vil være parent for andre enheter. Dette reflekteres i et statuskart i icinga, som vist i Figur \ref{statusmap}.
+Infrastrukturovervåkning er essensielt for å kunne levere IT-Tjenester. Det er viktig at design av overvåkningen fører til at man raskt og effektivt skal kunne oppdage og presentere feil som oppstår. For å få til dette i Icinga benyttes “parent” \ref{sec:parents}. De aller fleste enheter i infrastrukturen (untatt servermiljø) vil være parent for andre enheter. Dette reflekteres i et statuskart i icinga, som vist i Figur \ref{statusmap}.
 
 \begin{figure}
     \centering
