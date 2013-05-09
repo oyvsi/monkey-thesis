@@ -401,17 +401,20 @@ Figur \ref{dns-inv} viser data samlet inn fra to DNS servere over 30 dager. Diss
 
 DHCP tjenesten overvåkes med pluginen “check\_dhcp”. Denne sender en DHCPDISCOVER-pakke til DHCP-serveren. Hvis DHCP-tjenesten fungerer får pluginen en DHCPOFFER-pakke som respons. Dersom denne inneholder en korrekt lease, returnerer pluginen OK til Icinga sammen med tiden det tok.
 
-\subsubsection{Counters}
+\subsection{Counters}
 Mange interne applikasjoner brukes via Terminalservere, her er det viktig å kunne levere et stabilt system til brukerne, ofte kan terminalservere belastes mer i perioder, det blir da naturlig å overvåke hvor mange som bruker disse serverne, for å kunne sette inn nye servere, og se hvem som blir belastet mest.
 
 Ved å bruke NRPE sjekkes windows performance counters direkte. I Figur \ref{ts-skole-usage} checkterminalservices er bruken for en uke samlet inn og kan brukes videre til å evalure terminalserver lasten.
 
 Kommando som er brukt for å samle denne datoen er følgende:
+\begin{lstlisting}
+	command_line	$USER1$/check_nrpe -u -H $HOSTADDRESS$ -p 5666 -c CheckCounter -a "Counter:Active=\\Terminal Services\\Active Sessions!20!25" ShowAll MaxWarn=$25 MaxCrit=35
+\end{lstlisting}
 
 \begin{figure}
 	\centering
 	\includegraphics[width=1.0\textwidth]{img/ts-skole-usage-inv}
-	\caption{Data fra Graphite (Terminal service aktive brukere)}
+	\caption{Data fra Graphite (Antall)}
 	\label{ts-skole-usage}
 \end{figure}
 

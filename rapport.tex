@@ -9,6 +9,7 @@
 \usepackage{subfigure}
 \usepackage{tikz}
 \usepackage[utf8]{inputenc}     % For utf8 encoded .tex files
+\usepackage{textcomp}
 \usepackage[absolute]{textpos}
 \usepackage[T1]{fontenc}
 \usepackage{cite}
@@ -35,12 +36,20 @@ backgroundcolor=\color{white},
 basicstyle=\scriptsize, breakatwhitespace=false, 
 breaklines=true, commentstyle=\color{mygreen}, 
 deletekeywords={...}, escapeinside={\%*}{*)}, 
-extendedchars=true, frame=single, keywordstyle=\color{blue}, 
+extendedchars=\true, frame=single, keywordstyle=\color{blue}, 
 language=Octave, morekeywords={*,...}, numbers=left, 
 numbersep=5pt, stepnumber=1, numberstyle=\tiny\color{mygray}, 
 rulecolor=\color{black}, showspaces=false, showstringspaces=false, 
 showtabs=false, stringstyle=\color{mymauve}, tabsize=2, title=\lstname, 
 xleftmargin=3em, framexrightmargin=5pt, framexbottommargin=4pt 
+}
+\lstset{literate=%
+{æ}{{\ae}}1
+{å}{{\aa}}1
+{ø}{{\o}}1
+{Æ}{{\AE}}1
+{Å}{{\AA}}1
+{Ø}{{\O}}1
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -132,6 +141,8 @@ Erik Hjelmås
 \end{center}
 \end{titlepage}
 \fancyhead[R]{\small MonKey - Monitoring is Key}
+
+
 \pagenumbering{roman}
 
 \input{sammendrag}
