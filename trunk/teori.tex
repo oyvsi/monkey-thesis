@@ -325,14 +325,14 @@ define service {
 
 \section{Avhengigheter}
 
-I Icinga kan man definere de tre ulike typene avhengighetene "Parent", "Service dependency", "Host dependency". Disse har innvirkning på hvilke varsler som sendes ut og statusen de ulike service-ene og host-ene får. Alle er definert som egne objekttyper og krever egen konfigurasjon. 
+I Icinga kan en definere tre ulike typer avhengigheter, "Parent", "Service dependency", og "Host dependency". Disse har innvirkning på hvilke varsler som sendes ut og statusen de ulike service-ene og host-ene får. Hver av disse krever egen konfigurasjon. 
 
 \section{Parent}\label{sec:parent}
 Et host-objekt kan settes som en "parent" til et annet host-objekt. Host-objekter som har et parent blir betegnet som en child-host eller child-service. Dette brukes primært for å unngå varsler om andre host- og service-objekter enn det som er definert som parent om denne går ned. For eksempel hvis kjernerouteren går ned, ønskes ikke varsler for eventuelle host-er og tilhørende service-er som har kjernerouteren som parent. Disse vil ikke lengre bli sjekket og tilstanden vil bli satt til "UNREACHABLE". Tjenester som tilhører host-ene vil få tilstanden "UNKNOWN".
 
 For redundante oppsett kan et host-objekt ha flere "parents" definert. Host-objektet vil da ha tilstanden UP så lenge en "parent"-host har det.
 
-Ut ifra "parent"-relasjonene mellom host-objekter i konfigurasjonsfilene genereres også et "Status Map" over nettverket, som vist i Figur \ref{statusmap}. Dette brukes til å visualisere alle relasjonene, og vil gjengi redundante oppsett og hvilke host-objekter som er påvirket av at "parent"-hosten er DOWN.
+Ut ifra parent-relasjonene mellom host-objekter i konfigurasjonsfilene genereres også et "Status Map" over nettverket, som vist i Figur \ref{statusmap}. Dette brukes til å visualisere alle relasjonene, og vil gjengi redundante oppsett og hvilke host-objekter som er påvirket av at "parent"-hosten er DOWN.
 
 \section{Service dependency}\label{sec:servicedependency}
 
@@ -353,7 +353,7 @@ define servicedependency {
 }
 \end{lstlisting}
 
-Ved standard konfigurasjon vil Icinga benytte siste harde tilstand for master service. Det vil si at hvis denne er satt til 4 retries vil ikke Check SMB stoppes fra å kjøres før Check LDAP har blitt sjekket 4 ganger. 
+Ved standard konfigurasjon vil Icinga benytte siste harde tilstand for master service. Dersom "max\_check\_attempts" for eksempel er satt til 4, vil ikke Check SMB stoppes fra å kjøres før Check LDAP har blitt sjekket 4 ganger og oppnår en hard tilstand. 
 
 På attributten notification\_failure\_criteria kan det settes hvilke service-tilstander en ikke skal varsle for. Dette er hovedgrunnen til at det settes opp slike avhengigheter. Når denne er satt til "c" vil det ikke varsles om master-servicen går til critical tilstand.
 
@@ -376,15 +376,13 @@ En kan også erstatte host\_name og dependant\_host\_name med hostgroup og depen
 
 \section{Host dependency}
 
-For å sette en avhengighet mellom to host-er benyttes "host dependency". Dette må ikke forveksles med "parent", som refererer til nettverksoppsettet. Mens en host dependency går på at en host er avhengig av en annen. Host dependency er bare nyttig i veldig spesielle tilfeller, da det for de fleste tilfeller vil være avhengigheter til en eller flere tjenester på hosten. 
-
-Her er det anbefalt å bruke parents i stedet \cite{hostandservicedep}. /cite Nagios-boka og .
+For å sette en avhengighet mellom to host-objekter benyttes "host dependency". Dette må ikke forveksles med "parent", som refererer til nettverksoppsettet. Mens en host dependency går på at et host-objekt er avhengig av et annet. Host dependency er bare nyttig i veldig spesielle tilfeller, da det for de fleste tilfeller vil være avhengigheter til en eller flere tjenester på hosten\cite{hostandservicedep}.
 
 \section{Protokoller og agenter}
-For å kjøre sjekker på enheter må Icinga-serveren kunne kommunisere med operativsystemene på de ulike enhetene. Icinga henviser til protokollene SSH, SNMP, RPC (WMI) og agentene NRPE og NSCA (en del av pakken NSClient++) \cite{icingaintegration} \cite{icingaadditionalsoftware}. 
+For å kjøre sjekker på enheter må Icinga-serveren kunne kommunisere med operativsystemene på de ulike enhetene. Icinga henviser til protokollene SSH, SNMP, RPC (WMI) og agentene NRPE og NSCA (en del av pakken NSClient++) i dokumentasjonen\cite{icingaintegration} \cite{icingaadditionalsoftware}. 
 
 \subsubsection{NRPE}
-NRPE (Nagios Remote Plugin Executor) består av en plugin (check\_nrpe) på Icinga-serveren og en daemon som installeres på hver server som skal overvåkes. NRPE eksekverer lokale plugins på den eksterne serveren og returner dataen fra denne til check\_nrpe. Tillatelse for eksekveringer defineres i en config-fil på hver server, der en oppgir hvilke IP-er som kan koble seg til og hvilke kommandoer som er gyldige. 
+NRPE (Nagios Remote Plugin Executor) består av plugin-en "check\_nrpe" på Icinga-serveren og en daemon som installeres på hver server som skal overvåkes. NRPE eksekverer lokale plugin-er på den eksterne serveren og returner dataen fra denne til check\_nrpe. Tillatelse for eksekveringer defineres i en config-fil på hver server, der en oppgir hvilke IP-er som kan koble seg til og hvilke kommandoer som er gyldige. 
 
 \begin{figure}[H]
     \centering
@@ -393,14 +391,15 @@ NRPE (Nagios Remote Plugin Executor) består av en plugin (check\_nrpe) på Icin
     \label{nrpe}
 \end{figure}
 
-
 \subsubsection{SSH (Secure Shell)}
 
-Gjennom en tilkobling til en SSH-server kan en spesifisere en kommando som skal kjøres og ta outputen til det orginale shellet. Dette virket som den beste måten å overvåke Linux-servere ved starten av prosjektet. SSH-prosjektet er meget utbredt og blir aktivt sjekket for sikkerhetshull. SSH er også installert på de aller fleste Linux-servere, og en vil dermed unngå å lytte på en ekstra port. 
+Gjennom en tilkobling til en SSH-server kan en spesifisere en kommando som skal kjøres og hente output-en til det opprinnelige shellet. Dette virket som den beste måten å overvåke Linux-servere ved starten av prosjektet. SSH-prosjektet er meget utbredt og blir aktivt sjekket for sikkerhetshull. SSH er også installert på de aller fleste Linux-servere, og en vil dermed unngå å lytte på en ekstra port. 
 
-Ulempen med å kjøre sjekker over SSH er at man må sette opp nøkkelbasert innlogging mellom Icinga-serveren og alle Linux-serverne som skal overvåkes. En kan selvsagt begrense rettigheter for nagios-brukeren som kjører sjekkene, men den vil fortsatt ha muligheten til å logge inn til et shell og eksekvere kommandoer. Dette kan føre til at en potensiell angriper via Icinga-serveren har en vei inn til alle servere som overvåkes.
-
-SSH gir også endel overhead (ref man page) både på nettverkstrafikk og i CPU-tid. En måte å minske dette på er å benytte SSH med ControlMaster. Dette innebærer en endring i SSH-konfigurasjonen på serveren der SSH-klienten lagrer informasjon om hver utgående TCP- tilkobling slik at denne kan benyttes om nye tilkoblinger blir forsøkt mot samme host. Dermed unngår en å sette opp en ny TCP-tilkobling for hver ny sjekk som skal utføres på hosten.  
+Ulempen med å kjøre sjekker over SSH er at man må sette opp nøkkelbasert innlogging mellom Icinga-serveren og alle Linux-serverne som skal overvåkes. En kan begrense rettigheter for brukeren som kjører sjekkene, men den vil fortsatt ha muligheten til å logge inn til et shell og eksekvere kommandoer. Dette kan føre til at en potensiell angriper via Icinga-serveren har en vei inn til alle servere som overvåkes.
+% TODO
+% SSH forced command
+% en mulig løsning kan være å sette opp forced commands
+SSH gir også endel overhead både på nettverkstrafikk og i CPU-tid /ref http://www.openbsd.org/cgi-bin/man.cgi?query=ssh. En måte å minske dette på er å benytte SSH med ControlMaster. Dette innebærer en endring i SSH-konfigurasjonen på serveren der SSH-klienten lagrer informasjon om hver utgående TCP- tilkobling slik at denne kan benyttes om nye tilkoblinger blir forsøkt mot samme host. Dermed unngås en ny TCP-tilkobling for hver ny sjekk som skal utføres på hosten.
 
 \subsubsection{SNMP (Simple Network Management Protocol)}
 
@@ -418,9 +417,10 @@ iso(1). org(3). dod(6). internet(1). private(4). enterprises(1). apc(318). produ
 
 Denne OID-en er definert i APCs MIB-fil "PowerNet MIB". Ved å laste inn denne kan en også benytte "PowerNet-MIB::upsAdvBatteryCapacity.0".
 
-SNMP finnes i flere versjoner. I dag brukes for det meste versjon 2c og den nyeste, versjon 3. v2c og v1 er ikke kompatible, men i praksis støtter det meste av utstyr som støtter v3 eller v2c også v1 \cite{rfc3584}. Hovedforskjellen mellom versjon 2c og 3 er at versjon 3 krypterer dataene over nettverket, men krever da også mer konfigurasjon og vedlikehold. Sikkerhetsaspektet ved disse er diskutert videre i sikkerhets kapittelet \ref{chap:sikkerhet}. 
+% TODO sjekke forskjellen på de forskjellige protokollene
+SNMP finnes i flere versjoner. I dag brukes for det meste versjon 2c og den nyeste, versjon 3. v2c og v1 er ikke kompatible, men i praksis støtter det meste av utstyr som støtter v3 eller v2c også v1 \cite{rfc3584}. Hovedforskjellen mellom versjon 2c og 3 er at versjon 3 krypterer dataene over nettverket, men krever da også mer konfigurasjon og vedlikehold. Sikkerhetsaspektet ved dette er diskutert videre i Kapittel \ref{chap:sikkerhet}. 
 
-Man har to muligheter når man skal overvåke med SNMP. Enten kan enhetene selv rapportere inn hendelelser via SNMP trap/inform, eller så kan serveren spørre enhetene via SNMP GetRequest. Valg av det første medfører at en kan gjøre varsling umiddelbart, men da må også hver enhet konfigureres med parametere for hvilke traps som skal sendes og hvor. Icinga har ingen støtte for å motta traps, men en kan installere en egen daemon for dette og rapportere inn data som passive sjekker. 
+Det eksisterer to muligheter når enheter skal overvåkes via SNMP. Enten kan enhetene selv rapportere inn hendelelser via SNMP trap/inform, eller så kan serveren spørre enhetene via SNMP GetRequest. Valg av det første medfører at en kan gjøre varsling umiddelbart, men da må også hver enhet konfigureres med parametere for hvilke trap-er som skal sendes og til hvilken IP-adresse. Icinga har ingen støtte for å motta trap-er, men en kan installere en egen daemon for dette og rapportere inn data med passive sjekker. 
 
 For å benytte SNMP trap/inform må en tillate tilkoblinger til overvåkingsserveren i stedet for bare fra. Hvilke trap-meldinger som skal sendes må også konfigureres på hver enhet, og en vil da ikke kunne ha alle konfigurasjoner er på ett sted.
 
@@ -431,14 +431,14 @@ For å benytte SNMP trap/inform må en tillate tilkoblinger til overvåkingsserv
     \label{SNMP}
 \end{figure}
 
-SNMP benytter seg av UDP for å levere traps. UDP er en såkalt upålitelig protokoll, noe som vil si at det ikke er noen omsending av pakker eller noen tilbakemelding (ack) for at pakkene kommer fram. Derfor kan en risikere å miste en trap. SNMP inform, som kom i SNMPv3, løser dette ved at agenten vil sende en ny inform-pakke i et intervall, helt til manageren gir beskjed om at trap-en er mottatt.
+SNMP benytter seg av UDP for å levere trap-meldinger. UDP er en såkalt upålitelig protokoll, noe som vil si at det ikke er noen omsending av pakker eller noen tilbakemelding (ack) for at pakkene kommer fram. Derfor kan en risikere å miste en trap. SNMP inform, som kom i SNMPv3, løser dette ved at agenten vil sende en ny inform-pakke i et intervall, helt til manageren gir beskjed om at trap-en er mottatt.
 
 For å benytte SNMP på Windows- og Linux-servere kreves installasjon av en SNMP-agent \cite{mssnmp} \cite{netsnmp}.
 
 \subsubsection{WMI (Windows Management Instrumentation)}
-WMI er et grensesnitt som gjør det mulig å lage programmer eller script som utfører oppgaver mot operativsystemet Windows, enten lokalt eller mot eksterne maskiner. Disse oppgavene kan være alt fra å restarte maskinen til å hente ut logger over hendelser som har inntruffet på maskinen. I en overvåkningsløsning vil det være mest relevant å kjøre kommandoer som henter ut informasjon om maskinen og tjenester som kjører på den. Dette kan for eksempel være hvilke prosesser som bruker mest CPU-tid.
+WMI er et grensesnitt som gjør det mulig å lage programmer eller script som utfører oppgaver mot operativsystemet Windows, enten lokalt eller mot eksterne maskiner. Disse oppgavene kan være alt fra å restarte maskinen, til å hente ut logger over hendelser som har inntruffet på maskinen. I en overvåkningsløsning vil det være mest relevant å kjøre kommandoer som henter ut informasjon om maskinen og tjenester som kjører på den. Dette kan for eksempel være hvilke prosesser som bruker mest CPU-tid.
 
-For å benytte WMI-spørringer fra en ekstern enhet må det konfigureres brukertilgang og brannmurregler \cite{wmiremote}. Med NSclient++ har en mulighet til å kjøre WMI-queries over NRPE.
+For å benytte WMI-spørringer direkte fra en ekstern enhet må det konfigureres brukertilgang og brannmurregler \cite{wmiremote}. Med NSclient++ har en mulighet til å kjøre WMI-queries over NRPE uten ekstra konfigurasjon.
 
 \subsubsection{Valg av Agenter}
 Valg av protokoll eller agenter har basert seg på følgende punkter:
@@ -449,7 +449,7 @@ Valg av protokoll eller agenter har basert seg på følgende punkter:
 	\item Sikkerhet
 	\item Round-trip
 \end{itemize}
-Nettverkstrafikken som blir generert ved en enkelt NRPE- og SSH-sjekk ble målt ved å benytte et enkelt bash-script som kjørte en disk-sjekk 100 ganger. 
+Nettverkstrafikken som ble generert ved en NRPE- og SSH-sjekk ble målt ved å benytte et Bash-script som kjørte en disk-sjekk 100 ganger. 
 
 \begin{lstlisting}
 #!/usr/bin/env bash
@@ -467,7 +467,7 @@ done
 exit 0
 \end{lstlisting}
 
-Både serveren og klienten stod i et eget nettverk i Virtualbox sammen med en Windows-maskin med et nettverkskort satt i promiscious mode, for å kunne sniffe nettverkstrafikken. Denne fanget nettverkstrafikken med WireShark. SSH-trafikken mellom de to maskinene ble hentet ut og data for hver "samtale" kunne analyseres.  
+Både serveren og klienten stod i et eget nettverk i Virtualbox sammen med en Windows-maskin med et nettverkskort satt i promiscious mode, for å kunne sniffe nettverkstrafikken. Denne fanget nettverkstrafikken med WireShark. Trafikken mellom de to maskinene ble hentet ut og data for hver tilkobling kunne analyseres.
 
 Analyse av hvor mye CPU-tid NRPE og SSH trenger for å utføre sjekker ble også gjennomført. Fordi hver sjekk går veldig raskt ble det kjørt 100 disksjekker, 100 ganger. Time-kommandoen ble brukt for å se på tiden brukt i user- og kernel-mode ved 100 sjekker. Dette ble gjort ved å bruke et bash-script som kjører scriptet nedenfor.
 
@@ -485,14 +485,7 @@ for arg in "${args[@]}"; do
 done
 exit 0
 \end{lstlisting}
-
-%\begin{center}
-%\begin{figure}
-%    \includegraphics{img/network-usage.svg}
-%    \caption{Nettverksbruk}
-%    \label{network-usage}
-%\end{figure}
-%\end{center}
+% TODO som vi ser i Figur, er det lurt å bruke nrpe .....
 
 \begin{figure}[H]
     \centering
