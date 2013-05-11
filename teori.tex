@@ -466,13 +466,7 @@ Både serveren og klienten stod i et eget nettverk i Virtualbox sammen med en Wi
 
 Analyse av hvor mye CPU-tid NRPE og SSH trenger for å utføre sjekker ble også gjennomført. Fordi hver sjekk går veldig raskt ble det kjørt 100 disksjekker, 100 ganger. Time-kommandoen ble brukt for å se på tiden brukt i user- og kernel-mode ved 100 sjekker. Dette ble gjort ved å bruke et bash-script som kjører scriptet nedenfor.
 % TODO som vi ser i Figur, er det lurt å bruke nrpe .....	
-\begin{lstlisting}
-#!/usr/bin/env bash
-
-Både serveren og klienten stod i et eget nettverk i Virtualbox sammen med en Windows-maskin med et nettverkskort satt i promiscious mode, for å kunne sniffe nettverkstrafikken. Denne fanget nettverkstrafikken med WireShark. SSH-trafikken mellom de to maskinene ble hentet ut og data for hver "samtale" kunne analyseres.  
-
-Analyse av hvor mye CPU-tid NRPE og SSH trenger for å utføre sjekker ble også gjennomført. Fordi hver sjekk går veldig raskt ble det kjørt 100 disksjekker, 100 ganger. Time-kommandoen ble brukt for å se på tiden brukt i user- og kernel-mode ved 100 sjekker. Dette ble gjort ved å bruke et bash-script som kjører scriptet nedenfor.
-
+For en utrulling i den skalen som vil være aktuelt for IKT-avdelingen vil ikke nettverkstrafikken være noen stor faktor. Selv med 1000-enheter som overvåkes over SSH, der hver kjører 1000 sjekker, vil den totale båndbreddebruken være gjennomsnittlig (8.5kB(60/5)*(1000*100))/3600*8 = 22,14Mb/s.
 \begin{lstlisting}
 #!/usr/bin/env bash
 
