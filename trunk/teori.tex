@@ -11,7 +11,7 @@ Når en leverer tjenester innenfor IT er det viktig at det ikke er kunden som va
 I "The Practice of System and Network Administration" sier forfatteren det godt: ``If you aren’t monitoring it, you aren’t managing it''
 
 \section{Generelt om overvåkning}\label{sec:omovervakning}
-Overvåkning deles ofte inn i kategoriene historisk overvåkning og sanntidsovervåkning /cite Practice of System and network adm. 
+Overvåkning deles ofte inn i kategoriene historisk overvåkning og sanntidsovervåkning \cite{practiceofsystemandnetwork}. 
 Ved historisk overvåkning blir data samlet inn for å ha statistikk over oppetid, ytelse og bruk. Ut fra disse dataene kan en trekke konklusjoner, som for eksempel at VPN-tjenesten har hatt en oppetid på 99,9 \% over det siste året og gjennomsnittlig antall brukere har vært 100, med en økning på 10 \% den siste måneden. Dermed kan en få et overblikk over hvor lang nedetid tjenesten har hatt, og en har dokumentasjon på hvordan leveransen har vært opp mot avtalt leveranse.
 
 Ved å se på stigningstallet kan en også forsøke å si noe om trenden og forventet fremtidig nivå som kan gi en indikasjon på nødvendige skaleringstiltak. For eksempel at en med dagens bruk av toner på kopimaskinen, vil den gå tom for toner innen fredag. 
@@ -396,7 +396,7 @@ Ulempen med å kjøre sjekker over SSH er at man må sette opp nøkkelbasert inn
 SSH gir også endel overhead både på nettverkstrafikk og i CPU-tid \cite{sshmanpage}. En måte å minske dette på er å benytte SSH med ControlMaster. Dette innebærer en endring i SSH-konfigurasjonen på serveren der SSH-klienten lagrer informasjon om hver utgående TCP- tilkobling slik at denne kan benyttes om nye tilkoblinger blir forsøkt mot samme host. Dermed unngås en ny TCP-tilkobling for hver ny sjekk som skal utføres på hosten.
 
 \subsubsection{SNMP (Simple Network Management Protocol)}
-Det meste av mer avansert nettverksutstyr i dag støtter SNMP (/cite Douglas R. Mauro \& Kevin J. Schmidt. (2001). Essential SNMP (1st ed.). Sebastopol, CA: O’Reilly \& Associates). Gjennom protokollen SNMP har man en enkel og effektiv måte å overvåke på, samt en standard som leverandørene følger. 
+Det meste av mer avansert nettverksutstyr i dag støtter SNMP \cite{essentialsnmp}. Gjennom protokollen SNMP har man en enkel og effektiv måte å overvåke på, samt en standard som leverandørene følger. 
 
 SNMP baserer seg på variabler som blir gjort tilgjengelig på enheten som skal overvåkes (kalt agenten). Disse variablene er definert i en Management Information Base (MIB). MIB-filene er ofte tilgjengelige på produsentens hjemmeside. Her beskrives strukturen for dataen i et hiarkisk navnerom som inneholder Object Identifier (OID). Hver OID identifiserer en variabel som kan bli lest eller satt via SNMP. Enheten som ber om disse variablene kalles "manager". 
 
