@@ -24,12 +24,11 @@ I Figur \ref{hostgroupfigur} ser vi hvilke hostgroups de forskjellige hostene sk
         \item Filhierarkiet. Configfiler?
 \end{itemize}
 \section{Legge til mange host-objekter}
-I utrullingsfaser er det naturlig å legge til mange hosts i samme slengen, dette sparer mye tid og scriptet sørger også for at hostfilene genereres syntaktisk korrekte
+I utrullingsfaser vil det være naturlig å legge til mange hosts i samme slengen. Ved å bruke "gen.bash" scriptet spares tid samtidig som scriptet sørger for å generere hostfilene syntaktisk korrekte.
 
-Her er det laget et script som kan generere hosts med atributtene  ``hostname'', ``address'', ``hostgroup'' og ``generic''. Som vist i kode eksemplet under blir ikke hosts med feil verdier tatt med. Hosts uten hostgroup eller generic vil bruke standardverdier definert i scriptet.
+Scriptet genererer hosts med atributtene  ``hostname'', ``address'', ``hostgroup'' og ``generic''. Hosts uten hostgroup eller generic supplert, vil bruke standardverdier definert i scriptet mens hostname og address er obligatrisk å vil generere en feil.
 
-
-
+Eksemplet under viser hvordan scriptet kjøres, samtidig som linjenummer skrives ut dersom informasjon som er obligatorsk mangler.
 \begin{lstlisting}
 monkey@hig1:~/script$ vim servers.csv
 monkey@hig1:~/script$ ./gen.bash servers.csv
@@ -50,8 +49,8 @@ gen.bash  servers.csv  test1.cfg  test2.cfg  test3.cfg  test4.cfg
 monkey@hig1:~/script$
 \end{lstlisting}
 
+Koden under viser hvordan servers.csv er bygget opp. Inneholder også feil for å vise hva som skjer dersom informasjonen ikke er korrekt.
 \begin{lstlisting}
-
 10.0.0.1,test1,windows;,generic1
 10.0.0.1,test2,,jekrjekr
 10.0.0.1,test3
@@ -62,7 +61,7 @@ monkey@hig1:~/script$
 ,
 \end{lstlisting}
 
-Scriptet er vedlagt i Vedlegg \ref{gen.bash}.
+Kildekoden til scriptet ligger i Vedlegg \ref{gen.bash}.
 
 \section{Forventet nedtid}
 Schedule downtime. Er det nevnt under varsling?
