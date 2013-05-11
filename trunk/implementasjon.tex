@@ -308,7 +308,6 @@ GOTO loop
     \label{cpustrain}
 \end{figure}
 
-
 På Linux-servere baserer sjekk av CPU-bruk seg på "load-average" \cite{loadavg} \cite{wiki:loadavg}. Dette er i hovedsak et gjennomsnitt for hvor mange prosesser som bruker eller venter på CPU-en, men disk- eller nettverks-I/O kan også spille inn. For maskiner med flere kjerner og/eller CPU-er vil dette fortone seg annerledes da en kan utføre flere prosesser parallelt. Load-tallene må deles på antallet CPU-kjerner for at det skal kunne brukes samme grenseverdier uavhengig av hvor mange kjerner serveren har. Dette gjøres med opsjonen "r".
 
 Tallene som hentes ut er gjennomsnittet for de siste 1, 5 og 15 minuttene. Det er mer interessant hvis load-en er høy over lengre tid, derfor er grenseverdiene lavere for 5 og 15 minutters intervallene.
@@ -349,19 +348,19 @@ IKT-avdelingen ønsket å overvåke tjenester og prosesser på serverne. Prosses
 Overvåkning av tjenester vil innebære å se på om en eller flere prosesser kjører til en hver tid. NSClient++ har muligheten til å se om en bestemt prosess eller tjeneste kjører eller har stoppet gjennom CheckServiceState. Her spesifiserers navnet på prosessen eller tjenesten, og sjekken svarer på om denne finnes i prosesstabellen.
 \begin{lstlisting}
 define service {
-        service_description     DHCP Service
-        hostgroup_name          dhcp_servers
-        check_command           check_nrpe!CheckServiceState!DHCPServer=started ShowAll
-        use                     generic_service
+    service_description     DHCP Service
+    hostgroup_name          dhcp_servers
+    check_command           check_nrpe!CheckServiceState!DHCPServer=started ShowAll
+    use                     generic_service
 }
 \end{lstlisting}
 Linux-plugin fra nagios-plugins: check\_procs. Her spesifiseres også hvor mange instanser av prosessen som skal forekomme. 
 \begin{lstlisting}
 define service {
-  use            	generic_service
-  hostgroup_name       	linux_servers
-  service_description   NRPE Check my process
-  check_command        	check_nrpe!check_process!sshd 1:40
+    use            	        generic_service
+    hostgroup_name       	linux_servers
+    service_description     NRPE Check my process
+    check_command        	check_nrpe!check_process!sshd 1:40
 }
 \end{lstlisting}
 
@@ -550,16 +549,16 @@ define command {
 %TODO: EXPLAIN
 \begin{lstlisting}
 eeval [ oracle_health ] =
-    	my $chain = "";
-    	foreach my $instance (split(/,/,'$dbinstances$')) {
-            	$chain .= "-x \"command[ $instance ] = check_oracle_health --connect '$user$'\/'$pass$'\@'$instance' --mode '$mode$' --warning $warning$ --critical $critical$ \" ";
-    	}
-    	parse_lines("command [ check_oracle ] = check_multi -r 4 $chain");
-
+    my $chain = "";
+    foreach my $instance (split(/,/,'$dbinstances$')) {
+        $chain .= "-x \"command[ $instance ] = check_oracle_health --connect '$user$'\/'$pass$'\@'$instance' --mode '$mode$' --warning $warning$ --critical $critical$ \" ";
+    }
+    parse_lines("command [ check_oracle ] = check_multi -r 4 $chain");
 \end{lstlisting}
 
 \subsubsection{MySQL}
-For MySQL ligger de nødvendige pakkene i Debians pakkebrønn og kan installeres med apt. De nødvendige pakkene er "mysql-client", for databasetilkoblingen og "libclass-dbi-mysql-perl", som er en Perl-modul for å kunne koble til en MySQL-server. 
+For MySQL ligger de nødvendige pakkene i Debians pakkebrønn og kan installeres med apt. De nødvendige pakkene er "mysql-client", for databasetilkoblingen og "libclass-dbi-mysql-perl", som er en Perl-modul for å kunne koble til en MySQL-server.
+
 \subsubsection{MSSQL}
 For MSSQL var det vanskelig å finne en databaseklient som er fri programvare. Her endte vi opp med FreeTDS \cite{freetds}, sammen med Perl-modulen "libdbd-sybase-perl".
 
@@ -681,8 +680,8 @@ Switchene IKT-Avdelingen bruker er forskjellige modeller fra leverandørne Cisco
 \subsection{Routere og brannmurer}
 IKT-avdelingen benytter Cisco ASA- og Cisco PIX-routere for routing av trafikk mellom forskjellige nettverk. I tillegg utfører de oppgaver som pakkefiltrering, NAT og IPsec-tunneler.
 % TODO: Sjekk at dette er riktig mot docs
-\subsubsection{Ressurser}
 
+\subsubsection{Ressurser}
 Som for switcher brukes check\_nwc\_health til å se at sensorer er OK. I tillegg sjekkes CPU-bruk og minneforbruk gjennom samme plugin. 
 
 For CPU-bruk sjekkes gjennomsnittet over 5 minutter. Grenseverdier er satt til 80 \% på WARNING og 90 \% på CRITICAL, i henhold til det Cisco anbefaler \cite{ciscounifiedcommunication}. Høy CPU-bruk kan føre til dårligere ytelse, høy rate av buffer-feil og generelle feil med responsivitet \cite{ciscocpurouters}
@@ -690,7 +689,6 @@ For CPU-bruk sjekkes gjennomsnittet over 5 minutter. Grenseverdier er satt til 8
 I følge Cisco kan høyt minneforbruk under vanlig drift indikere at brannmuren er under angrep. \cite{ciscomem}. Dersom en router bruker opp tilgjengelig minne kan det føre til at routeren slutter å svare på kommandoer, telnet-tilkoblinger eller henger \cite{ciscomemproblem} . Cisco anbefaler en grenseverdi på 15 \% ledig minne \cite{ciscounifiedcommunication}. Grenseverdier for minne er derfor satt til 20 \% for WARNING og 15 \% for CRITICAL.
 
 \subsubsection{Failover}
-
 Cisco-routere og brannmurer har en viktig funksjon som kalles failover. Failover fungerer ved at to like enheter settes opp, der en blir satt som "primary" og den andre som "secondary". Secondary kan da overta for primary dersom det skulle bli nødvendig. Routerne kobles sammen med en seriellkabel. Figur \ref{ciscoasafailover} viser oppkoblingen for et Cisco-failover-oppsett. 
 
 \begin{figure}[H]
@@ -823,6 +821,10 @@ Ressurser som er valgt å overvåke for Xen hosts:
 Det oppstod et problem under implementeringen av check\_xenplugin.api, som hadde innvirkning på returnert resultat fra RRD-databasen. Etter å ha lest gjennom koden til selve pluginen og "biblioteket" XenAPI som også er skrevet av op5, ble det oppdaget at denne pluginen bruker siste datapunkt fra intervall nr.1 nevnt over. Resultatet vil da bare være ett datapunkt. Dette er vanskelig å sette varsel på, da en spike kan skje når gitt sjekk kjører. Her ble det avgjort å legge til en ny opsjon for å angi over hvor lang tidsperiode en skal hente ut data. Returnert resultat fra gitt tidsperiode blir gått gjennom, og en gjennomsnittsverdi returneres. Dette er foreløpig bare implementert for CPU- og minnebruk for en host.
 
 \subsection{Trådløse kontrollere}
+IKT-avdelingen bruker en trådløskontrollerløsning fra Meru Networks /cite(burde denne cites?). Disse har en viktig rolle i fylkeskommunens nettverk. På en dag har disse rundt 6000 samtidige brukere tilkoblet via "AP"-er ute på hver lokasjon.
+
+AP-ene i seg selv inneholder ingen konfigurasjon da de starter opp. Denne lastes fra kontrolleren. Alle tilkoblingene går i krypterte sessioner direkte mot kontrolleren hvor trafikken blir sendt til respektive mottakere. Siden det vil gå store mengder trafikk er det viktig at disse blir nøye overvåket.
+
 De trådløse kontrollerne som benyttes av IKT-avdelingen mangler støtter for SNMP-get for informasjon som hentes ut fra switcher og brannmurer, og som CPU- og minnebruk. Dette vil i følge produsenten komme i en senere firmware-oppdatering. Noe av dette kan løses ved å bruke SNMP-traps i stedet og definere verdier for når disse skal sendes ut direkte på kontrollerne. Her ble relevante trap-meldinger som omhandler kontrollerne satt opp.
 
 \begin{itemize}
