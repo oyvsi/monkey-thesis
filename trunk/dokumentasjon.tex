@@ -1,5 +1,5 @@
 \chapter{Dokumentasjon}
-Gjennom prosjektet har det blitt skrevet egen kode, installert ulike pakker, og satt opp konfigurasjon spesifikt for denne overvåkningsløsningen. Dette kapittelet vil gå igjennom implementering av ulike komponenter som vi ser nødvendige å forklare grundigere.
+Gjennom prosjektet har det blitt skrevet egen kode, installert ulike pakker, og satt opp konfigurasjon spesifikt for denne overvåkningsløsningen. Dette kapittelet vil gå igjennom implementering av ulike komponenter som gruppen anser som nødvendig å forklare grundigere.
 
 I Figur \ref{hostfigur} ser vi hvilken generics de forskjellige hostene skal ha.
 
@@ -24,11 +24,11 @@ I Figur \ref{hostgroupfigur} ser vi hvilke hostgroups de forskjellige hostene sk
         \item Filhierarkiet. Configfiler?
 \end{itemize}
 \section{Legge til mange host-objekter}
-I utrullingsfaser vil det være naturlig å legge til mange hosts i samme slengen. Ved å bruke "gen.bash" scriptet spares tid samtidig som scriptet sørger for å generere hostfilene syntaktisk korrekte.
+I utrullingsfaser vil det være naturlig å legge til mange hosts på den gang. Ved å bruke "gen.bash"-scriptet spares tid samtidig som scriptet sørger for å generere hostfilene syntaktisk korrekte.
 
-Scriptet genererer hosts med atributtene  ``hostname'', ``address'', ``hostgroup'' og ``generic''. Hosts uten hostgroup eller generic supplert, vil bruke standardverdier definert i scriptet mens hostname og address er obligatrisk å vil generere en feil.
+Scriptet genererer host-objekter med atributtene  ``hostname'', ``address'', ``hostgroup'' og ``generic''. Host-objekter uten hostgroup eller generic supplert, vil få standardverdier definert, mens hostname og address er obligatrisk, og det gis en feilmelding om disse er utelatt.
 
-Eksemplet under viser hvordan scriptet kjøres, samtidig som linjenummer skrives ut dersom informasjon som er obligatorsk mangler.
+Eksempelet under viser hvordan scriptet kjøres og at linjenummer skrives ut dersom informasjon som er obligatorsk mangler.
 \begin{lstlisting}
 monkey@hig1:~/script$ vim servers.csv
 monkey@hig1:~/script$ ./gen.bash servers.csv
@@ -68,14 +68,13 @@ Schedule downtime. Er det nevnt under varsling?
 \section{Stoppe varsling}
 acknowledge, stopper gjenvarsling??
 \section{Autentisering mot Active Directory} 
-LDAP-autentisering brukes for å styre hvem som skal ha tilgang til web-grensesnittene, ved hjelp av grupper og brukere i Active Directory. Dette er støttet direkte i Icinga-web, men må konfigureres på andre måter for Icinga Classic. Det kan opprettes en sikkerhetsgruppe i AD som inkluderer medlemmene som skal få tilgang. Alle som er med i denne gruppen vil få tilgang til Icinga Web, der det også kan defineres hvilken informasjon hver bruker skal kunne se. 
+LDAP-autentisering brukes for å styre hvem som skal ha tilgang til web-grensesnittene, ved hjelp av grupper og brukere i Active Directory. Dette er støttet direkte i Icinga Web, men må konfigureres på andre måter for Icinga Classic. Det kan opprettes en sikkerhetsgruppe i AD som inkluderer medlemmene som skal få tilgang. Alle som er med i denne gruppen vil få tilgang til Icinga Web, der det også kan defineres hvilken informasjon hver bruker skal se. 
 
-Selve LDAP-binden gjøres via PHP-modulen “php-ldap”. Når en bruker logger inn sjekkes først AD, dersom brukeren ikke finnes der, vil Icinga-web prøve sin egen database over brukere. Hvis brukeren finnes her og passordet er riktig vil brukeren bli logget inn. Når brukeren har logget inn for første gang via AD, vil brukeren bli lagret i Icinga-Web databasen. Om brukeren endrer passord i Icinga-Web vil uansett AD først bli spurt før Icinga-Web spør om passordet er riktig i sin egen database
+Selve LDAP-binden gjøres via PHP-modulen “php-ldap”. Når en bruker logger inn sjekkes først AD, dersom brukeren ikke finnes der, vil Icinga-web prøve sin egen database over brukere. Hvis brukeren finnes her og passordet er riktig vil brukeren bli logget inn. Når brukeren har logget inn for første gang via AD, vil brukeren bli lagret i Icinga Web-databasen. Om brukeren endrer passord i Icinga Web vil uansett AD først bli spurt før Icinga Web spør om passordet er riktig i sin egen database
 
 Icinga classic autentiserer mot AD gjennom modulene ldap og authnz\_ldap.
 
 /etc/apache2/conf.d/
-
 \begin{lstlisting}
         AuthName "Authentication"
         AuthType Basic
@@ -88,7 +87,6 @@ Icinga classic autentiserer mot AD gjennom modulene ldap og authnz\_ldap.
 \end{lstlisting}
 
 /usr/share/icinga-web/app/modules/AppKit/config/auth.xml
-
 \begin{lstlisting}
   <ae:parameter name="ldap_allow_anonymous">false</ae:parameter>
             <ae:parameter name="ldap_dsn">ldap://10.60.0.22</ae:parameter>
@@ -105,10 +103,9 @@ Icinga classic autentiserer mot AD gjennom modulene ldap og authnz\_ldap.
 
 For å opprette en ny kontakt i Icinga meldes brukeren inn i gruppen icinga\_kontakter (se synkronisering). Den vil trenge å ha e-postadresse og telefonnummer satt.
 
-Kontaktgrupper hentes fra OU-en icinga\_grupper der alle grupper hentes ut og opprettes i Icinga. For at en gruppe skal varsles må dette legges til på en service. For å slippe å sette opp kontakter for hver service kan en velge å sende med en parameter “gen\_service” for å generere en template som kan benyttes på tjenester som sorterer under hver av kontaktgruppene som blir opprettet.
+Kontaktgrupper hentes fra OU-en icinga\_grupper der alle grupper hentes ut og opprettes i Icinga. For at en gruppe skal varsles må dette legges til på en service. For å slippe å sette opp kontakter for hver service kan en velge å sende med argumentet “gen\_service” for å generere en template som kan benyttes på tjenester som sorterer under hver av kontaktgruppene som blir opprettet.
 
 Eksempel på generisk service som blir opprettet:
-
 \begin{lstlisting}
 define service {
     name network_services
@@ -121,8 +118,7 @@ define service {
 }
 \end{lstlisting}
 
-Denne brukes på en cisco firewall: 
-
+Denne brukes på en Cisco firewall: 
 \begin{lstlisting}
 define service {
         service_description Cisco Firewall CPU Load
@@ -134,7 +130,6 @@ define service {
 \end{lstlisting}
 
 Tabell med sjekker og tilhørende parametere:
-
 \begin{table}
 \begin{center}
 \begin{tabular}{| l | l | l | l |}
@@ -187,6 +182,3 @@ Tabell med sjekker og tilhørende parametere:
 \label{objekt_varsling}
 \end{center}
 \end{table}
-
-
-
