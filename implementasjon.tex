@@ -752,73 +752,126 @@ Ved IKT-avdelingen er det både et Citrix Xen-miljø og et VMware-miljø. Disse 
 For overvåkning av virtuelle maskiner brukes NRPE, det overvåkes da som en "egen" server. Overvåkning av servere som kjører hypervisor-ene vil bestå av å sjekke om ressurser strekker til etterspørselen fra de virtuelle maskinene. En eller flere virtuelle maskiner kan kreve mer ressurser enn en server har fysisk. Dette stjeler både CPU-tid, minne og I/O for å håndtere, noe som vil gå utover gjeste-operativsystem og applikasjoners responstid. Videre vil overvåkning av hvor mye ressurser som brukes gi muligheten for å kalkulere når eventuelle skaleringstiltak må innføres \cite{vmwaremonitoring}. 
 
 \subsubsection{VMware}
-Plugin-en "check\_vmware\_api.pl", som er utviklet av fri programvare firmaet op5 \cite{op5}, er brukt for å hente ut informasjonen fra VMware vCenter. Denne pluginen bruker et SDK-bibliotek i Perl \cite{vmwareperl} for å utføre API-kall til vCenter. Autentisering skjer ved å sende med brukernavn og passord for en brukerkonto som opprettet i vCenter-serveren med read-rettigheter. For å utveksle informasjon blir SOAP-protokollen benyttet \cite{wiki:soap} via HTTPS \cite{ciscovirtual}. 
+\paragraph{Plugin}
+Plugin-en "check\_vmware\_api.pl" , som er utviklet av fri programvare firmaet op5 \cite{op5}, er brukt for å hente ut informasjonen fra VMware vCenter. Denne pluginen bruker et SDK-bibliotek i Perl \cite{vmwareperl} for å utføre API-kall til vCenter. Autentisering skjer ved å sende med brukernavn og passord for en brukerkonto som opprettet i vCenter-serveren med read-rettigheter. For å utveksle informasjon blir SOAP-protokollen benyttet \cite{wiki:soap} via HTTPS \cite{ciscovirtual}.
+
+VMware vCenter bruker fire intervaller for lagring av historisk data \cite{vmwareperfintervals}. Dette er gjennomsnittet for:
 \begin{enumerate}
-	\item hvert 5. minutt over en dag 
-	\item hvert 30. minutt i en uke
-	\item hver 2. time i en måned
-	\item en dag over ett år
+        \item hvert 5. minutt over en dag
+        \item hvert 30. minutt i en uke
+        \item hver 2. time i en måned
+        \item en dag over ett år
 \end{enumerate}
 
 Pluginen i CLI:
 
-
-./check\_vmware\_api.pl -D <Virtual Center IP-adresse> -u <brukernavn> -p <passord> | -H <host\_navn> -N <vm\_navn> -C <cluster\_navn>  -l <hovedkommando> -s <subkommando> -i <interval> -T <timeshift>
+\begin{lstlisting}
+./check_vmware_api.pl -D <Virtual Center IP-adresse> -u <brukernavn> -p <passord> | -H <host_navn> -N <vm_navn> -C <cluster_navn>  -l <hovedkommando> -s <subkommando> -i <interval> -T <timeshift>
+\end{lstlisting}
 
 For å overvåke flere parametere kan en legge til kode i plugin-en, så lenge ønskede parametere er tilgjengelig via API-et. Navnet på funksjoner følger standarden:
 
-<host eller vm eller cluster>\_<hovedkommando>\_info 
+<host eller vm eller cluster>\_<hovedkommando>\_info
 
-For å legge til en ny CPU-parameter finner en "host\_cpu\_info()"-funksjonen og legger til en elseif på subkommandoen som brukes for å referere til et gitt parameter i VMware API-et. En kan følge oppsettet på de funksjonene som allerede er definert. Dette krever noe kunnskaper om språket Perl.
+For å legge til en ny CPU-parameter finner en "host\_cpu\_info"  funksjonen og legger til en elseif på subkommandoen som brukes for å referere til et gitt parameter i VMware API-et. En kan følge oppsettet på de funksjonene som allerede er definert. Dette krever noe kunnskaper om språket Perl.
 
-For alle parametere som blir hentet ut blir tilleggsopsjonene "-i 300" og "-T 600" sendt med. Som nevnt over lagres data i ulike intervall, og opsjonen "-i 300" vil si at det hentes ut data med intervall-ID 300 og vi får da gjennomsnittet for 5 minutter med datapunkt for hvert 20 sekund (standard innhenting i Virtual Center). Opsjonen "-T" er timsehift i sekunder, som vil si at det returneres data fra tiden sjekken blir kjørt og 600 sekunder tilbake i tid. 
+For alle parametere som blir hentet ut blir tilleggsopsjonene "-i 300" og "-T 600" sendt med. Som nevnt over lagres data i ulike intervall, og opsjonen "-i 300"  vil si at det hentes ut data med intervall-ID 300 og vi får da gjennomsnittet for 5 minutter med datapunkt for hvert 20 sekund (standard innhenting i Virtual Center). Opsjonen "-T"  er timsehift i sekunder, som vil si at det returneres data fra tiden sjekken blir kjørt og 600 sekunder tilbake i tid.
 
-Etter analyse av output fra pluginen ble det observert at dette var innstillingene som ga oss data om det siste 5 minutters-intervallet. Dette var ønskelig fordi pluginen varsler mot det siste intervallet, så de andre intervallene var overflødige. Andre opsjoner som ble testet var bare "-i 300", men her kom det 288 resultater tilbake. Dette er antall datapunkt som blir generert i 5 minutters-intervallet for en dag. /ref http://pubs.vmware.com/vsphere-51/index.jsp?topic=2Fcom.vmware.wssdk.pg.doc2FP\_Performance.18.6.html
+Etter analyse av output fra pluginen ble det observert at dette var innstillingene som ga oss data om det siste 5 minutters-intervallet. Dette var ønskelig fordi pluginen varsler mot det siste intervallet, så de andre intervallene var overflødige. Andre opsjoner som ble testet var bare "-i 300", men her kom det 288 resultater tilbake. Dette er antall datapunkt som blir generert i 5 minutters-intervallet for en dag. \cite{vmwareperfintervals}
 
+\paragraph{Ressurser}
 
-To counters er benyttet i overvåkningen, og vil være eksempler på hvordan en setter opp sjekker. Disse kan brukes som referanse for utvidelse av overvåkningen av VMware-miljøet. 
+To counters er benyttet i overvåkningen, og vil være eksempler på hvordan en setter opp sjekker. Disse kan brukes som referanse for utvidelse av overvåkningen av VMware-miljøet.
 
 Ressurser som nå overvåkes \cite{ciscovirtual} \cite{vmwaremonitoring}:
- 
+
 \subsubsection*{CPU}
 
-Counter usage.average (\%) over siste 5 minutter -  WARNING 75 CRITICAL 90 
+Grenseverdier her er satt til samme nivå som tilsvarende alarm i Virtual Center, og gir indikasjon på at det kan være en eller flere virtuelle maskiner som krever for mye CPU-kraft i forhold til hva hosten har tilgjengelig. Det kan også være et for stort antall virtuelle maskiner på hosten \cite{vmwarecounters}.
 
+Counter usage.average (\%) - ``Actively used CPU of the host, as a percentage of the total available CPU. Active CPU is approximately equal to the ratio of the used CPU to the available CPU. available CPU = \# of physical CPUs x clock rate''
 
-``Actively used CPU of the host, as a percentage of the total available CPU. Active CPU is approximately equal to the ratio of the used CPU to the available CPU. available CPU = \# of physical CPUs x clock rate''
-
-Grenseverdier her er satt til samme nivå som tilsvarende alarm i Virtual Center, og gir indikasjon på at det kan være en eller flere virtuelle maskiner som krever for mye CPU-kraft i forhold til hva hosten har tilgjengelig. Det kan også være et for stort antall virtuelle maskiner på hosten \cite{vmwarecounters}. 
+Grenseverdier (\%): WARNING 75 CRITICAL 90
 
 \subsubsection*{Minne}
 
-Counter usage.average (\%) warning: 80 critical: 90
+Grenseverdie her er satt til samme nivå som Virtual Center, og vil gi indikasjon på om virtuelle maskiner krever mer minne enn hosten har tilgjengelig. Når det er igjen 6 \% minne (tilgjengelig) vil hosten iverksette enten ballooning og eventuelt swapping. Ballooning vil si at en host vil kreve tilbake minne fra virtuelle maskiner uten å hensyn til hva den tar. Dette kan gå utover applikasjoner som ligger i minne for en virtuell maskin. Disse de to minnehåndteringsteknikkene krever CPU-kraft og er en indikasjon på at minneforbruket er for høyt.
 
-"Percentage of available machine memory: consumed ÷ machine-memory-size"
+Counter: usage.average (\%) - ``Percentage of available machine memory: consumed ÷ machine-memory-size''
 
-Grenseverdier her er satt til samme nivå som Virtual Center, og vil gi indikasjon på om virtuelle maskiner krever mer minne enn hosten har tilgjengelig. Når det er igjen 6 \% minne (tilgjengelig) vil hosten iverksette enten ballooning og eventuelt swapping. Disse de to minnehåndteringsteknikkene krever CPU-kraft og er en indikasjon på at minneforbruket er for høyt
+Grenseverdier (\%): WARNING 80 CRITICAL 90
 
-\subsubsection{Xen}
+\subsubsection{Citrix Xen}
 
-For overvåkning av Xen-miljøet ble det kun funnet en plugin som gir muligheten for å hente ut informasjon fra host-er og virtuelle maskiner. Plugin-en "check\_xen\_api.pl" bruker biblioteket "XenAPI" for å generere URL-er. Disse brukes videre for spørringer mot en RRD-database, hvor "XAPI" lagrer data \cite{xenwiki}. Det er ikke like mange tellere som er tilgjengelige som for VMware og I/O-data er foreløpig ikke tilgjengelig. Ressursdata som overvåkes for host-er er CPU- og minnebruk.
+For Citrix Xen er det satt opp flere "Resource Pools"  og for å hente ut informasjon om en host må en Master-host kontaktes. Master-hosten har ansvar
+for å presentere et administrativt grensesnitt, og videresender kommandoer mot spesifikke hosts i Resource Pool-et.
 
-RRD-databasen lagrer data i følgende intervaller:
+\paragraph{Plugin}
+
+For overvåkning av Xen-miljøet ble det kun funnet en plugin som gir muligheten for å hente ut informasjon fra host-er og virtuelle maskiner. Plugin-en "check\_xen\_api.pl"  bruker biblioteket "XenAPI"  for å generere URL-er. Disse brukes videre for spørringer mot en RRD-database, hvor "XAPI"  lagrer data \cite{xenwiki}. Det er ikke like mange tellere som er tilgjengelige som for VMware og I/O-data er foreløpig ikke tilgjengelig. Ressursdata som overvåkes for host-er er CPU- og minnebruk.
+
+Pluginen i CLI:
+\begin{lstlisting}
+./check_xenapi.pl -S <Master IP> -u <brukernavn> -p <passord> -H <hostname> -l <hovedkommando> -s <subkommando>
+\end{lstlisting}
+
+Opsjonen "-H"  brukes for å spesifisere hvilken host en vil kjøre sjekken mot. Den må være i samme pool som oppgitt Master-host i opsjonen "-S".
+
+For å få kjørt sjekkene mot Xen-hosts må det angis addressen til to enheter, Master host-en og host-en det skal hentes ut informasjon om. For å kunne sette en Master-IP på ett ojekt, og ikke for hvert host-objekt i et pool, ble det opprettet et generic-objekt. I generic-objektet settes Master IP-en til et gitt pool via en customvariable. Alle host-objekter som bruker dette generic-objektet arver da denne customvariabelen, og MasterIP-en kan endres fra et punkt.
+
+Under vises et eksempel hvordan dette kan konfigureres for ett pool med to host-objekter
+
+\begin{lstlisting}
+// generic-objektet
+define host {
+        use generic_linux_host
+        name generic_xen_pool_1
+        _MASTERIP 10.0.1.20
+}
+
+
+// To host-objekt som arver generic-objektet
+define host {
+        name Pool_1_Xen_Host_1
+        address 10.0.1.21
+        use generic_xen_pool_1
+}
+
+define host {
+        name Pool_1_Xen_Host_2
+        address 10.0.1.22
+        use generic_xen_pool_1
+}
+\end{lstlisting}
+
+Opsjenene blir da "-S \$HOST\_MASTERIP\$" og "-H \$HOSTADDRESS\$".
+
+RRD-databasen pluginen spør, lagrer data i følgende intervaller:
+
 \begin{enumerate}
-	\item Hvert 5. sekund i en 10 minutters periode
-	\item Hvert minutt for de siste 2 timene
+        \item Hvert 5. sekund i en 10 minutters periode
+        \item Hvert minutt for de siste 2 timene
 	\item Hver time for den siste uken
-	\item Hver dag for det siste året
+        \item Hver dag for det siste året
 \end{enumerate}
 
-For hvert 5. sekund blir aktuelle datapunkter lagret. For de andre intervallene blir en minimum-, maksimum-, og gjennomsnittsverdi over gitt tidsperiode lagret ved bruk av en konsolideringsfunksjon. %BUNDY REF 
+For hvert 5. sekund blir aktuelle datapunkter lagret. For de andre intervallene blir en minimum-, maksimum-, og gjennomsnittsverdi over gitt tidsperiode lagret ved bruk av en konsolideringsfunksjon. \ref{xenrrd}
 
+Det oppstod et problem under implementeringen av check\_xenplugin.api, som hadde innvirkning på returnert resultat fra RRD-databasen. Etter å ha lest gjennom koden til selve pluginen og "biblioteket"  XenAPI som også er skrevet av op5, ble det oppdaget at denne pluginen bruker siste datapunkt fra intervall nr.1 nevnt over. Resultatet vil da bare være ett datapunkt. Dette er vanskelig å sette varsel på, da en spike kan skje når gitt sjekk kjører. Her ble det avgjort å legge til en ny opsjon for å angi over hvor lang tidsperiode en skal hente ut data. Returnert resultat fra gitt tidsperiode blir gått gjennom, og en gjennomsnittsverdi returneres. Dette er foreløpig bare implementert for CPU- og minnebruk for en host
+
+\paragraph{Ressurser}
 Ressurser som er valgt å overvåke for Xen hosts:
 
 \begin{itemize}
-\item CPU-bruk - warning: 80 critical: 90 Totalbruk for alle kjerner ÷ antall kjerner
-\item Minne-bruk (MB og \%, varsler på \%) - warning: 80 critical: 90 Totalt allokert minne - ledig minne 
+        \item CPU-bruk(Totalbruk for alle kjerner ÷ antall kjerner)
+        \begin{itemize}
+                \item Grenseverdier (\%): WARNING 80 CRITICAL 90
+        \end{itemize}
+        \item Minne-bruk (Totalt allokert minne - ledig minne)
+        \begin{itemize}
+                \item Grenseverdier (\%): WARNING 80 CRITICAL 90
+        \end{itemize}
 \end{itemize}
-
-Det oppstod et problem under implementeringen av check\_xenplugin.api, som hadde innvirkning på returnert resultat fra RRD-databasen. Etter å ha lest gjennom koden til selve pluginen og "biblioteket" XenAPI som også er skrevet av op5, ble det oppdaget at denne pluginen bruker siste datapunkt fra intervall nr.1 nevnt over. Resultatet vil da bare være ett datapunkt. Dette er vanskelig å sette varsel på, da en spike kan skje når gitt sjekk kjører. Her ble det avgjort å legge til en ny opsjon for å angi over hvor lang tidsperiode en skal hente ut data. Returnert resultat fra gitt tidsperiode blir gått gjennom, og en gjennomsnittsverdi returneres. Dette er foreløpig bare implementert for CPU- og minnebruk for en host.
 
 \subsection{Trådløse kontrollere}
 IKT-avdelingen bruker en trådløskontrollerløsning fra Meru Networks /cite(burde denne cites?). Disse har en viktig rolle i fylkeskommunens nettverk. På en dag har disse rundt 6000 samtidige brukere tilkoblet via "AP"-er ute på hver lokasjon.
