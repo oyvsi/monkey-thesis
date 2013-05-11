@@ -129,7 +129,7 @@ function getGraphStats(graphStats) {
 					enabled: true,
 					style: {
 						fontSize: "16px",
-						//lineHeight: "auto"
+						lineHeight: "auto"
 					}
 				},
 				animation: false, 
