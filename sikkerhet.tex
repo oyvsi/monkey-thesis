@@ -20,9 +20,9 @@ I SNMP v3 er det mange muligheter for økt sikkerhet:
 \end{itemize}
 
 \subsubsection{NRPE}
-For kryptering og gjenkjenning av hosts har NRPE implementert OpenSSL med en anonymous Diffie-Hellmann. Plugin-en bruker h-filen dh.h til å generere base-nummer og prim-nummer for diffie-hellmann nøkkelutveksling. Disse blir satt statisk ved kompilering av kildekoden, noe som vil si at det er likt for alle debian-pakkene. Etter autentisering av host og Icinga-serveren brukes AES 256 bit for kryptering av trafikk. cite https://github.com/KristianLyng/nrpe/blob/master/README.SSL
+For kryptering og gjenkjenning av hosts har NRPE implementert OpenSSL med en anonymous Diffie-Hellmann. Plugin-en bruker h-filen dh.h til å generere base-nummer og prim-nummer for diffie-hellmann nøkkelutveksling. Disse blir satt statisk ved kompilering av kildekoden, noe som vil si at det er likt for alle debian-pakkene. Etter autentisering av host og Icinga-serveren brukes AES 256 bit for kryptering av trafikk \cite{nrpessl}.
 
-NRPE blir som nevnt tidligere i x.x brukt for å eksekvere kommandoer på eksterne maskiner, og kan være en angrepsvektor både fra overvåkningsservern og via andre enheter til de den er installert på. Den eksterne maksinen som NRPE blir installert på vil åpne opp for sikkerhetsrisikoer, men det er fortsatt tilpasninger som kan gjøres for å unngå tilgang for uvedkommende og utførelse av ondsinnede handlinger. I konfigurasjonen må en definere hvilke hosts som skal kunne kommunisere med serveren, en må da vite hvilke IP-er som er definert i denne listen. Her vil overvåkningsserveren  i de fleste tilfeller være en definert IP, og da kan det spoofes om denne er kjent for en angriper. En kan også via konfigurasjonen endre porten eksterne enheter skal lytte på. Standardisert port kan finnes i dokumentasjonen så denne bør endres for å skjule tjenestenavn ved portscanning.
+NRPE blir som nevnt tidligere i \ref{sec:nrpe} brukt for å eksekvere kommandoer på eksterne maskiner, og kan være en angrepsvektor både fra overvåkningsservern og via andre enheter til de den er installert på. Den eksterne maksinen som NRPE blir installert på vil åpne opp for sikkerhetsrisikoer, men det er fortsatt tilpasninger som kan gjøres for å unngå tilgang for uvedkommende og utførelse av ondsinnede handlinger. I konfigurasjonen må en definere hvilke hosts som skal kunne kommunisere med serveren, en må da vite hvilke IP-er som er definert i denne listen. Her vil overvåkningsserveren  i de fleste tilfeller være en definert IP, og da kan det spoofes om denne er kjent for en angriper. En kan også via konfigurasjonen endre porten eksterne enheter skal lytte på. Standardisert port kan finnes i dokumentasjonen så denne bør endres for å skjule tjenestenavn ved portscanning.
 
 For Windows som bruker NSClient++ kan det settes opp passord som i tillegg kreves for kommunikasjon, dette legger enda et lag med sikkerthet.
 
@@ -36,10 +36,11 @@ allow\_nasty\_meta\_chars, gjør at WMI-spørringer kan sendes som parameter til
 \subsubsection{Brukerkontoer}
 En brukerkonto ble opprettet i Active Directory for Icinga. Denne benyttes ved tilkobling mot domenet på flere områder:
 \begin{itemize}
-	\item Sjekk av LDAP
-	\item Synkronisering av kontakter
+	\item Sjekk av LDAP.
+	\item Synkronisering av kontakter.
+	\item Tilkobling mot MSSQL database.
 	\item ???
-	\item Service-kontoer i forbindelse med VMware og Xen ble opprettet med read-only rettigheter
+	\item Service-kontoer i forbindelse med VMware og Xen ble opprettet med read-only rettigheter.
 \end{itemize}
 
 \subsubsection{LDAP}
