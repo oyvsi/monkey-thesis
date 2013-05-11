@@ -709,7 +709,7 @@ Begge brannmurene legges i en hostgroup som er lagt på service-objektet for "ci
 
 \subsubsection{VPN}
 
-For brannmurer som har VPN-tjeneste sjekkes antall oppkoblede brukere opp mot det antallet brannmuren er lisensiert for. Begge disse verdiene finnes som SNMP OID-er definert i "CISCO-FIREWALL-MIB" /ref finn ref. Det fantes allerede en plugin som sjekker antall tilkoblede brukere \cite{checkciscovpn}. Denne ble endret til i tillegg å hente ut det maksimale antallet og sammeligne brukt kapasitet i prosent mot grenseverdier, som kommer inn som argumenter.
+For brannmurer som har VPN-tjeneste sjekkes antall oppkoblede brukere opp mot det antallet brannmuren er lisensiert for. Begge disse verdiene finnes som SNMP OID-er definert i "CISCO-FIREWALL-MIB" \cite{cisco_fw_mib}. Det fantes allerede en plugin som sjekker antall tilkoblede brukere \cite{checkciscovpn}. Denne ble endret til i tillegg å hente ut det maksimale antallet og sammeligne brukt kapasitet i prosent mot grenseverdier, som kommer inn som argumenter.
 
 \subsubsection{Båndbredde}
 For å overvåke bruk av båndbredde ut av og inn av en port på Cisco ASA og PIX finnes to muligheter:
