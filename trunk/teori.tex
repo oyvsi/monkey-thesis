@@ -1,5 +1,6 @@
 \chapter{Teori}
 I dette kapittelet gjennomgås teori og konsepter som er nødvendig å forstå før implementasjonsdelen.
+
 \section{Hvorfor overvåke}
 Nesten alle bedrifter i dag bruker IT-systemer for å gjøre seg mer effektiv og konkurransedyktig i dagens marked. Mange av disse systemene blir ofte tatt for gitt, fordi de rett og slett bare fungerer. Men hva skjer om e-posten en dag ikke virker, eller månedens lønn ikke kommer når den skal? I slike tilfeller kan en overvåkningsløsning være viktig for å oppdage og identifisere problemet tidlig.
 
@@ -69,11 +70,9 @@ For databaseoppsett støtter Icinga de tre databasemotorene PostgresSQL, Oracle 
 Icinga har også en tilleggsmodul kalt "Icinga Mobile". Denne gir tilrettelagt grensesnitt for mobile enheter, som var ønsket i oppgavebeskrivelsen. Icinga Mobile kan brukes for å gi en tilstandsvisning tilpasset mindre skjermer. Ved utsendelse av SMS eller e-post til en eller flere ansatte, kan Icinga-Mobile brukes via samme enhet for å se mer utfyllende informasjon om problemet, og gjøre administrative handlinger.
 
 \section{Icinga}
-
 For å kunne forstå implementasjonsdelen av prosjektrapporten er det behov for noe innsikt i hvordan Icinga fungerer. I dette delkapittelet er det viktigste forklart.
 
 \subsubsection{Arkitektur}
-
 Icinga består av tre separate komponenter, som vist i Figur \ref{icingacomponents}.
 
 \begin{figure}[H]
@@ -90,7 +89,6 @@ Icinga Core håndterer planlegging av sjekker gjennom plugins og tar i mot resul
 IDOMOD og IDO2DB kommer i en samlet pakke (IDOutils), men kan separeres ut for å skape et distribuert oppsett. CERN i Sveits har nylig implementert et slikt oppsett med hjelp av lastbalansereren "modgearman" \cite{cernthesis}.
 
 \subsubsection{Web}\label{sec:teoriweb}
-
 I utgangspunktet kommer ikke Icinga med noe webgrensesnitt. Men det er mulig å installere to forskjellige pakker for å få dette. I begge kan en få en oversikt over tilstanden til hosts og services, se konfigurasjon og utsendte varsler, samt utføre kommandoer.
 
 Icinga Classic baserer seg på det samme vindusoppsettet som Nagios. For uthenting av data benyttes CGI-moduler.
@@ -204,7 +202,6 @@ Fordelen er at en får beskjed med en gang noe er galt og kan gi en raskere vars
 \end{figure}
 
 \subsubsection{Hostsjekk}
-
 Resultatet av en host-sjekk vil avgjøre om tilstanden til host-objektet er "UP" eller "DOWN". 
 
 Det er ikke et fast tidsintervall for en hostsjekk med mindre check\_interval er definert. Icinga vil kjøre denne sjekken om en service som er satt opp for host-en skifter tilstand. Servicer som er definert for en host som er i "DOWN" vil automatisk bli satt som "Known service problems", og ingen sjekker vil bli kjørt på dem før host-en er "OK" igjen.
@@ -235,7 +232,6 @@ define command {
 Her benyttes de innebygde variablene "USER1" for banen til plugin-en som kjøres, "HOSTADDRESS" for IP-en til den hosten som sjekken skal kjøres på og den egendefinerte variabelen "\_SSHPORT" som defineres på host-objektet.
 
 \subsubsection{Templates}
-
 En template er ikke et objekt i seg selv, men en mal for et objekt. Med direktivet "register 0" vil ikke Icinga registrere dette objektet for overvåkning. Ved å bruke direktivet "use" kan en i et annet objekt "arve" konfigurasjonen fra templaten. Templates kan også arve, og en kan dermed sette opp et hierarki der en spesifiserer generell konfigurasjon og arver nedover til mer spesiell. 
 
 I eksempelet under er generell konfigurasjon for alle host-objekter definert i "generic\_host", som brukes i de andre objektene. I "generic\_firewall" erstattes verdien for kontaktgruppe, og i cisco\_firewall settes en egendefinert variabel:
@@ -335,7 +331,6 @@ For redundante oppsett kan et host-objekt ha flere "parents" definert. Host-obje
 Ut ifra parent-relasjonene mellom host-objekter i konfigurasjonsfilene genereres også et "Status Map" over nettverket, som vist i Figur \ref{statusmap}. Dette brukes til å visualisere alle relasjonene, og vil gjengi redundante oppsett og hvilke host-objekter som er påvirket av at "parent"-hosten er DOWN.
 
 \section{Service dependency}\label{sec:servicedependency}
-
 Service dependency er en egen objekttype der en kan sette opp avhengighet mellom to service-er. Formålet med dette er å unngå varsel hvis en tjeneste går til DOWN, som følge av at en annen tjeneste er nede. For eksempel bør det ikke varsles at tjenester som er avhengig av autentisering via LDAP-serveren får "access denied"-feilmeldinger, hvis LDAP-serveren er DOWN. 
 
 Icinga sjekker om avhengigheter er definert for en service-sjekk, før denne utføres. Dette er med på å bestemme om det blir sendt ut varsel for service-en.
@@ -392,7 +387,6 @@ NRPE (Nagios Remote Plugin Executor) består av plugin-en "check\_nrpe" på Icin
 \end{figure}
 
 \subsubsection{SSH (Secure Shell)}
-
 Gjennom en tilkobling til en SSH-server kan en spesifisere en kommando som skal kjøres og hente output-en til det opprinnelige shellet. Dette virket som den beste måten å overvåke Linux-servere ved starten av prosjektet. SSH-prosjektet er meget utbredt og blir aktivt sjekket for sikkerhetshull. SSH er også installert på de aller fleste Linux-servere, og en vil dermed unngå å lytte på en ekstra port. 
 
 Ulempen med å kjøre sjekker over SSH er at man må sette opp nøkkelbasert innlogging mellom Icinga-serveren og alle Linux-serverne som skal overvåkes. En kan begrense rettigheter for brukeren som kjører sjekkene, men den vil fortsatt ha muligheten til å logge inn til et shell og eksekvere kommandoer. Dette kan føre til at en potensiell angriper via Icinga-serveren har en vei inn til alle servere som overvåkes.
@@ -402,7 +396,6 @@ Ulempen med å kjøre sjekker over SSH er at man må sette opp nøkkelbasert inn
 SSH gir også endel overhead både på nettverkstrafikk og i CPU-tid \cite{sshmanpage}. En måte å minske dette på er å benytte SSH med ControlMaster. Dette innebærer en endring i SSH-konfigurasjonen på serveren der SSH-klienten lagrer informasjon om hver utgående TCP- tilkobling slik at denne kan benyttes om nye tilkoblinger blir forsøkt mot samme host. Dermed unngås en ny TCP-tilkobling for hver ny sjekk som skal utføres på hosten.
 
 \subsubsection{SNMP (Simple Network Management Protocol)}
-
 Det meste av mer avansert nettverksutstyr i dag støtter SNMP (/cite Douglas R. Mauro \& Kevin J. Schmidt. (2001). Essential SNMP (1st ed.). Sebastopol, CA: O’Reilly \& Associates). Gjennom protokollen SNMP har man en enkel og effektiv måte å overvåke på, samt en standard som leverandørene følger. 
 
 SNMP baserer seg på variabler som blir gjort tilgjengelig på enheten som skal overvåkes (kalt agenten). Disse variablene er definert i en Management Information Base (MIB). MIB-filene er ofte tilgjengelige på produsentens hjemmeside. Her beskrives strukturen for dataen i et hiarkisk navnerom som inneholder Object Identifier (OID). Hver OID identifiserer en variabel som kan bli lest eller satt via SNMP. Enheten som ber om disse variablene kalles "manager". 
