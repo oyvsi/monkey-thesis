@@ -70,7 +70,6 @@ Icinga har også en tilleggsmodul kalt "Icinga Mobile". Denne gir tilrettelagt g
 
 \section{Icinga}
 For å kunne forstå implementasjonsdelen av prosjektrapporten er det behov for noe innsikt i hvordan Icinga fungerer. I dette delkapittelet er det viktigste forklart.
-
 \subsubsection{Arkitektur}
 Icinga består av tre separate komponenter, som vist i Figur \ref{icingacomponents}.
 
@@ -85,7 +84,7 @@ Icinga består av tre separate komponenter, som vist i Figur \ref{icingacomponen
 \subsubsection{Core}
 Icinga Core håndterer planlegging av sjekker gjennom plugins og tar i mot resultatene av disse. Denne informasjonen sendes gjennom SSL-krypterte TCP-sockets videre til IDO2DB-prosessen (Icinga Data Out to Database) gjennom et interface kalt IDOMOD (Icinga Data Out Module). Ved å bruke disse abstraksjonslagene kan databasemotoren enkelt byttes ut. I dokumentasjonen er det laget veiledninger for MySQL, PostgreSQL og Oracle \cite{icingaarchitecture}.
 
-IDOMOD og IDO2DB kommer i en samlet pakke (IDOutils), men kan separeres ut for å skape et distribuert oppsett. CERN i Sveits har nylig implementert et slikt oppsett med hjelp av lastbalansereren "modgearman" \cite{cernthesis}.
+IDOMOD og IDO2DB kommer i en samlet pakke (IDOutils), men kan separeres ut for å skape et distribuert oppsett. CERN i Sveits har nylig implementert et slikt oppsett med hjelp av lastbalansereren "Mod Gearman" \cite{cernthesis}.
 
 \subsubsection{Web}\label{sec:teoriweb}
 I utgangspunktet kommer ikke Icinga med noe webgrensesnitt. Men det er mulig å installere to forskjellige pakker for å få dette. I begge kan en få en oversikt over tilstanden til hosts og services, se konfigurasjon og utsendte varsler, samt utføre kommandoer.
@@ -148,7 +147,7 @@ Sammenhengen mellom objektene er viktig å forstå for å skjønne hvordan sjekk
 \section{Plugin-er}
 Icinga i seg selv kommer uten noen overvåkningssjekker. Til dette benyttes plugin-er.
 
-En plugin i Icinga er et eksternt program som kjøres og outputen hentes inn som data. Resultatet av sjekken hentes fra exit-koden\cite{wiki:returncode} og oversettes til en tilstand etter Tabell \ref{state}.
+En plugin i Icinga er et eksternt program som kjøres og outputen hentes inn som data. Resultatet av sjekken hentes fra exit-koden \cite{wiki:returncode} og oversettes til en tilstand etter Tabell \ref{state}.
 
 Det finnes et sett med offisielle plugin-er til Nagios; nagios-plugins, som utgis av "Nagios Plugins project" \cite{nagiosplugins}. Pakken finnes i en rekke pakkebehandlere og inneholder over 50 plugin-er som er ment for å dekke et grunnleggende overvåkningsbehov.
 
@@ -380,8 +379,8 @@ For å sette en avhengighet mellom to host-objekter benyttes "host dependency". 
 \section{Protokoller og agenter}
 For å kjøre sjekker på enheter må Icinga-serveren kunne kommunisere med operativsystemene på de ulike enhetene. Icinga henviser til protokollene SSH, SNMP, RPC (WMI) og agentene NRPE og NSCA (en del av pakken NSClient++) i dokumentasjonen\cite{icingaintegration} \cite{icingaadditionalsoftware}. 
 
-\subsubsection{NRPE}
-NRPE (Nagios Remote Plugin Executor) består av plugin-en "check\_nrpe" på Icinga-serveren og en daemon som installeres på hver server som skal overvåkes. NRPE eksekverer lokale plugin-er på den eksterne serveren og returner dataen fra denne til check\_nrpe. Tillatelse for eksekveringer defineres i en config-fil på hver server, der en oppgir hvilke IP-er som kan koble seg til og hvilke kommandoer som er gyldige. 
+\subsubsection{NRPE}\label{sec:nrpe}
+NRPE (Nagios Remote Plugin Executor) består av plugin-en ``check\_nrpe'' på Icinga-serveren og en daemon som installeres på hver server som skal overvåkes. NRPE eksekverer lokale plugin-er på den eksterne serveren og returner dataen fra denne til check\_nrpe. Tillatelse for eksekveringer defineres i en config-fil på hver server, der en oppgir hvilke IP-er som kan koble seg til og hvilke kommandoer som er gyldige. 
 
 \begin{figure}[H]
     \centering
@@ -401,7 +400,7 @@ SSH gir også endel overhead både på nettverkstrafikk og i CPU-tid \cite{sshma
 \subsubsection{SNMP (Simple Network Management Protocol)}
 Det meste av mer avansert nettverksutstyr i dag støtter SNMP \cite{essentialsnmp}. Gjennom protokollen SNMP har man en enkel og effektiv måte å overvåke på, samt en standard som leverandørene følger.
 	
-SNMP baserer seg på variabler som blir gjort tilgjengelig på enheten som skal overvåkes (kalt agenten). Disse variablene er definert i en Management Information Base (MIB). MIB-filene er ofte tilgjengelige på produsentens hjemmeside. Her beskrives strukturen for dataen i et hiarkisk navnerom som inneholder Object Identifier (OID). Hver OID identifiserer en variabel som kan bli lest eller satt via SNMP. Enheten som ber om disse variablene kalles "manager". 
+SNMP baserer seg på variabler som blir gjort tilgjengelig på enheten som skal overvåkes (kalt agenten). Disse variablene er definert i en Management Information Base (MIB). MIB-filene er ofte tilgjengelige på produsentens hjemmeside. Her beskrives strukturen for dataen i et hierarkisk navnerom som inneholder Object Identifier (OID). Hver OID identifiserer en variabel som kan bli lest eller satt via SNMP. Enheten som ber om disse variablene kalles "manager". 
 
 En ulempe med SNMP er at OID-ene er lange og tunge å lese. For eksempel for å hente ut batterikapasiteten på en APC UPS benyttes OID-en:
 
@@ -466,7 +465,10 @@ Både serveren og klienten stod i et eget nettverk i Virtualbox sammen med en Wi
 
 Analyse av hvor mye CPU-tid NRPE og SSH trenger for å utføre sjekker ble også gjennomført. Fordi hver sjekk går veldig raskt ble det kjørt 100 disksjekker, 100 ganger. Time-kommandoen ble brukt for å se på tiden brukt i user- og kernel-mode ved 100 sjekker. Dette ble gjort ved å bruke et bash-script som kjører scriptet nedenfor.
 % TODO som vi ser i Figur, er det lurt å bruke nrpe .....	
-For en utrulling i den skalen som vil være aktuelt for IKT-avdelingen vil ikke nettverkstrafikken være noen stor faktor. Selv med 1000-enheter som overvåkes over SSH, der hver kjører 1000 sjekker, vil den totale båndbreddebruken være gjennomsnittlig (8.5kB(60/5)*(1000*100))/3600*8 = 22,14Mb/s.
+For en utrulling i den skalen som vil være aktuelt for IKT-avdelingen vil ikke nettverkstrafikken være noen stor faktor. Selv med 1000-enheter som overvåkes over SSH, der hver kjører 1000 sjekker, vil den totale båndbreddebruken være gjennomsnittlig:
+\begin{equation}
+\frac{8.50kB(kilobytes)\times\frac{60}{5}(1000\times100)}{3600}\times8=22,14Mb/s(megabit per sekund).
+\end{equation}
 \begin{lstlisting}
 #!/usr/bin/env bash
 
