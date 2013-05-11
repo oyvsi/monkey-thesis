@@ -399,7 +399,7 @@ Ulempen med å kjøre sjekker over SSH er at man må sette opp nøkkelbasert inn
 % TODO
 % SSH forced command
 % en mulig løsning kan være å sette opp forced commands
-SSH gir også endel overhead både på nettverkstrafikk og i CPU-tid /ref http://www.openbsd.org/cgi-bin/man.cgi?query=ssh. En måte å minske dette på er å benytte SSH med ControlMaster. Dette innebærer en endring i SSH-konfigurasjonen på serveren der SSH-klienten lagrer informasjon om hver utgående TCP- tilkobling slik at denne kan benyttes om nye tilkoblinger blir forsøkt mot samme host. Dermed unngås en ny TCP-tilkobling for hver ny sjekk som skal utføres på hosten.
+SSH gir også endel overhead både på nettverkstrafikk og i CPU-tid \cite{sshmanpage}. En måte å minske dette på er å benytte SSH med ControlMaster. Dette innebærer en endring i SSH-konfigurasjonen på serveren der SSH-klienten lagrer informasjon om hver utgående TCP- tilkobling slik at denne kan benyttes om nye tilkoblinger blir forsøkt mot samme host. Dermed unngås en ny TCP-tilkobling for hver ny sjekk som skal utføres på hosten.
 
 \subsubsection{SNMP (Simple Network Management Protocol)}
 

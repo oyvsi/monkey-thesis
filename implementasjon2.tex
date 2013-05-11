@@ -266,7 +266,7 @@ For at statusvinduet skulle imøtekomme IKT-avdelingens ønsker, ble det beslutt
 
 Utviklingsprosessen ble startet med et møte med hele IKT-avdelingen for å presentere gruppens forslag til utkast på designet, som vist i Figur \ref{statusvindu_mockup} mockup. Her kom det frem forslag om å vise temperaturene fra serverrom-sensorene som en terning der det fysiske oppsettet kom frem.
 
-Eksisterende programvare for denne type fremvisning ble funnet etter litt søk, og det ble besluttet å gjenbruke Nagdash cite \cite{nagdash}. Løsningen var et godt utgangspunkt for det visuelle, og er skrevet i språket PHP, noe gruppemedlemmene føler seg komfortable med og IKT-avdelingen har benyttet seg av i tidligere prosjekter. 
+Eksisterende programvare for denne type fremvisning ble funnet etter litt søk, og det ble besluttet å gjenbruke Nagdash \cite{nagdash}. Løsningen var et godt utgangspunkt for det visuelle, og er skrevet i språket PHP, noe gruppemedlemmene føler seg komfortable med og IKT-avdelingen har benyttet seg av i tidligere prosjekter. 
 
 Nagdash baserer uthenting av informasjon om host- og serviceobjekter på nagios-api \cite{nagiosapi}, som er en tjeneste som må installeres på Icinga-serveren og setter opp et API over HTTP. Icinga har sitt eget API som det var ønskelig å benytte. Uthenting av informasjon måtte derfor endres til å bruke kall til API-et som Icinga-web tilbyr \cite{icingarestapi}.
 
