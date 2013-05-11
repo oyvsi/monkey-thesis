@@ -485,12 +485,12 @@ service\_severity\_divisor = 4
 \end{equation}
 En host med en child-host som kjører to servicer som er viktige
 \begin{equation}
-Severity = 1 + (2/4) = 1.5
+Severity = 1 + \frac{2}{4} = 1.5
 \end{equation}
 
 En host med to child-hosts som kjører to servicer hver, men er ikke like viktige som nr. 1
 \begin{equation}
-Severity = 1 + (4/4) = 2
+Severity = 1 + \frac{4}{4} = 2
 \end{equation}
 
 Metoden er ikke anvendelig for prioriteringen, da det skal kunne settes på hvilket som helst host- eller service-objekt, og den gjengir ikke viktigheten godt nok.     
