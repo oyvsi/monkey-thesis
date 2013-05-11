@@ -428,7 +428,7 @@ For websider som skal svare på HTTPS sjekkes også utløpsdato for SSL-sertifik
 ./check_http -H portal.hedmark.org -C 50
 \end{lstlisting}
 
-\subsection{Sjekk av redundante oppsett}
+\subsection{Redundante oppsett}
 En ordinær plugin henter status for en service på ett host-objekt. Ved redundante oppsett vil det ikke nødvendigvis være kritisk om en av nodene er nede. For å vurdere statusen av et cluster kan en kjøre en sjekk på hvert enkelt host-objekt, og ta en vurdering basert på resultatene av alle sjekkene samlet.
 
 For å overvåke redundante oppsett, har plugin-ene check\_multi \cite{checkmulti} og check\_cluster \cite{checkcluster} blitt vurdert. Forskjellene på disse er at check\_cluster parser den lokale status.dat filen og ser hvilken tilstand en service eller en host er ved siste sjekk. Pluginen check\_multi derimot kjører plugin-er mot spesifiserte host-objekter, og en kan definere sammenligningsoperator (<,>,=), som vil bli sjekket mot de returnerte resultatene.
@@ -894,7 +894,7 @@ Høy luftfuktighet kan føre til kondens, som igjen kan føre til korrosjon på 
 \subsubsection{Temperatur}
 Det er mye uenighet rundt anbefalte verdier for temperatur i serverrom. I et studie utført ved University of Toronto \cite{torontopaper}, ble det samlet inn data fra tre forskjellige organisasjoners datasentre, deriblant Googles. I studiet ble det konkludert med at faren for hardware-feil ved høyere temperatur øker mindre enn det som har vært vanlig å basere seg på. For DRAM-feil og ``node outages'' fant de ingen korrelasjon til temperaturøkning for intervallet i testen (15° C - 60° C). I dette studiet ble det ikke målt eller tatt hensyn til luftfuktighet. 
 
-ASHRAE anbefaler en inntakstemperatur 18° C - 27° C, mens Sun anbefaling er 20° C - 23° C. Sun bregrunner sin anbefaling med at det er lettere å opprettholde trygge verdier for relativ luftfuktighet. ASHRAE refererer også til studier som viser at det totale strømforbruket kan gå opp ved høyere temperaturer, fordi enheter øker frekvensen på egne vifter \cite{datacentertemp}.
+ASHRAE anbefaler en inntakstemperatur 18° C - 27° C, mens Sun anbefaling er 20° C - 23° C. Sun begrunner sin anbefaling med at det er lettere å opprettholde trygge verdier for relativ luftfuktighet. ASHRAE refererer også til studier som viser at det totale strømforbruket kan gå opp ved høyere temperaturer, fordi enheter øker frekvensen på egne vifter \cite{datacentertemp}.
 
 \subsubsection{Plugin for overvåkning av temperatur og luftfuktighet i Icinga}
 Det fantes allerede en plugin for å sjekke sensorverdiene på APC NetBotz \cite{checknetbotz}. Men denne sammenlignet verdiene med grenseverdier satt i konfigurasjonen på enheten. Det var ønskelig å samle mest mulig av konfigurasjon på Icinga-serveren, derfor ble pluginen omskrevet til å kunne ta inn øvre og nedre grenseverdier som argumenter.
