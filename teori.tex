@@ -1,6 +1,5 @@
 \chapter{Teori}
 I dette kapittelet gjennomgås teori og konsepter som er nødvendig å forstå før implementasjonsdelen.
-
 \section{Hvorfor overvåke}
 Nesten alle bedrifter i dag bruker IT-systemer for å gjøre seg mer effektiv og konkurransedyktig i dagens marked. Mange av disse systemene blir ofte tatt for gitt, fordi de rett og slett bare fungerer. Men hva skjer om e-posten en dag ikke virker, eller månedens lønn ikke kommer når den skal? I slike tilfeller kan en overvåkningsløsning være viktig for å oppdage og identifisere problemet tidlig.
 
@@ -11,7 +10,7 @@ Når en leverer tjenester innenfor IT er det viktig at det ikke er kunden som va
 I "The Practice of System and Network Administration" sier forfatteren det godt: ``If you aren’t monitoring it, you aren’t managing it''
 
 \section{Generelt om overvåkning}\label{sec:omovervakning}
-Overvåkning deles ofte inn i kategoriene historisk overvåkning og sanntidsovervåkning \cite{practiceofsystemandnetwork}. 
+Overvåkning deles ofte inn i kategoriene historisk overvåkning og sanntidsovervåkning /cite Practice of System and network adm. 
 Ved historisk overvåkning blir data samlet inn for å ha statistikk over oppetid, ytelse og bruk. Ut fra disse dataene kan en trekke konklusjoner, som for eksempel at VPN-tjenesten har hatt en oppetid på 99,9 \% over det siste året og gjennomsnittlig antall brukere har vært 100, med en økning på 10 \% den siste måneden. Dermed kan en få et overblikk over hvor lang nedetid tjenesten har hatt, og en har dokumentasjon på hvordan leveransen har vært opp mot avtalt leveranse.
 
 Ved å se på stigningstallet kan en også forsøke å si noe om trenden og forventet fremtidig nivå som kan gi en indikasjon på nødvendige skaleringstiltak. For eksempel at en med dagens bruk av toner på kopimaskinen, vil den gå tom for toner innen fredag. 
@@ -20,7 +19,7 @@ Sanntidsovervåkning vil si at en sjekker tilstanden til en enhet eller tjeneste
 
 Den enkleste formen for overvåkning av en server er å sende en ICMP echo request (ping), og se om en får et svar (også kjent som pong). En måler tiden til en får et svar tilbake, og sjekker hvor mange prosent av antall forsøk en får svar på. Dette forteller deg om enheten du kontakter har en delvis fungerende IP-stack og om linjen i mellom fungerer, men det forteller deg ikke noe om tjenestene som kjører. Det er tross alt tjenestene som kjører på enheten som er grunnen til at man trenger enheten i utgangspunktet.
 
-En bedre løsning er å teste hver av tjenstene. For en webserver kan det være å prøve å hente ned forsiden av hjemmesiden som skal leveres og sjekke at man får reponsen "HTTP OK 200". Da vil en vite at webserveren kjører og leverer ut sider riktig. Et skritt videre kan være å sjekke at siden inneholder riktig informasjon og at en ikke har blitt utsatt for et hackerangrep der innholdet er endret (defacing).
+En bedre løsning er å teste hver av tjenstene. For en webserver kan det være å prøve å hente ned forsiden av hjemmesiden som skal leveres og sjekke at man får reponsen "HTTP OK 200". Da vil en vite at webserveren kjører og leverer ut sider riktig. Et skritt videre kan være å sjekke at siden inneholder riktig informasjon og at det ikke har blitt endret av uvedkommende (defacing).
 
 \section{Overvåkning i ITIL}
 ITIL (Information Technology Infrastucture Library) er et sett med standarder og konsepter som beskriver hvordan IT-tjenester kan kvalitetsikres innenfor leveranse, drift og support. ITIL er i dag i bruk i IT-bedrifter over hele verden og gir et felles rammeverk for hvordan en bør praktisere innen IT-sektoren. ITIL blir definert i et sett med bøker som blir utgitt av Office of Government Commerce i Storbritannia.
@@ -239,6 +238,10 @@ I eksempelet under er generell konfigurasjon for alle host-objekter definert i "
 Template-en generic\_host: 
 
 \begin{lstlisting}
+
+Template-en generic\_host: 
+
+\begin{lstlisting}
 define host {
 	name                            generic_host    ; The name of this host template
 	notifications_enabled           1       ; Host notifications are enabled
@@ -331,6 +334,7 @@ For redundante oppsett kan et host-objekt ha flere "parents" definert. Host-obje
 Ut ifra parent-relasjonene mellom host-objekter i konfigurasjonsfilene genereres også et "Status Map" over nettverket, som vist i Figur \ref{statusmap}. Dette brukes til å visualisere alle relasjonene, og vil gjengi redundante oppsett og hvilke host-objekter som er påvirket av at "parent"-hosten er DOWN.
 
 \section{Service dependency}\label{sec:servicedependency}
+
 Service dependency er en egen objekttype der en kan sette opp avhengighet mellom to service-er. Formålet med dette er å unngå varsel hvis en tjeneste går til DOWN, som følge av at en annen tjeneste er nede. For eksempel bør det ikke varsles at tjenester som er avhengig av autentisering via LDAP-serveren får "access denied"-feilmeldinger, hvis LDAP-serveren er DOWN. 
 
 Icinga sjekker om avhengigheter er definert for en service-sjekk, før denne utføres. Dette er med på å bestemme om det blir sendt ut varsel for service-en.
@@ -387,16 +391,16 @@ NRPE (Nagios Remote Plugin Executor) består av plugin-en "check\_nrpe" på Icin
 \end{figure}
 
 \subsubsection{SSH (Secure Shell)}
-Gjennom en tilkobling til en SSH-server kan en spesifisere en kommando som skal kjøres og hente output-en til det opprinnelige shellet. Dette virket som den beste måten å overvåke Linux-servere ved starten av prosjektet. SSH-prosjektet er meget utbredt og blir aktivt sjekket for sikkerhetshull. SSH er også installert på de aller fleste Linux-servere, og en vil dermed unngå å lytte på en ekstra port. 
 
-Ulempen med å kjøre sjekker over SSH er at man må sette opp nøkkelbasert innlogging mellom Icinga-serveren og alle Linux-serverne som skal overvåkes. En kan begrense rettigheter for brukeren som kjører sjekkene, men den vil fortsatt ha muligheten til å logge inn til et shell og eksekvere kommandoer. Dette kan føre til at en potensiell angriper via Icinga-serveren har en vei inn til alle servere som overvåkes.
-% TODO
-% SSH forced command
-% en mulig løsning kan være å sette opp forced commands
-SSH gir også endel overhead både på nettverkstrafikk og i CPU-tid \cite{sshmanpage}. En måte å minske dette på er å benytte SSH med ControlMaster. Dette innebærer en endring i SSH-konfigurasjonen på serveren der SSH-klienten lagrer informasjon om hver utgående TCP- tilkobling slik at denne kan benyttes om nye tilkoblinger blir forsøkt mot samme host. Dermed unngås en ny TCP-tilkobling for hver ny sjekk som skal utføres på hosten.
+Gjennom en tilkobling til en SSH-server kan en spesifisere en kommando som skal kjøres og ta outputen til det orginale shellet. Dette virket som den beste måten å overvåke Linux-servere ved starten av prosjektet. SSH-prosjektet er meget utbredt og blir aktivt sjekket for sikkerhetshull. SSH er også installert på de aller fleste Linux-servere, og en vil dermed unngå å lytte på en ekstra port. 
+
+Ulempen med å kjøre sjekker over SSH er at man må sette opp nøkkelbasert innlogging mellom Icinga-serveren og alle Linux-serverne som skal overvåkes. En kan selvsagt begrense rettigheter for nagios-brukeren som kjører sjekkene, men den vil fortsatt ha muligheten til å logge inn til et shell og eksekvere kommandoer. Dette kan føre til at en potensiell angriper via Icinga-serveren har en vei inn til alle servere som overvåkes.
+
+SSH gir også endel overhead (ref man page) både på nettverkstrafikk og i CPU-tid. En måte å minske dette på er å benytte SSH med ControlMaster. Dette innebærer en endring i SSH-konfigurasjonen på serveren der SSH-klienten lagrer informasjon om hver utgående TCP- tilkobling slik at denne kan benyttes om nye tilkoblinger blir forsøkt mot samme host. Dermed unngår en å sette opp en ny TCP-tilkobling for hver ny sjekk som skal utføres på hosten.  
 
 \subsubsection{SNMP (Simple Network Management Protocol)}
-Det meste av mer avansert nettverksutstyr i dag støtter SNMP \cite{essentialsnmp}. Gjennom protokollen SNMP har man en enkel og effektiv måte å overvåke på, samt en standard som leverandørene følger. 
+
+Det meste av mer avansert nettverksutstyr i dag støtter SNMP (/cite Douglas R. Mauro \& Kevin J. Schmidt. (2001). Essential SNMP (1st ed.). Sebastopol, CA: O’Reilly \& Associates). Gjennom protokollen SNMP har man en enkel og effektiv måte å overvåke på, samt en standard som leverandørene følger. 
 
 SNMP baserer seg på variabler som blir gjort tilgjengelig på enheten som skal overvåkes (kalt agenten). Disse variablene er definert i en Management Information Base (MIB). MIB-filene er ofte tilgjengelige på produsentens hjemmeside. Her beskrives strukturen for dataen i et hiarkisk navnerom som inneholder Object Identifier (OID). Hver OID identifiserer en variabel som kan bli lest eller satt via SNMP. Enheten som ber om disse variablene kalles "manager". 
 
@@ -407,14 +411,6 @@ En ulempe med SNMP er at OID-ene er lange og tunge å lese. For eksempel for å 
 Dette kan oversettes til:
 
 iso(1). org(3). dod(6). internet(1). private(4). enterprises(1). apc(318). products(1). hardware(1). ups(1). upsBattery(2). upsAdvBattery(2) upsAdvBatteryCapacity.0
-
-Denne OID-en er definert i APCs MIB-fil "PowerNet MIB". Ved å laste inn denne kan en også benytte "PowerNet-MIB::upsAdvBatteryCapacity.0".
-
-% TODO sjekke forskjellen på de forskjellige protokollene
-SNMP finnes i flere versjoner. I dag brukes for det meste versjon 2c og den nyeste, versjon 3. v2c og v1 er ikke kompatible, men i praksis støtter det meste av utstyr som støtter v3 eller v2c også v1 \cite{rfc3584}. Hovedforskjellen mellom versjon 2c og 3 er at versjon 3 krypterer dataene over nettverket, men krever da også mer konfigurasjon og vedlikehold. Sikkerhetsaspektet ved dette er diskutert videre i Kapittel \ref{chap:sikkerhet}. 
-
-Det eksisterer to muligheter når enheter skal overvåkes via SNMP. Enten kan enhetene selv rapportere inn hendelelser via SNMP trap/inform, eller så kan serveren spørre enhetene via SNMP GetRequest. Valg av det første medfører at en kan gjøre varsling umiddelbart, men da må også hver enhet konfigureres med parametere for hvilke trap-er som skal sendes og til hvilken IP-adresse. Icinga har ingen støtte for å motta trap-er, men en kan installere en egen daemon for dette og rapportere inn data med passive sjekker. 
-
 For å benytte SNMP trap/inform må en tillate tilkoblinger til overvåkingsserveren i stedet for bare fra. Hvilke trap-meldinger som skal sendes må også konfigureres på hver enhet, og en vil da ikke kunne ha alle konfigurasjoner er på ett sted.
 
 \begin{figure}[H]
@@ -467,6 +463,13 @@ Analyse av hvor mye CPU-tid NRPE og SSH trenger for å utføre sjekker ble også
 \begin{lstlisting}
 #!/usr/bin/env bash
 
+Både serveren og klienten stod i et eget nettverk i Virtualbox sammen med en Windows-maskin med et nettverkskort satt i promiscious mode, for å kunne sniffe nettverkstrafikken. Denne fanget nettverkstrafikken med WireShark. SSH-trafikken mellom de to maskinene ble hentet ut og data for hver "samtale" kunne analyseres.  
+
+Analyse av hvor mye CPU-tid NRPE og SSH trenger for å utføre sjekker ble også gjennomført. Fordi hver sjekk går veldig raskt ble det kjørt 100 disksjekker, 100 ganger. Time-kommandoen ble brukt for å se på tiden brukt i user- og kernel-mode ved 100 sjekker. Dette ble gjort ved å bruke et bash-script som kjører scriptet nedenfor.
+
+\begin{lstlisting}
+#!/usr/bin/env bash
+
 args=(nrpe ssh)
 
 for arg in "${args[@]}"; do
@@ -478,7 +481,14 @@ for arg in "${args[@]}"; do
 done
 exit 0
 \end{lstlisting}
-% TODO som vi ser i Figur, er det lurt å bruke nrpe .....
+
+%\begin{center}
+%\begin{figure}
+%    \includegraphics{img/network-usage.svg}
+%    \caption{Nettverksbruk}
+%    \label{network-usage}
+%\end{figure}
+%\end{center}
 
 \begin{figure}[H]
     \centering

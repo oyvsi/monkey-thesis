@@ -450,26 +450,23 @@ Under vises et eksempel hvor servicen Check HTTP for host-objektene localhost, H
 check_cluster --service -l "Check HTTP"  -d $SERVICESTATEID:localhost:Check HTTP$, $SERVICESTATEID:HiG2:Check HTTP$ ,$SERVICESTATEID:HiG4:Check HTTP$  -w @1 -c @2
 \end{lstlisting}
 
-%TODO: Flash will redo
 \subsection{Microsoft Exchange}
 
-Exchange er en kritisk tjeneste for fylkeskommunen. Her routes og lagres all e-post som sendes ut og inn av alle brukere. 
+Microsoft Exchange benyttes som e-postsystem for fylkeskommunen. Her routes og lagres all e-post som sendes ut og inn av alle brukere. I tillegg benyttes kalenderfunksjonalitet. Exchange er kritisk for kommunikasjon mellom ulike avdelinger i fylkeskommunen og utdad. 
 
-Gjennom perfmon har en tilgang til en rekke viktige tall \cite{exchange} for å måle ytelsen i Exchange. Disse kan overvåkes over NRPE med check\_counter i NSClient++.
+Som for terminalservere, beskrevet i \ref{sect:Terminalservere}, brukes Microsoft Performance Monitor for å få tilgang til en rekke viktige tall om Exchange-serverenes ytelse. Disse overvåkes over NRPE med check\_counter i NSClient++. Firmaet SolarWinds, som selger en kommersiell overvåkningsløsning anbefaler blant annet at følgende parametre overvåkes\cite{exchange}:
 \begin{itemize}
-	\item Antall tilkoblinger
-	\item Gjennomsnittlig responstid
-	\item Antall meldinger sendt per sekund. Ved høye tall kan det være mistanke om at mail-serveren blir brukt til spam, eller at det er zombier på nettverket.
-	\item Antall LDAP-søk som gir timeout. Feil mot AD.
-	\item Økning i SMTP-køen
+	\item Antall tilkoblinger. Dersom antallet er høyt kan det føre til at e-postklienter oppfattes som trege av brukerne.
+	\item Gjennomsnittlig responstid på forespørsler. Høye tall vil oppfattes som treghet for brukerne.
+	\item Antall meldinger sendt per sekund. Ved høye tall kan det være mistanke om at mail-serveren blir brukt til spam, eller at klienter på nettverket har blit kompromittert.
+	\item Antall LDAP-søk som gir timeout. Høye tall kan indikerer mange tilkoblingsfeil mot Active Directory.
+	\item Størrelse på leveringskø. Antall meldinger som venter på å bli prosessert.
 \end{itemize}
+Microsoft har gitt ut egne anbefalinger til grenseverdier som er benyttet som et utgangspunkt\cite{exchangethresholds}.
 
-Microsoft har gitt ut egne anbefalinger til grenseverdier \cite{exchangethresholds}.
+I tillegg til disse var det ønskelig med en sjekk som testet hele e-post-oppsettet. Til dette benyttes pluginen "check\_email\_delivery" \cite{exchange}. Her sjekkes det at en e-post kan sendes fra SMTP-serveren. E-posten som sendes ut inneholder en unik ID. Videre kobler pluginen seg til IMAP-tjenesten og sjekker om e-posten med den unike ID-en kom frem. Antall sekunder for hele round-tripen blir målt. Helst skulle en sendt e-posten fra en SMTP-server som står utenfor nettverket, men det var ikke tilgjengelig under implementasjonen.
 
-I tillegg til disse var det ønskelig med en sjekk som testet hele e-post-oppsettet. Til dette benyttes pluginen "check\_email\_delivery" \cite{exchange}. Her sjekkes det at en e-post kan sendes fra SMTP-serveren. E-posten som sendes ut inneholder en unik ID. Videre kobler pluginen seg til IMAP-tjenesten og sjekker om e-posten med den unike ID-en kom frem. Antall sekunder for hele round-tripen blir målt. Helst skulle en her koblet til en SMTP-server som står utenfor nettverket, men dette var det ikke andledning til.
-
-Det sjekkes også at websiden for Outlook Web Access er tilgjengelig gjennom pluginen "check\_http". Her burde en nok også sjekket om det var mulig å logge inn.
-
+Det sjekkes også at websiden for Outlook Web Access er tilgjengelig, på samme måte som andre websider, slik det er beskrevet i \ref{Webservere}.
 \section{Databaser}
 Tre forskjellige databasemotorer benyttes av IKT-avdelingen. Disse er MySQL, MSSQL og Oracle DB. Disse har ulik arkitektur og virkemåte \cite{databasecomparison}, og derfor blir ikke de samme parameterne overvåket på alle. Felles for alle er:
 
