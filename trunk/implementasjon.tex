@@ -73,6 +73,15 @@ En annen utfordring var å vite hvor kraftig hardware serveren trengte. Her ble 
 \subsection{Installasjon}
 Ved starten av iterasjonen "kjerneprogramvare" var den nyeste versjonen av Icinga 1.8.4. I pakkebrønnen for debian-stable fantes bare versjon 1.0.2 av Icinga, i backports lå 1.7.1. Icinga opprettholder en egen pakkebrønn - ``The Debian Monitoring Project'' \cite{debmon}. Fra denne kunne versjon 1.8.4 installeres. I samråd med teknisk kontakt ved IKT-avdelingen ble det bestemt å bruke versjon 1.8.4 fra debmon.
 
+\subsubsection{Icinga Webgrensesnitt}
+Webgrensesnittene "icinga-classic" og "icinga-web 1.8.1" installeres via pakkebrønnen. 
+
+Tidlig ble det avgjort at Icinga Web skulle primært brukes som webgrensesnitt mot Icinga. Denne avgjørelsen ble tatt fordi Icinga Web har en mer moderne "look", samt bruker en Ajax Web 2.0 inspirert frontend.
+
+Etter testing ble det oppdaget at Icinga Web inneholder feil som ble rapportert tilbake til Icinga Development Team. Feilen som ble rapportert inn omfatter søk på hostgroup-objekter eller servicegroup-objekter (link til bugreport \cite{icingawebbug}). 
+
+Det ble derfor lagt opp til at både Icinga Classic og Icinga Web kunne benyttes på lik linje.
+
 \subsection{Konfigurasjonsfiler}
 Ved standard installasjon av Icinga er konfigurasjonen delt opp i objekttyper med flere objekter i hver fil:
 \begin{itemize}
@@ -502,14 +511,17 @@ MySQL-databasene til IKT-avdelingen lagrer all databasedata i minnet, så her vi
 For at Icinga-serveren skal kunne snakke med de forskjellige databasemotorene trengs en klient for hver av dem. 
 
 \subsubsection{Oracle}
-Databaseklienten finnes på Oracle sine nettsider \cite{oracleclient}. Den finnes ikke som en deb-pakke, som som brukes for Debian. Det finnes derimot en rpm-pakke, som brukes av blant annet Red Hat. Alien \cite{debian:alien} ble brukt til å konvertere rpm-pakken over til deb-pakke før installasjon på Icinga-serveren. 
+Databaseklienten finnes på Oracle sine nettsider \cite{oracleclient}. Den finnes ikke som en deb-pakke, som som brukes for Debian. Det finnes derimot en rpm-pakke, som brukes av blant annet Red Hat. Alien ble brukt til å konvertere rpm-pakken over til deb-pakke før installasjon på Icinga-serveren \cite{debian:alien}. 
+
 \begin{lstlisting}
 alien oracle-instantclient11.2-basic-11.2.0.3.0-1.x86_64.rpm 
 dpkg -i oracle-instantclient11.2-basic-11.2.0.3.0-1.x86_64.deb
 \end{lstlisting}
+
 Videre trengs også en databasedriver, som gjør det mulig for Perl å benytte klienten. For Oracle-databaser brukes "libdbd-oracle-perl".
 
 På en Oracle-server vil hver database ha sin egen instans \cite{oraclefaq}. Derfor vil parametere som overvåkes være forskjellig fra database til database. Navnene til instansene legges derfor inn som en egendefinert variabel i hver enkel Oracle-servers host-objekt. Når plugin-en kjøres sjekkes filen tnsnames.ora, som inneholder tilkoblingsinformasjon for hver enkelt instans. Strukturen på tnsnames.ora vises under:
+
 \begin{lstlisting}
 ORA11 =
  (DESCRIPTION = 
@@ -521,12 +533,13 @@ ORA11 =
  )
 )
 \end{lstlisting}
+
 Check\_multi brukes for å samle en Oracle-servers instanser under samme service-objekt. For eksempel når cache hit-sjekken kjøres, vil check\_multi utføre sjekken for alle instansene. I webgrensesnittet vil svarene fra instansene samles under "check cache hit" for hvert enkelt host-objekt. Dette gjør det mer oversiktlig og dynamisk enn en sjekk for hver instans. Under vises konfigurasjonen for dette.
 
 \begin{lstlisting}
 define service {
 ...
-	check_command check_multi!check_oracle! -s dbinstances=$_HOSTDBINSTANCES$ -s host=$HOSTADDRESS$ -s mode=sga-data-buffer-hit-ratio -s warning=93: -s critical=90: -s user=$USER5$ -s pass=$USER4$
+    check_command check_multi!check_oracle! -s dbinstances=$_HOSTDBINSTANCES$ -s host=$HOSTADDRESS$ -s mode=sga-data-buffer-hit-ratio -s warning=93: -s critical=90: -s user=$USER5$ -s pass=$USER4$
 }
 
 define command {
@@ -578,7 +591,7 @@ Kommandoen konfigureres med muligheten for å bestemme hvilken sjekk som skal kj
 
 Her brukes MySQL som eksempel, men dette vil være likt for de to andre SQL serverne. 
 \begin{lstlisting}
-command_line $USER1$/check_truedatabase-motor>_health --hostname=$HOSTADDRESS$ --username=$USER5$ --password=$USER4$ --mode $ARG1$ --warning $ARG2$ --critical $ARG3$
+    command_line $USER1$/check_truedatabase-motor>_health --hostname=$HOSTADDRESS$ --username=$USER5$ --password=$USER4$ --mode $ARG1$ --warning $ARG2$ --critical $ARG3$
 \end{lstlisting}
 
 \subsubsection{MySQL Cluster}
@@ -705,7 +718,6 @@ Hvis brannmurene deler management IP på primary og secondary, er det ingen muli
 Begge brannmurene legges i en hostgroup som er lagt på service-objektet for "cisco\_health", slik at lokale ressurser sjekkes på samme måte som switcher. Brannmurene legges også inn i en hostgroup som heter Cisco-failover som benyttes i service-objektet for failover.
 
 \subsubsection{VPN}
-
 For brannmurer som har VPN-tjeneste sjekkes antall oppkoblede brukere opp mot det antallet brannmuren er lisensiert for. Begge disse verdiene finnes som SNMP OID-er definert i "CISCO-FIREWALL-MIB" \cite{cisco_fw_mib}. Det fantes allerede en plugin som sjekker antall tilkoblede brukere \cite{checkciscovpn}. Denne ble endret til i tillegg å hente ut det maksimale antallet og sammeligne brukt kapasitet i prosent mot grenseverdier, som kommer inn som argumenter.
 
 \subsubsection{Båndbredde}
@@ -737,13 +749,11 @@ Det er derfor anbefalt å bruke 64 bit-variablene ifHCOutOctets og ifHCInOctets 
 Plugin-en det er tatt utgangspunkt i for å hente ut båndbreddebruk heter check\_iftraffic64 \cite{checkciscoif}. Denne er noe omskrevet for å kunne sende inn absolutte verdier som grenseverdier for varsling. I generic-firewall er det satt opp to egendefinerte variabler "WANWARN" og "WANCRIT", som setter standard grenseverdier for alle brannmurer. For brannmurer der det er normalt med høyere båndbreddebruk, er disse variablene overstyrt i konfigurasjonen for host-objektet.
 
 \subsection{VMware og Citrix Xen}
-
 Ved IKT-avdelingen er det både et Citrix Xen-miljø og et VMware-miljø. Disse består av servere som kjører hypervisorene ESX 5.1 og Xen 6.1. Begge er av typen 1 (direkte på hardware) og står for administering av virtuelle maskiner, som er operativsystemer med applikasjoner. Hypervisoren introduserer altså et nytt lag mellom hardware og applikasjonene brukeren benytter. Host-ene har ansvaret for at de virtuelle maskinene får tilstrekkelig med ressurser for å kunne kjøre installerte applikasjoner. 
 
 For overvåkning av virtuelle maskiner brukes NRPE, det overvåkes da som en "egen" server. Overvåkning av servere som kjører hypervisor-ene vil bestå av å sjekke om ressurser strekker til etterspørselen fra de virtuelle maskinene. En eller flere virtuelle maskiner kan kreve mer ressurser enn en server har fysisk. Dette stjeler både CPU-tid, minne og I/O for å håndtere, noe som vil gå utover gjeste-operativsystem og applikasjoners responstid. Videre vil overvåkning av hvor mye ressurser som brukes gi muligheten for å kalkulere når eventuelle skaleringstiltak må innføres \cite{vmwaremonitoring}. 
 
 \subsubsection{VMware}
-
 Plugin-en "check\_vmware\_api.pl", som er utviklet av fri programvare firmaet op5 \cite{op5}, er brukt for å hente ut informasjonen fra VMware vCenter. Denne pluginen bruker et SDK-bibliotek i Perl \cite{vmwareperl} for å utføre API-kall til vCenter. Autentisering skjer ved å sende med brukernavn og passord for en brukerkonto som opprettet i vCenter-serveren med read-rettigheter. For å utveksle informasjon blir SOAP-protokollen benyttet \cite{wiki:soap} via HTTPS \cite{ciscovirtual}. 
 \begin{enumerate}
 	\item hvert 5. minutt over en dag 
