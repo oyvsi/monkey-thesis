@@ -151,38 +151,38 @@ Det ble testet ut et par verktøy for å administrere konfigurasjonsfilene, NCon
 Som nevnt i \ref{sec:objekter} knyttes et service-objekt til et host-objekt og et command-objekt for at det skal kjøres en sjekk. For å slippe å skrive et service-objekt for hvert host-objekt benyttes gruppering av host-objekter i hostgroup. Under vises et eksempel på hvordan dette er satt opp for MySQL-servere. 
 
 Først defineres en hostgroup for alle SQL serverne. Dette gjøres for å gruppere alle SQL serverne uavhengig av hvilken databasetype som brukes. 
-\begin{lstlisting}
+\begin{lstlisting}[style=example]
 define hostgroup {
 	hostgroup_name		sql_servers
-	alias 			SQL Servers
+	alias 				SQL Servers
 	hostgroup_members	mysql_servers, mssql_servers, oracle_servers
 }
 \end{lstlisting}
 Deretter defineres en hostgroup for alle MySQL-servere.
-\begin{lstlisting}
+\begin{lstlisting}[style=example]
 define hostgroup {
-        hostgroup_name 	mysql_servers
-        alias 		MySQL Servers
+    hostgroup_name 	mysql_servers
+    alias 		MySQL Servers
 }
 \end{lstlisting}
 For å legge til en host i denne gruppen kan host-objektet være definert på følgende måte.
-\begin{lstlisting}
+\begin{lstlisting}[style=example]
 define host {
-use		generic_windows_host
-address		10.60.0.21
-host_name	HiG2
-alias		HiG2
-hostgroups	debian_servers, mysql_servers
+    use			generic_windows_host
+    address		10.60.0.21
+    host_name	HiG2
+    alias		HiG2
+    hostgroups	debian_servers, mysql_servers
 }
 \end{lstlisting}
 Servicen som sammen med hostgroup-en og kommandoen defineres slik. Alle host-objekter i "mysql\_servers" vil da få denne sjekken.
-\begin{lstlisting}
+\begin{lstlisting}[style=example]
 define service {
-service_description	MySQL Connection Time
-use 			generic_service
-name 			mysql_connection_time
-hostgroup_name 		mysql_servers
-check_command 		check_mysql_health!connection-time!0.1!0.4
+    service_description	MySQL Connection Time
+    use		 			generic_service
+    name 				mysql_connection_time
+    hostgroup_name 		mysql_servers
+    check_command 		check_mysql_health!connection-time!0.1!0.4
 }
 \end{lstlisting}
 
@@ -203,7 +203,7 @@ I utgangspunktet ble det bestemt at ytelsesdata skulle holdes utenfor oppgaven. 
 
 For å sette opp eksportering av ytelsesdataen benyttes et vanlig command-objekt i Icinga:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=example]
 define command {
 command_name            rotate_perf_service
     command_line            /bin/mv /usr/local/icinga/var/perfdata/service-perfdata /usr/local/icinga/var/perfdata/logs/service-perfdata.$TIMET$
@@ -211,7 +211,7 @@ command_name            rotate_perf_service
 \end{lstlisting}
  Icinga.cfg må konfigureres til å benytte dette:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=example]
 process_performance_data=1
 service_perfdata_file=/usr/local/icinga/var/perfdata/service-perfdata
 service_perfdata_file_processing_command=rotate_perf_service
@@ -233,7 +233,7 @@ Overvåkning av standard Linux-servere skjer utelukkende ved bruk av NRPE.
 
 For Debian-servere kan denne installers fra pakkebrønnen "stable" med kommandoen:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=example]
 apt-get install nagios-nrpe-server nagios-plugins-basic
 \end{lstlisting}
 
@@ -287,11 +287,11 @@ På Windows-servere benyttes "CheckCPU" fra NSClient++ for å sjekke CPU-last. H
 
 Kommandoen for pluginen slik den er definert i command-objektet. Dette henter et gjennomsnittsbruk av CPU over 5 minutter: 
 
-\begin{lstlisting}
+\begin{lstlisting}[style=example]
 ./check_nrpe -u -H 10.60.0.22 -p 5666 -c CheckCPU -a time=5m warn=80 crit=90
 \end{lstlisting}
 Svar:
-\begin{lstlisting}
+\begin{lstlisting}[style=example]
 OK CPU Load ok.|'5m'=0%;80;90
 \end{lstlisting}
 
@@ -312,7 +312,9 @@ I Figur \ref{cpucritical} ser vi at testen er kritisk på grunn av et gjennomsni
 \end{figure}
 
 I Figur \ref{cpustrain} ser vi at alle de fire CPU-kjernene jobber oppmot maksimalt. Et batch-script ble kjørt lokalt på serveren som ble overvåket for å generere CPU-bruk.
-\begin{lstlisting}
+
+I Figur \ref{cpustrain} returnerer CPU-sjekken "OK". Dette er hentet fra gjennomsnittsbruk av CPU over 5 minutter. Like under ser vi at testen er kritisk på grunn av et gjennomsnittsbruk av CPU på 96 \%. I Figur \ref{cpustrain} ser vi at alle de fire CPU-kjernene jobber oppmot maksimalt. Et batch-script ble kjørt lokalt på serveren som ble overvåket for å generere CPU-bruk.
+\begin{lstlisting}[style=example]
 ## winloop.bat
 ##
 # Kjører loop.bat 10 ganger.
@@ -342,11 +344,11 @@ load average: 0.65 0.42 0.36
 
 check\_load fra nagios-plugins:
 I service-objektet:
-\begin{lstlisting}
+\begin{lstlisting}[style=example]
 check_command check_nrpe!check_dist_load!0.9,0.7,0.5 1.2,1.0,0.9
 \end{lstlisting}
 I konfigurasjonen på serveren som overvåkes:
-\begin{lstlisting}
+\begin{lstlisting}[style=example]
 command[check_dist_load]=/usr/lib/nagios/plugins/check_load -r -w $ARG1$ -c $ARG2$
 \end{lstlisting}
 
@@ -357,7 +359,7 @@ Kontinuerlig høyt minneforbruk kan være en indikasjon på flere minnekrevende 
 *Hva en prosess kan kreve. Virtuelt minne teknologi.
 
 For Windows-servere brukes CheckMem fra NSClient++
-\begin{lstlisting}
+\begin{lstlisting}[style=example]
 Check_Memory
 ./check_nrpe -u -H 10.60.0.22 -p 5666 -c CheckMem -a MaxWarnUsed=80% MaxCritUsed=90% type=physical
 \end{lstlisting}
@@ -395,7 +397,7 @@ DISK OK| /=1232MB;15430;17359;0;19288 /lib/init/rw=0MB;402;452;0;503 /dev=0MB;39
 IKT-avdelingen ønsket å overvåke tjenester og prosesser på serverne. Prossesser er instanser av programmer som kjører. Tjenester er prosesser som kjører i bakgrunnen. 
 
 Overvåkning av tjenester vil innebære å se på om en eller flere prosesser kjører til en hver tid. NSClient++ har muligheten til å se om en bestemt prosess eller tjeneste kjører eller har stoppet gjennom CheckServiceState. Her spesifiserers navnet på prosessen eller tjenesten, og sjekken svarer på om denne finnes i prosesstabellen.
-\begin{lstlisting}
+\begin{lstlisting}[style=example]
 define service {
     service_description     DHCP Service
     hostgroup_name          dhcp_servers
@@ -404,7 +406,7 @@ define service {
 }
 \end{lstlisting}
 Linux-plugin fra nagios-plugins: check\_procs. Her spesifiseres også hvor mange instanser av prosessen som skal forekomme. 
-\begin{lstlisting}
+\begin{lstlisting}[style=example]
 define service {
     use            	        generic_service
     hostgroup_name       	linux_servers
@@ -461,7 +463,7 @@ Antallet aktive og inaktive brukere kan hentes ut fra Windows Performance Counte
 
 Kommando som er brukt for å sjekke antallet aktive brukere på en terminalserver er:
  
-\begin{lstlisting}
+\begin{lstlisting}[style=example]
 	command_line	check_nrpe -u -H $HOSTADDRESS$ -p 5666 -c CheckCounter -a "Counter:Active=\\Terminal Services\\Active Sessions" ShowAll MaxWarn=25 MaxCrit=35
 \end{lstlisting}
 
@@ -476,12 +478,12 @@ Kommando som er brukt for å sjekke antallet aktive brukere på en terminalserve
 IKT-avdelingen drifter mange webservere som benyttes av, eller gir informasjon til brukere. Pluginen "check\_http" \cite{checkhttp} fra nagios-plugins benyttes for å sjekke at tilkoblingen til webserveren svarer på henvendelsen. Deler av forventet innhold sjekkes for å se at websiden ikke har blitt endret av uvedkommende.
 
 Kommandoen for å gjøre dette er for siden http://portal.hedmark.org:
-\begin{lstlisting}
+\begin{lstlisting}[style=example]
 ./check_http -H portal.hedmark.org -s "Velkommen til Hedmark fylkeskommunes portal" -S 
 \end{lstlisting}
 
 For websider som skal svare på HTTPS sjekkes også utløpsdato for SSL-sertifikatet. I eksempelet under vil plugin-en gi en WARNING om sertifikatet utløper innen 50 dager:
-\begin{lstlisting}
+\begin{lstlisting}[style=example]
 ./check_http -H portal.hedmark.org -C 50
 \end{lstlisting}
 
@@ -493,7 +495,7 @@ For å overvåke redundante oppsett, har plugin-ene check\_multi \cite{checkmult
 Med check\_multi kan en benytte en eller flere egendefinerte kommandoer som parametere. Disse vil parses av check\_multi og kan inneholde alt i fra "echo 'Hello, World!'", til mer avanserte Perl-script som kjøres ved hjelp av eval. For å evaluere resultatene kan en definere kriterier som gir et varsel (her brukes standard Icinga-tilstander). 
 
 Eksempel:
-\begin{lstlisting}
+\begin{lstlisting}[style=example]
 command [ HTTP_Node1 ] = check_http -H 192.168.2.10
 command [ HTTP_Node2 ] = check_http -H 192.168.2.11
 command [ HTTP_Node3 ] = check_http -H 192.168.2.12
@@ -503,7 +505,7 @@ state [ CRITICAL ] = COUNT(CRITICAL) > 3
 For check\_cluster spesiferes det om det er et host- eller service-cluster en skal sjekke. Deretter spesifiseres parametere med navn på host og service, og hvor mange hosts eller services som må være nede før at det skal varsles med WARNING eller CRITICAL. Siden check\_cluster kjører lokalt på Icinga-serveren vil den ikke bruke noe nettverkstrafikk, noe som er positivt. Ulempen er at den ikke gir noen informasjon om hvilket host-objekt som er nede eller hvilket host-objekt en service feilet på. Det vil si at den gir bare en overordnet status for det redundante oppsettet     
 
 Under vises et eksempel hvor servicen Check HTTP for host-objektene localhost, HiG2, HiG3, og HiG4 blir kjørt og vil gi WARNING om en av dem er nede og CRITICAL om to av dem er nede: 
-\begin{lstlisting}
+\begin{lstlisting}[style=example]
 check_cluster --service -l "Check HTTP"  -d $SERVICESTATEID:localhost:Check HTTP$, $SERVICESTATEID:HiG2:Check HTTP$ ,$SERVICESTATEID:HiG4:Check HTTP$  -w @1 -c @2
 \end{lstlisting}
 
@@ -561,7 +563,7 @@ For at Icinga-serveren skal kunne snakke med de forskjellige databasemotorene tr
 \subsubsection{Oracle}
 Databaseklienten finnes på Oracle sine nettsider \cite{oracleclient}. Den finnes ikke som en deb-pakke, som som brukes for Debian. Det finnes derimot en rpm-pakke, som brukes av blant annet Red Hat. Alien ble brukt til å konvertere rpm-pakken over til deb-pakke før installasjon på Icinga-serveren \cite{debian:alien}. 
 
-\begin{lstlisting}
+\begin{lstlisting}[style=example]
 alien oracle-instantclient11.2-basic-11.2.0.3.0-1.x86_64.rpm 
 dpkg -i oracle-instantclient11.2-basic-11.2.0.3.0-1.x86_64.deb
 \end{lstlisting}
@@ -570,7 +572,7 @@ Videre trengs også en databasedriver, som gjør det mulig for Perl å benytte k
 
 På en Oracle-server vil hver database ha sin egen instans \cite{oraclefaq}. Derfor vil parametere som overvåkes være forskjellig fra database til database. Navnene til instansene legges derfor inn som en egendefinert variabel i hver enkel Oracle-servers host-objekt. Når plugin-en kjøres sjekkes filen tnsnames.ora, som inneholder tilkoblingsinformasjon for hver enkelt instans. Strukturen på tnsnames.ora vises under:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=example]
 ORA11 =
  (DESCRIPTION = 
    (ADDRESS_LIST =
@@ -584,7 +586,7 @@ ORA11 =
 
 Check\_multi brukes for å samle en Oracle-servers instanser under samme service-objekt. For eksempel når cache hit-sjekken kjøres, vil check\_multi utføre sjekken for alle instansene. I webgrensesnittet vil svarene fra instansene samles under "check cache hit" for hvert enkelt host-objekt. Dette gjør det mer oversiktlig og dynamisk enn en sjekk for hver instans. Under vises konfigurasjonen for dette.
 
-\begin{lstlisting}
+\begin{lstlisting}[style=example]
 define service {
 ...
     check_command check_multi!check_oracle! -s dbinstances=$_HOSTDBINSTANCES$ -s host=$HOSTADDRESS$ -s mode=sga-data-buffer-hit-ratio -s warning=93: -s critical=90: -s user=$USER5$ -s pass=$USER4$
@@ -596,7 +598,7 @@ define command {
 }
 \end{lstlisting}
 %TODO: EXPLAIN
-\begin{lstlisting}
+\begin{lstlisting}[style=example]
 eeval [ oracle_health ] =
     my $chain = "";
     foreach my $instance (split(/,/,'$dbinstances$')) {
@@ -616,7 +618,7 @@ Plugin-ene som blir benyttet for databaser er skrevet av firmaet "Consulting \& 
 
 Disse må kompileres fra kildekoden. For å gjøre dette må en først konfigurere de med riktige parametere. Dette er de samme for alle tre plugin-ene.
 
-\begin{lstlisting}
+\begin{lstlisting}[style=example]
 ./configure --prefix=/usr/lib/nagios/plugins/ --with-nagios-user=nagios --with-nagios-group=nagios --with-perl=/usr/bin/perl --with-statefiles-dir=/tmp
 \end{lstlisting}
 
@@ -628,7 +630,7 @@ make INSTALL
 For å koble til databaseserverne trengs servicebrukere i hver av de. Her holder det med minimale tilganger slik at denne ikke har tilgang til å endre tabeller og spørre etter info. Brukeren vil kun ha tilgang til å kjøre "Server administrasjon" kommandoer \cite{mysqlpriv}.
 
 I MySQL brukes følgende kode for å opprette denne brukeren:
-\begin{lstlisting}[language=SQL]
+\begin{lstlisting}[language=SQL,style=example]
 GRANT USAGE ON *.* TO 'icinga'@'10.60.0.20' IDENTIFIED BY 'Password';
 \end{lstlisting}
 
@@ -638,7 +640,7 @@ Konfigurasjonen
 Kommandoen konfigureres med muligheten for å bestemme hvilken sjekk som skal kjøre i \$ARG1\$.
 
 Her brukes MySQL som eksempel, men dette vil være likt for de to andre SQL serverne. 
-\begin{lstlisting}
+\begin{lstlisting}[style=example]
     command_line $USER1$/check_truedatabase-motor>_health --hostname=$HOSTADDRESS$ --username=$USER5$ --password=$USER4$ --mode $ARG1$ --warning $ARG2$ --critical $ARG3$
 \end{lstlisting}
 
@@ -659,7 +661,7 @@ Antallet noder tilkoblet overvåkes med pluginen check\_ndbd \cite{ndbnode}. Her
 
 For minnebruk ble det skrevet en egen plugin, da ingen eksisterende plugin ble funnet som tillater å spesifisere hvilke noder som skal sjekkes. ID-ene til nodene som skal sjekkes ble satt opp som en egendefinert variabel i host-konfigurasjonen. Denne sendes til pluginen via service- og kommando-objektene. Konfigurasjonen for dette er vist under.
 
-\begin{lstlisting}
+\begin{lstlisting}[style=example]
 define host {
 	...
 	_NODEIDS 2,3  ;Data-nodes IDs to check memory usage
@@ -684,7 +686,7 @@ Et praktisk eksempel på dette vises i Figur \ref{servicegroup_layout}. Her vil 
 
 Konfigurasjonen for dette er vist under. Direktivet "Members" setter medlemmene i gruppen der hvert service-objekt er "host\_name,service\_description".
 
-\begin{lstlisting}
+\begin{lstlisting}[style=example]
 define servicegroup {
 	servicegroup_name ERP_WEBAPP
 	alias Web App for ERP
@@ -814,7 +816,7 @@ VMware vCenter bruker fire intervaller for lagring av historisk data \cite{vmwar
 
 Pluginen i CLI:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=example]
 ./check_vmware_api.pl -D <Virtual Center IP-adresse> -u <brukernavn> -p <passord> | -H <host_navn> -N <vm_navn> -C <cluster_navn>  -l <hovedkommando> -s <subkommando> -i <interval> -T <timeshift>
 \end{lstlisting}
 
@@ -860,7 +862,7 @@ for å presentere et administrativt grensesnitt, og videresender kommandoer mot 
 For overvåkning av Xen-miljøet ble det kun funnet en plugin som gir muligheten for å hente ut informasjon fra host-er og virtuelle maskiner. Plugin-en "check\_xen\_api.pl"  bruker biblioteket "XenAPI"  for å generere URL-er. Disse brukes videre for spørringer mot en RRD-database, hvor "XAPI"  lagrer data \cite{xenwiki}. Det er ikke like mange tellere som er tilgjengelige som for VMware og I/O-data er foreløpig ikke tilgjengelig. Ressursdata som overvåkes for host-er er CPU- og minnebruk.
 
 Pluginen i CLI:
-\begin{lstlisting}
+\begin{lstlisting}[style=example]
 ./check_xenapi.pl -S <Master IP> -u <brukernavn> -p <passord> -H <hostname> -l <hovedkommando> -s <subkommando>
 \end{lstlisting}
 
@@ -870,7 +872,7 @@ For å få kjørt sjekkene mot Xen-hosts må det angis addressen til to enheter,
 
 Under vises et eksempel hvordan dette kan konfigureres for ett pool med to host-objekter
 
-\begin{lstlisting}
+\begin{lstlisting}[style=example]
 // generic-objektet
 define host {
         use generic_linux_host
@@ -951,13 +953,13 @@ For å lytte etter SNMP-traps benyttes SNMPtrapd \cite{snmptraps2}. Her mottas a
 
 SNMPtt trenger konfigurasjon for alle OID-ene som skal prosesseres. Disse kan opprettes med snmpttconvertmib ut i fra en MIB-fil slik:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=example]
 root@icinga1:/usr/share/mibs/netsnmp# snmpttconvertmib --in=MERU-WLAN-MIB.my --out=meru.conf --exec='/usr/lib/nagios/plugins/libexec/submit_check_result "$aA meru_$N 2 $D"
 \end{lstlisting}
 
 Eksempel på en OID som blir generert i filen meru.conf:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=example]
 EVENT mwlRogueApDetected .1.3.6.1.4.1.15983.3.1.3.13 "Status Events" Normal
 FORMAT $*
 EXEC /usr/lib/nagios/plugins/libexec/submit_check_result $aA meru_$N 2 "$D"

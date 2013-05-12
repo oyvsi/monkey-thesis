@@ -206,7 +206,7 @@ Det er ikke et fast tidsintervall for en hostsjekk med mindre check\_interval er
 
 Grunnsjekken for en host defineres i host-konfigurasjonen med "check\_command".
 
-\begin{lstlisting}
+\begin{lstlisting}[style=example]
 define host {
 	...
 	check_command                   check_host_alive
@@ -216,7 +216,7 @@ define host {
 \subsubsection{Variabler}
 For å kunne gjøre konfigurasjon av Icinga mest mulig dynamisk er det en rekke forhåndsdefinerte variabler en kan bruke i konfigurasjonsfilene. Disse kalles makroer. En fullstendig liste over disse og hvor de kan benyttes finnes i Icinga-dokumentasjonen \cite{icingamacro}. \$HOSTADDRESS\$ kan for eksempel benyttes i et command-objekt slik at den bare må skrives en gang, og ikke for hver host. En kan også definere egne variabler som for eksempel "\_SSHPORT". Disse kan sendes videre til selve kommandoen som kjøres og benyttes som argumenter til programmet som kjører en sjekk, slik:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=example]
 define host {
 	host_name	example_server
 	_SSHPORT	222
@@ -236,7 +236,7 @@ I eksempelet under er generell konfigurasjon for alle host-objekter definert i "
 
 Template-en generic\_host: 
 
-\begin{lstlisting}
+\begin{lstlisting}[style=example]
 
 Template-en generic\_host: 
 
@@ -265,7 +265,7 @@ define host {
 
 Template-en generic\_firewall:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=example]
 define host {
    name             generic_firewall
    use              generic_host
@@ -276,7 +276,7 @@ define host {
 
 Template-en cisco\_firewall (arver fra generic\_firewall):
 
-\begin{lstlisting}
+\begin{lstlisting}[style=example]
 define host {
         name            cisco_firewall
         use             generic_firewall
@@ -287,7 +287,7 @@ define host {
 
 Host-objektet hig-hw1 (arver fra cisco\_firewall):
 
-\begin{lstlisting}
+\begin{lstlisting}[style=example]
 define host {
         host_name       hig-fw1
         use		cisco_firewall
@@ -301,7 +301,7 @@ Dette kan være nyttig dersom en for eksempel vil legge alle hoster i en hostgro
 
 I eksempelet nedenfor brukes det regulære uttrykket \verb|"^HiG\[0-9\]+\$"| i attributten "members" til å legge til alle konfgurerte hosts der navnet starter på "HiG" etterfulgt og avsluttet med ett eller flere siffer mellom 0 og 9, i hostgroup-objektet "all\_servers".
 
-\begin{lstlisting}
+\begin{lstlisting}[style=example]
 define hostgroup {
 	hostgroup_name	all_servers
 	alias           All Servers
@@ -311,7 +311,7 @@ define hostgroup {
 
 Det kan også være nyttig for å ekskludere en host fra en service-sjekk som den ellers skulle kjørt. I eksempelet nedenfor er HiG3 medlem av hostgroup-en "windows\_servers", men blir ekskludert fra å kjøre sjekken på diskplass ved å sette "!HiG3":
 
-\begin{lstlisting}
+\begin{lstlisting}[style=example]
 define service {
 	service_description	Disk space
 	hostgroup_name		windows_servers
@@ -340,7 +340,7 @@ Icinga sjekker om avhengigheter er definert for en service-sjekk, før denne utf
 
 I eksempelet under er tjenesten "Check SMB" på HiG3 avhengig av master tjenesten Check LDAP på HiG3. "execution\_failure\_criteria" bestemmer ved hvilke tilfeller tjenesten ikke skal sjekkes. Her er den satt til "c", som vil si at Check SMB skal ikke kjøres dersom Check LDAP er i "critical" tilstand.
 
-\begin{lstlisting}
+\begin{lstlisting}[style=example]
 define servicedependency {
 	host_name                          HiG3
 	service_description                Check LDAP
@@ -359,7 +359,7 @@ Service-objekt har også muligheten til å arve avhengighetene til master-servic
 
 For å konfigurere avhengigheter mellom tjenester som kjører på samme host kan en utelate "dependent\_host\_name". Dette er benyttet i oppsettet for å sette opp en avhengighet mellom NRPE-tjenesten og alle sjekker som går via NRPE.
 
-\begin{lstlisting}
+\begin{lstlisting}[style=example]
 define servicedependency{
 #       dependent_host_name   		; Not defined to make dependancy on same host            
         hostgroup_name           	linux_servers
@@ -444,7 +444,7 @@ Valg av protokoll eller agenter har basert seg på følgende punkter:
 \end{itemize}
 Nettverkstrafikken som ble generert ved en NRPE- og SSH-sjekk ble målt ved å benytte et Bash-script som kjørte en disk-sjekk 100 ganger. 
 
-\begin{lstlisting}
+\begin{lstlisting}[style=example,language=bash]
 #!/usr/bin/env bash
 if [ "$1" == "ssh" ]; then
     cmd="/usr/lib/nagios/plugins/check_by_ssh -H 10.60.0.21 -C \"/usr/lib/nagios/plugins/check_disk -W 10% -C 5% -M -A\" > /dev/null"
@@ -463,7 +463,8 @@ exit 0
 Både serveren og klienten stod i et eget nettverk i Virtualbox sammen med en Windows-maskin med et nettverkskort satt i promiscious mode, for å kunne sniffe nettverkstrafikken. Denne fanget nettverkstrafikken med WireShark. Trafikken mellom de to maskinene ble hentet ut og data for hver tilkobling kunne analyseres.
 
 Analyse av hvor mye CPU-tid NRPE og SSH trenger for å utføre sjekker ble også gjennomført. Fordi hver sjekk går veldig raskt ble det kjørt 100 disksjekker, 100 ganger. Time-kommandoen ble brukt for å se på tiden brukt i user- og kernel-mode ved 100 sjekker. Dette ble gjort ved å bruke et bash-script som kjører scriptet nedenfor.
-\begin{lstlisting}
+
+\begin{lstlisting}[style=example]
 #!/usr/bin/env bash
 
 args=(nrpe ssh)
