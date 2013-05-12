@@ -405,7 +405,6 @@ SNMP baserer seg på variabler som blir gjort tilgjengelig på enheten som skal 
 En ulempe med SNMP er at OID-ene er lange og tunge å lese. For eksempel for å hente ut batterikapasiteten på en APC UPS benyttes OID-en:
 
 1.3.6.1.4.1.318.1.1.1.2.2.1.0
-
 Dette kan oversettes til:
 
 iso(1). org(3). dod(6). internet(1). private(4). enterprises(1). apc(318). products(1). hardware(1). ups(1). upsBattery(2). upsAdvBattery(2) upsAdvBatteryCapacity.0
@@ -464,11 +463,6 @@ exit 0
 Både serveren og klienten stod i et eget nettverk i Virtualbox sammen med en Windows-maskin med et nettverkskort satt i promiscious mode, for å kunne sniffe nettverkstrafikken. Denne fanget nettverkstrafikken med WireShark. Trafikken mellom de to maskinene ble hentet ut og data for hver tilkobling kunne analyseres.
 
 Analyse av hvor mye CPU-tid NRPE og SSH trenger for å utføre sjekker ble også gjennomført. Fordi hver sjekk går veldig raskt ble det kjørt 100 disksjekker, 100 ganger. Time-kommandoen ble brukt for å se på tiden brukt i user- og kernel-mode ved 100 sjekker. Dette ble gjort ved å bruke et bash-script som kjører scriptet nedenfor.
-% TODO som vi ser i Figur, er det lurt å bruke nrpe .....	
-For en utrulling i den skalen som vil være aktuelt for IKT-avdelingen vil ikke nettverkstrafikken være noen stor faktor. Selv med 1000-enheter som overvåkes over SSH, der hver kjører 1000 sjekker, vil den totale båndbreddebruken være gjennomsnittlig:
-\begin{equation}
-\frac{8.50kB(kilobytes)\times\frac{60}{5}(1000\times100)}{3600}\times8=22,14Mb/s(megabit per sekund).
-\end{equation}
 \begin{lstlisting}
 #!/usr/bin/env bash
 
@@ -483,14 +477,6 @@ for arg in "${args[@]}"; do
 done
 exit 0
 \end{lstlisting}
-
-%\begin{center}
-%\begin{figure}
-%    \includegraphics{img/network-usage.svg}
-%    \caption{Nettverksbruk}
-%    \label{network-usage}
-%\end{figure}
-%\end{center}
 
 \begin{figure}[H]
     \centering
@@ -524,5 +510,12 @@ exit 0
 	\end{threeparttable}
 	\end{center}
 \end{table}
+For en utrulling i den skalen som vil være aktuelt for IKT-avdelingen vil ikke nettverkstrafikken være noen stor faktor. Figur \ref{network_traffic} viser at gjennomsnittlig vil en sjekk resultere i 8380 byte. Selv med 1000 enheter som overvåkes over SSH, der hver kjører 100 sjekker som kjører hvert 5. minutt, vil den totale båndbreddebruken, dersom alle sjekkene kjøre samtidig være:
+\begin{equation}
+\frac{8.38kB\times(1000\times100\times8)}{5\times60}=22346.67Kb/s = 22.35Mb/s
+\end{equation}
+På et gigabit-nettverk, som i tillegg er full duplex, vil ikke dette være nevneverdig. Icinga vil også fordele sjekkene utover slik at ikke alle kjører samtidig.
+
+Resultatene av testen av CPU-tid i \ref{cpu_usage}, viser at SSH krever mer CPU-tid enn NRPE. Mye av dette er på grunn av overhead ved tilkobling og frakobling, som tallene for SSH med ControlMaster viser. 
 
 Det ble valgt å benytte NRPE både for Linux- og Windows-servere. En fordel med dette er at samme protokoll for alle tilkoblinger fra Icinga-serveren til samme port (5666) på andre servere kan benyttes. Dette gjør at det kun trengs én brannmurregel for Icinga, som igjen holder antall angrepsvektorer nede. En annen fordel er at samme service- og command-objekter kan benyttes i Icinga for sjekker som skal utføres via NRPE, uavhengig av om hosten kjører Windows eller Linux.

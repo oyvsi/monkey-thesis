@@ -239,11 +239,35 @@ apt-get install nagios-nrpe-server nagios-plugins-basic
 
 For Red Hat og CentOS må det installeres en tredjeparts pakkebrønn som EPEL eller DAG før nrpe-server kan installeres med yum.
 
-%Bundy add mini-turorial for EPEL og DAG
-%rpm -Uhv http://apt.sw.be/redhat/el5/en/x86_64/rpmforge/RPMS//rpmforge-release-0.3.6-1.el5.rf.x86_64.rpm
-%http://www.sohailriaz.com/how-to-add-epel-repository-on-centos-rhel-6-x/
+Ved bruk av DAG må en "rpm"-pakken "rpmforge" installeres for å kunne bruke pakkebrønnen, slik:
 
-Konfigurasjonen skjer på samme måte som ved Windows. Det følger ikke med noen plugin-er når en installerer nagios-nrpe-server, derfor installeres også pakken "nagios-plugins-basic".
+\begin{lstlisting}
+rpm -Uvh http://apt.sw.be/redhat/el6/en/x86_64/rpmforge/RPMS/rpmforge-release-0.5.2-2.el6.rf.x86_64.rpm
+\end{lstlisting}
+
+For EPEL:
+
+\begin{lstlisting}
+sudo rpm -Uvh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
+\end{lstlisting}
+
+En kan verifisere at pakkebrønnene ble lagt til ved å kjøre en listing av direktivet /etc/yum.repos.d/:
+
+\begin{lstlisting}
+$ ls -1 /etc/yum.repos.d/epel*
+/etc/yum.repos.d/epel.repo
+/etc/yum.repos.d/epel-testing.repo
+\end{lstlisting}
+
+Installasjon av NRPE via yum etter at pakkebrønnene er lagt til:
+
+\begin{lstlisting}
+sudo yum install nagios-nrpe-2.12-1.el6.rf.x86_64.rpm 
+\end{lstlisting}
+
+Eksemplene er for CentOS og RHEL 6.x 64-bit.
+
+Konfigurasjonen på Linux-servere skjer på samme måte som på Windows. Det følger ikke med noen plugin-er når en installerer nagios-nrpe-server, derfor installeres også pakken "nagios-plugins-basic".
 
 \section{Utrulling av agenter}
 NSclient++ kan lastes ned som en MSI-pakke, som kan pushes til servere med en GPO. Konfigurasjonsfilen må enten legges inn i MSI-pakken eller pushes over GPO for seg selv. Det er ikke benyttet fordi IKT-avdelingen ønsker å gjøre installasjonen manuelt, for å ha mest mulig kontroll, sikre seg mot uforutsette problemer og gjøre utrulling i faser. Det ble laget en veiledning på hvordan denne klienten skal installeres, og hvilke opsjoner som er relevant. Denne finnes i vedlegg \ref{agentguide}.
@@ -256,35 +280,38 @@ For annen infrastruktur brukes for det meste SNMP for å hente ut informasjon. D
 For både Linux- og Windows-servere er det satt opp noen grunnsjekker som skal kjøres på alle servere. Dette er CPU-last, harddiskplass og minnebruk. Hver sjekk er definert i et service-objekt der hostgroup-ene er satt til "windows\_servers" og "linux\_servers". 
 
 For alle disse sjekkene er det mulig å angi grenseverdier både som prosentandel og absolutte tall. Det kan også sjekkes mot både andel ledig og andel brukt. 
-\subsection{Disk}
-En full harddisk kan skape problemer for applikasjoner som lagrer data og logger fra systemet kan stoppe. Ved høyt minneforbruk og bruk av virtuelt minne i kombinasjon med en full disk vil ikke harddisken kunne utnyttes som swap, og applikasjoner kan stoppe å fungere.
-
-Linux:
-
-For å sjekke ledig plass på harddisken benyttes sjekken "Check\_disk" fra nagios-plugins.
-% TODO: Sjekk all mounts
-Check\_Disk
-\begin{lstlisting}
-./check_disk -w 8% -c 4% -e
-\end{lstlisting}
-Svar: 
-\begin{lstlisting}
-DISK OK| /=1232MB;15430;17359;0;19288 /lib/init/rw=0MB;402;452;0;503 /dev=0MB;394;443;0;493 /dev/shm=0MB;402;452;0;503
-\end{lstlisting}
-I sjekken over brukes opsjoner slik at det gis en advarsel om det er 8 \% ledig diskplass, og vil gi kritisk varsel dersom det er 4 \% ledig diskplass.
-
-For Windows-servere benyttes "CheckDisk" fra NSClient++. For å sjekke flere disker brukes opsjonen "CHECKALL", som gir en oversikt over alle diskene på serveren.
-
 \subsection{CPU}
 Overvåkning av CPU vil kunne hjelpe til med å oppdage ressursproblemer. Dette kan komme av flere CPU-krevende applikasjoner på samme server eller at en applikasjon bruker all CPU-kraft.  
 
 På Windows-servere benyttes "CheckCPU" fra NSClient++ for å sjekke CPU-last. Her legges det ved tre opsjoner i sjekken som spesifiserer tidsintervallet for datagrunnlaget, grensen for når det skal gis en advarsel og når det skal vises som en kritisk feil.
 
-Check\_CPU
+Kommandoen for pluginen slik den er definert i command-objektet. Dette henter et gjennomsnittsbruk av CPU over 5 minutter: 
+
 \begin{lstlisting}
 ./check_nrpe -u -H 10.60.0.22 -p 5666 -c CheckCPU -a time=5m warn=80 crit=90
 \end{lstlisting}
-I Figur \ref{cpustrain} returnerer CPU-sjekken "OK". Dette er hentet fra gjennomsnittsbruk av CPU over 5 minutter. Like under ser vi at testen er kritisk på grunn av et gjennomsnittsbruk av CPU på 96 \%. I Figur \ref{cpustrain} ser vi at alle de fire CPU-kjernene jobber oppmot maksimalt. Et batch-script ble kjørt lokalt på serveren som ble overvåket for å generere CPU-bruk.
+Svar:
+\begin{lstlisting}
+OK CPU Load ok.|'5m'=0%;80;90
+\end{lstlisting}
+
+I Figur \ref{cpuok} vises svaret fra CPU-sjekken i Icinga. 
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.8]{img/HiG3_cpu_ok}
+    \caption{Visning av en OK CPU-sjekk i Icinga}
+    \label{cpuok}
+\end{figure}
+
+I Figur \ref{cpucritical} ser vi at testen er kritisk på grunn av et gjennomsnittsbruk av CPU på 96 \%. 
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.8]{img/HiG3_cpu_critical}
+    \caption{Visning av en CRITICAL CPU-sjekk i Icinga}
+    \label{cpucritical}
+\end{figure}
+
+I Figur \ref{cpustrain} ser vi at alle de fire CPU-kjernene jobber oppmot maksimalt. Et batch-script ble kjørt lokalt på serveren som ble overvåket for å generere CPU-bruk.
 \begin{lstlisting}
 ## winloop.bat
 ##
@@ -303,7 +330,7 @@ GOTO loop
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.6]{img/cpu_test_hig3}
+    \includegraphics[scale=0.6]{img/HiG3_cpu_graph}
     \caption{CPU-bruk for HiG3}
     \label{cpustrain}
 \end{figure}
@@ -333,14 +360,36 @@ For Windows-servere brukes CheckMem fra NSClient++
 \begin{lstlisting}
 Check_Memory
 ./check_nrpe -u -H 10.60.0.22 -p 5666 -c CheckMem -a MaxWarnUsed=80% MaxCritUsed=90% type=physical
-
-Svar
+\end{lstlisting}
+Svar:
+\begin{lstlisting}
 OK memory within bounds.|'physical memory %'=16%;80;90 'physical memory'=1G;4;5;0;6
 \end{lstlisting}
 
 Opsjoner sendes med som gjør at sjekken gir warning når mer enn 80 \% av fysisk minne er brukt, når minneforbruket overstiger 90 \% blir minneforbruket kritisk.
 
-For Linux benyttes plugin check\_mem \cite{checklinuxmem}
+For Linux benyttes plugin-en check\_mem \cite{checklinuxmem}, da det ikke følger med noen plugin for å sjekke minneforbruk i nagios-plugins.
+
+\subsection{Disk}
+En full harddisk kan skape problemer for applikasjoner som lagrer data og logger fra systemet kan stoppe. Ved høyt minneforbruk og bruk av virtuelt minne i kombinasjon med en full disk vil ikke harddisken kunne utnyttes som swap, og applikasjoner kan stoppe å fungere.
+
+For Windows-servere benyttes "CheckDisk" fra NSClient++. For å sjekke flere disker brukes opsjonen "CHECKALL", som gir en oversikt over alle diskene på serveren.
+
+\begin{lstlisting}
+./check_nrpe -u -H 10.60.0.22 -p 5666 -c CheckDriveSize -a Drive="C" MaxWarnUsed=90% MaxCritUsed=95%
+./check_nrpe -u -H 10.60.0.22 -p 5666 -c CheckDriveSize -a MaxWarnUsed=94% MaxCritUsed=96% CheckAll
+\end{lstlisting}
+
+For Linux-servere benyttes sjekken "Check\_disk" fra nagios-plugins.
+% TODO: Sjekk all mounts
+Check\_Disk
+\begin{lstlisting}
+./check_disk -w 8% -c 4% -e
+\end{lstlisting}
+Svar: 
+\begin{lstlisting}
+DISK OK| /=1232MB;15430;17359;0;19288 /lib/init/rw=0MB;402;452;0;503 /dev=0MB;394;443;0;493 /dev/shm=0MB;402;452;0;503
+\end{lstlisting}
 
 \section{Tjenester}
 IKT-avdelingen ønsket å overvåke tjenester og prosesser på serverne. Prossesser er instanser av programmer som kjører. Tjenester er prosesser som kjører i bakgrunnen. 
