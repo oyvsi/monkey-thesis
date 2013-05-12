@@ -60,7 +60,10 @@ Koden under viser hvordan servers.csv er bygget opp. Inneholder også feil for �
 Kildekoden til scriptet ligger i Vedlegg \ref{gen.bash}.
 
 \section{Forventet nedtid}
-Schedule downtime. Er det nevnt under varsling?
+Tilfeller kan forekomme hvor en server må tas ut av drift på grunn av vedlikehold. I Icinga er det ikke nødvendig å fjerne denne fra konfigurasjonen, for å unngå at varslingsmelding blir sendt ut. I både Icinga Web og Icinga Classic har man mulighet til å bruke en funksjon som kalles ''Schedule Downtime''. Her blir nedetidens start og slutt definert.
+
+I den nedetidsperioden vil Icinga nekte varslingsmelding i å bli sendt ut. Når nedetidsperioden er ferdig, eller denne blir utført før avtalt tid, vil kontaktene som skal bli varslet få en melding om at nedetid er over, og Icinga vil ikke lengre holde igjen varlser.
+
 \section{Stoppe varsling}
 acknowledge, stopper gjenvarsling??
 \section{Autentisering mot Active Directory} 
