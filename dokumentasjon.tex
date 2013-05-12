@@ -181,3 +181,28 @@ Tabell med sjekker og tilhørende parametere:
 \label{objekt_varsling}
 \end{center}
 \end{table}
+
+\section{Backup-rutiner}
+I Tabell \ref{backup}, vises viktige filer og mapper for overvåkningsløsningen. Disse bør integreres i en backup av Icinga-serveren.
+\begin{table} \label{backup}
+\begin{center}
+\begin{tabular}{| p{8cm} | p{8cm} |}
+ \hline
+        \textbf{Filbane} & \textbf{Inneholder}
+	\\ \hline
+	/etc/icinga/						& Alle konfigurasjonsfiler for Icinga \\ \hline
+	/usr/lib/nagios/plugins/				& Alle plugin-er \\ \hline
+	/etc/nagios-plugins/config				& Konfigurasjon for default plugins \\ \hline
+	/root/Scripts						& Lokale script. \\ \hline
+	/etc/snmp 						& Konfigurasjon for snmptt \\ \hline
+	/etc/default/snmp 					& Konfigurasjon for at snmpd starter snmptrapd \\ \hline
+	/etc/sysconfig/icinga					& Konfigurasjon for environment variabler \\ \hline
+	/usr/lib/oracle/11.2/client64/network/
+	admin/tnsnames.ora					& Konfigurasjon for oracle-instanser \\ \hline
+	/etc/init.d/carbon-cache				& Init script for grafprosessering gjennom graphite \\ \hline
+	/etc/init.d/metricinga					& Init script for prosessering av perfdata fra Icinga \\ \hline
+	/opt/graphite/						& Konfigurasjon og data for genering av grafer  \\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+I tilegg bruker Icinga Classic og Icinga Web hver sine databaser, kalt ''icinga'' og ''icinga\_web''. Graphite bruker også en database, som heter ''graphite''.
