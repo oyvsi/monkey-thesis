@@ -1,5 +1,5 @@
 \chapter{Sikkerhet}\label{chap:sikkerhet}
-Informasjon som brukes av overvåkningsserveren til å avgjøre tilstanden til en enhet eller tjeneste kommer fra eksterne kilder. Aksesstilgang må eksistere både på de eksterne enhetene som overvåkes, og på overvåkningsserveren for muligheten til å ta i bruk traps. Plugin-er vil ha eksekveringstillatelse på eksterne enheter, og SNMP trap-meldinger sender informasjon via en port på overvåkningsserveren. Ulike sikkerhetsrisikoer og hvordan dette kan håndteres for å minske graden av sårbarhet vil bli gått gjennom i dette kapittelet.
+Informasjon som brukes av overvåkningsserveren til å avgjøre tilstanden til en enhet eller tjeneste kommer fra eksterne kilder. Aksesstilgang må eksistere både på de eksterne enhetene som overvåkes, og på overvåkningsserveren for muligheten til å ta i bruk traps. Plugin-er vil ha eksekveringstillatelse på eksterne enheter, og SNMP trap-meldinger sender informasjon via en port på overvåkningsserveren. Fokus for dette prosjektet har vært implementasjon, men det har også blitt tatt noen sikkerhetsvurderinger underveis. Ulike sikkerhetsrisikoer og hvordan dette kan håndteres for å minske graden av sårbarhet vil bli gått gjennom i dette kapittelet.
 
 \section{Plugin-er}
 Flere plugin-er har blitt installert i etterkant av Icinga, og dette utgjør en viss sikkerhetsrisiko. En god del plugin-er har et omfang på 1000-5000 linjer og det er en tidkrevende prosess å kvalitetsikre alle. De sjekkene som eksekveres på andre enheter, og ikke på selve Icinga-serveren, er plugin-er som kommer med nagios-plugins og NSclient++. Disse blir brukt av et stort antall organisasjoner og andre. Gruppen har også fulgt med på fora og kommentarfelt for de ulike plugin-ene for å kunne være trygge på de plugin-ene som kjører på hver enkelt host. 
@@ -18,7 +18,7 @@ I SNMP v3 er det mange muligheter for økt sikkerhet:
 	\item Integritet. Hashing med MD5 eller SHA
 	\item Autentisering. Det kan settes rettigheter for spesifikke OID-er for spesifiserte brukere
 \end{itemize}
-
+Overgang til SNMPv3 vil medføre en konfigurasjonsendring på alle enheter som skal overvåkes. En vil også måtte bytte ut eller endre en del plugin-er da disse benytter SNMPv2 eller v1.
 \subsubsection{NRPE}
 For kryptering og gjenkjenning av hosts har NRPE implementert OpenSSL med en anonymous Diffie-Hellmann. Plugin-en bruker h-filen dh.h til å generere base-nummer og prim-nummer for diffie-hellmann nøkkelutveksling. Disse blir satt statisk ved kompilering av kildekoden, noe som vil si at det er likt for alle debian-pakkene. Etter autentisering av host og Icinga-serveren brukes AES 256 bit for kryptering av trafikk \cite{nrpessl}.
 
@@ -29,19 +29,20 @@ For Windows som bruker NSClient++ kan det settes opp passord som i tillegg kreve
 Videre utvidelse av implementasjonen av NRPE vil være å ta i bruk forhåndssignerte sertifikater 
 som NSClient++ støtter, det vil da føre til en sikrere nøkkelutveksling enn dagens som bare baseres på et prim og basenummer som er definert ved kompilering.
 
-% TODO: NEED HOTFIXES
 \subsubsection{NSClient++}
-allow\_nasty\_meta\_chars, gjør at WMI-spørringer kan sendes som parameter til check\_nrpe og ikke blir regnet som skadelige når NSclient++ mottar de. Serverporten defineres slik at kun Icinga-serveren har tilgang til å koble til via NRPE.
+allow\_nasty\_meta\_chars, gjør at WMI-spørringer kan sendes som parameter til check\_nrpe og ikke blir regnet som skadelige når NSclient++ mottar de. Dette er fordi en del karakterer vanligvis ville blitt escapet.
 
-\subsubsection{Brukerkontoer}
+I konfigurasjonesfilen for NSClient++ defineres serveradressen slik at kun Icinga-serveren har tilgang til å koble til via NRPE. Dersom denne settes opp til å inkludere et subnett eller inneholder feil adresse vil det være mulig for andre enheter enn Icinga-serveren å koble seg til NRPE-agenten.
+
+\section{Brukerkontoer}
 En brukerkonto ble opprettet i Active Directory for Icinga. Denne benyttes ved tilkobling mot domenet på flere områder:
 \begin{itemize}
 	\item Sjekk av LDAP.
 	\item Synkronisering av kontakter.
 	\item Tilkobling mot MSSQL database.
-	\item ???
-	\item Service-kontoer i forbindelse med VMware og Xen ble opprettet med read-only rettigheter.
+	\item Tilkobling til VMware (Read-only i Virtual Center).
 \end{itemize}
+Brukeren som brukes for XenServer har rollen Pool Admin, da IKT-avdelingen bruker en versjon som ikke har funksjonen "Role Base Access Control". 
 
-\subsubsection{LDAP}
+\subsection{LDAP}
 LDAP benyttes ved synkronisering av kontakter og kan benyttes til innlogging i Icinga Web og Icinga Classic, som beskrevet i /ref{ldap auth}. LDAP over SSL kan benyttes for å kryptere denne kommunikasjonen. Da må et sertifikat installeres på Icinga-serveren.
