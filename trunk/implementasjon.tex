@@ -331,7 +331,7 @@ GOTO loop
 
 På Linux-servere baserer sjekk av CPU-bruk seg på ''load-average'' \cite{loadavg} \cite{wiki:loadavg}. Dette er i hovedsak et gjennomsnitt for hvor mange prosesser som bruker eller venter på CPU-en, men disk- eller nettverks-I/O kan også spille inn. For servere med flere kjerner vil dette fortone seg annerledes da en kan utføre flere prosesser parallelt. Load-tallene må deles på antallet CPU-kjerner for at det skal kunne brukes samme grenseverdier uavhengig av hvor mange kjerner serveren har. Dette gjøres med opsjonen ''r''.
 
-Tallene som hentes ut er gjennomsnittet for de siste 1, 5 og 15 minuttene. Det er mer interessant hvis load-en er høy over lengre tid, derfor er grenseverdiene lavere for 5 og 15 minutters intervallene. Eksempel på load-tall: \bf{load average}: 0.65 0.42 0.36.
+Tallene som hentes ut er gjennomsnittet for de siste 1, 5 og 15 minuttene. Det er mer interessant hvis load-en er høy over lengre tid, derfor er grenseverdiene lavere for 5 og 15 minutters intervallene. Eksempel på load-tall: {\bf load average}: 0.65 0.42 0.36.
 
 check\_load fra nagios-plugins:
 I service-objektet:
