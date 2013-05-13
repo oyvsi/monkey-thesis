@@ -23,6 +23,8 @@
 \usepackage{color}
 \geometry{a4paper, top=2.0cm, left=3.0cm, right=3.0cm, bottom=2.5cm, includehead, includefoot}
 \usepackage{sverb}
+
+
 %\usepackage[compact]{titlesec}
 
 %\titlespacing{\section}{0pt}{5ex}{0ex}
@@ -99,9 +101,12 @@ xleftmargin=3em, framexrightmargin=5pt, framexbottommargin=4pt
 \title{Rapport, Monitoring is Key}
 \author{Øyvind Sigerstad, Nils Slåen og Bjørn-Erik Strand}
 
-\tolerance = 10000
+\predisplaypenalty=10000
+\tolerance = 5000 % Hvor mange ord kan paa hver linje
 \hbadness = \tolerance
-\pretolerance = 4000
+\pretolerance = 2000
+\raggedbottom
+
 
 \begin{document}
 
@@ -222,7 +227,6 @@ I dette vedlegget finnes:\\
 
 \chapter{Statusrapporter}\label{app:statusrapporter}
 I dette vedlegget finnes statusrapporter skrevet for hver iterasjon.
-%\modifiedincludepdf{-}{status1}{status/status1.pdf}
 %\modifiedincludepdf{-}{status2}{status/status2.pdf}
 
 \includepdf[pages=-]{status/status1.pdf}
