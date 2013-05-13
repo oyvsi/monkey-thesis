@@ -40,13 +40,13 @@ I Figur \ref{laboppsett} vises det logiske oppsettet av labmiljøet. I Tabell \r
 
 \subsubsection{Produksjonsserveren}
 Spesifikasjonene på bladeserveren:
-\begin{itemize}
+\begin{itemize*}
 \item 4 CPU-er med 4 kjerner à 2.4 GHz
 \item 32 GB RAM
 \item Debian 6
-\end{itemize}
+\end{itemize*}
 Programvare:
-\begin{itemize}
+\begin{itemize*}
 \item Debian 6
 \item Apache2
 \item MySQL
@@ -56,7 +56,7 @@ Programvare:
 \item Graphite
 \item Metricinga 
 \item sendmail
-\end{itemize}
+\end{itemize*}
 
 \subsubsection{Enhet for overvåkning av servermiljø}
 For å overvåke temperatur og luftfuktighet på serverrommet ble det i samråd med IKT-avdelingen kjøpt inn en APC NetBotz 200, som støtter opptil 12 eksterne sensorer \cite{netbotz}. Denne oppfyller kravene gitt i oppgavebeskrivelsen. 
@@ -80,7 +80,7 @@ Tidlig ble det avgjort at Icinga Web primært skulle brukes som webgrensesnitt m
 Etter testing ble det oppdaget at Icinga Web opplevdes som mye tregere enn Icinga Classic og inneholder en feil som ble rapportert tilbake til Icinga Development Team. Feilen som ble rapportert inn omfatter søk på hostgroup-objekter eller servicegroup-objekter (link til bugreport \cite{icingawebbug}). Det ble derfor lagt opp til at både Icinga Classic og Icinga Web kan benyttes på lik linje.
 \subsection{Konfigurasjonsfiler}
 Ved standard installasjon av Icinga er konfigurasjonen delt opp i objekttyper med flere objekter i hver fil:
-\begin{itemize}
+\begin{itemize*}
 \item contacts\_icinga.cfg  
 \item generic-host\_icinga.cfg     
 \item hostgroups\_icinga.cfg  
@@ -90,7 +90,7 @@ Ved standard installasjon av Icinga er konfigurasjonen delt opp i objekttyper me
 \item generic-service\_icinga.cfg   
 \item services\_icinga.cfg
 \item commands.cfg
-\end{itemize}
+\end{itemize*}
 %TODO: Finn cite
 Dette var uoversiktlig og en mer oppdelt konfigurasjon var ønskelig, som også er anbefalt ved større installasjoner \cite{sysadmin} + nagios-boka. Derfor ble det bestemt å sette opp følgende hovedinndeling (med undermapper videre der det var hensiktsmessig):
 
@@ -477,13 +477,13 @@ Kommando som er brukt for å sjekke antallet aktive brukere på en terminalserve
 Microsoft Exchange benyttes som e-postsystem for fylkeskommunen. Her routes og lagres all e-post som sendes ut og inn av alle brukere. I tillegg benyttes funksjonalitet som kalenderdeling, kontakter, og er integrert med telefonsystemet. Exchange er kritisk for kommunikasjon mellom ulike avdelinger i fylkeskommunen, og utad. 
 
 Som for terminalservere, beskrevet i \ref{sect:terminalservere}, brukes Microsoft Performance Monitor for å få tilgang til en rekke viktige tall om Exchange-serverenes ytelse. Firmaet SolarWinds, som selger en kommersiell overvåkningsløsning anbefaler annet at følgende parametre overvåkes\cite{exchange}, i tillegg til basisjekkene CPU, disk og minne:
-\begin{itemize}
+\begin{itemize*}
 	\item Antall tilkoblinger. Dersom antallet er høyt kan det føre til at e-postklienter oppfattes som trege av brukerne.
 	\item Gjennomsnittlig responstid på forespørsler. Høye tall vil oppfattes som treghet for brukerne.
 	\item Antall meldinger sendt per sekund. Ved høye tall kan det være mistanke om at mail-serveren blir brukt til spam, eller at klienter på nettverket har blit kompromittert.
 	\item Antall LDAP-søk som gir timeout. Høye tall kan indikerer mange tilkoblingsfeil mot Active Directory.
 	\item Størrelse på leveringskø. Antall e-poster som ikke har blitt prosessert.
-\end{itemize}
+\end{itemize*}
 Microsoft har gitt ut egne anbefalinger til grenseverdier som er benyttet som et utgangspunkt\cite{exchangethresholds}.
 
 I tillegg til disse sjekkene var det ønskelig å teste hele e-postoppsettet i én sjekk. Til dette benyttes pluginen ``check\_email\_delivery'' \cite{exchange}. Her sjekkes det at en e-post kan sendes fra SMTP-serveren. E-posten som sendes ut inneholder en unik ID. Videre kobler pluginen seg til IMAP-tjenesten og sjekker om e-posten med den unike ID-en kom frem. Antall sekunder for hele round-tripen blir målt. Helst skulle en sendt e-posten fra en SMTP-server som står utenfor nettverket, men det var ikke tilgjengelig under implementasjonensperioden.
@@ -517,19 +517,19 @@ check_cluster --service -l "Check HTTP"  -d $SERVICESTATEID:localhost:Check HTTP
 Databaser brukes i mange av applikasjonene IKT-avdelingen drifter for brukerne. På databaseserverne samles dataen fra disse applikasjonene på et sted. 
 
 Tre forskjellige databasemotorer brukes. Disse er MySQL, MSSQL og Oracle DB. Hver av disse har ulik arkitektur og virkemåte \cite{databasecomparison}, og derfor blir ikke de samme parameterne overvåket på alle. Felles for alle er:
-\begin{itemize}
+\begin{itemize*}
 	\item Connection time (tid det tar å koble til SQL serveren).
 	\item Connected users (antall aktive sessioner mot SQL serveren).
 	\item Cache hit rate (antall spørringer som blir hentet fra cache i et tidsintervall).
-\end{itemize}
+\end{itemize*}
 
 Noen av sjekkene er spesifikke for hver databasemotor, og er valgt for å få en oversikt over trege spørringer:
-\begin{itemize}
+\begin{itemize*}
 \item MySQL: Slow queries (antall trege spørringer SQL serveren utfører i et gitt tidsintervall).
 \item MSSQL: Lazy writes ()
 \item Oracle: Free table space (plass ledig for tabellene).
 \item Oracle: Switch interval (overvåker load).
-\end{itemize}
+\end{itemize*}
 
 \subsection*{Connection time}
 Sjekken av connection time tester om det er mulig å koble til SQL-serveren. Hvis denne sjekken gir en timeout, er det fordi sjekken ikke får kontakt på porten til serveren. Her definerers det parametere for hvor lang tid det bør ta å koble til. Hvis tilkoblingstiden blir for lang varsler Icinga om dette. Grenseverdier her er valgt ut fra gjennomsnittlig tilkoblingstid over 30 dager.
@@ -633,11 +633,11 @@ Konfigurasjon for command-objektet for MSSQL og MySQL vises under. \$ARG1\$ bruk
 
 \subsubsection{MySQL Cluster}
 MySQL Cluster er et distribuert oppsett for MySQL. Ved IKT-avdelingen benyttes et MySQL Cluster med NDB som lagringsmotor, der databasene kjører i minnet. Et MySQL Cluster består av tre forskjellige nodetyper \cite{ndbinformation}:
-\begin{itemize}
+\begin{itemize*}
 	\item Management - her konfigureres clusteret og en setter opp hvor mange Data- og SQL-noder som kan kobles til.
 	\item Data - oppbevarer tabeller og tabelldata i RAM. Disse håndterer lastbalansering, replikering, failover og gjenoppbygging automatisk i mellom hverandre.
 	\item SQL - MySQL servere som kobler seg til data-nodene for å hente og lagre data.
-\end{itemize}
+\end{itemize*}
 
 Den enkleste måten å hente ut statistikk for et MySQL Cluster, er å benytte administrasjonsprogrammet ``ndb\_adm''. Denne kan hentes ut fra installasjonspakken til mysql-cluster\cite{ndbdownload}. I ndb\_adm kan en se hvor mange noder av hver type som er tilkoblet management-noden og minneforbruket til hver av datanodene. De plugin-ene som benyttes baserer seg på output fra ndb\_adm.
 
@@ -730,13 +730,13 @@ Cisco-routere og brannmurer har en viktig funksjon som kalles failover. Failover
 Dersom primary går ned, vil secondary ta over nødvendige ruter, brannmurregler og konfigurasjon. Secondary vil dermed overta IP- og MAC-adressen til primary. Primary vil bli satt som passiv (trenger ikke nødvendigvis å ha en passiv IP-adresse, fordi IP-kommunikasjon kun går gjennom det aktive interfacet) helt til en manuelt endrer dette tilbake i konfigurasjonen. \cite{ciscofailover} 
 
 Sjekkene som settes opp for å verifisere at failover-funksjonaliteten fungerer som den skal, og at det ikke har intruffet feil er:
-\begin{itemize}
+\begin{itemize*}
 \item Hvis primary er satt som aktivt og secondary er passiv returneres OK.
 \item Om primary er satt som passiv returneres WARNING. 
 \item Om secondary er satt som aktiv returneres WARNING.
 \item Hvis primary eller secondary får en error returneres CRITICAL.
 \item Hvis failover ikke er konfigurert returneres UNKNOWN. 
-\end{itemize}
+\end{itemize*}
 
 Til dette benyttes plugin-en ``check\_cisco\_firewall'' \cite{checkciscofirewall}.
 
@@ -786,12 +786,12 @@ For overvåkning av virtuelle maskiner brukes NRPE, det overvåkes da som en ``e
 Plugin-en ``check\_vmware\_api.pl'' , som er utviklet av fri programvare firmaet op5 \cite{op5}, er brukt for å hente ut informasjonen fra VMware vCenter. Denne pluginen bruker et SDK-bibliotek i Perl \cite{vmwareperl} for å utføre API-kall til Virtual Center. Autentisering skjer ved å sende med brukernavn og passord for en brukerkonto, som er opprettet i Virtual Center-serveren med read-rettigheter. For å utveksle informasjon blir SOAP-protokollen benyttet \cite{wiki:soap} via HTTPS \cite{ciscovirtual}.
 
 VMware Virtual Center bruker fire intervaller for lagring av historisk data \cite{vmwareperf}. Dette er gjennomsnittet for:
-\begin{enumerate}
+\begin{enumerate*}
         \item hvert 5. minutt over en dag
         \item hvert 30. minutt i en uke
         \item hver 2. time i en måned
         \item en dag over ett år
-\end{enumerate}
+\end{enumerate*}
 
 Pluginen i CLI:
 \begin{lstlisting}[style=example]
@@ -870,12 +870,12 @@ Opsjenene blir da ``-S \$HOST\_MASTERIP\$'' og ``-H \$HOSTADDRESS\$''.
 
 RRD-databasen pluginen spør, lagrer data i følgende intervaller:
 
-\begin{enumerate}
+\begin{enumerate*}
         \item Hvert 5. sekund i en 10 minutters periode
         \item Hvert minutt for de siste 2 timene
 	\item Hver time for den siste uken
         \item Hver dag for det siste året
-\end{enumerate}
+\end{enumerate*}
 
 For hvert 5. sekund blir aktuelle datapunkter lagret. For de andre intervallene blir en minimum-, maksimum-, og gjennomsnittsverdi over gitt tidsperiode lagret ved bruk av en konsolideringsfunksjon. \ref{xenrrd}
 
@@ -884,16 +884,16 @@ Det oppstod et problem under implementeringen av check\_xenplugin.api, som hadde
 \paragraph{Ressurser}
 Ressurser som er valgt å overvåke for Xen hosts:
 
-\begin{itemize}
+\begin{itemize*}
         \item CPU-bruk(Totalbruk for alle kjerner ÷ antall kjerner)
-        \begin{itemize}
+        \begin{itemize*}
                 \item Grenseverdier (\%): WARNING 80 CRITICAL 90
-        \end{itemize}
+        \end{itemize*}
         \item Minne-bruk (Totalt allokert minne - ledig minne)
-        \begin{itemize}
+        \begin{itemize*}
                 \item Grenseverdier (\%): WARNING 80 CRITICAL 90
-        \end{itemize}
-\end{itemize}
+        \end{itemize*}
+\end{itemize*}
 
 \subsection{Trådløse kontrollere}
 IKT-avdelingen bruker en trådløskontrollerløsning fra Meru Networks. Disse har en viktig rolle i fylkeskommunens nettverk. På en dag har disse rundt 6000 samtidige brukere tilkoblet via aksesspunkter-er ute på hver lokasjon.
@@ -901,14 +901,14 @@ IKT-avdelingen bruker en trådløskontrollerløsning fra Meru Networks. Disse ha
 AP-ene i seg selv inneholder ingen konfigurasjon da de starter opp. Denne lastes fra kontrolleren. Alle tilkoblingene går i krypterte sessioner direkte mot kontrolleren hvor trafikken blir sendt til respektive mottakere. Fordi det går store mengder trafikk over de trådløse nettverkene er det viktig at kontrollerne blir overvåket.
 
 De trådløse kontrollerne mangler støtter for SNMP-get for informasjon som hentes ut fra switcher og brannmurer, som CPU- og minnebruk. Dette vil i følge produsenten komme i en senere firmware-oppdatering. Noe av dette kan løses ved å bruke SNMP-traps i stedet og definere verdier for når disse skal sendes ut direkte på kontrollerne. Her ble relevante trap-meldinger som omhandler kontrollerne satt opp:
-\begin{itemize}
+\begin{itemize*}
 	\item Hardware-feil på kontrolleren
 	\item Ressursmangel på kontrolleren
 	\item Rogue AP - et udefinert aksesspunkt er oppdaget av de andre aksesspunktene.
 	\item Failover til annen kontroller
 	\item Feil på tilkobling mot Radius
 	\item Lisens utløpt
-\end{itemize}
+\end{itemize*}
 
 For å få til dette trengs et mellomledd som kan motta SNMP-traps på Icinga-serveren, tolke trap-meldingene og sende informasjonen videre til Icinga. 
 
@@ -939,20 +939,20 @@ EDESC
 \end{lstlisting}
 
 Her benyttes variabler i snmptt \cite{snmptrans}:
-\begin{itemize}
+\begin{itemize*}
 	\item IP-adressen til snmp agenten, altså kontrollereren
 	\item Navnet på trap-en
 	\item Beskrivelse på trap fra konfigurasjonfilen.
-\end{itemize}
+\end{itemize*}
 
 SNMPtt vil så kjøre kommandoen definert under ``EXEC'' for OID-en, som i dette tilfellet er å sende informasjonen videre til scriptet ``submit\_check\_result''. Dette tar fire argumenter:
 
-\begin{itemize}
+\begin{itemize*}
 	\item IP-adresse eller hostname 
 	\item Service description
 	\item Returkode som setter tilstand på service-objektet (0-3)
 	\item Plugin-output
-\end{itemize}
+\end{itemize*}
 Scriptet skriver dette sammen med et timestamp til icinga.cmd som Icinga sjekker periodisk etter resultat av passive sjekker.
 
 Service description for alle meru traps som sendes inn vil da være ``meru\_'' + navnet på trap-en. Som plugin-output er det lagt inn beskrivelse av trap-en, da denne som regel er noe mindre kryptisk enn navnet.
@@ -987,11 +987,11 @@ UPS (Uninterruptible Power Supply), ofte kalt avbruddsfri strømforsyning på no
 Ved IKT-avdelingen benyttes UPS-er av fabrikatene APC og HP.
 
 For HP og APC overvåkes:
-\begin{itemize}
+\begin{itemize*}
  	\item Gjenstående batterikapasitet
 	\item Prosentandel belastning
 	\item Spenning inn og ut
-\end{itemize}
+\end{itemize*}
 På APC UPS-er overvåkes også intern temperatur. For både HP og APC overvåkes alle parametere direkte over SNMP med pluginen ``check\_snmp'' fra nagios-plugins. Her er OID-ene definert direkte i service-objektene.
 
 Under vises et eksempel på hvordan inntaksspenning overvåkes på en APC UPS:

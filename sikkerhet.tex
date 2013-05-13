@@ -13,11 +13,11 @@ Utstyr som skal sende SNMP-traps til Icinga må få åpnet tilgang i brannmurene
 I implementasjonen er det benyttet SNMP v2c for alt utstyr som støtter det. I noen få tilfeller har bare v1 vært støttet. Både v1 og v2c benytter autentisering basert på en klar tekststring kalt “community string”. Det er heller ingen integritetssjekk som verifiserer at kommandoen som ble sendt er den samme som kom fram. Dette er viktigere dersom en sender “write-kommandoer”, men i dette prosjektet benyttes bare “read” for å hente ut informasjon.
 
 I SNMP v3 er det mange muligheter for økt sikkerhet:
-\begin{itemize}
+\begin{itemize*}
 	\item Konfidensialitet. Kryptering. DES
 	\item Integritet. Hashing med MD5 eller SHA
 	\item Autentisering. Det kan settes rettigheter for spesifikke OID-er for spesifiserte brukere
-\end{itemize}
+\end{itemize*}
 Overgang til SNMPv3 vil medføre en konfigurasjonsendring på alle enheter som skal overvåkes. En vil også måtte bytte ut eller endre en del plugin-er da disse benytter SNMPv2 eller v1.
 \subsubsection{NRPE}
 For kryptering og gjenkjenning av hosts har NRPE implementert OpenSSL med en anonymous Diffie-Hellmann. Plugin-en bruker h-filen dh.h til å generere base-nummer og prim-nummer for diffie-hellmann nøkkelutveksling. Disse blir satt statisk ved kompilering av kildekoden, noe som vil si at det er likt for alle debian-pakkene. Etter autentisering av host og Icinga-serveren brukes AES 256 bit for kryptering av trafikk \cite{nrpessl}.
@@ -36,12 +36,12 @@ I konfigurasjonesfilen for NSClient++ defineres serveradressen slik at kun Icing
 
 \section{Brukerkontoer}
 En brukerkonto ble opprettet i Active Directory for Icinga. Denne benyttes ved tilkobling mot domenet på flere områder:
-\begin{itemize}
+\begin{itemize*}
 	\item Sjekk av LDAP.
 	\item Synkronisering av kontakter.
 	\item Tilkobling mot MSSQL database.
 	\item Tilkobling til VMware (Read-only i Virtual Center).
-\end{itemize}
+\end{itemize*}
 Brukeren som brukes for XenServer har rollen Pool Admin, da IKT-avdelingen bruker en versjon som ikke har funksjonen ``Role Base Access Control''. 
 
 \subsection{LDAP}
