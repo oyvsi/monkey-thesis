@@ -188,7 +188,7 @@ else
 fi
 \end{lstlisting}
 
-Det finnes et sett med offisielle plugin-er til Nagios; nagios-plugins, som utgis av ''Nagios Plugins project''. Pakken finnes i en rekke pakkebehandlere og inneholder over 50 plugin-er som er ment for å dekke et grunnleggende overvåkningsbehov.\cite{nagiosplugins}
+Det finnes et sett med offisielle plugin-er til Nagios; nagios-plugins, som utgis av ``Nagios Plugins project''. Pakken finnes i en rekke pakkebehandlere og inneholder over 50 plugin-er som er ment for å dekke et grunnleggende overvåkningsbehov.\cite{nagiosplugins}
 
 \begin{table}[H]
 	\begin{center}
@@ -213,10 +213,10 @@ Det finnes et sett med offisielle plugin-er til Nagios; nagios-plugins, som utgi
 \section{Sjekker}\label{sec:sjekker}
 Tilstanden for et service- eller host-objekt vil bestemmes ut i fra et returnert resultat fra en aktiv eller passiv sjekk. Forskjellen på disse to vil bli forklart i de neste delkapitlene.
 
-Dersom en aktiv eller passiv sjekk resulterer i en annen tilstand enn ''OK'', er det to typer av tilstanden, ''SOFT'' og ''HARD''. Første gang en plugin returnerer en feil vil tilstanden bli satt til ''SOFT'', i tillegg til service- eller host-tilstanden. Etter dette vil sjekken kjøres hyppigere for å finne ut om det er snakk om et forbigående problem. Etter et gitt antall ganger der plugin-en fortsatt ikke returnerer ''OK'', vil tilstanden skifte til ''HARD'' og det sendes ut varslingsmelding. Varsling er beskrevet grundigere i \ref{sec:varslingsmelding}.
+Dersom en aktiv eller passiv sjekk resulterer i en annen tilstand enn ``OK'', er det to typer av tilstanden, ``SOFT'' og ``HARD''. Første gang en plugin returnerer en feil vil tilstanden bli satt til ``SOFT'', i tillegg til service- eller host-tilstanden. Etter dette vil sjekken kjøres hyppigere for å finne ut om det er snakk om et forbigående problem. Etter et gitt antall ganger der plugin-en fortsatt ikke returnerer ``OK'', vil tilstanden skifte til ``HARD'' og det sendes ut varslingsmelding. Varsling er beskrevet grundigere i \ref{sec:varslingsmelding}.
 
 \subsubsection{Aktive sjekker}
-En aktiv sjekk er en sjekk som initieres av Icinga, der en kommando kjøres på Icinga-serveren. Dette er også kjent som en ''poll''-modell. En aktiv sjekk defineres ut i fra et command-objekt med parametere og et tidsintervall i service- og host-objekter. I command-objektet defineres en plugin som skal kjøre, og returverdien fra denne vil bestemme hvilken tilstand service- eller host-objektet har. I Figur \ref{active_checks} vises komponentene involvert i en aktiv sjekk.
+En aktiv sjekk er en sjekk som initieres av Icinga, der en kommando kjøres på Icinga-serveren. Dette er også kjent som en ``poll''-modell. En aktiv sjekk defineres ut i fra et command-objekt med parametere og et tidsintervall i service- og host-objekter. I command-objektet defineres en plugin som skal kjøre, og returverdien fra denne vil bestemme hvilken tilstand service- eller host-objektet har. I Figur \ref{active_checks} vises komponentene involvert i en aktiv sjekk.
 \begin{figure}
    \centering 
    \includegraphics[scale=0.7]{img/activechecks.png}
@@ -225,7 +225,7 @@ En aktiv sjekk er en sjekk som initieres av Icinga, der en kommando kjøres på 
 \end{figure}
 
 \subsubsection{Passive sjekker}
-Passive sjekker går motsatt vei av aktive sjekker. Her vil hver host si ifra når verdier har overgått en satt grense eller en feil har oppstått. Dette kalles ofte for en ''push''-modell. Passive sjekker kjøres ved at et eksternt program skriver en linje med informasjon om tjenesten og sjekkresultat til en fil, som Icinga sjekker periodisk. Dette er illustrert i Figur\ref{passive_checks}.
+Passive sjekker går motsatt vei av aktive sjekker. Her vil hver host si ifra når verdier har overgått en satt grense eller en feil har oppstått. Dette kalles ofte for en ``push''-modell. Passive sjekker kjøres ved at et eksternt program skriver en linje med informasjon om tjenesten og sjekkresultat til en fil, som Icinga sjekker periodisk. Dette er illustrert i Figur\ref{passive_checks}.
 
 Fordelen med passive sjekker er at Icinga vil oppdage feil raskere. Ved standard konfigurasjon sjekkes filen med sjekkresultater så ofte som mulig, mens aktive sjekker kjøres hver 5. minutt. Passive sjekker vil også avlaste Icinga-serveren, da alle sjekker utelukkende vil bli kjørt lokalt på enheten som overvåkes. Men en må åpne for at kommunikasjon kan initieres fra alle enheter som skal overvåkes til Icinga-serveren, og mister da samtidig muligheten til å samle all konfigurasjon på ett sentralt sted. 
 
@@ -237,9 +237,9 @@ Fordelen med passive sjekker er at Icinga vil oppdage feil raskere. Ved standard
 \end{figure}
 
 \subsubsection{Hostsjekk}
-Resultatet av en host-sjekk vil avgjøre om tilstanden til host-objektet er ''UP'' eller ''DOWN''. 
+Resultatet av en host-sjekk vil avgjøre om tilstanden til host-objektet er ``UP'' eller ``DOWN''. 
 
-Det er ikke et fast tidsintervall for en hostsjekk med mindre check\_interval er definert for objektet. Icinga vil kjøre sjekken om en service som er satt opp for host-en skifter tilstand. Service-objekter som er definert for en host som er i ''DOWN'' vil automatisk bli vist under ''Known service problems'' i webgrensesnittet, og ingen sjekker vil bli kjørt på dem før host-en er ''OK'' igjen.
+Det er ikke et fast tidsintervall for en hostsjekk med mindre check\_interval er definert for objektet. Icinga vil kjøre sjekken om en service som er satt opp for host-en skifter tilstand. Service-objekter som er definert for en host som er i ``DOWN'' vil automatisk bli vist under ``Known service problems'' i webgrensesnittet, og ingen sjekker vil bli kjørt på dem før host-en er ``OK'' igjen.
 
 Grunnsjekken for en host defineres i host-konfigurasjonen med ''check\_command'', som vist under.
 \begin{lstlisting}[style=example]
@@ -262,12 +262,12 @@ define command {
 }
 \end{lstlisting}
 
-Her benyttes de innebygde variablene ''USER1'' for banen til plugin-en som kjøres, HOSTADDRESS for IP-en til den hosten som sjekken skal kjøres på og den egendefinerte variabelen \_SSHPORT som defineres på host-objektet.
+Her benyttes de innebygde variablene ``USER1'' for banen til plugin-en som kjøres, HOSTADDRESS for IP-en til den hosten som sjekken skal kjøres på og den egendefinerte variabelen \_SSHPORT som defineres på host-objektet.
 
 %TODO User variable sjules fra cgi
 
 \subsubsection{Templates}
-En template er ikke et objekt i seg selv, men en mal for et objekt. Med direktivet ''register 0'' vil ikke Icinga registrere dette objektet for overvåkning. Ved å bruke direktivet ''use'' kan en i et annet objekt "arve" konfigurasjonen fra template-en. Template-er kan også arve, og en kan dermed sette opp et hierarki der en spesifiserer generell konfigurasjon i toppen og arver nedover til mer spesiell. 
+En template er ikke et objekt i seg selv, men en mal for et objekt. Med direktivet ``register 0'' vil ikke Icinga registrere dette objektet for overvåkning. Ved å bruke direktivet ``use'' kan en i et annet objekt "arve" konfigurasjonen fra template-en. Template-er kan også arve, og en kan dermed sette opp et hierarki der en spesifiserer generell konfigurasjon i toppen og arver nedover til mer spesiell. 
 
 I eksempelet under er generell konfigurasjon for alle host-objekter definert i ''generic\_host'', som brukes i de andre objektene. I ''generic\_firewall'' erstattes verdien for kontaktgruppe, og i cisco\_firewall settes en egendefinert variabel:
 
@@ -327,11 +327,11 @@ define host {
 Dette gjør at det blir lite konfigurasjon hver gang en ny brannmur skal legges til.
 
 \subsubsection{Regulære uttrykk}
-Ved å sette ''use regular expressions'' i konfigurasjonen for Icinga, kan en benytte regulære uttrykk i attributter i et objekt, der en refererer til andre objekter. Icinga støtter standarden POSIX Extended Regular Expressions, og vil automatisk tolke navnet på objekter som et regulært uttrykk dersom det inneholder \verb|"*", "?", "+", eller "\"|.
+Ved å sette ``use regular expressions'' i konfigurasjonen for Icinga, kan en benytte regulære uttrykk i attributter i et objekt, der en refererer til andre objekter. Icinga støtter standarden POSIX Extended Regular Expressions, og vil automatisk tolke navnet på objekter som et regulært uttrykk dersom det inneholder \verb|"*", "?", "+", eller "\"|.
 
 Dette kan være nyttig dersom en for eksempel vil legge alle hoster i en hostgroup, som har en navnekonvensjon som gjør at hver av hostene unikt kan identifiseres ved å bytte ut deler av navnet med en variabel.
 
-I eksempelet nedenfor brukes det regulære uttrykket \verb|"^HiG\[0-9\]+\$"| i attributten ''members'' til å legge til alle konfgurerte hosts der navnet starter på ''HiG'' etterfulgt og avsluttet med ett eller flere siffer mellom 0 og 9, i hostgroup-objektet ''all\_servers''.
+I eksempelet nedenfor brukes det regulære uttrykket \verb|"^HiG\[0-9\]+\$"| i attributten ``members'' til å legge til alle konfgurerte hosts der navnet starter på ``HiG'' etterfulgt og avsluttet med ett eller flere siffer mellom 0 og 9, i hostgroup-objektet ''all\_servers''.
 \begin{lstlisting}[style=example]
 define hostgroup {
     hostgroup_name	all_servers
@@ -352,14 +352,14 @@ define service {
 \end{lstlisting}
 
 \section{Avhengigheter}
-I Icinga kan en definere tre ulike typer avhengigheter, ''Parent'', ''Service dependency'', og ''Host dependency''. Disse har innvirkning på hvilke varsler som sendes ut og statusen de ulike service- og host-objektene får. Hver av disse krever egen konfigurasjon. 
+I Icinga kan en definere tre ulike typer avhengigheter, ``Parent'', ``Service dependency'', og ``Host dependency''. Disse har innvirkning på hvilke varsler som sendes ut og statusen de ulike service- og host-objektene får. Hver av disse krever egen konfigurasjon. 
 
 \section{Parent}\label{sec:parent}
-Et host-objekt kan settes som en ''parent'' til et annet host-objekt. Host-objekter som har en parent blir betegnet som en child-host eller child-service. Dette brukes primært for å unngå varsler om andre host- og service-objekter enn det som er definert som parent, om denne går ned. For eksempel hvis kjernerouteren går ned, ønskes ikke varsler for eventuelle host-objekter og tilhørende service-objekter som har kjernerouteren som parent. Disse vil ikke lenger bli sjekket og tilstanden vil bli satt til ''UNREACHABLE''. Tjenester som tilhører host-ene vil få tilstanden ''UNKNOWN''.
+Et host-objekt kan settes som en ``parent'' til et annet host-objekt. Host-objekter som har en parent blir betegnet som en child-host eller child-service. Dette brukes primært for å unngå varsler om andre host- og service-objekter enn det som er definert som parent, om denne går ned. For eksempel hvis kjernerouteren går ned, ønskes ikke varsler for eventuelle host-objekter og tilhørende service-objekter som har kjernerouteren som parent. Disse vil ikke lenger bli sjekket og tilstanden vil bli satt til ``UNREACHABLE''. Tjenester som tilhører host-ene vil få tilstanden ``UNKNOWN''.
 
-For redundante oppsett kan et host-objekt ha flere ''parents'' definert. Host-objektet vil da ha tilstanden UP så lenge minst én ''parent''-host er UP.
+For redundante oppsett kan et host-objekt ha flere ``parents'' definert. Host-objektet vil da ha tilstanden UP så lenge minst én ``parent''-host er UP.
 
-Ut ifra parent-relasjonene mellom host-objekter i konfigurasjonsfilene genereres også et ''Status Map'' over nettverket, som vist i Figur \ref{statusmap}. Dette brukes til å visualisere alle relasjonene, og vil gjengi redundante oppsett og hvilke host-objekter som er påvirket av at ''parent''-hosten er DOWN.
+Ut ifra parent-relasjonene mellom host-objekter i konfigurasjonsfilene genereres også et ``Status Map'' over nettverket, som vist i Figur \ref{statusmap}. Dette brukes til å visualisere alle relasjonene, og vil gjengi redundante oppsett og hvilke host-objekter som er påvirket av at ``parent''-hosten er DOWN.
 
 \begin{figure}[H]
     \centering
@@ -369,11 +369,11 @@ Ut ifra parent-relasjonene mellom host-objekter i konfigurasjonsfilene genereres
 \end{figure}
 
 \section{Service dependency}\label{sec:servicedependency}
-Service dependency er en egen objekttype der en kan sette opp avhengighet mellom to service-objekter. Formålet med dette er å unngå varsel hvis en tjeneste går til DOWN, som følge av at en annen tjeneste er nede. For eksempel bør det ikke varsles om at tjenester som er avhengig av autentisering via LDAP-serveren får ''Access Denied''-feilmeldinger, hvis LDAP-serveren er DOWN. Det service-objektet andre service-objekter er avhengige av kalles en master service. 
+Service dependency er en egen objekttype der en kan sette opp avhengighet mellom to service-objekter. Formålet med dette er å unngå varsel hvis en tjeneste går til DOWN, som følge av at en annen tjeneste er nede. For eksempel bør det ikke varsles om at tjenester som er avhengig av autentisering via LDAP-serveren får ``Access Denied''-feilmeldinger, hvis LDAP-serveren er DOWN. Det service-objektet andre service-objekter er avhengige av kalles en master service. 
 
 Icinga undersøker om avhengigheter er definert for et service-objekt, før det utføres sjekker på det. Dette er med på å bestemme om det blir sendt ut varsel for service-objektet.
 
-I eksempelet under er tjenesten ''Check SMB'' på HiG3 avhengig av master-service-en Check LDAP på HiG3. ''execution\_failure\_criteria'' bestemmer ved hvilke tilfeller tjenesten ikke skal sjekkes. Her er den satt til ''c'', som vil si at Check SMB ikke skal kjøres dersom ''Check LDAP'' er i CRITICAL tilstand.
+I eksempelet under er tjenesten ``Check SMB'' på HiG3 avhengig av master-service-en Check LDAP på HiG3. ''execution\_failure\_criteria'' bestemmer ved hvilke tilfeller tjenesten ikke skal sjekkes. Her er den satt til ``c'', som vil si at Check SMB ikke skal kjøres dersom ``Check LDAP'' er i CRITICAL tilstand.
 
 \begin{lstlisting}[style=example]
 define servicedependency {
@@ -388,7 +388,7 @@ define servicedependency {
 
 Ved standard konfigurasjon vil Icinga benytte siste harde tilstand for master service. Dersom ''max\_check\_attempts'' for eksempel er satt til 4, vil ikke Check SMB stoppes fra å kjøres før Check LDAP har blitt sjekket fire ganger, og oppnår en hard tilstand. 
 
-På attributten notification\_failure\_criteria kan det settes hvilke service-tilstander en ikke skal varsle for. Dette er hovedgrunnen til at det settes opp slike avhengigheter. Når denne er satt til ''c'' vil det ikke varsles om master service-en får tilstanded CRITICAL.
+På attributten notification\_failure\_criteria kan det settes hvilke service-tilstander en ikke skal varsle for. Dette er hovedgrunnen til at det settes opp slike avhengigheter. Når denne er satt til ``c'' vil det ikke varsles om master service-en får tilstanded CRITICAL.
 
 Service-objekter har kan også arve avhengighetene til en master service ved å sette direktivet inherits\_parent 1. For eksempelet over vil Check SMB da arve fra service-objekter som Check LDAP arver fra.
 
@@ -408,13 +408,13 @@ define servicedependency{
 En kan også erstatte host\_name og dependant\_host\_name med hostgroup og dependant\_host\_group for å lage avhengigheter på alle objekter som tilhører gruppen.
 
 \section{Host dependency}
-For å sette en avhengighet mellom to host-objekter benyttes ''host dependency''. Dette må ikke forveksles med ''parent'', som refererer til nettverksoppsettet. En host dependency vil si at et host-objekt er avhengig av et annet host-objekt. Host dependency er bare nyttig i veldig spesielle tilfeller, da det for de fleste tilfeller vil være avhengigheter til en eller flere tjenester på hosten\cite{hostandservicedep}, eller at en host er avhengig av å kjøre en sjekk igjennom en annen host.
+For å sette en avhengighet mellom to host-objekter benyttes ``host dependency''. Dette må ikke forveksles med ``parent'', som refererer til nettverksoppsettet. En host dependency vil si at et host-objekt er avhengig av et annet host-objekt. Host dependency er bare nyttig i veldig spesielle tilfeller, da det for de fleste tilfeller vil være avhengigheter til en eller flere tjenester på hosten\cite{hostandservicedep}, eller at en host er avhengig av å kjøre en sjekk igjennom en annen host.
 
 \section{Protokoller og agenter}
 For å kjøre sjekker på enheter må Icinga-serveren kunne kommunisere med operativsystemene på de ulike enhetene. Icinga henviser til protokollene SSH, SNMP, RPC (WMI) og agentene NRPE og NSCA (en del av pakken NSClient++) i dokumentasjonen\cite{icingaintegration} \cite{icingaadditionalsoftware}. 
 
 \subsubsection{NRPE}\label{sec:nrpe}
-NRPE (Nagios Remote Plugin Executor) består av plugin-en ''check\_nrpe'' på Icinga-serveren og en daemon som installeres på hver server som skal overvåkes. NRPE eksekverer lokale plugin-er på den eksterne serveren og returner dataen fra denne til check\_nrpe. Tillatelse for eksekveringer defineres i en config-fil på hver server, der en oppgir hvilke IP-adresser som kan koble seg til og hvilke kommandoer som er gyldige. 
+NRPE (Nagios Remote Plugin Executor) består av plugin-en ``check\_nrpe'' på Icinga-serveren og en daemon som installeres på hver server som skal overvåkes. NRPE eksekverer lokale plugin-er på den eksterne serveren og returner dataen fra denne til check\_nrpe. Tillatelse for eksekveringer defineres i en config-fil på hver server, der en oppgir hvilke IP-adresser som kan koble seg til og hvilke kommandoer som er gyldige. 
 
 \begin{figure}[H]
     \centering
@@ -496,7 +496,7 @@ exit 0
 
 Både serveren og klienten stod i et eget nettverk i Virtualbox sammen med en Windows-maskin med et nettverkskort satt i promiscious mode, for å kunne sniffe nettverkstrafikken. Denne fanget nettverkstrafikken med Wireshark. Trafikken mellom de to maskinene ble hentet ut og data for hver tilkobling ble brukt til å kalkulere båndbreddebruk.
 
-Det ble også undersøkt hvor mye CPU-tid NRPE og SSH trenger for å utføre sjekker. Fordi hver sjekk går veldig raskt ble det kjørt 100 disksjekker, 100 ganger. ''time''-kommandoen ble brukt for å se på tiden brukt i user- og kernel-mode. Dette ble gjort ved å bruke Bash-scriptet nedenfor, som kjører det samme scriptet som ble brukt for å generere nettverkstrafikk.
+Det ble også undersøkt hvor mye CPU-tid NRPE og SSH trenger for å utføre sjekker. Fordi hver sjekk går veldig raskt ble det kjørt 100 disksjekker, 100 ganger. ``time''-kommandoen ble brukt for å se på tiden brukt i user- og kernel-mode. Dette ble gjort ved å bruke Bash-scriptet nedenfor, som kjører det samme scriptet som ble brukt for å generere nettverkstrafikk.
 
 \begin{lstlisting}[style=example]
 #!/usr/bin/env bash

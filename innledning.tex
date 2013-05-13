@@ -4,7 +4,7 @@ Serviceenheten IKT ved Hedmark Fylkeskommune (heretter kalt IKT-avdelingen) har 
 
 Datasystemene er kritiske for daglig drift av de mange funksjonene fylkeskommunen fyller. Det er derfor mange brukere som berøres dersom en feil skulle inntreffe i systemene. Derfor er det viktig at de ansvarlige får beskjed så raskt og effektivt som mulig når et system går ned, eller ikke fungerer som det skal.
 
-Per i dag benyttes en enkel overvåkningsløsning, ''Servers Alive''\cite{servers}, som ikke dekker IKT-avdelingens behov. Oppsettet gir for mye irrelevant informasjon, som gjør at en ikke får et godt nok oversiktsbilde. Det mangler også mulighet for å kunne overvåke mange ønskede tjenester. Systemet gir kun varsling til skjerm, men det er i tillegg ønskelig å kunne få varsler på SMS og e-post. Servers Alive er også en proprietær løsning, og dermed ikke lett å utvide. I tillegg til dette kjøres ikke sjekkene parallelt, og derfor skalerer systemet dårlig.
+Per i dag benyttes en enkel overvåkningsløsning, ``Servers Alive''\cite{servers}, som ikke dekker IKT-avdelingens behov. Oppsettet gir for mye irrelevant informasjon, som gjør at en ikke får et godt nok oversiktsbilde. Det mangler også mulighet for å kunne overvåke mange ønskede tjenester. Systemet gir kun varsling til skjerm, men det er i tillegg ønskelig å kunne få varsler på SMS og e-post. Servers Alive er også en proprietær løsning, og dermed ikke lett å utvide. I tillegg til dette kjøres ikke sjekkene parallelt, og derfor skalerer systemet dårlig.
 
 IKT-avdelingen har lenge arbeidet med å finne en bedre overvåkningsløsning for infrastrukturen. Det er ønskelig å erstatte Servers Alive med en mer modulbasert løsning, der IKT-avdelingen har tilgang til kildekoden og kan utføre endringer.
 
@@ -113,7 +113,7 @@ I forhold til dagens løsning skal den nye løsningen
 
 \subsubsection{Læringsmål}
 \begin{itemize}
-	\item Sette oss inn i ''best practices'' for overvåking av datasystemer.
+	\item Sette oss inn i ``best practices'' for overvåking av datasystemer.
 	\item Kunne tilpasse og implementere en overvåkningsløsning for små og mellomstore bedrifter.
 \end{itemize}
 
@@ -129,7 +129,7 @@ Følgende krav var gitt i oppgaven
 \section{Faglig bakgrunn}
 Bjørn-Erik og Øyvind er 3. års studenter på Drift av nettverk og datasystemer, mens Nils går 3. året på Dataingeniør. Gjennom to og et halvt år på Høgskolen i Gjøvik har vi tatt fag innenfor områdene programmering, nettverk, databaser, sikkerhet, statistikk og ulik grad av matematikk. Nils og Øyvind har tidligere vært lærlinger ved henholdsvis Hedmark Fylkeskommune og Hamar Katedralskole, der de fikk kunnskap om deres applikasjoner og infrastruktur.
 
-Bjørn-Erik og Øyvind har også tidligere skrevet en rapport om bruk av ITIL ved Hedmark fylkeskommunes IKT-avdeling, i faget ''IT Service Mangement''.
+Bjørn-Erik og Øyvind har også tidligere skrevet en rapport om bruk av ITIL ved Hedmark fylkeskommunes IKT-avdeling, i faget ``IT Service Mangement''.
 
 Vi mener at en overvåkningsoppgave med denne beskrivelsen kan komme innom mange av områdene vi har vært gjennom i løpet av studiet. Her er det også områder der gruppen har delvis eller manglende kunnskap, både om hvilke teknologier som finnes og hvordan de brukes i et større datamiljø.
 
@@ -160,11 +160,11 @@ Av andre verktøy har vi benyttet Microsoft Visio til å lage illustrasjoner. Gr
 \section{Utviklingsmodell/rammeverk}
 For å tilpasse overvåkningssystemet til IKT-avdelingens krav, vil det med stor sannsynlighet komme endringer etterhvert. Det vil kunne oppstå ulike situasjoner som er vanskelige å forutse. Eksempler på dette er at en plugin som kreves ikke eksisterer, eller at webgrensesnittet må endres på grunn av mer informasjon eller omorganisering. I tillegg kan oppdragsgiver komme med innspill som fører til endring av funksjonalitet. Derfor må vi ha en fleksibel modell med tanke på endringer og tilbakefall, men med begrensninger på hvor mye tid vi kan bruke ved uforutsette problemer.
 
-På grunn av en naturlig sammenheng og avhengigheter mellom kravene som er satt, har vi valgt å gruppere funksjonalitet i moduler. De forskjellige modulene er ''Kjerneprogramvare'', ''Server'', ''Infrastruktur'', ''Servermiljø'', ''Varsling'' og ''Statusvindu'' (visualisert i Vedlegg \ref{app:forprosjekt}). Med nærliggende sammenheng mener vi at funksjonalitet som CPU, RAM, disk og prosesser er i samme kategori. 
+På grunn av en naturlig sammenheng og avhengigheter mellom kravene som er satt, har vi valgt å gruppere funksjonalitet i moduler. De forskjellige modulene er ``Kjerneprogramvare'', ``Server'', ``Infrastruktur'', ''Servermiljø'', ``Varsling'' og ``Statusvindu'' (visualisert i Vedlegg \ref{app:forprosjekt}). Med nærliggende sammenheng mener vi at funksjonalitet som CPU, RAM, disk og prosesser er i samme kategori. 
 
-Planen er også å gjennomføre kategoriene i en gitt rekkefølge. Varsling kan settes opp uten noe input, men med tanke på redundans i systemene, avhengigheter mellom objektene, og testing av funksjonene som går inn under varsling, ser vi på dette som en avhengighet av ''Server'' og ''Infrastruktur''. ''Statusvindu'' har vi valgt å legge sist fordi vi ser for oss at modulene ''Server'', ''Infrastruktur'', ''Servermiljø'', og ''Varsling'' må være på plass før en varslingsskjerm kan ferdigstilles.
+Planen er også å gjennomføre kategoriene i en gitt rekkefølge. Varsling kan settes opp uten noe input, men med tanke på redundans i systemene, avhengigheter mellom objektene, og testing av funksjonene som går inn under varsling, ser vi på dette som en avhengighet av ``Server'' og ``Infrastruktur''. ``Statusvindu'' har vi valgt å legge sist fordi vi ser for oss at modulene ``Server'', ``Infrastruktur'', ''Servermiljø'', og ``Varsling'' må være på plass før en varslingsskjerm kan ferdigstilles.
 
-I tradisjonell systemutvikling må en definere alle parametere og rekkefølge på alt som skal utvikles, før en starter med selve utviklingen. En smidig modell vil gi oss mer frihet til å gjøre justeringer underveis. Vi har derfor valgt en iterativ modell\cite{wiki:iterativ}. En del av den iterative modellen er ''product control list'', men denne har vi valgt å ikke ta med fordi vi har satt opp en overordnet kategorisering av funksjonalitet, og bestemt når hver av disse skal implementeres.
+I tradisjonell systemutvikling må en definere alle parametere og rekkefølge på alt som skal utvikles, før en starter med selve utviklingen. En smidig modell vil gi oss mer frihet til å gjøre justeringer underveis. Vi har derfor valgt en iterativ modell\cite{wiki:iterativ}. En del av den iterative modellen er ``product control list'', men denne har vi valgt å ikke ta med fordi vi har satt opp en overordnet kategorisering av funksjonalitet, og bestemt når hver av disse skal implementeres.
 
 Vi vil dele inn iterasjonene i faser, som hver består av en planleggingsfase, en implementeringsfase, og en fase for testing og evaluering. Disse vil så gjentas for hver modul som skal implementeres. Halvveis i hver iterasjon vil vi ha et møte med oppdragsgiver der vi kan presentere funksjonalitet i modulen, og få tilbakemeldinger. Det gjør at vi kan jobbe med dette i den siste halvdelen av iterasjonen. Dette vil forhåpentligvis føre til at produktet ikke sporer av fra de forventningene og behovene IKT-avdelingen har.
 
@@ -183,4 +183,4 @@ Konfigurasjonsfiler markeres slik:
 Plain box
 Der kun utdrag av konfigurasjon eller kildekode er benyttet bruker ''...'' for å markere hvor det er utelatt.
 
-Objekttyper omtegnes med navn f.eks ''host'', ''service'', ''timeperiod''. ''Tjeneste'' brukes om applikasjoner på en server som benyttes av andre enheter og/eller brukere. 
+Objekttyper omtegnes med navn f.eks ``host'', ``service'', ``timeperiod''. ``Tjeneste'' brukes om applikasjoner på en server som benyttes av andre enheter og/eller brukere. 
