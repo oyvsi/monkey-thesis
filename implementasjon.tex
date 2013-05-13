@@ -151,33 +151,33 @@ Først defineres en hostgroup for alle SQL serverne. Dette gjøres for å gruppe
 \begin{lstlisting}[style=example]
 define hostgroup {
     hostgroup_name		sql_servers
-    alias 			SQL Servers
+    alias 				SQL Servers
     hostgroup_members	mysql_servers, mssql_servers, oracle_servers
 }
 \end{lstlisting}
 Deretter defineres en hostgroup for alle MySQL-servere.
 \begin{lstlisting}[style=example]
 define hostgroup {
-    hostgroup_name 	mysql_servers
-    alias 		MySQL Servers
+    hostgroup_name 		mysql_servers
+    alias 				MySQL Servers
 }
 \end{lstlisting}
 For å legge til en host i denne gruppen kan host-objektet være definert på følgende måte.
 \begin{lstlisting}[style=example]
 define host {
-    use			generic_linux_host
-    address		10.60.0.21
+    use				generic_linux_host
+    address			10.60.0.21
     host_name		HiG2
-    alias		HiG2
+    alias			HiG2
     hostgroups		debian_servers, mysql_servers
 }
 \end{lstlisting}
 Service-objektet defineres slik og refererer til hostgroup-en og kommandoen ```check\_mysql\_health''. Alle host-objekter i "mysql\_servers" vil da få denne sjekken.
 \begin{lstlisting}[style=example]
 define service {
-    service_description		MySQL Connection Time
-    use		 		generic_service
-    name 			mysql_connection_time
+    service_description	MySQL Connection Time
+    use		 			generic_service
+    name 				mysql_connection_time
     hostgroup_name 		mysql_servers
     check_command 		check_mysql_health!connection-time!0.1!0.4
 }
@@ -202,8 +202,8 @@ For å sette opp eksportering av ytelsesdataen benyttes et vanlig command-objekt
 
 \begin{lstlisting}[style=example]
 define command {
-    command_name            rotate_perf_service
-    command_line            /bin/mv /usr/local/icinga/var/perfdata/service-perfdata /usr/local/icinga/var/perfdata/logs/service-perfdata.$TIMET$
+    command_name	rotate_perf_service
+    command_line	/bin/mv /usr/local/icinga/var/perfdata/service-perfdata /usr/local/icinga/var/perfdata/logs/service-perfdata.$TIMET$
 }
 \end{lstlisting}
  Icinga.cfg må konfigureres til å benytte dette:
@@ -628,7 +628,7 @@ Script for å opprette brukere i Oracle og MSSQL finnes i Vedlegg \ref{oracledb.
 
 Konfigurasjon for command-objektet for MSSQL og MySQL vises under. \$ARG1\$ brukes for å sende med hvilken parameter plugin-en sjekker.
 \begin{lstlisting}[style=example]
-    command_line $USER1$/check_<database-motor>_health --hostname=$HOSTADDRESS$ --username=$USER5$ --password=$USER4$ --mode $ARG1$ --warning $ARG2$ --critical $ARG3$
+    command_line	$USER1$/check_<database-motor>_health --hostname=$HOSTADDRESS$ --username=$USER5$ --password=$USER4$ --mode $ARG1$ --warning $ARG2$ --critical $ARG3$
 \end{lstlisting}
 
 \subsubsection{MySQL Cluster}
@@ -672,9 +672,9 @@ Konfigurasjonen for dette er vist under. Direktivet ``members'' setter medlemmen
 
 \begin{lstlisting}[style=example]
 define servicegroup {
-	servicegroup_name ERP_WEBAPP
-	alias Web App for ERP
-	members Web1,Check ERP Web Contents, File1,Check SMB, Mail1,Check Exchange, DB1,Check MySQL
+	servicegroup_name	ERP_WEBAPP
+	alias 				Web App for ERP
+	members 			Web1,Check ERP Web Contents, File1,Check SMB, Mail1,Check Exchange, DB1,Check MySQL
 }
 \end{lstlisting}
 
@@ -846,23 +846,23 @@ Under vises et eksempel hvordan dette kan konfigureres for ett pool med to host-
 \begin{lstlisting}[style=example]
 // generic-objektet
 define host {
-    use 	generic_linux_host
-    name 	generic_xen_pool_1
+    use 		generic_linux_host
+    name 		generic_xen_pool_1
     _MASTERIP 	10.0.1.20
 }
 
 
 // To host-objekt som arver generic-objektet
 define host {
-    name 	Pool_1_Xen_Host_1
+    name 		Pool_1_Xen_Host_1
     address 	10.0.1.21
-    use 	generic_xen_pool_1
+    use 		generic_xen_pool_1
 }
 
 define host {
-    name 	Pool_1_Xen_Host_2
+    name 		Pool_1_Xen_Host_2
     address 	10.0.1.22
-    use 	generic_xen_pool_1
+    use 		generic_xen_pool_1
 }
 \end{lstlisting}
 

@@ -345,10 +345,10 @@ Det kan også være nyttig for å ekskludere en host fra en service-sjekk som de
 \begin{lstlisting}[style=example]
 define service {
     service_description	Disk space
-    hostgroup_name	windows_servers
-    host_name		!HiG3
-    check_command	win_nrpe!CheckDriveSize!Drive="C" MaxWarnUsed=80% MaxCritUsed=90%
-    use			generic_service
+    hostgroup_name		windows_servers
+    host_name			!HiG3
+    check_command		win_nrpe!CheckDriveSize!Drive="C" MaxWarnUsed=80% MaxCritUsed=90%
+    use					generic_service
 }
 \end{lstlisting}
 
@@ -546,7 +546,7 @@ exit 0
 \end{table}
 For en utrulling i den skalen som vil være aktuelt for IKT-avdelingen vil ikke denne nettverkstrafikken være noen stor faktor. Figur \ref{network_traffic} viser at gjennomsnittlig vil total båndbreddebruk for en sjekk var 8380 byte. Selv med 1000 enheter som overvåkes over SSH, der hver kjører 100 sjekker hvert 5. minutt, vil den totale båndbreddebruken, dersom alle sjekkene var jevnt fordelt over 5 minutters-intervallet:
 \begin{equation}
-\frac{8.38kB\times(1000(enheter)\times100(sjekker)\times8)}{5\times60s (sekunder)}=22346.67Kb/s = 22.35Mb/s
+\frac{8.38kB\times(1000(enheter)\times100(sjekker))\times8b/B}{5(min)\times60s}=22346.67Kb/s = 22.35Mb/s
 \end{equation}
 På et gigabit-nettverk, som i tillegg er full duplex, vil ikke dette være nevneverdig. Icinga vil forsøke å fordele sjekkene utover slik at lasten på Icinga-serveren og enhenetene som overvåkes blir minst mulig \cite{icingascheduling}, men i praksis blir ikke dette helt jevnt fordelt, tallet kan derfor bli noe høyere.
 
