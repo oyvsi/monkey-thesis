@@ -898,12 +898,11 @@ Ressurser som er valgt å overvåke for Xen hosts:
 \end{itemize}
 
 \subsection{Trådløse kontrollere}
-IKT-avdelingen bruker en trådløskontrollerløsning fra Meru Networks. Disse har en viktig rolle i fylkeskommunens nettverk. På en dag har disse rundt 6000 samtidige brukere tilkoblet via "AP"-er ute på hver lokasjon.
+IKT-avdelingen bruker en trådløskontrollerløsning fra Meru Networks. Disse har en viktig rolle i fylkeskommunens nettverk. På en dag har disse rundt 6000 samtidige brukere tilkoblet via aksesspunkter-er ute på hver lokasjon.
 
-AP-ene i seg selv inneholder ingen konfigurasjon da de starter opp. Denne lastes fra kontrolleren. Alle tilkoblingene går i krypterte sessioner direkte mot kontrolleren hvor trafikken blir sendt til respektive mottakere. Siden det vil gå store mengder trafikk er det viktig at disse blir nøye overvåket.
+AP-ene i seg selv inneholder ingen konfigurasjon da de starter opp. Denne lastes fra kontrolleren. Alle tilkoblingene går i krypterte sessioner direkte mot kontrolleren hvor trafikken blir sendt til respektive mottakere. Fordi det går store mengder trafikk over de trådløse nettverkene er det viktig at kontrollerne blir overvåket.
 
-De trådløse kontrollerne som benyttes av IKT-avdelingen mangler støtter for SNMP-get for informasjon som hentes ut fra switcher og brannmurer, og som CPU- og minnebruk. Dette vil i følge produsenten komme i en senere firmware-oppdatering. Noe av dette kan løses ved å bruke SNMP-traps i stedet og definere verdier for når disse skal sendes ut direkte på kontrollerne. Her ble relevante trap-meldinger som omhandler kontrollerne satt opp.
-
+De trådløse kontrollerne mangler støtter for SNMP-get for informasjon som hentes ut fra switcher og brannmurer, som CPU- og minnebruk. Dette vil i følge produsenten komme i en senere firmware-oppdatering. Noe av dette kan løses ved å bruke SNMP-traps i stedet og definere verdier for når disse skal sendes ut direkte på kontrollerne. Her ble relevante trap-meldinger som omhandler kontrollerne satt opp:
 \begin{itemize}
 	\item Hardware-feil på kontrolleren
 	\item Ressursmangel på kontrolleren
@@ -915,7 +914,7 @@ De trådløse kontrollerne som benyttes av IKT-avdelingen mangler støtter for S
 
 For å få til dette trengs et mellomledd som kan motta SNMP-traps på Icinga-serveren, tolke trap-meldingene og sende informasjonen videre til Icinga. 
 
-For å lytte etter SNMP-traps benyttes SNMPtrapd \cite{snmptraps2}. Her mottas alle trap-meldinger som sendes med riktig community string. Disse sendes så videre til snmptt (SNMP Trap Translator \cite{traptranselator}). Her defineres de trap-ene en er ute etter, informasjon om OID-ene og kommandoen som skal kjøres når denne mottas. I Figur \ref{snmptrap} illustreres hvordan en trap blir prosessert. 
+For å lytte etter SNMP-traps benyttes SNMPtrapd \cite{snmptraps2}. Her mottas alle trap-meldinger som sendes med riktig community string. Disse sendes så videre til snmptt (SNMP Trap Translator \cite{traptranselator}). Her defineres de trap-meldingene en er ute etter, informasjon om OID-ene og kommandoen som skal kjøres når denne mottas. I Figur \ref{snmptrap} illustreres hvordan en trap blir prosessert. 
 
 \begin{figure}[H]
     \centering
@@ -948,18 +947,17 @@ Her benyttes variabler i snmptt \cite{snmptrans}:
 	\item Beskrivelse på trap fra konfigurasjonfilen.
 \end{itemize}
 
-SNMPtt vil så kjøre kommandoen definert under "EXEC" for OID-en, som i dette tilfellet er å sende informasjonen videre til scriptet "submit\_check\_result". Dette tar fire argumenter:
+SNMPtt vil så kjøre kommandoen definert under ``EXEC'' for OID-en, som i dette tilfellet er å sende informasjonen videre til scriptet ``submit\_check\_result''. Dette tar fire argumenter:
 
 \begin{itemize}
 	\item IP-adresse eller hostname 
 	\item Service description
-	\item Returkode som setter status på tjenesten (0-3)
+	\item Returkode som setter tilstand på service-objektet (0-3)
 	\item Plugin-output
 \end{itemize}
+Scriptet skriver dette sammen med et timestamp til icinga.cmd som Icinga sjekker periodisk etter resultat av passive sjekker.
 
-Service description for alle meru traps som sendes inn vil da være "meru\_" + navnet på trap-en. Som plugin-output er det lagt inn beskrivelse av trap-en, da denne som regel er noe mindre kryptisk enn navnet.
-
-Scriptet vil så skrive dette sammen med et timestamp til icinga.cmd som Icinga sjekker periodisk etter resultat av passive sjekker.
+Service description for alle meru traps som sendes inn vil da være ``meru\_'' + navnet på trap-en. Som plugin-output er det lagt inn beskrivelse av trap-en, da denne som regel er noe mindre kryptisk enn navnet.
 
 Noe å merke seg er at en ikke vil få informasjon når tjenesten er OK igjen, og må sette tjenestene til OK manuelt i Icingas webgrensesnitt.
 
@@ -969,24 +967,24 @@ For å overvåke temperatur og luftfuktighet på serverrommet ble det kjøpt inn
 Hver sensor måler både temperatur og relativ luftfuktighet.
 
 \subsubsection{Luftfuktighet}
-Relativ luftfuktighet er definert som "forholdet mellom partielltrykket til vanndamp, i en gassblanding av luft og vann, og vanndampens metningstrykk ved en viss temperatur.". Dette gir en prosentandelen av vann i luften \cite{wiki:luftfuktighet}. 
+Relativ luftfuktighet er definert som "forholdet mellom partielltrykket til vanndamp, i en gassblanding av luft og vann, og vanndampens metningstrykk ved en viss temperatur". Dette gir en prosentandelen av vann i luften \cite{wiki:luftfuktighet}. 
 
-Mange enheter for overvåkning av servermiljø måler også duggpunkt. Et duggpunkt er temperaturen en viss mengde luft må avkjøles til for at vanndamp skal kondensere. Ved en økning i relativ luftfuktighet vil duggpunktet nærme seg luftemperaturen. Ved 100 \% relativ luftfuktighet vil temperaturen og duggpunktet være like. 
+Mange enheter for overvåkning av servermiljø måler også duggpunkt. Et duggpunkt er temperaturen en viss mengde luft må avkjøles til for at vanndamp skal kondensere. Ved en økning i relativ luftfuktighet vil duggpunktet nærme seg luftemperaturen. Ved 100 \% relativ luftfuktighet vil temperaturen og duggpunktet ha samme verdi. 
 
-I "Sun Microsystems Data Center Site Planning Guide" anbefales en luftfuktighet på 45 \% - 50 \%. Det meste av datautstyr kan fungere innenfor et bredere intervall enn det, typisk 20 \% - 80 \%. Men de anbefalte verdiene er satt for at det skal være et buffer dersom en har klimaanlegg som kontrollerer luftfuktighet, og det slutter å fungere \cite{planningserver}. Andre, som "American Society of Heating, Refrigerating and Air-Conditioning Engineers" (ASHRAE) anbefaler at den relative luftfuktigheten ikke bør overstige 60 \%, mens den nedre grensen er basert på duggpunkt og satt til 5.5° C, der den relative luftfuktigheten vil variere mellom 25 \% og 45 \% \cite{envguide}. Disse verdiene er også anbefalt av Cisco \cite{ciscoenvguide}, og omtalt som vidt akseptert. 
+I "Sun Microsystems Data Center Site Planning Guide" anbefales en luftfuktighet på 45 \% - 50 \%. Det meste av datautstyr kan fungere innenfor et bredere intervall enn det, typisk 20 \% - 80 \%. Men de anbefalte verdiene er satt for at det skal være et buffer dersom en har klimaanlegg som kontrollerer luftfuktighet, og det slutter å fungere \cite{planningserver}. Andre, som "American Society of Heating, Refrigerating and Air-Conditioning Engineers" (ASHRAE) anbefaler at den relative luftfuktigheten ikke bør overstige 60 \%, mens den nedre grensen er basert på duggpunkt og satt til 5.5° C, der den relative luftfuktigheten vil variere mellom 25 \% og 45 \% \cite{envguide}. Disse verdiene er også anbefalt av Cisco \cite{envguidecisco}, og omtalt som vidt akseptert. 
 
 Høy luftfuktighet kan føre til kondens, som igjen kan føre til korrosjon på komponenter. Ved lavere luftfuktighet øker faren for utladninger av statisk elektrisitet (kritisk ved 30 \%), som kan føre til utladninger med ekstremt høye spenningsverdier. Dette kan ødelegge komponenter.
 
 \subsubsection{Temperatur}
 Det er mye uenighet rundt anbefalte verdier for temperatur i serverrom. I et studie utført ved University of Toronto \cite{torontopaper}, ble det samlet inn data fra tre forskjellige organisasjoners datasentre, deriblant Googles. I studiet ble det konkludert med at faren for hardware-feil ved høyere temperatur øker mindre enn det som har vært vanlig å basere seg på. For DRAM-feil og ``node outages'' fant de ingen korrelasjon til temperaturøkning for intervallet i testen (15° C - 60° C). I dette studiet ble det ikke målt eller tatt hensyn til luftfuktighet. 
 
-ASHRAE anbefaler en inntakstemperatur 18° C - 27° C, mens Sun anbefaling er 20° C - 23° C. Sun begrunner sin anbefaling med at det er lettere å opprettholde trygge verdier for relativ luftfuktighet. ASHRAE refererer også til studier som viser at det totale strømforbruket kan gå opp ved høyere temperaturer, fordi enheter øker frekvensen på egne vifter \cite{datacentertemp}.
+ASHRAE anbefaler en inntakstemperatur 18° C - 27° C, mens Suns anbefaling er 20° C - 23° C. Sun begrunner sin anbefaling med at det er lettere å opprettholde trygge verdier for relativ luftfuktighet med dette temperatur-intervallet. ASHRAE refererer også til studier som viser at det totale strømforbruket kan gå opp ved høyere temperaturer, fordi enheter øker frekvensen på egne vifter \cite{datacentertemp}.
 
 \subsubsection{Plugin for overvåkning av temperatur og luftfuktighet i Icinga}
 Det fantes allerede en plugin for å sjekke sensorverdiene på APC NetBotz \cite{checknetbotz}. Men denne sammenlignet verdiene med grenseverdier satt i konfigurasjonen på enheten. Det var ønskelig å samle mest mulig av konfigurasjon på Icinga-serveren, derfor ble pluginen omskrevet til å kunne ta inn øvre og nedre grenseverdier som argumenter.
 
-\subsection{UPS (Uninterruptible Power Supply)}
-UPS, ofte kalt avbruddsfri strømforsyning på norsk, blir benyttet til å opprettholde strøm til alle enheter på IKT-avdelingens serverrom dersom strømnettet skulle falle ut. Strømmen filtreres også slik at utstyr ikke vil bli skadet av overspenning. Det beskytter derimot ikke mot overspenninger ved lynnedslag %TODO: /cite apc lynnedslag .
+\subsection{UPS}
+UPS (Uninterruptible Power Supply), ofte kalt avbruddsfri strømforsyning på norsk, blir benyttet til å opprettholde strøm til alle enheter på IKT-avdelingens serverrom dersom strømnettet skulle falle ut. Strømmen filtreres også slik at utstyr ikke vil bli skadet av overspenning. Det beskytter derimot ikke mot overspenninger ved lynnedslag %TODO: /cite apc lynnedslag .
 
 Ved IKT-avdelingen benyttes UPS-er av fabrikatene APC og HP.
 
@@ -995,7 +993,10 @@ For HP og APC overvåkes:
  	\item Gjenstående batterikapasitet
 	\item Prosentandel belastning
 	\item Spenning inn og ut
-	\item Temperatur (kun APC)
 \end{itemize}
+På APC UPS-er overvåkes også intern temperatur. For både HP og APC overvåkes alle parametere direkte over SNMP med pluginen "check\_snmp" fra nagios-plugins. Her er OID-ene definert direkte i service-objektene.
 
-For både HP og APC overvåkes alle parametere direkte over SNMP med pluginen "check\_snmp" fra nagios-plugins. Her er OID-ene definert direkte i service-objektene.
+Under vises et eksempel på hvordan inntaksspenning overvåkes på en APC UPS:
+\begin{lstlisting}[style=example]
+./check_snmp -H $HOSTADDRESS$ -C <community string>-o .1.3.6.1.4.1.318.1.1.1.3.2.1.0 -l "Voltage In" -w 225:239 -c 220:245 -u "V"
+\end{lstlisting}
