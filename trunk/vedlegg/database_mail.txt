@@ -1,0 +1,23 @@
+Fra:"Nils Slåen" <nils.slaen@hig.no>
+Emne:Oracle Health Question
+Dato:fre, april 12, 2013, 15:50
+Til:gerhard.lausser@consol.de
+
+Hello from Norway!
+
+We are a bachelor group from Norway doing our project on Icinga, by now we
+have about 200 hosts and 600 service checks, and using your MySQL, MSSQL,
+and your Oracle plugins for a couple of database servers.
+
+Now my question is, we have some different Oracle servers, they are
+running a different number of Oracle instances, Should we monitor every
+instance? Which means checks like cache hit and connection time should be
+checked on every "Instance" Not only each server?
+
+In that case, is there a way to check all instances for one server? Don't
+really want to script alot of services, or use check multi.
+
+
+Regards, Nils Slåen
+Monkey bachelor group.
+Gjøvik University College
