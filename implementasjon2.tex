@@ -53,12 +53,12 @@ define host {
 }
 \end{lstlisting}
 
-\subsection{Oppsett av kontakter og kontaktgrupper}
+\subsection{Oppsett av kontakter og kontaktgrupper}\label{sec:sync}
 IKT-avdelingen ønsket å kunne styre kontaktinformasjon og kontaktgrupper fra Active Directory. Det ble bestemt at ansvarsforhold skulle gjenspeiles i kontaktgrupper /ref vedlegg møte, for eksempel ``ts\_ansvarlig'' eller ``printer\_ansvarlig''. Icinga støtter ikke integrasjon mot LDAP i konfigurasjonsfilene, men siden disse er rene tekstfiler kan de enkelt opprettes og endres med script. Gruppen var i utgangspunktet skeptiske til å la et script gjøre endringer i konfigurasjonsfiler, da det ble fryktet at dette kunne medføre en konfigurasjon med feil. Konsekvensen av dette ville være at Icinga ikke ville kunne lese ny konfigurasjon.
 
 Icinga har en funksjon som gjør at en kan teste konfigurasjonen etter feil med en opsjon på binærfilen (--verify-config). Icinga vil da ta utgangspunkt i rot-konfigurasjonsfilen (icinga.cfg) for så å sjekke alle konfigurasjonsfilene. Dette gjør at alle konfigurasjonsfilene må sjekkes, og ikke bare de som lages for kontakter. Dermed vil ikke kontakter og kontaktgrupper bli oppdatert dersom det allerede finnes en feil i konfigurasjonen. 
 
-Det ble skrevet et Perl-script (Vedlegg \ref{ad_sync.pl}) som henter ut kontakter og kontaktgrupper fra en bestemt OU i Active Directory. Perl ble benyttet fordi det ble funnet et godt sett med LDAP-moduler, "perl-ldap" \cite{perlldap} som gjorde tilkobling og søk enkelt. Scriptet kalles fra Bash-scriptet vist under, som henter resultatet fra synkroniseringen, og sender dette til Icinga. En cron-jobb er satt opp for å kjøre synkroniseringen en gang i timen.
+Det ble skrevet et Perl-script (Vedlegg \ref{ad_sync.pl}) som henter ut kontakter og kontaktgrupper fra en bestemt OU i Active Directory. Perl ble benyttet fordi det ble funnet et godt sett med LDAP-moduler, ``perl-ldap''\cite{perlldap} som gjorde tilkobling og søk enkelt. Scriptet kalles fra Bash-scriptet vist under, som henter resultatet fra synkroniseringen, og sender dette til Icinga. En cron-jobb er satt opp for å kjøre synkroniseringen en gang i timen.
 
 \begin{lstlisting}[language=bash]
 #!/usr/bin/env bash
@@ -380,9 +380,9 @@ Vi har totalt seks spørringer og de ulike gjør følgende:
 	\item  hostQuery henter ut alle hosts som har status DOWN eller UNREACHABLE
 	\item  serviceQuery henter ut alle servicer som har en UP host, men en service som er enten WARNING eller CRITICAL
 	\item  hostTotalQuery henter ut alle hosts, med en kolonne som forteller hvilken tilstand den er i. Dette blir brukt for å regne ut et antall innenfor hver tilstand.
-	\item  serviceTotalQuery samme som 3., men henter alle servicer.
+	\item  serviceTotalQuery samme som 3, men henter alle servicer.
 	\item  hostPriorityQuery henter ut en og en host basert på objekt id. Informasjonen brukes videre for å sjekke om den har en prioritets variabel satt, som vil føre til at den blir prioritert ved fremvisning.
-	\item  servicePriorityQuery samme som 4., men henter her ut for en service.
+	\item  servicePriorityQuery samme som 4, men henter her ut for en service.
 \end{enumerate}
 
 \subsection{Footprints}
