@@ -270,13 +270,13 @@ Distribuering er ikke benyttet fordi IKT-avdelingen ønsker å gjøre installasj
 For annen infrastruktur brukes for det meste SNMP for å hente ut informasjon. Dette konfigureres på hver enkelt enhet, og krever ikke noe ekstra programvare installert. I noen tilfeller brukes egne API-er for å hente ut informasjon, som for eksempel for VMware. Her må Icinga serveren ha tilgang til å bruke API-et, som konfigureres på Virtual Center-serveren.
 
 \section{Lokale ressurser}
-For både Linux- og Windows-servere er det satt opp noen grunnsjekker som skal kjøres på alle servere. Dette er CPU-last, harddiskplass og minnebruk. Hver av sjekkene er definert i et service-objekt der hostgroup-ene er satt til "windows\_servers" og "linux\_servers". 
+For både Linux- og Windows-servere er det satt opp noen grunnsjekker som skal kjøres på alle servere. Dette er CPU-last, harddiskplass og minnebruk. Hver av sjekkene er definert i et service-objekt der hostgroup-ene er satt til ``windows\_servers'' og ``linux\_servers''. 
 
 For alle disse sjekkene er det mulig å angi grenseverdier både som prosentandel og absolutte tall. Det kan også sjekkes mot både andel ledig og andel brukt. 
 \subsection{CPU}
 Overvåkning av CPU vil kunne hjelpe til med å oppdage ressursproblemer. Dette kan komme av flere CPU-krevende applikasjoner på samme server, eller at en applikasjon bruker all CPU-kraft.  
 
-På Windows-servere benyttes "CheckCPU" fra NSClient++ for å sjekke CPU-last over NRPE. Her legges det ved tre opsjoner i sjekken som spesifiserer tidsintervallet for datagrunnlaget, grenseverdiene for når det skal gis en WARNING og en CRITICAL.
+På Windows-servere benyttes ``CheckCPU'' fra NSClient++ for å sjekke CPU-last over NRPE. Her legges det ved tre opsjoner i sjekken som spesifiserer tidsintervallet for datagrunnlaget, grenseverdiene for når det skal gis en WARNING og en CRITICAL.
 
 Kommandoen for plugin-en slik den er definert i command-objektet. Dette henter et gjennomsnittsbruk av CPU over 5 minutter: 
 
@@ -329,7 +329,7 @@ GOTO loop
     \label{cpustrain}
 \end{figure}
 
-På Linux-servere baserer sjekk av CPU-bruk seg på ''load-average'' \cite{loadavg} \cite{wiki:loadavg}. Dette er i hovedsak et gjennomsnitt for hvor mange prosesser som bruker eller venter på CPU-en, men disk- eller nettverks-I/O kan også spille inn. For servere med flere kjerner vil dette fortone seg annerledes da en kan utføre flere prosesser parallelt. Load-tallene må deles på antallet CPU-kjerner for at det skal kunne brukes samme grenseverdier uavhengig av hvor mange kjerner serveren har. Dette gjøres med opsjonen ''r''.
+På Linux-servere baserer sjekk av CPU-bruk seg på ''load-average'' \cite{loadavg} \cite{wiki:loadavg}. Dette er i hovedsak et gjennomsnitt for hvor mange prosesser som bruker eller venter på CPU-en, men disk- eller nettverks-I/O kan også spille inn. For servere med flere kjerner vil dette fortone seg annerledes da en kan utføre flere prosesser parallelt. Load-tallene må deles på antallet CPU-kjerner for at det skal kunne brukes samme grenseverdier uavhengig av hvor mange kjerner serveren har. Dette gjøres med opsjonen ``r''.
 
 Tallene som hentes ut er gjennomsnittet for de siste 1, 5 og 15 minuttene. Det er mer interessant hvis load-en er høy over lengre tid, derfor er grenseverdiene lavere for 5 og 15 minutters intervallene. Eksempel på load-tall: {\bf load average}: 0.65 0.42 0.36.
 
@@ -361,7 +361,7 @@ For Linux benyttes plugin-en check\_mem \cite{checklinuxmem}, da det ikke følge
 \subsection{Disk}
 En full harddisk kan skape problemer for applikasjoner som lagrer data og logger fra systemet kan stoppe. Ved høyt minneforbruk og bruk av virtuelt minne i kombinasjon med en full disk, vil ikke harddisken kunne utnyttes som swap, og applikasjoner kan stoppe å fungere.
 
-For Windows-servere benyttes ''CheckDisk'' fra NSClient++. For å sjekke flere disker brukes opsjonen ''CHECKALL'', som gir en oversikt over alle diskene på serveren.
+For Windows-servere benyttes ``CheckDisk'' fra NSClient++. For å sjekke flere disker brukes opsjonen ``CHECKALL'', som gir en oversikt over alle diskene på serveren.
 
 \begin{lstlisting}[style=example]
 ./check_nrpe -u -H 10.60.0.22 -p 5666 -c CheckDriveSize -a Drive="C" MaxWarnUsed=90% MaxCritUsed=95%
@@ -382,7 +382,7 @@ DISK OK| /=1232MB;15430;17359;0;19288 /lib/init/rw=0MB;402;452;0;503 /dev=0MB;39
 \section{Tjenester}
 IKT-avdelingen ønsket å overvåke tjenester og prosesser på serverne. Prossesser er instanser av programmer som kjører. Tjenester er prosesser som kjører i bakgrunnen. 
 
-Overvåk	ning av tjenester vil innebære å se på om en eller flere prosesser kjører til en hver tid. NSClient++ har muligheten til å se om en bestemt tjeneste kjører eller har stoppet gjennom ''CheckServiceState''. Her spesifiserers navnet på tjenesten, og sjekken svarer på om denne tjensten kjører.
+Overvåk	ning av tjenester vil innebære å se på om en eller flere prosesser kjører til en hver tid. NSClient++ har muligheten til å se om en bestemt tjeneste kjører eller har stoppet gjennom ``CheckServiceState''. Her spesifiserers navnet på tjenesten, og sjekken svarer på om denne tjensten kjører.
 \begin{lstlisting}[style=example]
 define service {
     service_description     DHCP Service
@@ -401,7 +401,7 @@ define service {
 }
 \end{lstlisting}
 
-Å se at en tjeneste kjører via Windows kan gi falsk informasjon. Et eksempel her er Microsofts terminal services. Tjenesten står som kjørende i Windows, men brukere får ikke koblet til. Dette kommer av at tjenesten har hengt seg, uten at den står som ''stoppet''. Dette merkes ikke før brukere ringer inn og beskriver problemet \cite{serviceproblem}. Som nevnt i \ref{sec:omovervakning} vil en bedre sjekk være å teste selve tjenesten, som blir gjort for tjenestene beskrevet under.
+Å se at en tjeneste kjører via Windows kan gi falsk informasjon. Et eksempel her er Microsofts terminal services. Tjenesten står som kjørende i Windows, men brukere får ikke koblet til. Dette kommer av at tjenesten har hengt seg, uten at den står som ``stoppet''. Dette merkes ikke før brukere ringer inn og beskriver problemet \cite{serviceproblem}. Som nevnt i \ref{sec:omovervakning} vil en bedre sjekk være å teste selve tjenesten, som blir gjort for tjenestene beskrevet under.
 
 \subsection{LDAP, DNS og DHCP}
 Tjenester som LDAP-autentisering, DNS-oppslag og DHCP-leasing er en viktig del av tjenestene IKT-avdelingen leverer.
@@ -415,7 +415,7 @@ Når en ny enhet kobles til nettverket vil denne få tildelt en IP-adresse av DH
 Sjekkene for alle de tre tjenestene vil bli gjort direkte fra Icinga-serveren. Denne står i et eget nettverk. Derfor vil det kunne oppstå situasjoner der Icinga rapporterer at tjenestene fungerer, men det fungerer ikke for brukere tilkoblet andre nettverk. En løsning på dette kan være å kjøre sjekkene via en server i hvert nettverk hvor brukere er tilkoblet.
 
 \subsubsection*{LDAP}
-For å overvåke LDAP-tjenestene benyttes pluginen ''check\_ldap'' som følger med i nagios-plugins. Plugin-en kobler til LDAP-tjenesten og prøver å autentisere en spesifisert bruker. Her vil sjekken returnere OK, om den fikk koblet til og autentisert. 
+For å overvåke LDAP-tjenestene benyttes pluginen ``check\_ldap'' som følger med i nagios-plugins. Plugin-en kobler til LDAP-tjenesten og prøver å autentisere en spesifisert bruker. Her vil sjekken returnere OK, om den fikk koblet til og autentisert. 
 
 Ytelsesdata har blitt samlet inn over 30 dager, for å sette grenseverdier for når Icinga skal gi varsel om treg innlogging. I Figur \ref{ldapauth-inv} vises det at tjenesten sjekket på fire LDAP-servere, over en måneds periode bruker rundt 0.0044 sekunder på å autentisere. Ut ifra dataen som er samlet inn settes grenseverdien for WARNING til 0.01 sekund, og CRITICAL til 0.02 sekunder.
 
@@ -428,7 +428,7 @@ Ytelsesdata har blitt samlet inn over 30 dager, for å sette grenseverdier for n
 
 \subsubsection*{DNS}
 
-DNS overvåkes med plugin-en ''check\_dns''. Denne, på samme måte som ''check\_ldap'' kobler seg til selve tjenesten. Dette fungerer ved å gjøre et DNS-oppslag på en spesifikk IP-adresse, og verifisere dette mot et satt hostname. Dersom dette stemmer vil plugin-en returnere OK, sammen med ytelses-data på hvor lang tid oppslaget tok.
+DNS overvåkes med plugin-en ``check\_dns''. Denne, på samme måte som check\_ldap kobler seg til selve tjenesten. Dette fungerer ved å gjøre et DNS-oppslag på en spesifikk IP-adresse, og verifisere dette mot et satt hostname. Dersom dette stemmer vil plugin-en returnere OK, sammen med ytelses-data på hvor lang tid oppslaget tok.
 
 Figur \ref{dns-inv} viser data samlet inn fra to DNS servere over 30 dager. Disse dataene viser forventet tid for et oppslag, og ut ifra dette ble grenseverdien for WARNING satt til 0.01 sek og CRITICAL til 0.02 sek.
 
@@ -440,10 +440,10 @@ Figur \ref{dns-inv} viser data samlet inn fra to DNS servere over 30 dager. Diss
 \end{figure}
 
 \subsubsection*{DHCP}
-Overvåkning av en DHCP-tjeneste ble testet i labmiljøet med pluginen ''check\_dhcp''. Denne sender en DHCPDISCOVER-pakke til DHCP-serveren. Hvis DHCP-tjenesten fungerer får pluginen en DHCPOFFER-pakke som respons. Dersom denne inneholder en korrekt lease, returnerer pluginen OK til Icinga sammen med tiden det tok.
+Overvåkning av en DHCP-tjeneste ble testet i labmiljøet med pluginen ``check\_dhcp''. Denne sender en DHCPDISCOVER-pakke til DHCP-serveren. Hvis DHCP-tjenesten fungerer får pluginen en DHCPOFFER-pakke som respons. Dersom denne inneholder en korrekt lease, returnerer pluginen OK til Icinga sammen med tiden det tok.
 
 \subsection{Webservere}\label{webservere}
-IKT-avdelingen drifter mange webservere som benyttes av, eller gir informasjon til brukere. Pluginen ''check\_http'' \cite{checkhttp} fra nagios-plugins benyttes for å sjekke at tilkoblingen til webserveren svarer på henvendelsen. Deler av forventet innhold sjekkes for å se at websiden ikke har blitt endret av uvedkommende.
+IKT-avdelingen drifter mange webservere som benyttes av, eller gir informasjon til brukere. Pluginen ``check\_http'' \cite{checkhttp} fra nagios-plugins benyttes for å sjekke at tilkoblingen til webserveren svarer på henvendelsen. Deler av forventet innhold sjekkes for å se at websiden ikke har blitt endret av uvedkommende.
 
 Kommandoen for å gjøre dette er for siden http://portal.hedmark.org:
 \begin{lstlisting}[style=example]
@@ -486,14 +486,14 @@ Som for terminalservere, beskrevet i \ref{sect:terminalservere}, brukes Microsof
 \end{itemize}
 Microsoft har gitt ut egne anbefalinger til grenseverdier som er benyttet som et utgangspunkt\cite{exchangethresholds}.
 
-I tillegg til disse sjekkene var det ønskelig å teste hele e-postoppsettet i én sjekk. Til dette benyttes pluginen ''check\_email\_delivery'' \cite{exchange}. Her sjekkes det at en e-post kan sendes fra SMTP-serveren. E-posten som sendes ut inneholder en unik ID. Videre kobler pluginen seg til IMAP-tjenesten og sjekker om e-posten med den unike ID-en kom frem. Antall sekunder for hele round-tripen blir målt. Helst skulle en sendt e-posten fra en SMTP-server som står utenfor nettverket, men det var ikke tilgjengelig under implementasjonensperioden.
+I tillegg til disse sjekkene var det ønskelig å teste hele e-postoppsettet i én sjekk. Til dette benyttes pluginen ``check\_email\_delivery'' \cite{exchange}. Her sjekkes det at en e-post kan sendes fra SMTP-serveren. E-posten som sendes ut inneholder en unik ID. Videre kobler pluginen seg til IMAP-tjenesten og sjekker om e-posten med den unike ID-en kom frem. Antall sekunder for hele round-tripen blir målt. Helst skulle en sendt e-posten fra en SMTP-server som står utenfor nettverket, men det var ikke tilgjengelig under implementasjonensperioden.
 
 Det sjekkes også at websiden for Outlook Web Access er tilgjengelig, på samme måte som andre websider, slik det er beskrevet i \ref{sec:webservere}.
 
 \subsection{Redundante oppsett}
 En ordinær plugin henter status for en service på ett host-objekt. Ved redundante oppsett vil det ikke nødvendigvis være kritisk om en av nodene er nede. For å vurdere statusen til et cluster kan en kjøre en sjekk på hvert enkelt host-objekt, og ta en vurdering basert på resultatene av alle sjekkene samlet.
 
-For å overvåke redundante oppsett, har plugin-ene ''check\_multi'' \cite{checkmulti} og ''check\_cluster'' \cite{checkcluster} blitt vurdert. check\_cluster parser den lokale status.dat-filen og ser hvilken tilstand en service eller en host er ved siste sjekk. Pluginen check\_multi derimot kjører plugin-er mot spesifiserte host-objekter, og en kan definere sammenligningsoperator (<,>,=), som vil bli sjekket mot de returnerte resultatene.
+For å overvåke redundante oppsett, har plugin-ene ``check\_multi'' \cite{checkmulti} og ``check\_cluster'' \cite{checkcluster} blitt vurdert. check\_cluster parser den lokale status.dat-filen og ser hvilken tilstand en service eller en host er ved siste sjekk. Pluginen check\_multi derimot kjører plugin-er mot spesifiserte host-objekter, og en kan definere sammenligningsoperator (<,>,=), som vil bli sjekket mot de returnerte resultatene.
 
 Med check\_multi kan en benytte en eller flere egendefinerte kommandoer som parametere. Disse vil parses av check\_multi og kan inneholde alt i fra ``echo 'Hello, World!'´'', til mer avanserte Perl-script som kjøres ved hjelp av eval. Dette blir brukt for Oracle-databaser som forklart i \ref{sec:oracle}. 
 
@@ -538,7 +538,7 @@ Sjekken av connection time tester om det er mulig å koble til SQL-serveren. Hvi
 For connected users sjekkes hvor mange sessioner som er koblet til database tjenesten (per instanse for Oracle DB). Antall aktive sesjoner blir samlet inn om hver enkelt database. Derfor defineres grenseverdier ut fra hvor mange brukere som er koblet til over en periode, og et uvanlig bruksmønster vi gi et varsel.
 
 \subsection*{Cache hit}
-Cache hit er hvor ofte data hentes ut fra databasemotorens egen cache, slik at dataen ikke leses fra disk. Dette sparer diskene for I/O-operasjoner. Hvis cache hit ligger på et høyt nivå (90-100 \%), indikerer dette at tabellene det spørres mest mot lagres i cache. Når cache hit ligger under 90 \% kan dette være et resultat av at serveren ikke har nok minne til å lagre tabellene i cache. Dette kan indikere et minneproblem.
+Cache hit er hvor ofte data hentes ut fra databasemotorens egen cache, slik at dataen ikke leses fra disk. Dette sparer diskene for I/O-operasjoner. Hvis cache hit ligger på et høyt nivå (90 - 100 \%), indikerer dette at tabellene det spørres mest mot lagres i cache. Når cache hit ligger under 90 \% kan dette være et resultat av at serveren ikke har nok minne til å lagre tabellene i cache. Dette kan indikere et minneproblem.
 
 Oracle mener at cache hit bør ligge på over 90 \% \cite{oraclecachehit}. For MSSQL er tilnærmet 100 \% cache hit et godt utgangspunkt \cite{sqlmonitoring}.
 
@@ -633,13 +633,11 @@ Konfigurasjon for command-objektet for MSSQL og MySQL vises under. \$ARG1\$ bruk
 
 \subsubsection{MySQL Cluster}
 MySQL Cluster er et distribuert oppsett for MySQL. Ved IKT-avdelingen benyttes et MySQL Cluster med NDB som lagringsmotor, der databasene kjører i minnet. Et MySQL Cluster består av tre forskjellige nodetyper \cite{ndbinformation}:
-
 \begin{itemize}
 	\item Management - her konfigureres clusteret og en setter opp hvor mange Data- og SQL-noder som kan kobles til.
 	\item Data - oppbevarer tabeller og tabelldata i RAM. Disse håndterer lastbalansering, replikering, failover og gjenoppbygging automatisk i mellom hverandre.
 	\item SQL - MySQL servere som kobler seg til data-nodene for å hente og lagre data.
 \end{itemize}
-
 
 Den enkleste måten å hente ut statistikk for et MySQL Cluster, er å benytte administrasjonsprogrammet ``ndb\_adm''. Denne kan hentes ut fra installasjonspakken til mysql-cluster\cite{ndbdownload}. I ndb\_adm kan en se hvor mange noder av hver type som er tilkoblet management-noden og minneforbruket til hver av datanodene. De plugin-ene som benyttes baserer seg på output fra ndb\_adm.
 
@@ -680,7 +678,7 @@ define servicegroup {
 }
 \end{lstlisting}
 
-I dette eksempelet kjøres service-sjekker mot alle tjenestene. Service-objektene grupperes i en servicegroup. Et oversiktsbilde over applikasjonen vises i Icingas web-grensesnitt, som i Figur \ref{servicegroup_web}. Slik blir det enklere for ansatte på servicedesk å kunne gå inn og se hva som er feil med "Web app for ERP" om brukere rapporterer om feil på denne applikasjonen.
+I dette eksempelet kjøres service-sjekker mot alle tjenestene. Service-objektene grupperes i en servicegroup. Et oversiktsbilde over applikasjonen vises i Icingas web-grensesnitt, som i Figur \ref{servicegroup_web}. Slik blir det enklere for ansatte på servicedesk å kunne gå inn og se hva som er feil med ``Web app for ERP'' om brukere rapporterer om feil på denne applikasjonen.
 
 \begin{figure}[H]
     \centering
@@ -994,7 +992,7 @@ For HP og APC overvåkes:
 	\item Prosentandel belastning
 	\item Spenning inn og ut
 \end{itemize}
-På APC UPS-er overvåkes også intern temperatur. For både HP og APC overvåkes alle parametere direkte over SNMP med pluginen "check\_snmp" fra nagios-plugins. Her er OID-ene definert direkte i service-objektene.
+På APC UPS-er overvåkes også intern temperatur. For både HP og APC overvåkes alle parametere direkte over SNMP med pluginen ``check\_snmp'' fra nagios-plugins. Her er OID-ene definert direkte i service-objektene.
 
 Under vises et eksempel på hvordan inntaksspenning overvåkes på en APC UPS:
 \begin{lstlisting}[style=example]

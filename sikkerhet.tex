@@ -1,10 +1,10 @@
 \chapter{Sikkerhet}\label{chap:sikkerhet}
-Informasjon som brukes av overvåkningsserveren til å avgjøre tilstanden til en enhet eller tjeneste kommer fra eksterne kilder. Aksesstilgang må eksistere både på de eksterne enhetene som overvåkes, og på overvåkningsserveren for muligheten til å ta i bruk traps. Plugin-er vil ha eksekveringstillatelse på eksterne enheter, og SNMP trap-meldinger sender informasjon via en port på overvåkningsserveren. Fokus for dette prosjektet har vært implementasjon, men det har også blitt tatt noen sikkerhetsvurderinger underveis. Ulike sikkerhetsrisikoer og hvordan dette kan håndteres for å minske graden av sårbarhet vil bli gått gjennom i dette kapittelet.
+Informasjon som brukes av overvåkningsserveren til å avgjøre tilstanden til en enhet eller tjeneste kommer fra eksterne kilder. Plugin-er vil ha eksekveringstillatelse på eksterne enheter, og SNMP trap-meldinger sender informasjon via en port på overvåkningsserveren. Fokus for prosjektet har vært implementasjon, men det er tatt noen sikkerhetsvurderinger underveis. Ulike sikkerhetsrisikoer og hvilke implikasjoner dette har for imlementasjonen vil bli gått gjennom i dette kapittelet.
 
 \section{Plugin-er}
-Flere plugin-er har blitt installert i etterkant av Icinga, og dette utgjør en viss sikkerhetsrisiko. En god del plugin-er har et omfang på 1000-5000 linjer og det er en tidkrevende prosess å kvalitetsikre alle. De sjekkene som eksekveres på andre enheter, og ikke på selve Icinga-serveren, er plugin-er som kommer med nagios-plugins og NSclient++. Disse blir brukt av et stort antall organisasjoner og andre. Gruppen har også fulgt med på fora og kommentarfelt for de ulike plugin-ene for å kunne være trygge på de plugin-ene som kjører på hver enkelt host. 
+Flere plugin-er har blitt installert i etterkant av Icinga, og dette utgjør en viss sikkerhetsrisiko. Flere plugin-er har et omfang på 1000 - 5000 linjer og det er en tidkrevende prosess å kvalitetsikre alle. De sjekkene som eksekveres på andre enheter, og ikke på selve Icinga-serveren, er plugin-er som kommer med nagios-plugins og NSclient++. Disse blir brukt av et stort antall organisasjoner og andre. Gruppen har også fulgt med på fora og kommentarfelt for de ulike plugin-ene for å kunne være trygge på de plugin-ene som kjører på hver enkelt host. 
 
-De pluging-ene som sjekker en tjeneste eller henter ut informasjon som check\_dns, og check\_dhcp har i utgangspunktet ingen mulighet for å kjøre direkte på en host. Disse kan utføre ondsinnede handlinger på selve Icinga-serveren. Alle plugin-er som er tatt i bruk kommer enten i fra monitor-exchange.org, op5, opsview, eller nagios-exchange.
+De plugin-ene som sjekker en tjeneste eller henter ut informasjon som check\_dns, og check\_dhcp har i utgangspunktet ingen mulighet for å kjøre direkte på en host. Disse kan utføre ondsinnede handlinger på selve Icinga-serveren. Alle plugin-er som er tatt i bruk kommer enten i fra monitor-exchange.org, op5, opsview, eller nagios-exchange.
 \section{Nettverk}
 Icinga-serveren står i et adskilt VLAN. Ved hjelp av pakkefiltrering sperres innkommende trafikk fra andre nettverk. Icinga-serveren må kontakte andre servere den skal overvåke og kommunikasjon som er initiert av Icinga tillates i brannmuren. 
 
@@ -42,7 +42,7 @@ En brukerkonto ble opprettet i Active Directory for Icinga. Denne benyttes ved t
 	\item Tilkobling mot MSSQL database.
 	\item Tilkobling til VMware (Read-only i Virtual Center).
 \end{itemize}
-Brukeren som brukes for XenServer har rollen Pool Admin, da IKT-avdelingen bruker en versjon som ikke har funksjonen "Role Base Access Control". 
+Brukeren som brukes for XenServer har rollen Pool Admin, da IKT-avdelingen bruker en versjon som ikke har funksjonen ``Role Base Access Control''. 
 
 \subsection{LDAP}
 LDAP benyttes ved synkronisering av kontakter og kan benyttes til innlogging i Icinga Web og Icinga Classic, som beskrevet i /ref{ldap auth}. LDAP over SSL kan benyttes for å kryptere denne kommunikasjonen. Da må et sertifikat installeres på Icinga-serveren.
