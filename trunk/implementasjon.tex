@@ -676,11 +676,11 @@ Konfigurasjonen for dette er vist under. Direktivet ``members'' setter medlemmen
 define servicegroup {
 	servicegroup_name ERP_WEBAPP
 	alias Web App for ERP
-	members Web1,Check HTTP, File1,Check SMB, Mail1,Check Exchange, DB1,Check MySQL
+	members Web1,Check ERP Web Contents, File1,Check SMB, Mail1,Check Exchange, DB1,Check MySQL
 }
 \end{lstlisting}
 
-I dette eksempelet kjøres service-sjekker mot alle tjenestene. Service-objektene grupperes i en servicegroup. Et oversiktsbilde over applikasjonen vises i Icingas web-grensesnitt, som i Figur \ref{servicegroup_web}. Slik blir det enklere for servicedesk å kunne gå inn og se hva som er feil med "Web app for ERP" om brukere rapporterer om feil på denne applikasjonen.
+I dette eksempelet kjøres service-sjekker mot alle tjenestene. Service-objektene grupperes i en servicegroup. Et oversiktsbilde over applikasjonen vises i Icingas web-grensesnitt, som i Figur \ref{servicegroup_web}. Slik blir det enklere for ansatte på servicedesk å kunne gå inn og se hva som er feil med "Web app for ERP" om brukere rapporterer om feil på denne applikasjonen.
 
 \begin{figure}[H]
     \centering
@@ -688,16 +688,15 @@ I dette eksempelet kjøres service-sjekker mot alle tjenestene. Service-objekten
     \caption{ Oversikt over servicegroup-objekt og status i webgrensesnittet}
     \label{servicegroup_web}
 \end{figure}
-
-Det vil det også være naturlig å sette opp servicedependency-er mellom ERP Web1 og sjekkene for webserveren, filserveren, mailserveren og databaseserveren.
+Det vil det også være naturlig å sette opp servicedependency-er mellom ``Check ERP Web Contents'' på Web1 og sjekkene for webserveren, filserveren, mailserveren og databaseserveren for å unnga flere varsler ved følgefeil.
 
 \section{Infrastruktur}
-Infrastruktur består av de grunnleggende enhetene de andre serverne er avhengig av. I dette prosjektet er det definert til: switcher, routere, brannmurer, UPS, virtualiseringsteknologi og serverrommiljø.
+Infrastruktur består av de grunnleggende enhetene de andre serverne er avhengig av, og er dermed ekstra viktig å overvåke. I dette prosjektet er det definert til: switcher, routere, brannmurer, UPS, virtualiseringsteknologi og serverrommiljø.
 
-Infrastrukturovervåkning er essensielt for å kunne levere IT-tjenester. Det er viktig at design av overvåkningen fører til at man raskt og effektivt skal kunne oppdage og presentere feil som oppstår. For å få til dette i Icinga benyttes "parent" \ref{sec:parents}. De aller fleste enheter i infrastrukturen (untatt servermiljø) vil være parent for andre enheter. Dette reflekteres i et statuskart i Icinga, som vist i Figur \ref{statusmap}.
+Det er viktig at design av overvåkningen fører til at man raskt og effektivt skal kunne varsle feil, og hvilke andre enheter dette berører. For å få til dette i Icinga benyttes ``parent'' \ref{sec:parent}. De aller fleste enheter i infrastrukturen vil være parent for andre enheter, med unntak av servermiljø. Dette reflekteres også i et statuskart i Icinga, som vist i Figur \ref{statusmap}.
 
 \subsection{Switcher}\label{sec:switch}
-Switcher er nettverksutstyr som jobber på lag 2 i OSI-modellen, datalink-laget. IKT-avdelingen benytter switcher med lag 3-funksjonalitet. Det vil si at switchen kan kommunisere over IP. Alle switchene IKT-avdelingen benytter støtter SNMP-protokollen, som brukes til overvåkingen.
+Switcher er nettverksutstyr som jobber på lag 2 i OSI-modellen, datalink-laget. IKT-avdelingen benytter switcher med lag 3-funksjonalitet. Det vil si at switchen kan kommunisere over IP. Alle switchene IKT-avdelingen benytter støtter SNMP-protokollen, som brukes til overvåkning.
 
 På switchene overvåkes forskjellige sensorer avhengig av hvilke som finnes. Alle switcher har for eksempel ikke vifter.
 
@@ -705,21 +704,23 @@ Det er laget et generisk oppsett som overvåker temperatur, PSU og viftestatus. 
 
 Dersom en vifte eller PSU rapporteres som defekt vil det rapporteres som en CRITICAL-status i Icinga. For temperatur er grenseverdiene satt til xx for WARNING og xx for CRITICAL.
 
-Switchene IKT-Avdelingen bruker er forskjellige modeller fra leverandørne Cisco, Dell og HP. Disse overvåkes med plugin-ene "check\_nwc\_health" \cite{checknwc} for Cisco og HP, og check\_snmp\_powerconnect for Dell \cite{checkpowerconnect}.
+Switchene IKT-Avdelingen bruker er forskjellige modeller fra leverandørne Cisco, Dell og HP. Disse overvåkes med plugin-ene ``check\_nwc\_health'' \cite{checknwc} for Cisco og HP, og check\_snmp\_powerconnect for Dell \cite{checkpowerconnect}.
 
 \subsection{Routere og brannmurer}
-IKT-avdelingen benytter Cisco ASA- og Cisco PIX-routere for routing av trafikk mellom forskjellige nettverk. I tillegg utfører de oppgaver som pakkefiltrering, NAT og IPsec-tunneler.
+IKT-avdelingen benytter Cisco ASA- og Cisco PIX-routere for routing av trafikk mellom forskjellige nettverk. I tillegg utfører de oppgaver som pakkefiltrering, NAT og IPsec-tunnelering.
 % TODO: Sjekk at dette er riktig mot docs
 
 \subsubsection{Ressurser}
-Som for switcher brukes check\_nwc\_health til å se at sensorer er OK. I tillegg sjekkes CPU-bruk og minneforbruk gjennom samme plugin. 
+Plugin-en check\_nwc\_health brukes for å overvåke sensorer, CPU-bruk og minneforbruk.
 
 For CPU-bruk sjekkes gjennomsnittet over 5 minutter. Grenseverdier er satt til 80 \% på WARNING og 90 \% på CRITICAL, i henhold til det Cisco anbefaler \cite{ciscounifiedcommunication}. Høy CPU-bruk kan føre til dårligere ytelse, høy rate av buffer-feil og generelle feil med responsivitet \cite{ciscocpurouters}
 
-I følge Cisco kan høyt minneforbruk under vanlig drift indikere at brannmuren er under angrep. \cite{ciscomem}. Dersom en router bruker opp tilgjengelig minne kan det føre til at routeren slutter å svare på kommandoer, telnet-tilkoblinger eller henger \cite{ciscomemproblem} . Cisco anbefaler en grenseverdi på 15 \% ledig minne \cite{ciscounifiedcommunication}. Grenseverdier for minne er derfor satt til 20 \% for WARNING og 15 \% for CRITICAL.
+I følge Cisco kan høyt minneforbruk under vanlig drift indikere at brannmuren er under angrep. \cite{ciscomem}. Dersom en router bruker opp tilgjengelig minne kan det føre til at routeren slutter å svare på kommandoer, telnet-tilkoblinger eller blir mindre responsiv \cite{ciscomemproblem}. Cisco anbefaler en grenseverdi på 15 \% ledig minne \cite{ciscounifiedcommunication}. Grenseverdier for minne er derfor satt til 20 \% for WARNING og 15 \% for CRITICAL.
+
+Begge brannmurene legges i en hostgroup som er lagt på service-objektet for ``cisco\_health'', slik at lokale ressurser sjekkes på samme måte som switcher. Brannmurene legges også inn i en hostgroup som heter Cisco-failover som benyttes i service-objektet for failover.
 
 \subsubsection{Failover}
-Cisco-routere og brannmurer har en viktig funksjon som kalles failover. Failover fungerer ved at to like enheter settes opp, der en blir satt som "primary" og den andre som "secondary". Secondary kan da overta for primary dersom det skulle bli nødvendig. Routerne kobles sammen med en seriellkabel. Figur \ref{ciscoasafailover} viser oppkoblingen for et Cisco-failover-oppsett. 
+Cisco-routere og brannmurer har en viktig funksjon som kalles failover. Failover fungerer ved at to like enheter settes opp, der en blir satt som ``primary'' og den andre som ``secondary''. Secondary kan da overta for primary dersom det skulle bli nødvendig. Routerne kobles sammen med en seriellkabel. Figur \ref{ciscoasafailover} viser denne oppkoblingen. 
 
 \begin{figure}[H]
     \centering
@@ -728,7 +729,7 @@ Cisco-routere og brannmurer har en viktig funksjon som kalles failover. Failover
     \label{ciscoasafailover}
 \end{figure}
 
-Dersom primary går ned, vil secondary ta over nødvendige ruter, brannmurregler og konfigurasjon. Secondary vil dermed overta IP- og MAC-adressen til primary. Primary vil bli satt som passiv (trenger ikke nødvendigvis å ha en passiv IP-adresse, fordi IP-kommunikasjon kun går gjennom det aktive interfacet) helt til en manuelt endrer dette tilbake i konfigurasjonen. \cite{ciscofailover}. 
+Dersom primary går ned, vil secondary ta over nødvendige ruter, brannmurregler og konfigurasjon. Secondary vil dermed overta IP- og MAC-adressen til primary. Primary vil bli satt som passiv (trenger ikke nødvendigvis å ha en passiv IP-adresse, fordi IP-kommunikasjon kun går gjennom det aktive interfacet) helt til en manuelt endrer dette tilbake i konfigurasjonen. \cite{ciscofailover} 
 
 Sjekkene som settes opp for å verifisere at failover-funksjonaliteten fungerer som den skal, og at det ikke har intruffet feil er:
 \begin{itemize}
@@ -739,28 +740,28 @@ Sjekkene som settes opp for å verifisere at failover-funksjonaliteten fungerer 
 \item Hvis failover ikke er konfigurert returneres UNKNOWN. 
 \end{itemize}
 
-Til dette benyttes plugin-en "check\_cisco\_firewall" \cite{checkciscofirewall}.
+Til dette benyttes plugin-en ``check\_cisco\_firewall'' \cite{checkciscofirewall}.
 
 Hvis brannmurene deler management IP på primary og secondary, er det ingen mulighet for å hente ut informasjon fra den passive brannmuren. Da sjekkes failover status bare for primary. I et ideelt miljø bør både passiv og aktiv enhet ha hver sin IP-adresse, slik at fysiske feil også kan avdekkes på den passive.
 
-Begge brannmurene legges i en hostgroup som er lagt på service-objektet for "cisco\_health", slik at lokale ressurser sjekkes på samme måte som switcher. Brannmurene legges også inn i en hostgroup som heter Cisco-failover som benyttes i service-objektet for failover.
-
 \subsubsection{VPN}
-For brannmurer som har VPN-tjeneste sjekkes antall oppkoblede brukere opp mot det antallet brannmuren er lisensiert for. Begge disse verdiene finnes som SNMP OID-er definert i "CISCO-FIREWALL-MIB" \cite{cisco_fw_mib}. Det fantes allerede en plugin som sjekker antall tilkoblede brukere \cite{checkciscovpn}. Denne ble endret til i tillegg å hente ut det maksimale antallet og sammeligne brukt kapasitet i prosent mot grenseverdier, som kommer inn som argumenter.
+For brannmurer som har VPN-tjeneste sjekkes antall oppkoblede brukere opp mot det antallet brannmuren er lisensiert for. Det fantes allerede en plugin som sjekker antall tilkoblede brukere \cite{checkciscovpn}. Plugin-en ble endret til i tillegg å hente ut det maksimale antallet, og sammeligne brukt kapasitet i prosent mot grenseverdier, som kommer inn som argumenter. Plugin-en henter ut variablene over SNMP etter OID-er definert i ``CISCO-FIREWALL-MIB'' \cite{cisco_fw_mib}.
 
 \subsubsection{Båndbredde}
-For å overvåke bruk av båndbredde ut av og inn av en port på Cisco ASA og PIX finnes to muligheter:
+For å overvåke bruk av båndbredde ut av og inn av en port på Cisco ASA og PIX finnes to muligheter: NetFlow eller hente ut verdien fra en teller i et intervall.
 
 \subsubsection*{Netflow}
-Funksjonen Netflow \cite{ciscoiosnetflow} fungerer ved at enheten samler inn informasjon om og statistikk over alle pakker som går ut og inn av portene. Dette krevet at Netflow konfigureres på alle routerne, og det vil også ta opp ekstra minne og CPU \cite{cisconetflowperf}. Det ble derfor avgjort at Netflow ikke skulle benyttes.
+Funksjonen Netflow \cite{ciscoiosnetflow} fungerer ved at enheten samler inn informasjon og statistikk om alle pakker som går ut og inn av portene. Dette krevet at Netflow konfigureres på alle routerne, og det vil også ta opp ekstra minne og CPU \cite{cisconetflowperf}. Det ble derfor avgjort at Netflow ikke skulle benyttes.
 
 \subsubsection*{Telle pakker}
 Både Cisco Pix og ASA har tellere for antall byte som går ut og inn på en nettverksport. For å kalkulere bruk av båndbredde over et intervall kan en hente ut disse, vente en gitt periode og hente ut nye verdier. Da vil bruken være ((målepunkt2 - målepunkt1)*8) / antall sekunder.
 
-Mange plugin-er benytter seg av dette ved å lese ut "ifInOctets" og "ifOutOctets" over SNMP. Det er også disse som er benyttet i Ciscos notat "How to Calculate Bandwidth Using SNMP" \cite{ciscobandwidth}. 
+Mange plugin-er benytter seg av dette ved å lese ut "ifInOctets" og "ifOutOctets" over SNMP. Dette følger Ciscos notat "How to Calculate Bandwidth Using SNMP" \cite{ciscobandwidth}. 
 
 En stor ulempe med å benytte disse er at de er 32 bit, og vil dermed nullstilles kjapt ved høye hastigheter. For 1000 Mbps vil det ta ((2\^32)-1) / ((10\^9)/8) = ca. 34 sekunder til telleren har gått rundt. Se Tabell \ref{kalkulering_teller} for andre hastigheter.
-
+\begin{equation}
+\frac{2^{32}-1}{\frac{10^9}{8}}=34.36 s
+\end{equation}
 Det er derfor anbefalt å bruke 64 bit-variablene ifHCOutOctets og ifHCInOctets i stedet for \cite{ciscosnmpcounters}.
 \begin{table}
 \begin{center}
@@ -770,22 +771,23 @@ Det er derfor anbefalt å bruke 64 bit-variablene ifHCOutOctets og ifHCInOctets 
     100 Mbps & 5 minutter og 43.60 sekunder \\ \hline
     1000 Mbps & 34.36 sekunder \\ \hline
 \end{tabular}
-\caption{Kalkuleringsteller}
+\caption{Sekunder før en 32 bit nullstilles }
 \label{kalkulering_teller}
 \end{center}
 \end{table}
-Plugin-en det er tatt utgangspunkt i for å hente ut båndbreddebruk heter check\_iftraffic64 \cite{checkciscoif}. Denne er noe omskrevet for å kunne sende inn absolutte verdier som grenseverdier for varsling. I generic-firewall er det satt opp to egendefinerte variabler "WANWARN" og "WANCRIT", som setter standard grenseverdier for alle brannmurer. For brannmurer der det er normalt med høyere båndbreddebruk, er disse variablene overstyrt i konfigurasjonen for host-objektet.
+Plugin-en det er tatt utgangspunkt i for å hente ut båndbreddebruk heter check\_iftraffic64 \cite{checkciscoif}. Denne er noe omskrevet for å kunne sende inn absolutte verdier som grenseverdier for varsling. I generic-firewall er det satt opp to egendefinerte variabler ``WANWARN'' og ``WANCRIT'', som setter standard grenseverdier for alle brannmurer. For brannmurer der det er normalt med høyere båndbreddebruk, er disse variablene overstyrt i konfigurasjonen for host-objektet.
 
+%TODO: Cluster shit
 \subsection{VMware og Citrix Xen}
-Ved IKT-avdelingen er det både et Citrix Xen-miljø og et VMware-miljø. Disse består av servere som kjører hypervisorene ESX 5.1 og Xen 6.1. Begge er av typen 1 (direkte på hardware) og står for administering av virtuelle maskiner, som er operativsystemer med applikasjoner. Hypervisoren introduserer altså et nytt lag mellom hardware og applikasjonene brukeren benytter. Host-ene har ansvaret for at de virtuelle maskinene får tilstrekkelig med ressurser for å kunne kjøre installerte applikasjoner. 
+Ved IKT-avdelingen er det både et Citrix Xen-miljø og et VMware-miljø. Disse består av servere som kjører hypervisorene ESX 5.1 og Xen 6.1. Begge er av typen 1 (direkte på hardware) og står for administering og kjøring av virtuelle maskiner, som er operativsystemer med applikasjoner. Hypervisoren introduserer altså et nytt lag mellom hardware og applikasjonene brukeren benytter. Host-ene har ansvaret for at de virtuelle maskinene får tilstrekkelig med ressurser for å kunne kjøre installerte applikasjoner. 
 
-For overvåkning av virtuelle maskiner brukes NRPE, det overvåkes da som en "egen" server. Overvåkning av servere som kjører hypervisor-ene vil bestå av å sjekke om ressurser strekker til etterspørselen fra de virtuelle maskinene. En eller flere virtuelle maskiner kan kreve mer ressurser enn en server har fysisk. Dette stjeler både CPU-tid, minne og I/O for å håndtere, noe som vil gå utover gjeste-operativsystem og applikasjoners responstid. Videre vil overvåkning av hvor mye ressurser som brukes gi muligheten for å kalkulere når eventuelle skaleringstiltak må innføres \cite{vmwaremonitoring}. 
+For overvåkning av virtuelle maskiner brukes NRPE, det overvåkes da som en ``egen'' server. Overvåkning av servere som kjører hypervisor-ene vil bestå av å sjekke om ressurser strekker til etterspørselen fra de virtuelle maskinene. En eller flere virtuelle maskiner kan kreve mer ressurser enn en server har fysisk. Dette stjeler både CPU-tid, minne og I/O for å håndtere, noe som vil gå utover gjeste-operativsystemer og applikasjoners responstid. Videre vil overvåkning av hvor mye ressurser som brukes gi muligheten for å kalkulere når eventuelle skaleringstiltak må innføres \cite{vmwaremonitoring}.
 
 \subsubsection{VMware}
 \paragraph{Plugin}
-Plugin-en "check\_vmware\_api.pl" , som er utviklet av fri programvare firmaet op5 \cite{op5}, er brukt for å hente ut informasjonen fra VMware vCenter. Denne pluginen bruker et SDK-bibliotek i Perl \cite{vmwareperl} for å utføre API-kall til vCenter. Autentisering skjer ved å sende med brukernavn og passord for en brukerkonto som opprettet i vCenter-serveren med read-rettigheter. For å utveksle informasjon blir SOAP-protokollen benyttet \cite{wiki:soap} via HTTPS \cite{ciscovirtual}.
+Plugin-en ``check\_vmware\_api.pl'' , som er utviklet av fri programvare firmaet op5 \cite{op5}, er brukt for å hente ut informasjonen fra VMware vCenter. Denne pluginen bruker et SDK-bibliotek i Perl \cite{vmwareperl} for å utføre API-kall til Virtual Center. Autentisering skjer ved å sende med brukernavn og passord for en brukerkonto, som er opprettet i Virtual Center-serveren med read-rettigheter. For å utveksle informasjon blir SOAP-protokollen benyttet \cite{wiki:soap} via HTTPS \cite{ciscovirtual}.
 
-VMware vCenter bruker fire intervaller for lagring av historisk data \cite{vmwareperfintervals}. Dette er gjennomsnittet for:
+VMware Virtual Center bruker fire intervaller for lagring av historisk data \cite{vmwareperf}. Dette er gjennomsnittet for:
 \begin{enumerate}
         \item hvert 5. minutt over en dag
         \item hvert 30. minutt i en uke
@@ -794,7 +796,6 @@ VMware vCenter bruker fire intervaller for lagring av historisk data \cite{vmwar
 \end{enumerate}
 
 Pluginen i CLI:
-
 \begin{lstlisting}[style=example]
 ./check_vmware_api.pl -D <Virtual Center IP-adresse> -u <brukernavn> -p <passord> | -H <host_navn> -N <vm_navn> -C <cluster_navn>  -l <hovedkommando> -s <subkommando> -i <interval> -T <timeshift>
 \end{lstlisting}
@@ -803,20 +804,18 @@ For å overvåke flere parametere kan en legge til kode i plugin-en, så lenge �
 
 <host eller vm eller cluster>\_<hovedkommando>\_info
 
-For å legge til en ny CPU-parameter finner en "host\_cpu\_info"  funksjonen og legger til en elseif på subkommandoen som brukes for å referere til et gitt parameter i VMware API-et. En kan følge oppsettet på de funksjonene som allerede er definert. Dette krever noe kunnskaper om språket Perl.
+For å legge til en ny CPU-parameter finner en ``host\_cpu\_info''  funksjonen og legger til en elseif på subkommandoen som brukes for å referere til et gitt parameter i VMware API-et. En kan følge oppsettet på de funksjonene som allerede er definert. Dette krever noe kunnskaper om språket Perl.
 
-For alle parametere som blir hentet ut blir tilleggsopsjonene "-i 300" og "-T 600" sendt med. Som nevnt over lagres data i ulike intervall, og opsjonen "-i 300"  vil si at det hentes ut data med intervall-ID 300 og vi får da gjennomsnittet for 5 minutter med datapunkt for hvert 20 sekund (standard innhenting i Virtual Center). Opsjonen "-T"  er timsehift i sekunder, som vil si at det returneres data fra tiden sjekken blir kjørt og 600 sekunder tilbake i tid.
+For alle parametere som blir hentet ut blir tilleggsopsjonene ``-i 300'' og ``-T 600'' sendt med. Som nevnt over lagres data i ulike intervall, og opsjonen ``-i 300''  vil si at det hentes ut data med intervall-ID 300 og vi får da gjennomsnittet for 5 minutter med datapunkt for hvert 20 sekund (standard innhenting i Virtual Center). Opsjonen ``-T''  er timeshift i sekunder, som vil si at det returneres data fra tiden sjekken blir kjørt og 600 sekunder tilbake i tid.
 
-Etter analyse av output fra pluginen ble det observert at dette var innstillingene som ga oss data om det siste 5 minutters-intervallet. Dette var ønskelig fordi pluginen varsler mot det siste intervallet, så de andre intervallene var overflødige. Andre opsjoner som ble testet var bare "-i 300", men her kom det 288 resultater tilbake. Dette er antall datapunkt som blir generert i 5 minutters-intervallet for en dag. \cite{vmwareperfintervals}
+Etter analyse av output fra pluginen ble det observert at dette var innstillingene som ga oss data om det siste 5 minutters-intervallet. Dette var ønskelig fordi pluginen varsler mot det siste intervallet, så de andre intervallene var overflødige. Andre opsjoner som ble testet var bare ``-i 300'', men her kom det 288 resultater tilbake. Dette er antall datapunkt som blir generert i 5 minutters-intervallet for en dag. \cite{vmwareperfintervals}
 
 \paragraph{Ressurser}
-
 To counters er benyttet i overvåkningen, og vil være eksempler på hvordan en setter opp sjekker. Disse kan brukes som referanse for utvidelse av overvåkningen av VMware-miljøet.
 
 Ressurser som nå overvåkes \cite{ciscovirtual} \cite{vmwaremonitoring}:
 
 \subsubsection*{CPU}
-
 Grenseverdier her er satt til samme nivå som tilsvarende alarm i Virtual Center, og gir indikasjon på at det kan være en eller flere virtuelle maskiner som krever for mye CPU-kraft i forhold til hva hosten har tilgjengelig. Det kan også være et for stort antall virtuelle maskiner på hosten \cite{vmwarecounters}.
 
 Counter usage.average (\%) - ``Actively used CPU of the host, as a percentage of the total available CPU. Active CPU is approximately equal to the ratio of the used CPU to the available CPU. available CPU = \# of physical CPUs x clock rate''
@@ -824,57 +823,52 @@ Counter usage.average (\%) - ``Actively used CPU of the host, as a percentage of
 Grenseverdier (\%): WARNING 75 CRITICAL 90
 
 \subsubsection*{Minne}
-
-Grenseverdie her er satt til samme nivå som Virtual Center, og vil gi indikasjon på om virtuelle maskiner krever mer minne enn hosten har tilgjengelig. Når det er igjen 6 \% minne (tilgjengelig) vil hosten iverksette enten ballooning og eventuelt swapping. Ballooning vil si at en host vil kreve tilbake minne fra virtuelle maskiner uten å hensyn til hva den tar. Dette kan gå utover applikasjoner som ligger i minne for en virtuell maskin. Disse de to minnehåndteringsteknikkene krever CPU-kraft og er en indikasjon på at minneforbruket er for høyt.
+Grenseverdier for minne er satt til samme nivå som tilsvarende alarmer i Virtual Center, og vil gi indikasjon på om virtuelle maskiner krever mer minne enn hosten har tilgjengelig. Når det er igjen 6 \% minne (tilgjengelig) vil hosten iverksette enten ballooning og eventuelt swapping. Ballooning vil si at en host vil kreve tilbake minne fra virtuelle maskiner uten å hensyn til hva den tar. Dette kan gå utover applikasjoner som ligger i minne for en virtuell maskin. Disse de to minnehåndteringsteknikkene krever CPU-kraft og er en indikasjon på at minneforbruket er for høyt.
 
 Counter: usage.average (\%) - ``Percentage of available machine memory: consumed ÷ machine-memory-size''
 
 Grenseverdier (\%): WARNING 80 CRITICAL 90
 
 \subsubsection{Citrix Xen}
-
-For Citrix Xen er det satt opp flere "Resource Pools"  og for å hente ut informasjon om en host må en Master-host kontaktes. Master-hosten har ansvar
-for å presentere et administrativt grensesnitt, og videresender kommandoer mot spesifikke hosts i Resource Pool-et.
+For Citrix Xen er det satt opp flere ``Resource Pools'' og for å hente ut informasjon om en host må en Master-host kontaktes. Master-hosten har ansvar for å presentere et administrativt grensesnitt, og videresender kommandoer mot spesifikke hosts i Resource Pool-et.
 
 \paragraph{Plugin}
-
-For overvåkning av Xen-miljøet ble det kun funnet en plugin som gir muligheten for å hente ut informasjon fra host-er og virtuelle maskiner. Plugin-en "check\_xen\_api.pl"  bruker biblioteket "XenAPI"  for å generere URL-er. Disse brukes videre for spørringer mot en RRD-database, hvor "XAPI"  lagrer data \cite{xenwiki}. Det er ikke like mange tellere som er tilgjengelige som for VMware og I/O-data er foreløpig ikke tilgjengelig. Ressursdata som overvåkes for host-er er CPU- og minnebruk.
+For overvåkning av Xen-miljøet ble det kun funnet en plugin som gir muligheten for å hente ut informasjon fra host-er og virtuelle maskiner. Plugin-en ``check\_xen\_api.pl'' bruker biblioteket ``XenAPI'' for å generere URL-er. Disse brukes videre for spørringer mot en RRD-database, hvor ``XAPI'' lagrer data\cite{xenwiki}. Det er ikke like mange tellere som er tilgjengelige som for VMware og I/O-data er foreløpig ikke tilgjengelig. Ressursdata som overvåkes for host-er er CPU- og minnebruk.
 
 Pluginen i CLI:
 \begin{lstlisting}[style=example]
 ./check_xenapi.pl -S <Master IP> -u <brukernavn> -p <passord> -H <hostname> -l <hovedkommando> -s <subkommando>
 \end{lstlisting}
 
-Opsjonen "-H"  brukes for å spesifisere hvilken host en vil kjøre sjekken mot. Den må være i samme pool som oppgitt Master-host i opsjonen "-S".
+Opsjonen ``-H'' brukes for å spesifisere hvilken host en vil kjøre sjekken mot. Den må være i samme pool som oppgitt Master-host i opsjonen ``-S''.
 
 For å få kjørt sjekkene mot Xen-hosts må det angis addressen til to enheter, Master host-en og host-en det skal hentes ut informasjon om. For å kunne sette en Master-IP på ett ojekt, og ikke for hvert host-objekt i et pool, ble det opprettet et generic-objekt. I generic-objektet settes Master IP-en til et gitt pool via en customvariable. Alle host-objekter som bruker dette generic-objektet arver da denne customvariabelen, og MasterIP-en kan endres fra et punkt.
 
-Under vises et eksempel hvordan dette kan konfigureres for ett pool med to host-objekter
-
+Under vises et eksempel hvordan dette kan konfigureres for ett pool med to host-objekter:
 \begin{lstlisting}[style=example]
 // generic-objektet
 define host {
-        use generic_linux_host
-        name generic_xen_pool_1
-        _MASTERIP 10.0.1.20
+    use 	generic_linux_host
+    name 	generic_xen_pool_1
+    _MASTERIP 	10.0.1.20
 }
 
 
 // To host-objekt som arver generic-objektet
 define host {
-        name Pool_1_Xen_Host_1
-        address 10.0.1.21
-        use generic_xen_pool_1
+    name 	Pool_1_Xen_Host_1
+    address 	10.0.1.21
+    use 	generic_xen_pool_1
 }
 
 define host {
-        name Pool_1_Xen_Host_2
-        address 10.0.1.22
-        use generic_xen_pool_1
+    name 	Pool_1_Xen_Host_2
+    address 	10.0.1.22
+    use 	generic_xen_pool_1
 }
 \end{lstlisting}
 
-Opsjenene blir da "-S \$HOST\_MASTERIP\$" og "-H \$HOSTADDRESS\$".
+Opsjenene blir da ``-S \$HOST\_MASTERIP\$'' og ``-H \$HOSTADDRESS\$''.
 
 RRD-databasen pluginen spør, lagrer data i følgende intervaller:
 
@@ -887,7 +881,7 @@ RRD-databasen pluginen spør, lagrer data i følgende intervaller:
 
 For hvert 5. sekund blir aktuelle datapunkter lagret. For de andre intervallene blir en minimum-, maksimum-, og gjennomsnittsverdi over gitt tidsperiode lagret ved bruk av en konsolideringsfunksjon. \ref{xenrrd}
 
-Det oppstod et problem under implementeringen av check\_xenplugin.api, som hadde innvirkning på returnert resultat fra RRD-databasen. Etter å ha lest gjennom koden til selve pluginen og "biblioteket"  XenAPI som også er skrevet av op5, ble det oppdaget at denne pluginen bruker siste datapunkt fra intervall nr.1 nevnt over. Resultatet vil da bare være ett datapunkt. Dette er vanskelig å sette varsel på, da en spike kan skje når gitt sjekk kjører. Her ble det avgjort å legge til en ny opsjon for å angi over hvor lang tidsperiode en skal hente ut data. Returnert resultat fra gitt tidsperiode blir gått gjennom, og en gjennomsnittsverdi returneres. Dette er foreløpig bare implementert for CPU- og minnebruk for en host
+Det oppstod et problem under implementeringen av check\_xenplugin.api, som hadde innvirkning på returnert resultat fra RRD-databasen. Etter å ha lest gjennom koden til selve pluginen og biblioteket XenAPI som også er skrevet av op5, ble det oppdaget at denne pluginen bruker siste datapunkt fra intervall nr.1 nevnt over. Resultatet vil da bare være ett datapunkt. Dette er vanskelig å sette varsel på, da en spike kan skje når gitt sjekk kjører. Her ble det avgjort å legge til en ny opsjon for å angi over hvor lang tidsperiode en skal hente ut data. Returnert resultat fra gitt tidsperiode blir gått gjennom, og en gjennomsnittsverdi returneres. Dette er foreløpig bare implementert for CPU- og minnebruk for en host
 
 \paragraph{Ressurser}
 Ressurser som er valgt å overvåke for Xen hosts:
@@ -904,7 +898,7 @@ Ressurser som er valgt å overvåke for Xen hosts:
 \end{itemize}
 
 \subsection{Trådløse kontrollere}
-IKT-avdelingen bruker en trådløskontrollerløsning fra Meru Networks /cite(burde denne cites?). Disse har en viktig rolle i fylkeskommunens nettverk. På en dag har disse rundt 6000 samtidige brukere tilkoblet via "AP"-er ute på hver lokasjon.
+IKT-avdelingen bruker en trådløskontrollerløsning fra Meru Networks. Disse har en viktig rolle i fylkeskommunens nettverk. På en dag har disse rundt 6000 samtidige brukere tilkoblet via "AP"-er ute på hver lokasjon.
 
 AP-ene i seg selv inneholder ingen konfigurasjon da de starter opp. Denne lastes fra kontrolleren. Alle tilkoblingene går i krypterte sessioner direkte mot kontrolleren hvor trafikken blir sendt til respektive mottakere. Siden det vil gå store mengder trafikk er det viktig at disse blir nøye overvåket.
 
