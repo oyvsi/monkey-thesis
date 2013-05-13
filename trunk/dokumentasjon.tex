@@ -65,7 +65,37 @@ Tilfeller kan forekomme hvor en server må tas ut av drift på grunn av vedlikeh
 I den nedetidsperioden vil Icinga nekte varslingsmelding i å bli sendt ut. Når nedetidsperioden er ferdig, eller denne blir utført før avtalt tid, vil kontaktene som skal bli varslet få en melding om at nedetid er over, og Icinga vil ikke lengre holde igjen varlser.
 
 \section{Stoppe varsling}
-acknowledge, stopper gjenvarsling??
+Når problemet som fører til et varsel for enten et host- eller service-objekt er kjent, kan en legge dette varselet i kategorien ''Acknowledged Hosts'' eller
+''Acknowledged Services'' ved å benytte en kommando for gitt host- eller service-objekt i webgrensesnittet.
+
+I Figur \ref{ackbutton} vises knappen for å sette et host- eller service-objekt acknowlegded
+
+\begin{figure}[H]
+    \centering
+    \includegraphics{img/ack_button}
+    \caption{Knapp for å settet et varsel som acknowledged}
+    \label{ackbutton}
+\end{figure}
+
+Visning av antallet med enten WARNING eller CRITICAL vil gråtonet om bare et host- eller service-objekt er acknowledged. Tallet vil også flyttes til den midterse kolonnen som vist i Figur \ref{ackcombined} 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics{img/ack_combined}
+    \caption{Visning av ett acknowledged problem i webgrensesnittet}
+    \label{ackcombined}
+\end{figure}
+
+I statusvinduet vil host- eller service-objektet legges i en egen kategori ''Known <objekttype> problems'', og ha en gråtonet farge, som vist i Figur \ref{ackstatusvindu}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics{img/ack_statusvindu}
+    \caption{Separering av acknowledged varsel i statusvinduet}
+    \label{ackstatusvindu}
+\end{figure}
+
+
 \section{Autentisering mot Active Directory} 
 LDAP-autentisering brukes for å styre hvem som skal ha tilgang til web-grensesnittene, ved hjelp av grupper og brukere i Active Directory. Dette er støttet direkte i Icinga Web, men må konfigureres på andre måter for Icinga Classic. Det kan opprettes en sikkerhetsgruppe i AD som inkluderer medlemmene som skal få tilgang. Alle som er med i denne gruppen vil få tilgang til Icinga Web, der det også kan defineres hvilken informasjon hver bruker skal se. 
 
