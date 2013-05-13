@@ -1,4 +1,4 @@
-﻿# diff check_asa_vpn.pl orig/check_asa_sessions.pl
+﻿# diff check_asa_vpn.pl orig/check_asa_sessions.pl 
 <                 'sessions' => '1.3.6.1.4.1.9.9.392.1.3.1.0',
 <                 'maxSessions' => '1.3.6.1.4.1.9.9.392.1.1.1.0' 
 ---
@@ -53,6 +53,9 @@
 ---
 >         print "Unknown - Cisco ASA $sessions\n";
 156a154,155
+
+
+
 
 # diff check_iftraffic64.pl orig/check_iftraffic64.pl 
 88d87
@@ -116,8 +119,10 @@
 <         -n --nopercent FLAG
 <         Sets the thresholds to be in mbps instead of percent
 
-#diff check_netbotz.py orig/check_netbotz.py 
 
+
+
+# diff check_netbotz.py orig/check_netbotz.py 
 <     parser.add_option("-t", "--type", dest="type", default="temp", type="string", help="Test Type. Valid values are 'temp' for temprature test, and 'humid' for humidity tests. [Default:temp]")
 ---
 >     parser.add_option("-t", "--type", dest="type", default="temp", type="string", help="Test Type. Valid values are 'temp' for tempratue test, and 'humid' for humidity tests. [Default:temp]")
@@ -189,7 +194,8 @@
 >  
 
 
-#diff check_ndbd.pl orig/check_ndbd.pl 
+# diff check_ndbd.pl orig/check_ndbd.pl 
+
 
 < my $check_command = '/usr/sbin/ndb_mgm';
 ---
@@ -329,14 +335,15 @@
 >         $localtime_diff = time() - parse_datetime_iso8601($host->get_server_localtime());
 
 
-# diff metricinga.py orig/metricinga.py
 
+
+# diff metricinga.py orig/metricinga.py
 < import MySQLdb
 <     PERFDATA TIL DATABASE
 <     if len(check_result['SERVICEPERFDATA'])!= 0:
 <         conn = MySQLdb.connect (host = "localhost",
 <                              user = "root",
-<                              passwd = "Bachel0r",
+<                              passwd = "<Password>",
 <                              db = "perfdata")
 < 
 <         cursor = conn.cursor ()
