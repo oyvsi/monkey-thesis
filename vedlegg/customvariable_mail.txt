@@ -1,0 +1,17 @@
+Fra:bundy.icinga@gmail.com
+Emne:Retrieving a specific custom variable through The Icinga-Web REST API
+Dato:Fri, 3 May 2013 14:03:25 +0200
+Til:icinga-users@lists.sourceforge.net
+
+Hey!
+
+I am wondering if it is possible to retrieve the column
+HOST_CUSTOMVARIABLE_VALUE or SERVICE_CUSTOMVARIABLE_VALUE based on a given
+custom variables name.
+
+I have a custom variable named _PRIORITY and want to get the value of this
+variable, and not the other custom variables the object has in the result
+of the query.
+
+So something like
+...columns[HOST_CUSTOMVARIABLE_VALUE|where|HOST_CUSTOMVARIABLE_NAME|=|PRIORITY|...]

@@ -43,15 +43,14 @@ Denne prosentandelen er kalkulert ved at
 \end{itemize}
 
 Som standard er denne grensen satt til 20.0 for høy og 5 for lav i Icinga.cfg. Men den kan også konfigureres på hvert host- og service-objekt med direktivene “low\_flap\_threshold” og “high\_flap\_threshold”, som vist i eksempelet under:
-
-\begin{lstlisting}
+\begin{lstlisting}[style=example]
 define host {
-	name important_servers  		#template
-	use generic_host
-	flap_detection_enabled          1     ; Flap detection is enabled
+	name 					important_servers  	#template
+	use						generic_host
+	flap_detection_enabled	1     ; Flap detection is enabled
 	low_flap_threshold		70    ; Stop flapping at 70 %
 	high_flap_threshold		80    ; Start flapping at 80 %
-	register			0
+	register				0
 }
 \end{lstlisting}
 
@@ -116,18 +115,15 @@ For hver gang en konfigurasjonsfil skrives blir det først tatt en backup dersom
 Til slutt sendes resultatet som en passiv sjekk til Icinga. Dersom ingen feil oppstår sendes OK. Hvis ikke vil det gis en CRITICAL der feilmeldingene blir sendt med som resultat av sjekken. Det sjekkes også om e-post-adresse og mobilnummer er definert for alle kontakter. Hvis dette ikke er satt vil det gis en WARNING på service-objektet “Contact sync” i Icinga.
 
 For å sikre at synkroniseringen kjører er service-objektet satt opp med en freshness-sjekk. Dette vil si at det forventes at Icinga mottar et resultat av sjekken hver time (pluss en feilmargin på ett minutt). Dersom det ikke skjer vil det bli satt en feil på “Contact sync”. Konfigurasjonen for service-objektet er vist under:
-\begin{lstlisting}
-
+\begin{lstlisting}[style=example]
 define service contact_sync {
-   use 				generic_service
-   host_name      		localhost
+   use 						generic_service
+   host_name      			localhost
    service_description  	Contact sync
-# Only use passive checks for this service
-   active_checks_enabled   	0
+   active_checks_enabled   	0 ; Only use passive checks for this service
    passive_checks_enabled  	1
    check_freshness      	1
-   freshness_threshold     	3660 ; 1h + 1 min splay time
-# if we don't get a passive result within freshness_threshold this will be run
+   freshness_threshold     	3660 ; 1h + 1 min splay time # if we don't get a passive result within freshness_threshold this will be run
    check_command     		check_dummy!2 "No contact sync has been run for 24hrs" 
 }
 \end{lstlisting}
@@ -138,14 +134,14 @@ Objektettypen timeperiod er sterkt knyttet til kontakter. Her kan en definere pe
 
 Det var ønskelig at det ikke skulle sendes ut varsler når IKT-avdelingen har servicevindu, den første onsdagen etter andre tirsdagen i hver måned (dagen etter Patch-Tuesday fotnote \cite{wiki:patch}). For å få til dette ble det først prøvd å definere det slik:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=example]
 define timeperiod {
 	tuesday 2 +1       15:00-04:00
 }
 \end{lstlisting}
 
 Dette fungerte imidlertid ikke. Løsningen ble å definere perioden for tirsdagen og onsdagen, for så å ekskludere tirsdagen. Slik:
-\begin{lstlisting}
+\begin{lstlisting}[style=example]
 define timeperiod {
         timeperiod_name 	patch_tuesday
         alias           	Patch tuesday
@@ -153,12 +149,12 @@ define timeperiod {
 }
 \end{lstlisting}
 
-\begin{lstlisting}
+\begin{lstlisting}[style=example]
 define timeperiod {
-        timeperiod_name         service_vindu
-	 alias			Servicevindu
-        tuesday 2 - wednesday   15:00-04:00
-        exclude patch_tuesday
+    timeperiod_name         service_vindu
+    alias					Servicevindu
+    tuesday 2 - wednesday   15:00-04:00
+    exclude patch_tuesday
 }
 \end{lstlisting}
 
@@ -167,27 +163,27 @@ define timeperiod {
 Når varsel har blitt sendt ut, og tilstanden til et host- eller service-objekt ikke har endret seg over en definert tidsperiode, kan et eskaleringsvarsel sendes. Contact- eller contactgroup-objektene som er referert til i et host- eller serviceescalation-objekt, vil da motta SMS eller e-post om hendelsen.
 
 Et eksempel på når dette kan være nyttig er at ledere for et driftsteam ønsker å bli varslet dersom temperaturen på serverrommet fortsatt ligger over varslingsgrensen etter at 10 varsler er sendt ut til ansvarlige for kjølingen. Da får lederen mulighet til å ta nødvendige avgjørelser for at problemet skal løses. Konfigurasjonen for dette er vist under:
-\begin{lstlisting}
+\begin{lstlisting}[style=example]
 define serviceescalation {
-	hostgroup_name		temperature_sensors
-	service_description	Check Temperature
-	contact_groups		team_leaders
-	first_notification	10	# Ten notifications has to be sent before escalation
-	last_notification	15	# After fiftheen notifications, this escalation stops. "0" is forever.
+	hostgroup_name			temperature_sensors
+	service_description		Check Temperature
+	contact_groups			team_leaders
+	first_notification		10	# Ten notifications has to be sent before escalation
+	last_notification		15	# After fiftheen notifications, this escalation stops. "0" is forever.
 	notification_interval	60 	# Escalation notifications are sent every 60 minutes (default 45)
-	escalation_options	c	# Only use escalation when service  is C(ritical)
-	escalation_period	op_hours  # Only escalate during hours of operations
+	escalation_options		c	# Only use escalation when service  is C(ritical)
+	escalation_period		op_hours  # Only escalate during hours of operations
 }
 \end{lstlisting}
 Det samme kan benyttes på host-objekter ved at ikke service\_description defineres:
-\begin{lstlisting}
+\begin{lstlisting}[style=example]
 define hostescalation {
-	hostgroup_name		domain_controllers
-	contact_groups		big_bosses
-	first_notification	3 	
-	last_notification	5 # When does escalation notifications stop
+	hostgroup_name			domain_controllers
+	contact_groups			big_bosses
+	first_notification		3 	
+	last_notification		5 # When does escalation notifications stop
 	notification_interval	50
-	escalation_options	d #Only use escalation when host is D(own)
+	escalation_options		d #Only use escalation when host is D(own)
 }
 \end{lstlisting}
 
@@ -195,21 +191,21 @@ define hostescalation {
 
 Selve varslingsmeldingene sendes ut først når host- eller service-objekter er i en hard tilstand (beskrevet i \ref{sec:sjekker}). Et eksempel er om en brannmurs hostsjekk returnerer DOWN. Da er det ikke ønskelig å varsle over SMS eller e-post, dersom det er snakk om et par ping som mistes. For eksempel kan en sjekk som har returnert DOWN kjøres to ganger til, med et intervall på ett minutt, før en hard tilstand settes, slik:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=example]
 define host {
-   use 				generic_host # Inherit basic config. check_ping for host_check
+   use 					generic_host # Inherit basic config. check_ping for host_check
    host_name			hig-fw1
-   max_check_attempts           2 # Number of checks before hardstate
-   retry_check_interval		1 # 60 seconds between each consecutive check
+   max_check_attempts   2 # Number of checks before hardstate
+   retry_check_interval	1 # 60 seconds between each consecutive check
 }
 \end{lstlisting}
 
 For et contact-objekt kan det settes opp ett eller flere command-objekter for både hosts og servicer som skal brukes for utsending og formatering av varslingsmeldingen.  
 
 I eksempelet under brukes command-objektene host\_problem\_email og host\_problem\_smsb for varslingsmeldinger:
-\begin{lstlisting}
+\begin{lstlisting}[style=example]
 define contact {
-   contact_name 			Kari Sysadmin
+   contact_name 		Kari Sysadmin
    email 				kari@example.org
    pager 				480 88 256 
    host_notification_commands    	host_problem_email, host_problem_sms
@@ -219,7 +215,7 @@ define contact {
 
 I eksempelet under vises et command-objekt for utsendingen. Her benyttes sendmail \cite{wiki:sendmail} til å sende en e-post til en SMS-gateway.
 
-\begin{lstlisting}
+\begin{lstlisting}[style=example]
 define command {
    command_name host_problem_sms
    command_line /usr/bin/printf "%b" "Subject:$CONTACTPAGER$\n***** Icinga *****\n\nHost: $HOSTNAME$\nAddress: $HOSTADDRESS$\nState: $HOSTSTATE$\nTime: $SHORTDATETIME$\nInfo: $HOSTOUTPUT$" | /usr/sbin/sendmail -f icinga@hedmark.org -v $CONTACTPAGER$@smsgw.sms
@@ -355,7 +351,7 @@ For å hente ut data fra Icinga benyttes REST-API-et til Icinga Web. I eksempele
 	\item authkey: Nøkkelen brukt for å autentisere til API-et
 \end{itemize}
 
-\begin{lstlisting}
+\begin{lstlisting}[style=example]
 http://<host>/icinga-web/web/api/<objekt>/filter[OR(HOST_CURRENT_STATE|=|1;HOST_CURRENT_STATE|=|2)]/columns[HOST_ID|HOST_CURRENT_CHECK_ATTEMPT|...]/authkey=<apikey>/json
 \end{lstlisting}
 
@@ -386,7 +382,7 @@ I footprints.php vil returnert data fra alle de fire spørringene bli slått sam
 For å grafe returnert resultat i external.js ble jQuery biblioteket Highcarts benyttet. Det ble først testet et annet bibliotek for grafing: jqBarGraph, men dette hadde manglende konfigurasjonsmuligheter.  
 
 I utdraget nedenfor vises koden for å definere hver søyle i diagrammet (“categories”), og sette de ulike dataverdiene med stats.<variabel>:
-\begin{lstlisting}
+\begin{lstlisting}[style=example]
 xAxis: {
    categories: ['Closed(today)', 'Received(today)', 'Closed(overall)', 'Active(overall)']
 
@@ -419,7 +415,7 @@ Standard font-størrelse var for liten, så denne ble justert opp. I Internet Ex
 
 Endring:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=example]
 lineHeight: "auto"
 \end{lstlisting}
 
@@ -443,7 +439,7 @@ Figur \ref{IE_bug} viser høydeforskjellen, der høyre er før endring og venstr
 Det er ønskelig at det skal være enkelt å legge til nye sensorer for temperatur og luftfuktighet. Alle sensorene oppdages automatisk av plugin-en som utførerer sjekkene for Icinga. Via API-et til Icinga-web hentes siste verdi for denne sjekken ut. Samtidig får en ut hvilken ID hver av sensorene har fått. I Javascript mappes hver sensor til riktig rad.
 
 Utdrag fra external.js
-\begin{lstlisting}
+\begin{lstlisting}[style=example]
  var front_layout = [2, 1]; // The netbotz sensor IDs for the front row
   var back_layout = [5, 4];  // and the back
   var columns = Math.max(front_layout.length, back_layout.length); // Largest row is used 
@@ -473,7 +469,7 @@ Den ene metoden var å bruke et severity-tall som Icinga kalkulerer basert på h
 Utrekningen skjer i outages.cgi, som ble funnet etter å lese gjennom HTML-koden og lese kildekoden for outages.c \cite{dnsmichi} : 
 Child-servicer blir delt på et forhåndsdefinert tall (service\_severity\_divisor) som brukes for å angi hvor kritisk det er i forhold til child-hosts.
 
-\begin{lstlisting}
+\begin{lstlisting}[style=example]
 temp_hostoutage->severity = (temp_hostoutage->affected_child_hosts + (temp_hostoutage->affected_child_services / service_severity_divisor));
 \end{lstlisting}
 

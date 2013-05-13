@@ -1,0 +1,37 @@
+Fra:"Nils Slåen" <nils.slaen@hig.no>
+Emne:Server-rom overvåkning
+Dato:ons, februar 6, 2013, 16:59
+Til:svein-inge.kvalo@hedmark.org
+
+Hei.
+
+Produktene vi har funnet som ser mest lovende ut er ITwatchdogs, det er
+også disse som er benyttet av Uninett. De er rackmonterbar, støtter snmp
+v3 og kan utvides med flere sensorer i ettertid. Prisforskjellen går på
+hvilke sensorer som er innebygd i selve enheten og hvor mange porter den
+har for sensorer. Sensorene er basert på 1-wire, som gjør disse
+forholdsvis billige.
+Alle produktene har 1 års garanti.
+
+1. http://www.itwatchdogs.com/product-detail-minigoose_xp_ii-10.html
+Innebygd temperatursensor. 16 digitale innganger og 3 analoge.
+Digitale sensorer er f.eks temp, luftfuktighet, luftflyt etc, mens analoge
+er f.eks vann, røyk, dørposisjon og strøm.
+
+2. http://www.itwatchdogs.com/product-detail-weathergoose_ii-1.html
+Innebygd temperatur, luftfuktighet, luftflyt, lys og lyd. 5 digitale
+innganger og 3 analoge. Kan utvides med portsplittere.
+
+3. http://www.itwatchdogs.com/product-detail-watchdog_100-67.html
+Denne har kun en digital innganger, og kan ikke splittes i flere, her er
+det en innebygget temperaturføler, og en luftfuktighetsmåler.
+
+Ekstra temperatur sensor
+http://www.itwatchdogs.com/product-detail-temperature_sensor-4.html
+
+
+Alle disse vil fungere ypperlig til oppgaven. Hvilken som velges er
+avhengig av hvilke sensorer dere ønsker å ha i boksen, og utvidbarheten
+ved tanke på flere sensorer i ettertid.
+
+-Nils
