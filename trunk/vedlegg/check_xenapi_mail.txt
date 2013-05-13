@@ -1,0 +1,49 @@
+Fra:bundy.icinga@gmail.com
+Emne:Question about check_xenapi.pl plugin for Nagios
+Dato:Sat, 11 May 2013 17:22:42 +0200
+Til:op5-users@lists.op5.com
+
+Hello
+
+I have started using the check_xenapi.pl plugin and I am wondering about
+the results it is returning. From what I have understood it uses the data
+with the latest timestamp from this code block:
+
+sub get_latest_perfdata {
+    my ($obj, $timestamp) =3D @_;
+    my $rrd =3D $obj->get_rrd_update($timestamp);
+    my $perf =3D {};
+    my $time =3D 0;
+    # get newest perf data
+    foreach my $row (@{$rrd}) {
+        if ($time < $row->{timestamp}) {
+            $time =3D $row->{timestamp};
+            $perf =3D $row->{data};
+        }
+    }
+    return $perf;
+
+
+The plugin also per default asks the RRD-database for data in the following
+interval (quoted from the documentation on RRDs on XenServer):
+
+*Every 5 seconds for the duration of 10 minutes
+
+And for this interval it says the following:
+
+*The sampling that takes place every 5 seconds records actual data points
+
+So my question is really if this is intended behavior, because I have not
+found any options to specify which interval I want data from, or if this
+should be averaged. The returned results will be actual datapoints, which
+can hard to set tresholds on since a spike can happen in that 5 second
+interval.
+
+I might be totally off here, and misunderstood the code / or use of the
+plugin.
+
+
+Thanks in advance.
+
+Kind regards,
+Bjoern-Erik
