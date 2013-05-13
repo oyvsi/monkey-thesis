@@ -1,27 +1,27 @@
 \section{Varsling}
-Varsling er en funksjon i overvåkningsløsningen som krever en del finjusteringer og balansering av parametere over tid. Det vil være en balansegang mellom å varsle for mye og filtrere for grovkornet. Et tegn på et godt overvåkningssystem er at det er fokusert, og ikke gir overflødig informasjon \cite{buildingnagiosmonitoring}. Sendes det ofte ut "falske varsler", kan det føre til at alvorlige hendelser ikke blir oppdaget, selv om det faktisk sendes ut varsler. Når varsler sendes ut bør det kun være til de som trenger å få dem.
+Varsling er en funksjon i overvåkningsløsningen som krever en del finjusteringer og balansering av parametere over tid. Det vil være en balansegang mellom å varsle for mye og filtrere for grovkornet. Et tegn på et godt overvåkningssystem er at det er fokusert, og ikke gir overflødig informasjon \cite{buildingnagiosmonitoring}. Sendes det ofte ut "falske varsler", kan det føre til at alvorlige hendelser blir ignorert, selv om det sendes ut varsler. Når varsler sendes ut bør det kun være til de som trenger å få dem.
 
 \subsection{Avhengigheter}
-For å holde antallet varsler som sendes ut nede benyttes avhengigheter som beskrevet i \ref{sec:servicedependency}  og \ref{sec:parent} for å ikke få mer enn en melding ved følgefeil. “Parent” har blitt benyttet til å reflektere det fysiske nettverksoppsettet. Service dependency-objekter er satt opp for noen tjenester. Tjenester som blir sjekket via NRPE vil for eksempel være avhengig av at NRPE-daemonen på gitt host kan motta henvendelser.
+For å holde antallet varsler som sendes ut nede, benyttes avhengigheter som beskrevet i \ref{sec:servicedependency}  og \ref{sec:parent}. Som tidligere nevnt gjøres dette for å ikke få mer enn en melding ved følgefeil. “Parent” har blitt benyttet til å reflektere det fysiske nettverksoppsettet. Service dependency-objekter er for eksempel satt på tjenester som blir sjekket via NRPE. Disse vil være avhengig av at NRPE-daemon-en på gitt host kan motta henvendelser.
 
 \subsection{Konfigurasjon}
 I Icinga kan en lage kontakter og legge disse i kontaktgrupper. Oppsettet følger samme logikk som at et hostgroup-objekt referer til en eller flere host-objekt i et service-objekt.
 
-Det vil si at contact- og contactgroup-objekter refereres til i et service- eller host-objekt. Disse kontaktene kan bli varslet dersom service-objektet får en annen status enn OK. Dette konfigureres i service-objektet sammen ved hvilke tilstander som skal varsles. Disse tilstandene er vist i tabell \ref{objekt_varsling}.
+Det vil si at contact- og contactgroup-objekter refereres til i et service- eller host-objekt. Disse kontaktene kan bli varslet dersom service-objektet får en annen status enn OK. Dette konfigureres i service-objektet, der også hvilke tilstander det skal varsles ved defineres. Dette er vist i Tabell \ref{objekt_varsling}.
 
-Når en feil oppstår vil Icinga vurdere ulike konfigurasjonsopsjoner før det eventuelt sendes ut et varsel. Om konfigurasjonsopsjonene tilsier at det skal varsles, vil Icinga gå igjennom filtre som er ferdig definert, som for eksempel om kontakten eller gruppen skal ha varsel via SMS eller e-post. 
+Når en feil oppstår vil Icinga vurdere ulike konfigurasjonsopsjoner før det eventuelt sendes ut et varsel. Om konfigurasjonen tilsier at det skal varsles, vil Icinga sende varsler gjennom et command-objekt definert på kontaktene. 
 
 \begin{table}
 \begin{center}
 \begin{tabular}{| c | l | l | p{7cm} |} \hline
         \textbf{Objekt} & \textbf{Opsjon} & \textbf{Tilstand} & \textbf{Det sendes varsler om} \\ \hline
-	\multirow{3}{*}{Host} & d & DOWN 			& Host-objektet er nede 			\\ \cline{2-4}
-					    & u & UNREACHABLE 		& Et parent er nede eller unreachable.		\\ \cline{2-4}	
+	\multirow{3}{*}{Host} & d & DOWN 			& Host-objektet er DOWN 			\\ \cline{2-4}
+					    & u & UNREACHABLE 		& Et parent er DOWN eller UNREACHABLE		\\ \cline{2-4}	
 					    & r & UP 			& Hosten går til UP				\\ \hline 
-        \multirow{3}{*}{Service} 	    & c & CRITICAL 		& Service-en er i CRITICAL 			\\ \cline{2-4}
-					    & w & WARNING  		& Service-en er i WARNING  			\\ \cline{2-4}
-					    & u & UNKNOWN  		& Service-en er i UNKNOWN  			\\ \hline
-	\multirow{4}{*}{Host eller Service} & f & FLAPPING           	& Flapping starter eller slutter 		\\ \cline{2-4}
+        \multirow{3}{*}{Service} 	    & c & CRITICAL 		& Service-en er CRITICAL 			\\ \cline{2-4}
+					    & w & WARNING  		& Service-en er WARNING  			\\ \cline{2-4}
+					    & u & UNKNOWN  		& Service-en er UNKNOWN  			\\ \hline
+	\multirow{4}{*}{Host og Service} & f & FLAPPING           	& Flapping starter eller slutter 		\\ \cline{2-4}
 					    & s & Scheduled downtime 	& Planlagt nedetid starter eller slutter 	\\ \cline{2-4}
 				 	    & r & UP                 	& Objektet går til UP 				\\ \cline{2-4}  
 					    & n &                    	& Det skal ikke varsles ved noen tilfeller 	\\ \cline{2-4}
@@ -35,39 +35,63 @@ Når en feil oppstår vil Icinga vurdere ulike konfigurasjonsopsjoner før det e
 I Icinga defineres “flapping” som når et host- eller service-objekt skifter tilstand for ofte, noe som resulterer i mange problem- og recoveryvarsler. \cite{icingaflapping} Dersom detektering av flapping er konfigurert for objektet, vil Icinga stoppe varsler for det dersom prosentandelen flapping overstiger en konfigurert grense. Objektet regnes som å ha startet å flappe når andelen for første gang overstiger en “høy”-grense, og som å stoppe å flappe når andelen igjen er under en “lav”-grense.
 
 Denne prosentandelen er kalkulert ved at
-\begin{itemize}
-	\item resultatet for de siste 21 sjekkene blir lagret
-	\item Icinga finner tilstandsendringene fra de lagrede resultatene 
-	\item flap-prosent blir kalkulert ut fra andelen tilstandsendringer
-	\item resultatet av de nyeste sjekkene vektes høyere
-\end{itemize}
+\begin{enumerate}
+	\item resultatet for de siste 21 sjekkene blir lagret.
+	\item Icinga finner tilstandsendringene fra de lagrede resultatene.
+	\item Flap-prosent blir kalkulert ut fra andelen tilstandsendringer, der resultatet av de nyeste sjekkene vektes høyere.
+\end{enumerate}
 
 Som standard er denne grensen satt til 20.0 for høy og 5 for lav i Icinga.cfg. Men den kan også konfigureres på hvert host- og service-objekt med direktivene “low\_flap\_threshold” og “high\_flap\_threshold”, som vist i eksempelet under:
 \begin{lstlisting}[style=example]
 define host {
-	name 					important_servers  	#template
-	use						generic_host
-	flap_detection_enabled	1     ; Flap detection is enabled
-	low_flap_threshold		70    ; Stop flapping at 70 %
-	high_flap_threshold		80    ; Start flapping at 80 %
-	register				0
+    name 			important_servers  	;template
+    use				generic_host
+    flap_detection_enabled	1     ; Flap detection is enabled
+    low_flap_threshold		70    ; Stop flapping at 70 %
+    high_flap_threshold		80    ; Start flapping at 80 %
+    register			0
 }
 \end{lstlisting}
 
 \subsection{Oppsett av kontakter og kontaktgrupper}
 IKT-avdelingen ønsket å kunne styre kontaktinformasjon og kontaktgrupper fra Active Directory. Det ble bestemt at ansvarsforhold skulle gjenspeiles i kontaktgrupper /ref vedlegg møte, for eksempel “ts\_ansvarlig” eller “printer\_ansvarlig”. Icinga støtter ikke integrasjon mot LDAP i konfigurasjonsfilene, men siden disse er rene tekstfiler kan de enkelt opprettes og endres med script. Gruppen var i utgangspunktet skeptiske til å la et script gjøre endringer i konfigurasjonsfiler, da det ble fryktet at dette kunne medføre en konfigurasjon med feil. Konsekvensen av dette ville være at Icinga ikke ville kunne lese ny konfigurasjon.
 
-Icinga har en funksjon som gjør at en kan teste konfigurasjonen etter feil med en opsjon på binærfilen (--verify-config). Icinga vil da ta utgangspunkt i rot-konfigurasjonsfilen (icinga.cfg) for å sjekke alle konfigurasjonsfilene. Dette gjør at alle konfigurasjonsfilene må sjekkes og ikke bare de som lages for kontakter. Dermed vil ikke kontakter og kontaktgrupper bli oppdatert dersom det allerede finnes en feil i konfigurasjonen. 
+Icinga har en funksjon som gjør at en kan teste konfigurasjonen etter feil med en opsjon på binærfilen (--verify-config). Icinga vil da ta utgangspunkt i rot-konfigurasjonsfilen (icinga.cfg) for så å sjekke alle konfigurasjonsfilene. Dette gjør at alle konfigurasjonsfilene må sjekkes, og ikke bare de som lages for kontakter. Dermed vil ikke kontakter og kontaktgrupper bli oppdatert dersom det allerede finnes en feil i konfigurasjonen. 
 
-Det ble skrevet et Perl-script (er å finne i Vedlegg \ref{ad_sync.pl}) som henter ut kontakter og kontaktgrupper fra en bestemt OU i Active Directory. Perl ble benyttet fordi det ble funnet et godt sett med LDAP-moduler, "perl-ldap" \cite{perlldap} som gjorde tilkobling og søk enkelt. Scriptet kalles fra et Bash-script (ref vedlegg X) som henter resultatet fra synkroniseringen, og sender dette til Icinga. En cron-jobb er satt opp for å kjøre synkroniseringen en gang i timen.
+Det ble skrevet et Perl-script (Vedlegg \ref{ad_sync.pl}) som henter ut kontakter og kontaktgrupper fra en bestemt OU i Active Directory. Perl ble benyttet fordi det ble funnet et godt sett med LDAP-moduler, "perl-ldap" \cite{perlldap} som gjorde tilkobling og søk enkelt. Scriptet kalles fra Bash-scriptet vist under, som henter resultatet fra synkroniseringen, og sender dette til Icinga. En cron-jobb er satt opp for å kjøre synkroniseringen en gang i timen.
 
-Scriptet fungerer ved å:
+\begin{lstlisting}[language=bash]
+#!/usr/bin/env bash
+# This script runs a perl script which syncs contacts and contactgroups to Icinga
+# it reports the results of the sync as a passive check to Icinga for the service "Contact sync"
+# MonKey 2013 
+
+script="/root/Scripts/ad_sync.pl"
+submit="/usr/lib/nagios/plugins/libexec/submit_check_result"
+contact_sync=$(perl "$script" --gen-service 2>&1)
+exit_code=$?
+
+if [ $exit_code -ne 0 ]; then
+        icinga_code=2
+        if [ $exit_code -eq 2 ]; then
+                icinga_code=1
+        fi
+else
+        icinga_code=0
+        contact_sync="Sync OK"
+fi
+
+$submit "localhost" "Contact sync" "$icinga_code" "$contact_sync"
+
+exit 0
+\end{lstlisting}
+Perl-scriptet som kalles fungerer ved å:
 \begin{enumerate}
 	\item hente alle medlemmer av gruppe “icinga\_kontakter” og medlemmer av grupper som er medlem (rekursivt)
 	\item det opprettes en konfigurasjonsfil for hver av medlemmene.
 	\item alle grupper under “Kontaktgrupper” hentes ut
 	\item meldemmene av hver gruppe hentes ut og det opprettes en konfigruasjonsfil for hver gruppe.
-	\item Det opprettes en egen service-template der kontaktgruppen er satt til å få meldinger, slik at tjenester kan arve fra denne.
+	\item Det opprettes en egen service-objekt-template der kontaktgruppen er satt til å få meldinger, slik at tjenester kan arve fra denne.
 \end{enumerate}
 
 \makeatletter
@@ -117,8 +141,8 @@ Til slutt sendes resultatet som en passiv sjekk til Icinga. Dersom ingen feil op
 For å sikre at synkroniseringen kjører er service-objektet satt opp med en freshness-sjekk. Dette vil si at det forventes at Icinga mottar et resultat av sjekken hver time (pluss en feilmargin på ett minutt). Dersom det ikke skjer vil det bli satt en feil på “Contact sync”. Konfigurasjonen for service-objektet er vist under:
 \begin{lstlisting}[style=example]
 define service contact_sync {
-   use 						generic_service
-   host_name      			localhost
+   use 				generic_service
+   host_name      		localhost
    service_description  	Contact sync
    active_checks_enabled   	0 ; Only use passive checks for this service
    passive_checks_enabled  	1
