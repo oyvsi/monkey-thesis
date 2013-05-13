@@ -22,6 +22,7 @@
 \pagestyle{fancy}
 \usepackage{color}
 \geometry{a4paper, top=2.0cm, left=3.0cm, right=3.0cm, bottom=2.5cm, includehead, includefoot}
+\usepackage{sverb}
 %\usepackage[compact]{titlesec}
 
 %\titlespacing{\section}{0pt}{5ex}{0ex}
@@ -32,11 +33,13 @@
 \definecolor{mymauve}{rgb}{0.58,0,0.82}
 
 % xleftmargin=17pt, framexleftmargin=17pt, framexrightmargin=5pt, framexbottommargin=4pt
+
+% escapeinside={\%*}{*)}{\#*},
 \lstset{ 
 backgroundcolor=\color{white}, 
 basicstyle=\scriptsize, breakatwhitespace=false, 
 breaklines=true, commentstyle=\color{mygreen}, 
-deletekeywords={...}, escapeinside={\%*}{*)}, 
+deletekeywords={...}, 
 extendedchars=\true, frame=single, keywordstyle=\color{blue}, 
 language=Octave, morekeywords={*,...}, numbers=left, 
 numbersep=6pt, stepnumber=1, numberstyle=\tiny\color{mygray}, 
@@ -188,13 +191,14 @@ Erik Hjelmås
 
 \clearpage
 \bibliographystyle{ieeetr}
-\small{\bibliography{rapport,rapport-books}}
 \addcontentsline{toc}{chapter}{Referanser}
+\small{\bibliography{rapport,rapport-books}}
 \clearpage
 
 % Appendixes
 
 \begin{appendices}
+
 \chapter{Arbeidslogg}\label{app:arbeidslogg}
 \includepdf[pages=-]{vedlegg/GruppeLogg.pdf}
 
@@ -234,7 +238,7 @@ I dette vedlegget finnes forprosjektet for MonKey
 \includepdf[pages=-]{forprosjekt.pdf}
 
 \chapter{Kildekode}\label{app:kildekode}
-Selvskrevene kildekode er lagt ved under dette vedlegget. Innholder plugins og generering av hosts script.
+Selvskrevene kildekode er lagt ved under dette vedlegget. Innholder plugins og generering av host-er script.
 
 \begin{changemargin}{-1cm}{-1cm}
 \section{Host generering}
@@ -245,7 +249,7 @@ Selvskrevene kildekode er lagt ved under dette vedlegget. Innholder plugins og g
 
 \section{Check NDB Mem}
 \lstinputlisting[language=Perl, label={check_ndb_mem.pl}]{script/check_ndb_mem.pl}
-
+\clearpage
 \section{SQL Brukeroppretting}
 \lstinputlisting[language=sql, label={oracledb.sql}]{script/oracledb.sql}
 \lstinputlisting[language=sql, label={mssqldb.sql}]{script/mssqldb.sql}
@@ -260,7 +264,8 @@ Selvskrevene kildekode er lagt ved under dette vedlegget. Innholder plugins og g
 \lstinputlisting[language=PHP, label={external.js}]{script/external.js}
 \clearpage
 \section{Differanse på nedlastede plug-ins}
-%\lstinputlisting[language=Perl, label={diff.pl}]{vedlegg/diff.pl}
+\inputencoding{latin1}
+\lstinputlisting{vedlegg/diff.pl}
 \end{changemargin}
 
 \chapter{Epost}\label{epost}
@@ -277,7 +282,8 @@ Eposter av relevans for rapporten, svar er fjernet av hensyn til mottaker.
 \verbatiminput{vedlegg/database_mail.txt}
 \clearpage
 \verbatiminput{vedlegg/servermiljo_mail.txt}
-
+\clearpage
+\verbinput{vedlegg/check_xenapi_mail.txt}
 \end{appendices}
 
 \end{document}
