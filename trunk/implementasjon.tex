@@ -241,19 +241,19 @@ For Red Hat og CentOS må det installeres en tredjeparts pakkebrønn som EPEL el
 
 Ved bruk av DAG må en "rpm"-pakken "rpmforge" installeres for å kunne bruke pakkebrønnen, slik:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=example]
 rpm -Uvh http://apt.sw.be/redhat/el6/en/x86_64/rpmforge/RPMS/rpmforge-release-0.5.2-2.el6.rf.x86_64.rpm
 \end{lstlisting}
 
 For EPEL:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=example]
 sudo rpm -Uvh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
 \end{lstlisting}
 
 En kan verifisere at pakkebrønnene ble lagt til ved å kjøre en listing av direktivet /etc/yum.repos.d/:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=example]
 $ ls -1 /etc/yum.repos.d/epel*
 /etc/yum.repos.d/epel.repo
 /etc/yum.repos.d/epel-testing.repo
@@ -261,7 +261,7 @@ $ ls -1 /etc/yum.repos.d/epel*
 
 Installasjon av NRPE via yum etter at pakkebrønnene er lagt til:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=example]
 sudo yum install nagios-nrpe-2.12-1.el6.rf.x86_64.rpm 
 \end{lstlisting}
 
@@ -364,7 +364,7 @@ Check_Memory
 ./check_nrpe -u -H 10.60.0.22 -p 5666 -c CheckMem -a MaxWarnUsed=80% MaxCritUsed=90% type=physical
 \end{lstlisting}
 Svar:
-\begin{lstlisting}
+\begin{lstlisting}[style=example]
 OK memory within bounds.|'physical memory %'=16%;80;90 'physical memory'=1G;4;5;0;6
 \end{lstlisting}
 
@@ -377,7 +377,7 @@ En full harddisk kan skape problemer for applikasjoner som lagrer data og logger
 
 For Windows-servere benyttes "CheckDisk" fra NSClient++. For å sjekke flere disker brukes opsjonen "CHECKALL", som gir en oversikt over alle diskene på serveren.
 
-\begin{lstlisting}
+\begin{lstlisting}[style=example]
 ./check_nrpe -u -H 10.60.0.22 -p 5666 -c CheckDriveSize -a Drive="C" MaxWarnUsed=90% MaxCritUsed=95%
 ./check_nrpe -u -H 10.60.0.22 -p 5666 -c CheckDriveSize -a MaxWarnUsed=94% MaxCritUsed=96% CheckAll
 \end{lstlisting}
@@ -385,11 +385,11 @@ For Windows-servere benyttes "CheckDisk" fra NSClient++. For å sjekke flere dis
 For Linux-servere benyttes sjekken "Check\_disk" fra nagios-plugins.
 % TODO: Sjekk all mounts
 Check\_Disk
-\begin{lstlisting}
+\begin{lstlisting}[style=example]
 ./check_disk -w 8% -c 4% -e
 \end{lstlisting}
 Svar: 
-\begin{lstlisting}
+\begin{lstlisting}[style=example]
 DISK OK| /=1232MB;15430;17359;0;19288 /lib/init/rw=0MB;402;452;0;503 /dev=0MB;394;443;0;493 /dev/shm=0MB;402;452;0;503
 \end{lstlisting}
 
@@ -568,6 +568,13 @@ alien oracle-instantclient11.2-basic-11.2.0.3.0-1.x86_64.rpm
 dpkg -i oracle-instantclient11.2-basic-11.2.0.3.0-1.x86_64.deb
 \end{lstlisting}
 
+Da denne er installert kreves følgende miljøvariable for at klienten skal fungere, og finne tnsnames filen
+
+\begin{lstlisting}[style=example]
+export ORACLE_HOME=/usr/lib/oracle/11.2/client
+export TNS_ADMIN=/usr/lib/oracle/11.2/client/network/admin
+\end{lstlisting}
+
 Videre trengs også en databasedriver, som gjør det mulig for Perl å benytte klienten. For Oracle-databaser brukes "libdbd-oracle-perl".
 
 På en Oracle-server vil hver database ha sin egen instans \cite{oraclefaq}. Derfor vil parametere som overvåkes være forskjellig fra database til database. Navnene til instansene legges derfor inn som en egendefinert variabel i hver enkel Oracle-servers host-objekt. Når plugin-en kjøres sjekkes filen tnsnames.ora, som inneholder tilkoblingsinformasjon for hver enkelt instans. Strukturen på tnsnames.ora vises under:
@@ -607,6 +614,7 @@ eeval [ oracle_health ] =
     parse_lines("command [ check_oracle ] = check_multi -r 4 $chain");
 \end{lstlisting}
 
+
 \subsubsection{MySQL}
 For MySQL ligger de nødvendige pakkene i Debians pakkebrønn og kan installeres med apt. De nødvendige pakkene er "mysql-client", for databasetilkoblingen og "libclass-dbi-mysql-perl", som er en Perl-modul for å kunne koble til en MySQL-server.
 
@@ -624,8 +632,7 @@ Disse må kompileres fra kildekoden. For å gjøre dette må en først konfigure
 
 Plugin-en kompileres og legges i riktig bane ved å kjøre kommandoene
 
-make
-make INSTALL
+make\\make INSTALL
 
 For å koble til databaseserverne trengs servicebrukere i hver av de. Her holder det med minimale tilganger slik at denne ikke har tilgang til å endre tabeller og spørre etter info. Brukeren vil kun ha tilgang til å kjøre "Server administrasjon" kommandoer \cite{mysqlpriv}.
 

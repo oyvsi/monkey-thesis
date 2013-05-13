@@ -1,0 +1,16 @@
+Fra:oyvind@sigerstad.com
+Emne:Nagdash Licence
+Dato:Thu, 4 Apr 2013 11:39:24 +0200
+Til:laurie@denness.net
+
+Hi!
+
+We're doing a bachelor thesis where we implement Icinga for the local
+county. We are currently looking at solutions for how to implement
+dashboard functionality to give a quick overview to help desk workers.
+We looked at Nagdash and it seems like a good starting point for what we
+want to do, so we were wondering what license, if any, it is published
+under.
+
+Sincerely,
+Øyvind Sigerstad

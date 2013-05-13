@@ -25,7 +25,7 @@ I utrullingsfaser vil det være naturlig å legge til mange hosts på den gang. 
 Scriptet genererer host-objekter med atributtene  ``hostname'', ``address'', ``hostgroup'' og ``generic''. Host-objekter uten hostgroup eller generic supplert, vil få standardverdier definert, mens hostname og address er obligatrisk, og det gis en feilmelding om disse er utelatt.
 
 Eksempelet under viser hvordan scriptet kjøres og at linjenummer skrives ut dersom informasjon som er obligatorsk mangler.
-\begin{lstlisting}
+\begin{lstlisting}[style=example]
 monkey@hig1:~/script$ vim servers.csv
 monkey@hig1:~/script$ ./gen.bash servers.csv
 
@@ -104,7 +104,7 @@ Selve LDAP-binden gjøres via PHP-modulen “php-ldap”. Når en bruker logger 
 Icinga classic autentiserer mot AD gjennom modulene ldap og authnz\_ldap.
 
 /etc/apache2/conf.d/
-\begin{lstlisting}
+\begin{lstlisting}[style=example]
         AuthName "Authentication"
         AuthType Basic
         AuthBasicProvider ldap
@@ -135,11 +135,11 @@ For å opprette en ny kontakt i Icinga meldes brukeren inn i gruppen icinga\_kon
 Kontaktgrupper hentes fra OU-en icinga\_grupper der alle grupper hentes ut og opprettes i Icinga. For at en gruppe skal varsles må dette legges til på en service. For å slippe å sette opp kontakter for hver service kan en velge å sende med argumentet “gen\_service” for å generere en template som kan benyttes på tjenester som sorterer under hver av kontaktgruppene som blir opprettet.
 
 Eksempel på generisk service som blir opprettet:
-\begin{lstlisting}
+\begin{lstlisting}[style=example]
 define service {
-    name network_services
-    register 0
-    use generic-service     
+    name 					network_services
+    register 				0
+    use 					generic-service     
     notification_interval   30
     notification_period     24x7
     notification_options    w,c,r
@@ -148,13 +148,13 @@ define service {
 \end{lstlisting}
 
 Denne brukes på en Cisco firewall: 
-\begin{lstlisting}
+\begin{lstlisting}[style=example]
 define service {
-        service_description Cisco Firewall CPU Load
-        use network_services
-        name cisco-firewall-cpu-load
-        hostgroup_name all_firewalls
-        check_command check_network_component!cpu-load
+    service_description 	Cisco Firewall CPU Load
+    use 					network_services
+    name 					cisco-firewall-cpu-load
+    hostgroup_name 			all_firewalls
+    check_command 			check_network_component!cpu-load
 }
 \end{lstlisting}
 

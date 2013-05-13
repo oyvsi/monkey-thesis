@@ -1,0 +1,19 @@
+Fra:"Nils Slåen" <nils.slaen@hig.no>
+Emne:Weathergoose spørsmål
+Dato:tor, januar 31, 2013, 11:17
+Til:mvold@uninett.no
+
+Hei!
+
+Vi er en bachelorgruppe på 3 som skal overvåke infrastruktur med
+Nagios/Icinga.
+
+Så er vi kommet til steget der vi skal kjøpe inn sensor for luftfuktighet
+og temperatur. Vi ser at du har sist endret denne:
+https://openwiki.uninett.no/gigacampus:weathergoose
+
+Så vi lurte på hvor du kjøpte IT Watchdog produkter, og evt hvordan
+erfaringene med disse har vært?
+
+Mvh Nils Slåen
+Høgskolen i Gjøvik
