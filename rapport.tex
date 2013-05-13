@@ -24,7 +24,6 @@
 \geometry{a4paper, top=2.0cm, left=3.0cm, right=3.0cm, bottom=2.5cm, includehead, includefoot}
 \usepackage{sverb}
 
-
 %\usepackage[compact]{titlesec}
 
 %\titlespacing{\section}{0pt}{5ex}{0ex}
@@ -51,7 +50,7 @@ xleftmargin=3em, framexrightmargin=5pt, framexbottommargin=4pt
 }
 
 % Ikke for vedlegg
-\lstdefinestyle{example}{language=sh,frame=single,numbers=none,xleftmargin=3em,framexrightmargin=1em,xrightmargin=3em,framexbottommargin=4pt,,backgroundcolor={}}
+\lstdefinestyle{example}{language=sh,frame=single,numbers=none,xleftmargin=3em,framexrightmargin=1em,xrightmargin=3em,framexbottommargin=4pt,backgroundcolor={}}
 
 
 % Norwegian characters for code
@@ -104,12 +103,11 @@ xleftmargin=3em, framexrightmargin=5pt, framexbottommargin=4pt
 \predisplaypenalty=10000
 \tolerance = 5000 % Hvor mange ord kan paa hver linje
 \hbadness = \tolerance
-\pretolerance = 2000
+\pretolerance = 6000
 \raggedbottom
 
 
 \begin{document}
-
 \begin{titlepage}
 \begin{center}
 
@@ -150,18 +148,23 @@ Erik Hjelmås
 
 \end{center}
 \end{titlepage}
-\fancyhead[L]{\small\leftmark}
-\fancyhead[R]{\small MonKey - Monitoring is Key}
-
 
 \pagenumbering{roman}
+\newpage
+\thispagestyle{empty}
+\mbox{}
 
 \input{sammendrag}
+\newpage
+\thispagestyle{empty}
+\mbox{}
 \input{deklarasjoner}
 \input{ordliste}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % TABLE OF CONTENTS, LISTS OF TABLES & FIGURES
-\newpage
+\clearpage
+%\newpage
 %\pdfbookmark[0]{Contents}{contents_bookmark}
 \tableofcontents
 \listoftables
@@ -171,7 +174,8 @@ Erik Hjelmås
 %\phantomsection
 %\addcontentsline{toc}{chapter}{List of Figures}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+\fancyhead[L]{\small\leftmark}
+\fancyhead[R]{\small MonKey - Monitoring is Key}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % MAIN THESIS TEXT: arabic page numbering 1, 2, 3, ...
 \newpage
@@ -203,7 +207,7 @@ Erik Hjelmås
 % Appendixes
 
 \begin{appendices}
-
+\clearpage
 \chapter{Arbeidslogg}\label{app:arbeidslogg}
 \includepdf[pages=-]{vedlegg/GruppeLogg.pdf}
 

@@ -1,6 +1,6 @@
 \chapter{Sikkerhet}\label{chap:sikkerhet}
 Informasjon som brukes av overvåkningsserveren til å avgjøre tilstanden til en enhet eller tjeneste kommer fra eksterne kilder. Plugin-er vil ha eksekveringstillatelse på eksterne enheter, og SNMP trap-meldinger sender informasjon via en port på overvåkningsserveren. Fokus for prosjektet har vært implementasjon, men det er tatt noen sikkerhetsvurderinger underveis. Ulike sikkerhetsrisikoer og hvilke implikasjoner dette har for imlementasjonen vil bli gått gjennom i dette kapittelet.
-
+\clearpage
 \section{Plugin-er}
 Flere plugin-er har blitt installert i etterkant av Icinga, og dette utgjør en viss sikkerhetsrisiko. Flere plugin-er har et omfang på 1000 - 5000 linjer og det er en tidkrevende prosess å kvalitetsikre alle. De sjekkene som eksekveres på andre enheter, og ikke på selve Icinga-serveren, er plugin-er som kommer med nagios-plugins og NSclient++. Disse blir brukt av et stort antall organisasjoner og andre. Gruppen har også fulgt med på fora og kommentarfelt for de ulike plugin-ene for å kunne være trygge på de plugin-ene som kjører på hver enkelt host. 
 
