@@ -46,7 +46,7 @@ xleftmargin=3em, framexrightmargin=5pt, framexbottommargin=4pt
 }
 
 % Ikke for vedlegg
-\lstdefinestyle{example} {language=sh,frame=single,numbers=none,xleftmargin=3em,framexrightmargin=-2em,framexbottommargin=4pt,backgroundcolor={}}
+\lstdefinestyle{example}{language=sh,frame=single,numbers=none,xleftmargin=3em,framexrightmargin=1em,xrightmargin=3em,framexbottommargin=4pt,,backgroundcolor={}}
 
 
 % Norwegian characters for code
@@ -169,7 +169,6 @@ Erik Hjelmås
 \newpage
 \pagenumbering{arabic}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 \input{innledning}
 %yo doodsters \ref{opplaering}
 %yo dood \ref{kartlegging}
@@ -244,6 +243,9 @@ Selvskrevene kildekode er lagt ved under dette vedlegget. Innholder plugins og g
 \section{Active Directory Kontakt Sync}
 \lstinputlisting[language=Perl, label={ad_sync.pl}]{script/ad_sync.pl}
 
+\section{Check NDB Mem}
+\lstinputlisting[language=Perl, label={check_ndb_mem.pl}]{script/check_ndb_mem.pl}
+
 \section{SQL Brukeroppretting}
 \lstinputlisting[language=sql, label={oracledb.sql}]{script/oracledb.sql}
 \lstinputlisting[language=sql, label={mssqldb.sql}]{script/mssqldb.sql}
@@ -256,6 +258,9 @@ Selvskrevene kildekode er lagt ved under dette vedlegget. Innholder plugins og g
 \lstinputlisting[language=PHP, label={image.php}]{script/image.php}
 \lstinputlisting[language=PHP, label={footprints.php}]{script/footprints.php}
 \lstinputlisting[language=PHP, label={external.js}]{script/external.js}
+\clearpage
+\section{Differanse på nedlastede plug-ins}
+\lstinputlisting[language=Perl, label={diff.pl}]{vedlegg/diff.pl}
 \end{changemargin}
 
 \chapter{Epost}\label{epost}
