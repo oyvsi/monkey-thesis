@@ -148,11 +148,45 @@ Sammenhengen mellom objektene er viktig å forstå for å skjønne hvordan sjekk
     \caption{Sammenhengen mellom host-, service- og command-objekter.}
     \label{command_host_service}
 \end{figure}
+% Si noe om utelatt konfig, arv ved use?
+I eksempelet under vises konfigurasjonen for å sette opp en ping-sjekk på HiG1.
+\begin{lstlisting} [style=example]
+define host {
+    use 	generic_host
+    host_name	HiG1
+    address   	192.168.0.1
+}
 
+define service {
+   use			generic_service
+   host_name            HiG1
+   service_description  Ping
+   check_command        check_ping!200,5%!500,10%
+   check_interval       5
+}
+
+define command {
+        command_name    check_ping
+        command_line    /usr/lib/nagios/plugins/check_ping -H $HOSTADDRESS$ --warning $ARG1$ --critical $ARG2$   
+}
+\end{lstlisting}
 \section{Plugin-er}
 Icinga i seg selv kommer uten noen overvåkningssjekker. Til dette benyttes plugin-er.
 
 En plugin i Icinga er et eksternt program som kjøres og outputen hentes inn som data. Resultatet av sjekken hentes fra exit-koden \cite{wiki:returncode} og oversettes til en tilstand, som vist i Tabell \ref{state}.
+
+En plugin kan være noe helt enkelt som scriptet under. Der exit-koden til en ping-kommando sjekkes. Hvis ping ikke får svar, vil den gi exit-koden 1. Scriptet vil da gi exit koden 2, som i Icinga oversettes til CRITICAL.
+\begin{lstlisting} [language=bash]
+#!/usr/bin/env bash
+loss=$(ping -c 5 google.com)
+if [ $? -eq 0 ]; then
+    echo "OK"
+    exit 0
+else
+    echo "ERROR"
+    exit 2
+fi
+\end{lstlisting}
 
 Det finnes et sett med offisielle plugin-er til Nagios; nagios-plugins, som utgis av ''Nagios Plugins project''. Pakken finnes i en rekke pakkebehandlere og inneholder over 50 plugin-er som er ment for å dekke et grunnleggende overvåkningsbehov.\cite{nagiosplugins}
 
