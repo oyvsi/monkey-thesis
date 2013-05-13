@@ -568,7 +568,9 @@ alien oracle-instantclient11.2-basic-11.2.0.3.0-1.x86_64.rpm
 dpkg -i oracle-instantclient11.2-basic-11.2.0.3.0-1.x86_64.deb
 \end{lstlisting}
 
-Da denne er installert kreves følgende miljøvariable for at klienten skal fungere, og finne tnsnames filen
+Da denne er installert kreves følgende miljøvariable for at klienten skal fungere, og finne tnsnames filen.
+Disse må legges til i environment variablene til Icinga for at "nagios-brukeren" skal få tilgang.
+% need config
 
 \begin{lstlisting}[style=example]
 export ORACLE_HOME=/usr/lib/oracle/11.2/client

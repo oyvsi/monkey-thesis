@@ -3,10 +3,11 @@ Emne:Mail to HWGroup
 Dato:Februar
 Til:Mail to HWGroup
 
-Hello! We are looking to implement temperature and humidity in a "Nagios" Environment for our bachelors project, can you give us some prices and info for equipment you would recommend?
+Hello! We are looking to implement temperature and humidity in a "Nagios" 
+Environment for our bachelors project, can you give us some prices and 
+info for equipment you would recommend?
 
 We have looked at this one: HWg-STE: Ethernet thermometer,
-
 With this we also need probes.
 Can you ship to Norway?
 
