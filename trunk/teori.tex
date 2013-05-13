@@ -226,7 +226,7 @@ En aktiv sjekk er en sjekk som initieres av Icinga, der en kommando kjøres på 
 \end{figure}
 
 \subsubsection{Passive sjekker}
-Passive sjekker går motsatt vei av aktive sjekker. Her vil hver host si ifra når verdier har overgått en satt grense eller en feil har oppstått. Dette kalles ofte for en ``push''-modell. Passive sjekker kjøres ved at et eksternt program skriver en linje med informasjon om tjenesten og sjekkresultat til en fil, som Icinga sjekker periodisk. Dette er illustrert i Figur\ref{passive_checks}.
+Passive sjekker går motsatt vei av aktive sjekker. Her vil hver host si ifra når verdier har overgått en satt grense eller en feil har oppstått. Dette kalles ofte for en ``push''-modell. Passive sjekker kjøres ved at et eksternt program skriver en linje med informasjon om tjenesten og sjekkresultat til en fil, som Icinga sjekker periodisk. Dette er illustrert i Figur \ref{passive_checks}.
 
 Fordelen med passive sjekker er at Icinga vil oppdage feil raskere. Ved standard konfigurasjon sjekkes filen med sjekkresultater så ofte som mulig, mens aktive sjekker kjøres hver 5. minutt. Passive sjekker vil også avlaste Icinga-serveren, da alle sjekker utelukkende vil bli kjørt lokalt på enheten som overvåkes. Men en må åpne for at kommunikasjon kan initieres fra alle enheter som skal overvåkes til Icinga-serveren, og mister da samtidig muligheten til å samle all konfigurasjon på ett sentralt sted. 
 
@@ -471,12 +471,12 @@ For å benytte WMI-spørringer direkte fra en ekstern enhet må det konfigureres
 
 \subsubsection{Valg av Agenter}
 Valg av protokoll eller agenter har basert seg på følgende punkter:
-\begin{itemize}
+\begin{itemize*}
 	\item Ressursbruk (CPU)
 	\item Nettverkstrafikk
 	\item Utrulling
 	\item Sikkerhet
-\end{itemize}
+\end{itemize*}
 Nettverkstrafikken som ble generert ved både en NRPE- og en SSH-sjekk ble målt ved å benytte et Bash-script som kjørte en disk-sjekk 100 ganger, som vist under. 
 
 \begin{lstlisting}[style=example,language=bash]

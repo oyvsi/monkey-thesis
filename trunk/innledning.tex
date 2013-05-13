@@ -13,61 +13,61 @@ De har imidlertid for hver gjennomgang av mulige overvåkningsløsninger konklud
 \section*{Oppgavebeskrivelse}
 Det skal settes opp en overvåkningsløsning, som skal varsle feil og hendelser på enheter i fylkeskommunens datanettverk. Dette innebefatter servere med tjenester, og nettverksenheter som switcher, routere og brannmurer. Dette systemet må være modulært med mulighet for enkelt å kunne legge til nye moduler i ettertid. Følgende krav er satt til løsningen:
 
-\begin{itemize}
+\begin{itemize*}
 	\item Webgrensesnitt for administering av overvåkningssystemet, der informasjon om enheter og hvilke tjenester som overvåkes skal vises.
 	\item Varsling
-	\begin{itemize} 
+	\begin{itemize*} 
 		\item med feilbeskrivelse.
 		\item med flere grader kritisk nivå.
 		\item med mulighet for varsling til SMS, e-post og skjerm.
 		\item som tar hensyn til redundans.
-	\end{itemize}
+	\end{itemize*}
 	\item Avhengigheter mellom enheter som overvåkes skal kunne settes opp. Varsling skal gi informasjon om det er antatt følgefeil og hovedfeil.
 	\item Objekter (data inn) og data skapt av programvaren (data ut) lagres i database(r).
 	\item All tiltstandsinformasjon skal logges og lagres i database.
 	\item Støtte WMI, SNMP, ICMP (med antall drop før varsling), og eventuelt andre aktuelle standarder.
 	\item Det skal være enkelt å legge til nye enheter for overvåking, fra et grafisk grensesnitt.
 	\item Innen servermiljø skal det kunne overvåkes kjøling, temperatur, luftfuktighet og UPS.
-\end{itemize}
+\end{itemize*}
 
 Vi må derfor finne programvare som kan tilpasses fylkeskommunes systemer, og som dekker flest mulig av disse kravene. Dersom eksisterende løsninger ikke finnes, eller ikke dekker behovet, må vi utvikle dette selv.
 
 IKT-avdelingen har også en liste over tilleggsfunksjonalitet de ønsker implementert i løsningen. Disse vil implementeres dersom det er tid til det.
 
-\begin{itemize}
+\begin{itemize*}
 	\item Rapporter som viser dagens situasjon og uthenting av trender.
 	\item Ta hensyn til driftsarbeid. Planlagt arbeid definert på enheter vil ikke utløse alarm, men driftsarbeidsvarsling.
 	\item SLA
-	\begin{itemize}
+	\begin{itemize*}
 		\item Vise SLA-avtaler opp mot faktiske verdier.
 		\item Kundebase med krav opp mot logget data.
 		\item Kapasitetsmålinger opp mot maksverdier (for eksempel linjekapasitet).
-	\end{itemize}
+	\end{itemize*}
 	\item Dashboard-funksjonalitet med mulighet for personliggjøring av grafisk grensesnitt.
 	\item Grensesnitt for mobile enheter.
 	\item Konfigurasjonskart som tegner kart av løsning grafisk med klikkbare objekter (enheter).
 	\item Mulighet for lagring av konfigurasjonsoppsett for objekter med integrasjon mot CMDB.
 	\item Overvåking av telefonlinjer via Trio og Asterisk.
-\end{itemize}
+\end{itemize*}
 
 Etter at valg av kjerneprogramvare var tatt ble det definert at følgende kategorier med underpunkter skulle overvåkes:
 
-\begin{itemize}
+\begin{itemize*}
 	\item Infrastruktur og nettverk
-	\begin{itemize}
+	\begin{itemize*}
 		\item Brannmur
 		\item Switch
 		\item Trådløse kontrollere
 		\item VMware ESX og Citrix Xen
 		\item Serverrommiljø
-		\begin{itemize}
+		\begin{itemize*}
 			\item Temperatur
 			\item Strøm (UPS)
 			\item Luftfuktighet
-		\end{itemize}
-	\end{itemize}
+		\end{itemize*}
+	\end{itemize*}
 	\item Servere
-	\begin{itemize}
+	\begin{itemize*}
 		\item CPU
 		\item Minne
 		\item Disk
@@ -76,14 +76,14 @@ Etter at valg av kjerneprogramvare var tatt ble det definert at følgende katego
 		\item Databaser: MySQL, MySQL Cluster, Oracle og MSSQL.
 		\item E-post: Microsoft Exchange
 		\item Tjenester
-		\begin{itemize}
+		\begin{itemize*}
 			\item Webservere
 			\item DNS 
 			\item DHCP
 			\item LDAP
-		\end{itemize}
-	\end{itemize}
-\end{itemize}
+		\end{itemize*}
+	\end{itemize*}
+\end{itemize*}
 
 Manuell endring av konfigurasjon i tekstfiler er den mest fleksible løsningen, og oppdragsgiver var enig i at dette var enkelt nok og dermed ikke trengte å være grafisk.
 
@@ -98,33 +98,33 @@ Overvåkningsløsningen utvikles for IKT-avdelingen, og ansatte her vil være en
 \section{Prosjektmål}
 \subsubsection{Effektmål}
 I forhold til dagens løsning skal den nye løsningen
-\begin{itemize}
+\begin{itemize*}
 	\item være mer oversiktlig.
 	\item tilrettelegge for mer omfattende overvåkning.
 	\item være mer fleksibel.
 	\item bidra til mer effektiv drift for IKT-avdelingen, der hendelser raskt kan oppdages og eskaleres.
-\end{itemize}
+\end{itemize*}
 
 \subsubsection{Resultatmål}
-\begin{itemize}
+\begin{itemize*}
 	\item Utvikle en overvåkningsløsning som tilfredsstiller de krav som er satt.
 	\item Den nye overvåkningsløsningen vil resultere i at den eksisterende kan erstattes og deretter fases ut.
-\end{itemize}
+\end{itemize*}
 
 \subsubsection{Læringsmål}
-\begin{itemize}
+\begin{itemize*}
 	\item Sette oss inn i ``best practices'' for overvåking av datasystemer.
 	\item Kunne tilpasse og implementere en overvåkningsløsning for små og mellomstore bedrifter.
-\end{itemize}
+\end{itemize*}
 
 \section{Rammer}
 Følgende krav var gitt i oppgaven
-\begin{itemize}
+\begin{itemize*}
 	\item Dersom eksisterende programvare benyttes må denne være fri programvare.
 	\item MySQL skal benyttes som databasesystem.
 	\item Prosjektrapporten skal ikke inneholde sensitiv informasjon om Hedmark fylkeskommunes tekniske løsninger. Eksempelvis IP-adresser, brukernavn/passord eller brannmurkonfigurasjon. Dette er i tråd med taushetserklæringen som må inngås.
 	\item Det skal kjøpes inn en enhet for å overvåke luftfuktighet og temperaturer. Innkjøp av denne skal skje i henhold til fylkeskommunens innkjøpsrutiner.
-\end{itemize}
+\end{itemize*}
 
 \section{Faglig bakgrunn}
 Bjørn-Erik og Øyvind er 3. års studenter på Drift av nettverk og datasystemer, mens Nils går 3. året på Dataingeniør. Gjennom to og et halvt år på Høgskolen i Gjøvik har vi tatt fag innenfor områdene programmering, nettverk, databaser, sikkerhet, statistikk og ulik grad av matematikk. Nils og Øyvind har tidligere vært lærlinger ved henholdsvis Hedmark Fylkeskommune og Hamar Katedralskole, der de fikk kunnskap om deres applikasjoner og infrastruktur.

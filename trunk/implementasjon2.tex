@@ -35,11 +35,11 @@ Når en feil oppstår vil Icinga vurdere ulike konfigurasjonsopsjoner før det e
 I Icinga defineres ``flapping'' som når et host- eller service-objekt skifter tilstand for ofte, noe som resulterer i mange problem- og recoveryvarsler. \cite{icingaflapping} Dersom detektering av flapping er konfigurert for objektet, vil Icinga stoppe varsler for det dersom prosentandelen flapping overstiger en konfigurert grense. Objektet regnes som å ha startet å flappe når andelen for første gang overstiger en ``høy''-grense, og som å stoppe å flappe når andelen igjen er under en ``lav''-grense.
 
 Denne prosentandelen er kalkulert ved at
-\begin{enumerate}
+\begin{enumerate*}
 	\item resultatet for de siste 21 sjekkene blir lagret.
 	\item Icinga finner tilstandsendringene fra de lagrede resultatene.
 	\item Flap-prosent blir kalkulert ut fra andelen tilstandsendringer, der resultatet av de nyeste sjekkene vektes høyere.
-\end{enumerate}
+\end{enumerate*}
 
 Standardgrense er satt til 20.0 for høy og 5 for lav i Icinga.cfg. Men den kan også konfigureres på hvert host- og service-objekt med direktivene ``low\_flap\_threshold'' og ``high\_flap\_threshold'', som vist i eksempelet under:
 \begin{lstlisting}[style=example]
@@ -86,13 +86,13 @@ $submit "localhost" "Contact sync" "$icinga_code" "$contact_sync"
 exit 0
 \end{lstlisting}
 Perl-scriptet som kalles fungerer ved å:
-\begin{enumerate}
+\begin{enumerate*}
 	\item hente alle medlemmer av gruppe ``icinga\_kontakter'' og medlemmer av undergrupper rekursivt.
 	\item det opprettes en konfigurasjonsfil for hver av medlemmene.
 	\item alle grupper under ``Kontaktgrupper'' hentes ut
 	\item medlemmene av hver gruppe hentes ut og det opprettes en konfigruasjonsfil for hver gruppe.
 	\item det opprettes en egen service-objekt-template der kontaktgruppen er satt til å få meldinger, slik at tjenester kan arve fra denne.
-\end{enumerate}
+\end{enumerate*}
 
 \makeatletter
 \newcount\dirtree@lvl
@@ -266,12 +266,12 @@ Ansatte som sitter på servicedesk og besvarer henvendelser vil være hovedbruke
 \subsection{Design}
 For at statusvinduet skal imøtekomme IKT-avdelingens ønsker, ble det besluttet å gjøre utviklingen i iterasjoner. Ofte vet ikke brukeren hva de vil ha før de ser et utkast og prosessen har begynt. For utviklingen av statusvinduet har designprosessen beskrevet i ISO 9241-210 blitt fulgt. Der er det beskrevet fire aktiviteter som går i syklus til en får et tilfredsstillende resultat:
 % TODO: Oversette til norsk?
-\begin{itemize}
+\begin{itemize*}
 	\item Understand and specify the context of use
 	\item Specify the user and organizational requirements
 	\item Produce design solutions
 	\item Evaluate designs against requirements.
-\end{itemize}
+\end{itemize*}
 
 Utviklingsprosessen startet med et møte med hele IKT-avdelingen for å presentere gruppens forslag til utkast på designet, som vist i Figur \ref{statusvindu_utkast}. Her kom det frem forslag om å vise temperaturene fra serverrom-sensorene som en terning der det fysiske oppsettet kom frem.
 
@@ -280,13 +280,13 @@ Eksisterende programvare for denne type fremvisning ble funnet etter research, o
 Nagdash baserer uthenting av informasjon om host- og serviceobjekter på nagios-api \cite{nagiosapi}, som er en tjeneste som må installeres på Icinga-serveren og setter opp et API over HTTP. Icinga har sitt eget API som det var ønskelig å benytte. Uthenting av informasjon måtte derfor endres til å bruke kall til API-et som Icinga Web tilbyr \cite{icingarestapi}.
 
 Gjennom to iterasjoner kom det frem flere ønsker som ble lagt inn:
-\begin{itemize}
+\begin{itemize*}
 	 \item Uthenting av driftsmeldinger via RSS fra portal.hedmark.org
 	 \item Endre utseendet på ``Known Services''
 	 \item Sette kolonnene med hosts og servicer ved siden av hverandre 
 	 \item Hente ut og grafe antall åpne, lukkede, og mottatte saker fra sakssystemet Footprints
 	 \item Fjerne irrelevant informasjon, som hvor mange ganger en service-sjekk har fått en soft tilstandsendring
-\end{itemize}
+\end{itemize*}
 
 Det ble også rapportert en bug om at datoen på skjermen ikke endret seg før etter en sideoppdatering. Koden som oppdaterer datoen var ikke lagt inn i funksjonen som sørger for automatisk oppdatering. Dette viser viktigheten av å ha brukertesting, da en slik bug kan være vanskelig å oppdage.
 
@@ -311,10 +311,10 @@ Figur \ref{statusvindu_oversatte_kall} viser hvordan Nagdash ser ut med oversatt
 \end{figure}
 
 Figur \ref{statusvindu_first} viser statusvisningen etter første iterasjon. Følgende funksjonalitet blitt lagt til:
-\begin{itemize}
+\begin{itemize*}
 	\item Temperatur fra serverrommet
 	\item Antall mottatte, lukkede, og aktive saker fra Footprints
-\end{itemize}
+\end{itemize*}
 
 \begin{figure}[H]
     \centering
@@ -325,14 +325,14 @@ Figur \ref{statusvindu_first} viser statusvisningen etter første iterasjon. Fø
 
 Figur \ref{statusvindu_final} viser den ferdige statusvisningen. Følgende funksjonalitet er lagt til fra første iterasjon:
 
-\begin{itemize}
+\begin{itemize*}
 	\item Visualisering av retning på luftstrøm
 	\item Temperatur fra de sensorene som er konfigurert
 	\item Luftfuktighet
 	\item Kolonnene for host og services er satt ved siden av hverandre
 	\item Driftsmeldinger fra portal.hedmark.org
 	\item Grafing av lukkede saker som er mottatt i dag, lukkede saker fra alle mottatte saker, mottatte saker i dag og totalt antall åpne saker
-\end{itemize}
+\end{itemize*}
 
 \begin{figure}[H]
     \centering
@@ -361,13 +361,13 @@ I filen external.js hentes data fra de ulike modulene og settes inn i statusvind
 \subsection{Nagdash}
 
 For å hente ut data fra Icinga benyttes REST-API-et til Icinga Web. I eksempelet under vises en spørring som henter alle host-objekter som har state-en DOWN (HOST\_CURRENT\_STATE|=|1) eller UNREACHABLE (HOST\_CURRENT\_STATE|=|2). Viktige parametere:
-\begin{itemize}
+\begin{itemize*}
 	\item <host>: hostnavn eller IP til hosten som kjører Icinga-web
 	\item <objekt>: Objekttypen spørringen skal kjøres mot (f.eks host eller service)
 	\item filter: Kolonner som skal brukes i sammen med de logiske operatorene AND og/eller OR
 	\item columns: kolonner som skal returneres i resultatet
 	\item authkey: Nøkkelen brukt for å autentisere til API-et
-\end{itemize}
+\end{itemize*}
 
 \begin{lstlisting}[style=example]
 http://<host>/icinga-web/web/api/<objekt>/filter[OR(HOST_CURRENT_STATE|=|1;HOST_CURRENT_STATE|=|2)]/columns[HOST_ID|HOST_CURRENT_CHECK_ATTEMPT|...]/authkey=<apikey>/json
@@ -376,24 +376,24 @@ http://<host>/icinga-web/web/api/<objekt>/filter[OR(HOST_CURRENT_STATE|=|1;HOST_
 Da får en et javascript objekt ut med de kolonnene en har bedt om.
 
 Vi har totalt seks spørringer og de ulike gjør følgende:
-\begin{enumerate}
+\begin{enumerate*}
 	\item  hostQuery henter ut alle hosts som har status DOWN eller UNREACHABLE
 	\item  serviceQuery henter ut alle servicer som har en UP host, men en service som er enten WARNING eller CRITICAL
 	\item  hostTotalQuery henter ut alle hosts, med en kolonne som forteller hvilken tilstand den er i. Dette blir brukt for å regne ut et antall innenfor hver tilstand.
 	\item  serviceTotalQuery samme som 3, men henter alle servicer.
 	\item  hostPriorityQuery henter ut en og en host basert på objekt id. Informasjonen brukes videre for å sjekke om den har en prioritets variabel satt, som vil føre til at den blir prioritert ved fremvisning.
 	\item  servicePriorityQuery samme som 4, men henter her ut for en service.
-\end{enumerate}
+\end{enumerate*}
 
 \subsection{Footprints}
 
 For uthenting av antall saker innenfor ulike kategorier i Footprints ble det benyttet SQL-spørringer direkte mot databasen. IKT-avdelingen ønsket å få en graf om følgende antall om saker:
-\begin{itemize}
+\begin{itemize*}
 	\item Mottatt i dag
 	\item Både lukket og mottatt i dag
 	\item Lukket av alle mottatte saker
 	\item Antall aktive saker
-\end{itemize}
+\end{itemize*}
 
 I footprints.php vil returnert data fra alle de fire spørringene bli slått sammen til et array som videre returneres som et JSON-objekt til external.js via Ajax. 
 
