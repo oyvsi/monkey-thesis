@@ -37,18 +37,18 @@ Overvåkning er også en del av komponenten "Capacity Management" innenfor kateg
 Det finnes i dag mange løsninger for overvåkning av IT-systemer\cite{wiki:networkmonitoring}. Det ble tatt utgangspunkt i prosjektets rammer og krav til funksjonalitet, og valgt ut noen løsninger som ble undersøkt nærmere. Punktene om ønsket tilleggsfunksjonalitet ble også vektlagt slik at de skulle være lettere å implementere i senere faser av prosjektetet, eller i senere prosjekter. 
 
 Det ble også gjort en gjennomgang med oppdragsgiver, hvor ulike løsningene ble diskutert (presentasjon av dette ligger i Vedlegg \ref{app:presentasjoner}). De overvåkningsløsningene som ble vurdert nærmere etter den første runden med research er alle fri programvare og har en utbredt brukermasse. 
+\begin{description}
+\item[Zenoss] har en open source-lisens på Zenoss Core. Zenoss brukes av mange store aktører \cite{zenoss}, som gjorde denne til en verdig kandidat. Det ble likevel valgt å ikke bruke Zenoss på grunn av vinklingen de har mot "Enterprise Solutions" \cite{zenpacks}. Dette involverer at en må kjøpe tilleggsmoduler til selve kjernen for å oppnå en komplett overvåkningsløsning.
 
-Zenoss har en open source-lisens på Zenoss Core. Zenoss brukes av mange store aktører \cite{zenoss}, som gjorde denne til en verdig kandidat. Det ble likevel valgt å ikke bruke Zenoss på grunn av vinklingen de har mot "Enterprise Solutions" \cite{zenpacks}. Dette involverer at en må kjøpe tilleggsmoduler til selve kjernen for å oppnå en komplett overvåkningsløsning.
+\item[Observium] har lagt mye vekt på å visualisere ytelsesdata. Dette vises med statistikk og grafer over hver enhet som overvåkes. Observium erstatter ikke en såkalt "UP/Down overvåkning", da alarmer og grenseverdier for tjenester og servere ikke støttes\cite{observium}. Dette gjør at Observium ikke kunne benyttes i denne oppgaven.
 
-Observium har lagt mye vekt på å visualisere ytelsesdata. Dette vises med statistikk og grafer over hver enhet som overvåkes. Observium erstatter ikke en såkalt "UP/Down overvåkning", da alarmer og grenseverdier for tjenester og servere ikke støttes\cite{observium}. Dette gjør at Observium ikke kunne benyttes i denne oppgaven.
-
-Zabbix \cite{zabbix} var en av de sterkeste kandidatene. Denne støtter mange punkter som vi var ute etter, men antall plugin-er utenfor selve programvaren er for få. Zabbix er også et mer monolittisk system, og ikke like modulært som andre kandidater\cite{zabbixandnagios}. Oppgavebeskrivelsen krever modularitet, og Zabbix ble derfor valgt bort. 
+\item[Zabbix]\cite{zabbix} var en av de sterkeste kandidatene. Denne støtter mange punkter som vi var ute etter, men antall plugin-er utenfor selve programvaren er for få. Zabbix er også et mer monolittisk system, og ikke like modulært som andre kandidater\cite{zabbixandnagios}. Oppgavebeskrivelsen krever modularitet, og Zabbix ble derfor valgt bort. 
 %TODO
 
-Nagios er kjent som en av de mest utprøvde overvåkningsløsningene \cite{wiki:nagios} \cite{monitoringsetup} \cite{opensourcewatch} \cite{sectools}, og har et enormt antall brukere som aktivt bidrar til å utvikle plugins og moduler til Nagios-kjernen \cite{nagioscommunity}. Det finnes flere websider der brukere bidrar med og diskuterer plugin-er og moduler, blant annet Nagios Exchange \cite{nagiosexchange} og Monitoring Exchange \cite{monitoringexchange}. Det som gjør Nagios spesielt interessant er fleksibiliteten med tanke på konfigurasjon, integrasjon og plugin-er.
+\item[Nagios] er kjent som en av de mest utprøvde overvåkningsløsningene \cite{wiki:nagios} \cite{monitoringsetup} \cite{opensourcewatch} \cite{sectools}, og har et enormt antall brukere som aktivt bidrar til å utvikle plugins og moduler til Nagios-kjernen \cite{nagioscommunity}. Det finnes flere websider der brukere bidrar med og diskuterer plugin-er og moduler, blant annet Nagios Exchange \cite{nagiosexchange} og Monitoring Exchange \cite{monitoringexchange}. Det som gjør Nagios spesielt interessant er fleksibiliteten med tanke på konfigurasjon, integrasjon og plugin-er.
 
-Icinga er en fork av Nagios, og har blitt utviklet videre siden 2004. Konfigurasjoner, plugin-er og addon-er er kompatible med det som benyttes for Nagios. Forskjellen er selve arkitekturen som i Icinga består av tre separate deler, og abstraksjon mot databaselaget. 
-
+\item[Icinga] er en fork av Nagios, og har blitt utviklet videre siden 2004. Konfigurasjoner, plugin-er og addon-er er kompatible med det som benyttes for Nagios. Forskjellen er selve arkitekturen som i Icinga består av tre separate deler, og abstraksjon mot databaselaget. 
+\end{description}
 I Figur \ref{losninger} vises en oversikt over hvor ofte hver av disse overvåkningsløsningene har blitt benyttet i et Google-søk i perioden januar 2008 - januar 2013. Dette er hentet fra Google Trends og viser at Nagios har vært, og fortsatt er et mer populært søkeord enn de andre løsningene.
 
 \begin{figure}[H]
