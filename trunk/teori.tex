@@ -547,7 +547,7 @@ For en utrulling i den skalen som vil være aktuelt for IKT-avdelingen vil ikke 
 \begin{equation}
 \frac{8.38kB\times(1000(enheter)\times100(sjekker)\times8)}{5\times60s (sekunder)}=22346.67Kb/s = 22.35Mb/s
 \end{equation}
-På et gigabit-nettverk, som i tillegg er full duplex, vil ikke dette være nevneverdig. Icinga vil forsøke å fordele sjekkene utover slik at lasten på Icinga-serveren og enhenetene som overvåkes blir minst mulig /cite http://docs.icinga.org/latest/en/checkscheduling.html, men i praksis blir ikke dette helt jevnt fordelt, tallet kan derfor bli noe høyere.
+På et gigabit-nettverk, som i tillegg er full duplex, vil ikke dette være nevneverdig. Icinga vil forsøke å fordele sjekkene utover slik at lasten på Icinga-serveren og enhenetene som overvåkes blir minst mulig \cite{icingascheduling}, men i praksis blir ikke dette helt jevnt fordelt, tallet kan derfor bli noe høyere.
 
 Resultatene av testen av CPU-tid i \ref{cpu_usage}, viser at SSH krever mer CPU-tid enn NRPE. Mye av dette er på grunn av overhead ved tilkobling og frakobling, som tallene for SSH med ControlMaster viser. 
 
