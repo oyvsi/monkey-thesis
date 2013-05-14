@@ -54,7 +54,7 @@ define host {
 \end{lstlisting}
 
 \subsection{Oppsett av kontakter og kontaktgrupper}\label{sec:sync}
-IKT-avdelingen ønsket å kunne styre kontaktinformasjon og kontaktgrupper fra Active Directory. Det ble bestemt at ansvarsforhold skulle gjenspeiles i kontaktgrupper i møte med IKT-avdelingen(Vedlegg \ref{app:moteref}), for eksempel ``ts\_ansvarlig'' eller ``printer\_ansvarlig''. Icinga støtter ikke integrasjon mot LDAP i konfigurasjonsfilene, men siden disse er rene tekstfiler kan de enkelt opprettes og endres med script. Gruppen var i utgangspunktet skeptiske til å la et script gjøre endringer i konfigurasjonsfiler, da det ble fryktet at dette kunne medføre en konfigurasjon med feil. Konsekvensen av dette ville være at Icinga ikke ville kunne lese ny konfigurasjon.
+IKT-avdelingen ønsket å kunne styre kontaktinformasjon og kontaktgrupper fra Active Directory. Det ble bestemt at ansvarsforhold skulle gjenspeiles i kontaktgrupper i møte med IKT-avdelingen(Vedlegg \ref{app:motereferat}), for eksempel ``ts\_ansvarlig'' eller ``printer\_ansvarlig''. Icinga støtter ikke integrasjon mot LDAP i konfigurasjonsfilene, men siden disse er rene tekstfiler kan de enkelt opprettes og endres med script. Gruppen var i utgangspunktet skeptiske til å la et script gjøre endringer i konfigurasjonsfiler, da det ble fryktet at dette kunne medføre en konfigurasjon med feil. Konsekvensen av dette ville være at Icinga ikke ville kunne lese ny konfigurasjon.
 
 Icinga har en funksjon som gjør at en kan teste konfigurasjonen etter feil med en opsjon på binærfilen (--verify-config). Icinga vil da ta utgangspunkt i rot-konfigurasjonsfilen (icinga.cfg) for så å sjekke alle konfigurasjonsfilene. Dette gjør at alle konfigurasjonsfilene må sjekkes, og ikke bare de som lages for kontakter. Dermed vil ikke kontakter og kontaktgrupper bli oppdatert dersom det allerede finnes en feil i konfigurasjonen. 
 
@@ -376,12 +376,12 @@ Da får en et javascript objekt ut med de kolonnene en har bedt om.
 
 Vi har totalt seks spørringer og de ulike gjør følgende:
 \begin{enumerate*}
-	\item  hostQuery henter ut alle hosts som har status DOWN eller UNREACHABLE
-	\item  serviceQuery henter ut alle servicer som har en UP host, men en service som er enten WARNING eller CRITICAL
-	\item  hostTotalQuery henter ut alle hosts, med en kolonne som forteller hvilken tilstand den er i. Dette blir brukt for å regne ut et antall innenfor hver tilstand.
-	\item  serviceTotalQuery samme som 3, men henter alle servicer.
-	\item  hostPriorityQuery henter ut en og en host basert på objekt id. Informasjonen brukes videre for å sjekke om den har en prioritets variabel satt, som vil føre til at den blir prioritert ved fremvisning.
-	\item  servicePriorityQuery samme som 4, men henter her ut for en service.
+	\item  \textbf{hostQuery} henter ut alle hosts som har status DOWN eller UNREACHABLE
+	\item  \textbf{serviceQuery} henter ut alle servicer som har en UP host, men en service som er enten WARNING eller CRITICAL
+	\item  \textbf{hostTotalQuery} henter ut alle hosts, med en kolonne som forteller hvilken tilstand den er i. Dette blir brukt for å regne ut et antall innenfor hver tilstand.
+	\item  \textbf{serviceTotalQuery} samme som 3, men henter alle servicer.
+	\item  \textbf{hostPriorityQuery} henter ut en og en host basert på objekt id. Informasjonen brukes videre for å sjekke om den har en prioritets variabel satt, som vil føre til at den blir prioritert ved fremvisning.
+	\item  \textbf{servicePriorityQuery} samme som 4, men henter her ut for en service.
 \end{enumerate*}
 
 \subsection{Footprints}
