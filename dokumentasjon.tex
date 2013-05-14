@@ -25,7 +25,7 @@ I utrullingsfaser vil det være naturlig å legge til mange host-objekter på en
 
 Scriptet genererer host-objekter med atributtene  ``hostname'', ``address'', ``hostgroup'' og ``generic''. Host-objekter uten hostgroup eller generic supplert, vil få standardverdier definert, mens hostname og address er obligatorisk, og det gis en feilmelding om disse er utelatt.
 
-Eksempelet under viser hvordan scriptet kjøres. Linjenummer skrives ut dersom obligatorisk informasjon mangler.
+Eksempelet under viser hvordan scriptet kjøres. Linjenummer skrives ut dersom obligatorisk informasjon mangler:
 \begin{lstlisting}[style=example]
 monkey@hig1:~/script$ vim servers.csv
 monkey@hig1:~/script$ ./gen.bash servers.csv
@@ -46,7 +46,7 @@ gen.bash  servers.csv  test1.cfg  test2.cfg  test3.cfg  test4.cfg
 monkey@hig1:~/script$
 \end{lstlisting}
 
-Koden under viser hvordan servers.csv er bygget opp. Den inneholder også feil for å vise hva som skjer dersom informasjonen ikke er korrekt.
+Koden under viser hvordan servers.csv er bygget opp. Den inneholder også feil for å vise hva som skjer dersom informasjonen ikke er korrekt:
 \begin{lstlisting}
 10.0.0.1,test1,windows;,generic1
 10.0.0.1,test2,,jekrjekr
@@ -69,7 +69,7 @@ I den nedetidsperioden vil Icinga nekte varslingsmelding i å bli sendt ut. Når
 Når problemet som fører til et varsel for enten et host- eller service-objekt er kjent, kan en legge dette varselet i kategorien ``Acknowledged Hosts'' eller
 ``Acknowledged Services'' ved å benytte en kommando for gitt host- eller service-objekt i webgrensesnittet.
 
-I Figur \ref{ackbutton} vises knappen for å sette et host- eller service-objekt acknowlegded
+I Figur \ref{ackbutton} vises knappen for å sette et host- eller service-objekt acknowlegded.
 
 \begin{figure}[H]
     \centering
@@ -78,7 +78,7 @@ I Figur \ref{ackbutton} vises knappen for å sette et host- eller service-objekt
     \label{ackbutton}
 \end{figure}
 
-Visning av antallet med enten WARNING eller CRITICAL vil gråtonet om bare et host- eller service-objekt er acknowledged. Tallet vil også flyttes til den midterse kolonnen som vist i Figur \ref{ackcombined} 
+Visning av antallet med enten WARNING eller CRITICAL vil gråtonet om bare et host- eller service-objekt er acknowledged. Tallet vil også flyttes til den midterse kolonnen som vist i Figur \ref{ackcombined} .
 
 \begin{figure}[H]
     \centering
@@ -87,7 +87,7 @@ Visning av antallet med enten WARNING eller CRITICAL vil gråtonet om bare et ho
     \label{ackcombined}
 \end{figure}
 
-I statusvinduet vil host- eller service-objektet legges i en egen kategori ``Known <objekttype> problems'', og ha en gråtonet farge, som vist i Figur \ref{ackstatusvindu}
+I statusvinduet vil host- eller service-objektet legges i en egen kategori ``Known <objekttype> problems'', og ha en gråtonet farge, som vist i Figur \ref{ackstatusvindu}.
 
 \begin{figure}[H]
     \centering
@@ -97,7 +97,7 @@ I statusvinduet vil host- eller service-objektet legges i en egen kategori ``Kno
 \end{figure}
 
 
-\section{Autentisering mot Active Directory} 
+\section{Autentisering mot Active Directory}\label{sec:ldapauth}
 LDAP-autentisering brukes for å styre hvem som skal ha tilgang til webgrensesnittene, ved hjelp av grupper og brukere i Active Directory. Dette er støttet direkte i Icinga Web, men må konfigureres på andre måter for Icinga Classic. Det kan opprettes en sikkerhetsgruppe i AD som inkluderer medlemmene som skal få tilgang. Alle som er med i denne gruppen vil få tilgang til Icinga Web, der det også kan defineres hvilken informasjon hver bruker skal se. 
 
 Selve LDAP-binden gjøres via PHP-modulen ``php-ldap''. Når en bruker logger inn sjekkes først AD, dersom brukeren ikke finnes der, vil Icinga-web prøve sin egen database med brukere. Hvis brukeren finnes her og passordet er riktig vil brukeren bli logget inn. Når brukeren har logget inn for første gang via AD, vil brukeren bli lagret i Icinga Web-databasen. Om brukeren endrer passord i Icinga Web vil uansett AD først bli spurt før Icinga Web spør om passordet er riktig i sin egen database
@@ -106,31 +106,30 @@ Icinga Classic autentiserer mot AD gjennom modulene ldap og authnz\_ldap til Apa
 
 /etc/apache2/conf.d/:
 \begin{lstlisting}[style=example]
-        AuthName "Authentication"
-        AuthType Basic
-        AuthBasicProvider ldap
-        AuthLDAPURL
-"ldap://10.60.0.22:3268/dc=monkey,dc=local?samAccountName?sub?(objectClass=person)"
-        AuthLDAPBindDN "<user>"
-        AuthLDAPBindPassword "<password>"
-        require ldap-group CN=icinga-login, OU=icinga, DC=monkey, DC=local
+    AuthName "Authentication"
+    AuthType Basic
+    AuthBasicProvider ldap
+    AuthLDAPURL"ldap://10.60.0.22:3268/dc=monkey,dc=local?samAccountName?sub?(objectClass=person)"
+    AuthLDAPBindDN "<user>"
+    AuthLDAPBindPassword "<password>"
+    require ldap-group CN=icinga-login, OU=icinga, DC=monkey, DC=local
 \end{lstlisting}
 
 /usr/share/icinga-web/app/modules/AppKit/config/auth.xml:
 \begin{lstlisting}
-  <ae:parameter name="ldap_allow_anonymous">false</ae:parameter>
-            <ae:parameter name="ldap_dsn">ldap://10.60.0.22</ae:parameter>
-            <ae:parameter name="ldap_start_tls">false</ae:parameter>
-            <ae:parameter name="ldap_basedn">DC=monkey,DC=local</ae:parameter>
-            <ae:parameter name="ldap_binddn">icingawebauth@monkey.local</ae:parameter>
-            <ae:parameter name="ldap_bindpw"><![CDATA[Password]]></ae:parameter>
-            <ae:parameter name="ldap_userattr">sAMAccountName</ae:parameter>
-            <ae:parameter name="ldap_filter_user"><![CDATA[(&(sAMAccountName=__USERNAME__)(memberOf=CN=icinga-login,OU=icinga,DC=monkey,DC=local))]]></ae:parameter>
-        </ae:parameter>
+    <ae:parameter name="ldap_allow_anonymous">false</ae:parameter>
+        <ae:parameter name="ldap_dsn">ldap://10.60.0.22</ae:parameter>
+        <ae:parameter name="ldap_start_tls">false</ae:parameter>
+        <ae:parameter name="ldap_basedn">DC=monkey,DC=local</ae:parameter>
+        <ae:parameter name="ldap_binddn">icingawebauth@monkey.local</ae:parameter>
+        <ae:parameter name="ldap_bindpw"><![CDATA[Password]]></ae:parameter>
+        <ae:parameter name="ldap_userattr">sAMAccountName</ae:parameter>
+        <ae:parameter name="ldap_filter_user"><![CDATA[(&(sAMAccountName=__USERNAME__)(memberOf=CN=icinga-login,OU=icinga,DC=monkey,DC=local))]]></ae:parameter>
+    </ae:parameter>
 \end{lstlisting}
 
 \section{Kontakter og kontaktgrupper}
-For å opprette en ny kontakt i Icinga meldes brukeren inn i gruppen icinga\_kontakter (se sec:sync). Den vil trenge å ha e-postadresse og telefonnummer satt.
+For å opprette en ny kontakt i Icinga meldes brukeren inn i gruppen icinga\_kontakter (hvordan dette fungerer forklart i \ref{sec:sync}). Den vil trenge å ha e-postadresse og telefonnummer satt.
 
 Kontaktgrupper hentes fra OU-en icinga\_grupper der alle grupper hentes ut og opprettes i Icinga. For at en gruppe skal varsles må dette legges til på et service-objekt. For å slippe å sette opp kontakter for hver service kan en sende med argumentet ``gen\_service'', for å generere en template som kan benyttes på tjenester som sorterer under hver av kontaktgruppene som blir opprettet.
 
@@ -220,18 +219,18 @@ I Tabell \ref{backup}, vises viktige filer og mapper for overvåkningsløsningen
  \hline
         \textbf{Filbane} & \textbf{Inneholder}
 	\\ \hline
-	/etc/icinga/						& Alle konfigurasjonsfiler for Icinga \\ \hline
-	/usr/lib/nagios/plugins/				& Alle plugin-er \\ \hline
-	/etc/nagios-plugins/config				& Konfigurasjon for default plugins \\ \hline
-	/root/Scripts						& Lokale script. \\ \hline
-	/etc/snmp 						& Konfigurasjon for snmptt \\ \hline
-	/etc/default/snmp 					& Konfigurasjon for at snmpd starter snmptrapd \\ \hline
-	/etc/sysconfig/icinga					& Konfigurasjon for environment variabler \\ \hline
+	/etc/icinga/ & Alle konfigurasjonsfiler for Icinga \\ \hline
+	/usr/lib/nagios/plugins/ & Alle plugin-er \\ \hline
+	/etc/nagios-plugins/config & Konfigurasjon for default plugins \\ \hline
+	/root/Scripts & Lokale script. \\ \hline
+	/etc/snmp & Konfigurasjon for snmptt \\ \hline
+	/etc/default/snmp & Konfigurasjon for at snmpd starter snmptrapd \\ \hline
+	/etc/sysconfig/icinga & Konfigurasjon for environment variabler \\ \hline
 	/usr/lib/oracle/11.2/client64/network/
-	admin/tnsnames.ora					& Konfigurasjon for oracle-instanser \\ \hline
-	/etc/init.d/carbon-cache				& Init script for grafprosessering gjennom graphite \\ \hline
-	/etc/init.d/metricinga					& Init script for prosessering av perfdata fra Icinga \\ \hline
-	/opt/graphite/						& Konfigurasjon og data for genering av grafer  \\ \hline
+	admin/tnsnames.ora & Konfigurasjon for oracle-instanser \\ \hline
+	/etc/init.d/carbon-cache & Init script for grafprosessering gjennom graphite \\ \hline
+	/etc/init.d/metricinga & Init script for prosessering av perfdata fra Icinga \\ \hline
+	/opt/graphite/ & Konfigurasjon og data for genering av grafer  \\ \hline
 \end{tabular}
 \end{center}
 \end{table}
