@@ -59,7 +59,7 @@ Programvare:
 \end{itemize*}
 
 \subsubsection{Enhet for overvåkning av servermiljø}
-For å overvåke temperatur og luftfuktighet på serverrommet ble det i samråd med IKT-avdelingen kjøpt inn en APC NetBotz 200, som støtter opptil 12 eksterne sensorer \cite{netbotz}. Denne oppfyller kravene gitt i oppgavebeskrivelsen. 
+For å overvåke temperatur og luftfuktighet på serverrommet ble det i samråd med IKT-avdelingen kjøpt inn en APC NetBotz 200, som støtter opptil 12 eksterne sensorer\cite{netbotz}. Denne oppfyller kravene gitt i oppgavebeskrivelsen. 
 
 \section{Produksjonsserver}
 ``Quis custodiet ipsos custodes?'' er et latinsk uttrykk som kan oversettes med ``hvem passer på de som passer på?''. I en overvåkningsløsning er det viktig å stille spørsmålet; hva skjer hvis overvåkningsserveren går ned? Et forslag ved starten av prosjektet var å legge overvåkningsserveren på et Xen- eller VMware-cluster. Men dette ble etter noe omtanke stemplet som en dårlig idé. Dersom clusteret gikk ned, ville også overvåkningsserveren gå ned. Det ble derfor bestemt at Icinga-serveren skulle være en egen fysisk server, med databasen installert lokalt.
@@ -73,11 +73,11 @@ Debian 6 ble valgt som operativsystem på Icinga-serveren etter ønske fra oppdr
 Ved starten av iterasjonen ``kjerneprogramvare'' var den nyeste versjonen av Icinga 1.8.4. I pakkebrønnen for debian-stable fantes bare versjon 1.0.2 av Icinga, i backports lå 1.7.1. Icinga opprettholder en egen pakkebrønn - ``The Debian Monitoring Project''\cite{debmon} (debmon). Fra denne kunne versjon 1.8.4 installeres. I samråd med teknisk kontakt ved IKT-avdelingen ble det bestemt å bruke versjon 1.8.4 fra debmon.
 
 \subsubsection{Icinga Webgrensesnitt}
-Webgrensesnittene Icinga Classic og Icinga Web ble installert med pakkene "icinga-classic" og "icinga-web 1.8.1", via pakkebrønnen debmon. 
+Webgrensesnittene Icinga Classic og Icinga Web ble installert med pakkene ``icinga-classic'' og ``icinga-web 1.8.1'', via pakkebrønnen debmon. 
 
 Tidlig ble det avgjort at Icinga Web primært skulle brukes som webgrensesnitt mot Icinga. Denne avgjørelsen ble tatt fordi Icinga Web kommer med et REST-API, har støtte for LDAP-integrasjon og aksesstyring på mange objekter.
 
-Etter testing ble det oppdaget at Icinga Web opplevdes som mye tregere enn Icinga Classic og inneholder en feil som ble rapportert tilbake til Icinga Development Team. Feilen som ble rapportert inn omfatter søk på hostgroup-objekter eller servicegroup-objekter (link til bugreport \cite{icingawebbug}). Det ble derfor lagt opp til at både Icinga Classic og Icinga Web kan benyttes på lik linje.
+Etter testing ble det oppdaget at Icinga Web opplevdes som mye tregere enn Icinga Classic og inneholder en feil som ble rapportert tilbake til Icinga Development Team. Feilen som ble rapportert inn omfatter søk på hostgroup-objekter eller servicegroup-objekter (bugreport\cite{icingawebbug}). Det ble derfor lagt opp til at både Icinga Classic og Icinga Web kan benyttes på lik linje.
 \subsection{Konfigurasjonsfiler}
 Ved standard installasjon av Icinga er konfigurasjonen delt opp i objekttyper med flere objekter i hver fil:
 \begin{itemize*}
@@ -171,7 +171,7 @@ define host {
     hostgroups		debian_servers, mysql_servers
 }
 \end{lstlisting}
-Service-objektet defineres slik og refererer til hostgroup-en og kommandoen ```check\_mysql\_health''. Alle host-objekter i "mysql\_servers" vil da få denne sjekken.
+Service-objektet defineres slik og refererer til hostgroup-en og kommandoen ``check\_mysql\_health''. Alle host-objekter i ``mysql\_servers'' vil da få denne sjekken.
 \begin{lstlisting}[style=example]
 define service {
     service_description	MySQL Connection Time
@@ -183,7 +183,6 @@ define service {
 \end{lstlisting}
 
 Figur \ref{sql} viser en visuell fremstilling av hvordan dette henger sammen for alle SQL-servere:
-
 \begin{changemargin}{-1cm}{-1cm}
 \begin{figure}[H]
     \centering
@@ -198,15 +197,14 @@ Figur \ref{sql} viser en visuell fremstilling av hvordan dette henger sammen for
 I utgangspunktet ble det bestemt at ytelsesdata skulle holdes utenfor oppgaven. Det ble likevel satt opp en løsning for å visualisere ytelsesdata fra sjekkene med programmet Graphite\cite{graphite}. Dette ble gjort fordi det var ønskelig å kunne etablere en baseline for tjenestene slik at bedre grenseverdier kunne settes.
 
 For å sette opp eksportering av ytelsesdataen benyttes et vanlig command-objekt i Icinga:
-
 \begin{lstlisting}[style=example]
 define command {
     command_name	rotate_perf_service
     command_line	/bin/mv /usr/local/icinga/var/perfdata/service-perfdata /usr/local/icinga/var/perfdata/logs/service-perfdata.$TIMET$
 }
 \end{lstlisting}
-Icinga.cfg må konfigureres til å benytte dette:
 
+Icinga.cfg må konfigureres til å benytte dette:
 \begin{lstlisting}[style=example]
 process_performance_data=1
 service_perfdata_file=/usr/local/icinga/var/perfdata/service-perfdata
@@ -216,7 +214,7 @@ service_perfdata_file_template=[SERVICEPERFDATA]\tDATATYPE::SERVICEPERFDATA\tTIM
 
 For å transformere ytelsesdataene til riktig format for Graphite benyttes ``Metricinga''\cite{metricinga}. Dette scriptet sjekker ``spool''-mappen som command-objektet flytter filene med ytelsesdata til. Metricinga sjekker mappen én gang i minuttet etter filer som enda ikke er prosessert, og sender data inn til Graphite (via carbon). Gjennom Graphite vil det dermed genereres grafer basert på ytelsesdata fra alle service-sjekker som gir dette.
 
-Det ble også testet å modifisere scriptet til å lagre outputen til service-sjekkene direkte i en MySQL-database, som vist i vedlegg /ref metricinga diff. Dette ble gjort for å oppfylle kravet fra oppgavebeskrivelsen om at alle henvendelser skal lagres i database. I samråd med oppdragsgiver ble det avgjort å gå bort i fra dette fordi det resulterte i et høyt antall nye rader over kort tid. Som et alternativ til dette kan en ta inn all data til Graphite, men aggregere det etter en viss tid. For eksempel lagre dagsgjennomsnittet for data som er eldre enn seks måneder. Dataene kan da eksporteres fra Graphite til videre bruk.
+Det ble også testet å modifisere scriptet til å lagre outputen til service-sjekkene direkte i en MySQL-database, som vist i Vedlegg \ref{diff.pl}. Dette ble gjort for å oppfylle kravet fra oppgavebeskrivelsen om at alle henvendelser skal lagres i database. I samråd med oppdragsgiver ble det avgjort å gå bort i fra dette fordi det resulterte i et høyt antall nye rader over kort tid. Som et alternativ til dette kan en ta inn all data til Graphite, men aggregere det etter en viss tid. For eksempel lagre dagsgjennomsnittet for data som er eldre enn seks måneder. Dataene kan da eksporteres fra Graphite til videre bruk.
 
 Metricinga kommer ikke med init-script for Debian. For at prosessen skal kunne startes automatisk med serveren ble dette skrevet av gruppen (Vedlegg \ref{metricinga_init.d}).
 \section{Overvåkning av Windows-servere}
@@ -372,9 +370,9 @@ For Windows-servere benyttes ``CheckDisk'' fra NSClient++. For å sjekke flere d
 ./check_nrpe -u -H 10.60.0.22 -p 5666 -c CheckDriveSize -a MaxWarnUsed=94% MaxCritUsed=96% CheckAll
 \end{lstlisting}
 
-For Linux-servere benyttes sjekken "Check\_disk" fra nagios-plugins. Her spesifiseres baner som er montert i filsystemet.
+For Linux-servere benyttes sjekken ``check\_disk'' fra nagios-plugins. Her spesifiseres baner som er montert i filsystemet.
 
-Check\_Disk
+check\_disk kjøres slik:
 \begin{lstlisting}[style=example]
 ./check_disk -w 8% -c 4% --mountpoint --all
 \end{lstlisting}
@@ -405,16 +403,16 @@ define service {
 }
 \end{lstlisting}
 
-Å se at en tjeneste kjører via Windows kan gi falsk informasjon. Et eksempel her er Microsofts terminal services. Tjenesten står som kjørende i Windows, men brukere får ikke koblet til. Dette kommer av at tjenesten har hengt seg, uten at den står som ``stoppet''. Dette merkes ikke før brukere ringer inn og beskriver problemet \cite{serviceproblem}. Som nevnt i \ref{sec:omovervakning} vil en bedre sjekk være å teste selve tjenesten, som blir gjort for tjenestene beskrevet under.
+Å se at en tjeneste kjører via Windows kan gi falsk informasjon. Et eksempel her er Microsofts terminal services. Tjenesten står som kjørende i Windows, men brukere får ikke koblet til. Dette kommer av at tjenesten har hengt seg, uten at den står som ``stoppet''. Dette merkes ikke før brukere ringer inn og beskriver problemet\cite{serviceproblem}. Som nevnt i \ref{sec:omovervakning} vil en bedre sjekk være å teste selve tjenesten, som blir gjort for tjenestene beskrevet under.
 
 \subsection{LDAP, DNS og DHCP}
 Tjenester som LDAP-autentisering, DNS-oppslag og DHCP-leasing er en viktig del av tjenestene IKT-avdelingen leverer.
 
-LDAP-tjenesten 	\cite{ldap} gjør at brukere får logget på trådløse nettverk og autentisert seg for andre tjenester IKT-avdelingen leverer.
+LDAP-tjenesten\cite{ldap} gjør at brukere får logget på trådløse nettverk og autentisert seg for andre tjenester IKT-avdelingen leverer.
 
-DNS-oppslag gjøres hver gang en enhet skal oversette en IP-adresse til et hostname eller omvendt. Uten DNS vil ikke enheten kunne kontakte andre enheter ved å benytte hostname, som brukes i eksempelvis web-adresser \cite{dns}. 
+DNS-oppslag gjøres hver gang en enhet skal oversette en IP-adresse til et hostname eller omvendt. Uten DNS vil ikke enheten kunne kontakte andre enheter ved å benytte hostname, som brukes i eksempelvis web-adresser\cite{dns}. 
 
-Når en ny enhet kobles til nettverket vil denne få tildelt en IP-adresse av DHCP-serveren. Samtidig får den informasjon om gateway og DNS-servere. Uten dette vil ikke enheten få kommunisert med andre enheter på det lokale nettverket og Internett \cite{dhcp}.
+Når en ny enhet kobles til nettverket vil denne få tildelt en IP-adresse av DHCP-serveren. Samtidig får den informasjon om gateway og DNS-servere. Uten dette vil ikke enheten få kommunisert med andre enheter på det lokale nettverket og Internett\cite{dhcp}.
 
 Sjekkene for alle de tre tjenestene vil bli gjort direkte fra Icinga-serveren. Denne står i et eget nettverk. Derfor vil det kunne oppstå situasjoner der Icinga rapporterer at tjenestene fungerer, men det fungerer ikke for brukere tilkoblet andre nettverk. En løsning på dette kan være å kjøre sjekkene via en server i hvert nettverk hvor brukere er tilkoblet.
 
@@ -430,8 +428,8 @@ Ytelsesdata har blitt samlet inn over 30 dager, for å sette grenseverdier for n
     \label{ldapauth-inv}
 \end{figure}
 \begin{lstlisting} [style=example]
- check_command check_ldap_status!0.05!0.1!10
-        command_line    $USER1$/check_ldap -H $HOSTADDRESS$ -b $USER6$ -P $USER4$ -w $ARG1 -c $ARG2 -t $ARG
+    check_command 	check_ldap_status!0.05!0.1!10
+    command_line    $USER1$/check_ldap -H $HOSTADDRESS$ -b $USER6$ -P $USER4$ -w $ARG1 -c $ARG2 -t $ARG
 \end{lstlisting}
 
 \subsubsection*{DNS}
@@ -480,7 +478,7 @@ Antallet aktive og inaktive brukere kan hentes ut fra Windows Performance Counte
 Kommando som er brukt for å sjekke antallet aktive brukere på en terminalserver er:
  
 \begin{lstlisting}[style=example]
-	command_line	check_nrpe -u -H $HOSTADDRESS$ -p 5666 -c CheckCounter -a "Counter:Active=\\Terminal Services\\Active Sessions" ShowAll MaxWarn=25 MaxCrit=35
+./command_line check_nrpe -u -H $HOSTADDRESS$ -p 5666 -c CheckCounter -a "Counter:Active=\\Terminal Services\\Active Sessions" ShowAll MaxWarn=25 MaxCrit=35
 \end{lstlisting}
 
 \begin{figure}[H]
@@ -512,7 +510,7 @@ En ordinær plugin henter status for en service på ett host-objekt. Ved redunda
 
 For å overvåke redundante oppsett, har plugin-ene ``check\_multi'' \cite{checkmulti} og ``check\_cluster'' \cite{checkcluster} blitt vurdert. check\_cluster parser den lokale status.dat-filen og ser hvilken tilstand en service eller en host er ved siste sjekk. Pluginen check\_multi derimot kjører plugin-er mot spesifiserte host-objekter, og en kan definere sammenligningsoperator (<,>,=), som vil bli sjekket mot de returnerte resultatene.
 
-Med check\_multi kan en benytte en eller flere egendefinerte kommandoer som parametere. Disse vil parses av check\_multi og kan inneholde alt i fra ``echo 'Hello, World!'´'', til mer avanserte Perl-script som kjøres ved hjelp av eval. Dette blir brukt for Oracle-databaser som forklart i \ref{sec:oracle}. 
+Med check\_multi kan en benytte en eller flere egendefinerte kommandoer som parametere. Disse vil parses av check\_multi og kan inneholde alt i fra ``echo 'Hello, World!', til mer avanserte Perl-script som kjøres ved hjelp av eval. Dette blir brukt for Oracle-databaser som forklart i \ref{sec:oracle}. 
 
 For å evaluere resultatene fra alle sjekkene samlet, kan en definere kriterier som gir et varsel. Da brukes standard Icinga-tilstander, som vist i eksempelet under:
 \begin{lstlisting}[style=example]
@@ -527,12 +525,12 @@ For check\_cluster spesiferes det om det er et host- eller service-cluster en sk
 
 Under vises et eksempel for kommandoen check\_cluster som kjører Check HTTP host-objektene localhost, HiG2, HiG3, og HiG4. Det vil bli gitt en WARNING om en av serverene er nede, og CRITICAL om to er nede: 
 \begin{lstlisting}[style=example]
-check_cluster --service -l "Check HTTP"  -d $SERVICESTATEID:localhost:Check HTTP$, $SERVICESTATEID:HiG2:Check HTTP$ ,$SERVICESTATEID:HiG4:Check HTTP$  -w @1 -c @2
+./check_cluster --service -l "Check HTTP"  -d $SERVICESTATEID:localhost:Check HTTP$, $SERVICESTATEID:HiG2:Check HTTP$ ,$SERVICESTATEID:HiG4:Check HTTP$  -w @1 -c @2
 \end{lstlisting}
 
 \section{Databaser}
 Databaser brukes i mange av applikasjonene IKT-avdelingen drifter for brukerne. På databaseserverne samles dataen fra disse applikasjonene på et sted. 
-Tre forskjellige databasemotorer brukes. Disse er MySQL, MSSQL og Oracle DB. Hver av disse har ulik arkitektur og virkemåte \cite{databasecomparison}, og derfor blir ikke de samme parameterne overvåket på alle. Felles for alle er:
+Tre forskjellige databasemotorer brukes. Disse er MySQL, MSSQL og Oracle DB. Hver av disse har ulik arkitektur og virkemåte\cite{databasecomparison}, og derfor blir ikke de samme parameterne overvåket på alle. Felles for alle er:
 \begin{itemize*}
 	\item Connection time (tid det tar å koble til SQL serveren).
 	\item Connected users (antall aktive sessioner mot SQL serveren).
@@ -556,7 +554,7 @@ For connected users sjekkes hvor mange sessioner som er koblet til database tjen
 \subsection*{Cache hit}
 Cache hit er hvor ofte data hentes ut fra databasemotorens egen cache, slik at dataen ikke leses fra disk. Dette sparer diskene for I/O-operasjoner. Hvis cache hit ligger på et høyt nivå (90 - 100 \%), indikerer dette at tabellene det spørres mest mot lagres i cache. Når cache hit ligger under 90 \% kan dette være et resultat av at serveren ikke har nok minne til å lagre tabellene i cache. Dette kan indikere et minneproblem.
 
-Oracle mener at cache hit bør ligge på over 90 \% \cite{oraclecachehit}. For MSSQL er tilnærmet 100 \% cache hit et godt utgangspunkt \cite{sqlmonitoring}.
+Oracle mener at cache hit bør ligge på over 90 \% \cite{oraclecachehit}. For MSSQL er tilnærmet 100 \% cache hit et godt utgangspunkt\cite{sqlmonitoring}.
 
 MySQL-databasene til IKT-avdelingen lagrer all databasedata i minnet, så her vil det ikke være relevant å sjekke cache hit. Sjekken er satt opp slik at ordinære MySQL-servere vil kunne settes opp med denne sjekken i ettertid.
 
@@ -564,7 +562,7 @@ MySQL-databasene til IKT-avdelingen lagrer all databasedata i minnet, så her vi
 For at Icinga-serveren skal kunne snakke med de forskjellige databasemotorene trengs en klient for hver av dem. 
 
 \subsubsection{Oracle}\label{sec:oracle}
-Databaseklienten finnes på Oracle sine nettsider \cite{oracleclient}. Den finnes ikke som en deb-pakke, som som brukes for Debian. Det finnes derimot en rpm-pakke, som brukes av blant annet Red Hat. Alien ble brukt til å konvertere rpm-pakken over til deb-pakke før installasjon på Icinga-serveren \cite{debian:alien}. 
+Databaseklienten finnes på Oracle sine nettsider\cite{oracleclient}. Den finnes ikke som en deb-pakke, som som brukes for Debian. Det finnes derimot en rpm-pakke, som brukes av blant annet Red Hat. Alien ble brukt til å konvertere rpm-pakken over til deb-pakke før installasjon på Icinga-serveren\cite{debian:alien}.
 
 \begin{lstlisting}[style=example]
 alien oracle-instantclient11.2-basic-11.2.0.3.0-1.x86_64.rpm 
@@ -599,7 +597,7 @@ Check\_multi brukes for å samle en Oracle-servers instanser under samme service
 \begin{lstlisting}[style=example]
 define service {
 ...
-    check_command check_multi!check_oracle! -s dbinstances=$_HOSTDBINSTANCES$ -s host=$HOSTADDRESS$ -s mode=sga-data-buffer-hit-ratio -s warning=93: -s critical=90: -s user=$USER5$ -s pass=$USER4$
+    check_command	check_multi!check_oracle! -s dbinstances=$_HOSTDBINSTANCES$ -s host=$HOSTADDRESS$ -s mode=sga-data-buffer-hit-ratio -s warning=93: -s critical=90: -s user=$USER5$ -s pass=$USER4$
 }
 
 define command {
@@ -608,7 +606,7 @@ define command {
 }
 \end{lstlisting}
 %TODO: EXPLAIN
-Da check\_multi utfører sin kommando vil ``eeval'' funksjonen sette sammen en kjede med alle instansene som skal sjekkes, for så å kjøre disse separat. Svaret returnert til Icinga vil inneholde status og ytelsesdata for alle instansene i variabelen "\_HOSTDBINSTANCES". Det som blir unikt for denne sjekken er at service-objektet vil inneholde status for alle instansene.
+Da check\_multi utfører sin kommando vil ``eeval'' funksjonen sette sammen en kjede med alle instansene som skal sjekkes, for så å kjøre disse separat. Svaret returnert til Icinga vil inneholde status og ytelsesdata for alle instansene i variabelen ``\_HOSTDBINSTANCES''. Det som blir unikt for denne sjekken er at service-objektet vil inneholde status for alle instansene.
 \begin{lstlisting}[style=example]
 eeval [ oracle_health ] =
     my $chain = "";
@@ -625,7 +623,7 @@ For MySQL ligger de nødvendige pakkene i Debians pakkebrønn og kan installeres
 For MSSQL var det vanskelig å finne en databaseklient som er fri programvare. Det ble etter noe research besluttet å bruke ``FreeTDS''\cite{freetds}, sammen med Perl-modulen ``libdbd-sybase-perl''.
 
 \subsection{Plugin}
-Plugin-ene som blir benyttet for databaser er skrevet av firmaet "Consulting \& Solutions" og heter "Check\_MySQL\_Health", "Check\_Oracle\_Health" og "Check\_MSSQL\_Health" \cite{consol}.
+Plugin-ene som blir benyttet for databaser er skrevet av firmaet ``Consulting \& Solutions'' og heter ``Check\_MySQL\_Health'', ``Check\_Oracle\_Health'' og ``Check\_MSSQL\_Health''\cite{consol}.
 
 Disse må kompileres fra kildekoden. For å gjøre dette må en først konfigurere de med riktige parametere, før den installeres. Dette er de samme for alle tre plugin-ene.
 
@@ -649,18 +647,18 @@ Konfigurasjon for command-objektet for MSSQL og MySQL vises under. \$ARG1\$ bruk
 \end{lstlisting}
 
 \subsubsection{MySQL Cluster}
-MySQL Cluster er et distribuert oppsett for MySQL. Ved IKT-avdelingen benyttes et MySQL Cluster med NDB som lagringsmotor, der databasene kjører i minnet. Et MySQL Cluster består av tre forskjellige nodetyper \cite{ndbinformation}:
+MySQL Cluster er et distribuert oppsett for MySQL. Ved IKT-avdelingen benyttes et MySQL Cluster med NDB som lagringsmotor, der databasene kjører i minnet. Et MySQL Cluster består av tre forskjellige nodetyper\cite{ndbinformation}:
 \begin{itemize*}
-	\item Management - her konfigureres clusteret og en setter opp hvor mange Data- og SQL-noder som kan kobles til.
-	\item Data - oppbevarer tabeller og tabelldata i RAM. Disse håndterer lastbalansering, replikering, failover og gjenoppbygging automatisk i mellom hverandre.
-	\item SQL - MySQL servere som kobler seg til data-nodene for å hente og lagre data.
+	\item \textbf{Management} her konfigureres clusteret og en setter opp hvor mange Data- og SQL-noder som kan kobles til.
+	\item \textbf{Data} oppbevarer tabeller og tabelldata i RAM. Disse håndterer lastbalansering, replikering, failover og gjenoppbygging automatisk i mellom hverandre.
+	\item \textbf{SQL} MySQL servere som kobler seg til data-nodene for å hente og lagre data.
 \end{itemize*}
 
 Den enkleste måten å hente ut statistikk for et MySQL Cluster, er å benytte administrasjonsprogrammet ``ndb\_adm''. Denne kan hentes ut fra installasjonspakken til mysql-cluster\cite{ndbdownload}. I ndb\_adm kan en se hvor mange noder av hver type som er tilkoblet management-noden og minneforbruket til hver av datanodene. De plugin-ene som benyttes baserer seg på output fra ndb\_adm.
 
 Antall noder tilkoblet overvåkes med pluginen check\_ndbd\cite{ndbnode}. Her ble det gjort en endring i koden slik at serveren som ndb\_adm kobler seg til kan spesifiseres som en parameter.
 
-For minnebruk ble det skrevet en egen plugin (vedlegg \cite{check_ndb_mem}), da ingen eksisterende plugin ble funnet som tillater å spesifisere hvilke noder som skal sjekkes. ID-ene til nodene som skal sjekkes ble satt opp som en egendefinert variabel i host-konfigurasjonen. Denne sendes til pluginen via service- og kommando-objektene. Konfigurasjonen for dette er vist under.
+For minnebruk ble det skrevet en egen plugin (Vedlegg \ref{check_ndb_mem}), da ingen eksisterende plugin ble funnet som tillater å spesifisere hvilke noder som skal sjekkes. ID-ene til nodene som skal sjekkes ble satt opp som en egendefinert variabel i host-konfigurasjonen. Denne sendes til pluginen via service- og kommando-objektene. Konfigurasjonen for dette er vist under.
 
 \begin{lstlisting}[style=example]
 define host {
@@ -729,7 +727,7 @@ Plugin-en check\_nwc\_health brukes for å overvåke sensorer, CPU-bruk og minne
 
 For CPU-bruk sjekkes gjennomsnittet over 5 minutter. Grenseverdier er satt til 80 \% på WARNING og 90 \% på CRITICAL, i henhold til det Cisco anbefaler \cite{ciscounifiedcommunication}. Høy CPU-bruk kan føre til dårligere ytelse, høy rate av buffer-feil og generelle feil med responsivitet \cite{ciscocpurouters}
 
-I følge Cisco kan høyt minneforbruk under vanlig drift indikere at brannmuren er under angrep. \cite{ciscomem}. Dersom en router bruker opp tilgjengelig minne kan det føre til at routeren slutter å svare på kommandoer, telnet-tilkoblinger eller blir mindre responsiv \cite{ciscomemproblem}. Cisco anbefaler en grenseverdi på 15 \% ledig minne \cite{ciscounifiedcommunication}. Grenseverdier for minne er derfor satt til 20 \% for WARNING og 15 \% for CRITICAL.
+I følge Cisco kan høyt minneforbruk under vanlig drift indikere at brannmuren er under angrep\cite{ciscomem}. Dersom en router bruker opp tilgjengelig minne kan det føre til at routeren slutter å svare på kommandoer, telnet-tilkoblinger eller blir mindre responsiv\cite{ciscomemproblem}. Cisco anbefaler en grenseverdi på 15 \% ledig minne\cite{ciscounifiedcommunication}. Grenseverdier for minne er derfor satt til 20 \% for WARNING og 15 \% for CRITICAL.
 
 Begge brannmurene legges i en hostgroup som er lagt på service-objektet for ``cisco\_health'', slik at lokale ressurser sjekkes på samme måte som switcher. Brannmurene legges også inn i en hostgroup som heter Cisco-failover som benyttes i service-objektet for failover.
 
@@ -759,24 +757,24 @@ Til dette benyttes plugin-en ``check\_cisco\_firewall'' \cite{checkciscofirewall
 Hvis brannmurene deler management IP på primary og secondary, er det ingen mulighet for å hente ut informasjon fra den passive brannmuren. Da sjekkes failover status bare for primary. I et ideelt miljø bør både passiv og aktiv enhet ha hver sin IP-adresse, slik at fysiske feil også kan avdekkes på den passive.
 
 \subsubsection{VPN}
-For brannmurer som har VPN-tjeneste sjekkes antall oppkoblede brukere opp mot det antallet brannmuren er lisensiert for. Det fantes allerede en plugin som sjekker antall tilkoblede brukere \cite{checkciscovpn}. Plugin-en ble endret til i tillegg å hente ut det maksimale antallet, og sammeligne brukt kapasitet i prosent mot grenseverdier, som kommer inn som argumenter. Plugin-en henter ut variablene over SNMP etter OID-er definert i ``CISCO-FIREWALL-MIB'' \cite{cisco_fw_mib}.
+For brannmurer som har VPN-tjeneste sjekkes antall oppkoblede brukere opp mot det antallet brannmuren er lisensiert for. Det fantes allerede en plugin som sjekker antall tilkoblede brukere\cite{checkciscovpn}. Plugin-en ble endret til i tillegg å hente ut det maksimale antallet, og sammeligne brukt kapasitet i prosent mot grenseverdier, som kommer inn som argumenter. Plugin-en henter ut variablene over SNMP etter OID-er definert i ``CISCO-FIREWALL-MIB''\cite{cisco_fw_mib}.
 
 \subsubsection{Båndbredde}
 For å overvåke bruk av båndbredde ut av og inn av en port på Cisco ASA og PIX finnes to muligheter: NetFlow eller hente ut verdien fra en teller i et intervall.
 
 \subsubsection*{Netflow}
-Funksjonen Netflow \cite{ciscoiosnetflow} fungerer ved at enheten samler inn informasjon og statistikk om alle pakker som går ut og inn av portene. Dette krevet at Netflow konfigureres på alle routerne, og det vil også ta opp ekstra minne og CPU \cite{cisconetflowperf}. Det ble derfor avgjort at Netflow ikke skulle benyttes.
+Funksjonen Netflow\cite{ciscoiosnetflow} fungerer ved at enheten samler inn informasjon og statistikk om alle pakker som går ut og inn av portene. Dette krevet at Netflow konfigureres på alle routerne, og det vil også ta opp ekstra minne og CPU\cite{cisconetflowperf}. Det ble derfor avgjort at Netflow ikke skulle benyttes.
 
 \subsubsection*{Telle pakker}
 Både Cisco Pix og ASA har tellere for antall byte som går ut og inn på en nettverksport. For å kalkulere bruk av båndbredde over et intervall kan en hente ut disse, vente en gitt periode og hente ut nye verdier. Da vil bruken være ((målepunkt2 - målepunkt1)*8) / antall sekunder.
 
-Mange plugin-er benytter seg av dette ved å lese ut "ifInOctets" og "ifOutOctets" over SNMP. Dette følger Ciscos notat "How to Calculate Bandwidth Using SNMP" \cite{ciscobandwidth}. 
+Mange plugin-er benytter seg av dette ved å lese ut ``ifInOctets'' og ``ifOutOctets'' over SNMP. Dette følger Ciscos notat ``How to Calculate Bandwidth Using SNMP''\cite{ciscobandwidth}. 
 
 En stor ulempe med å benytte disse er at de er 32 bit, og vil dermed nullstilles kjapt ved høye hastigheter. For 1000 Mbps vil det ta ((2\^32)-1) / ((10\^9)/8) = ca. 34 sekunder til telleren har gått rundt. Se Tabell \ref{kalkulering_teller} for andre hastigheter.
 \begin{equation}
 \frac{2^{32}-1}{\frac{10^9}{8}}=34.36 s
 \end{equation}
-Det er derfor anbefalt å bruke 64 bit-variablene ifHCOutOctets og ifHCInOctets i stedet for \cite{ciscosnmpcounters}.
+Det er derfor anbefalt å bruke 64 bit-variablene ifHCOutOctets og ifHCInOctets i stedet for\cite{ciscosnmpcounters}.
 \begin{table}
 \begin{center}
 \begin{tabular}{ | l | p{7cm} |} \hline
@@ -789,7 +787,7 @@ Det er derfor anbefalt å bruke 64 bit-variablene ifHCOutOctets og ifHCInOctets 
 \label{kalkulering_teller}
 \end{center}
 \end{table}
-Plugin-en det er tatt utgangspunkt i for å hente ut båndbreddebruk heter check\_iftraffic64 \cite{checkciscoif}. Denne er noe omskrevet for å kunne sende inn absolutte verdier som grenseverdier for varsling. I generic-firewall er det satt opp to egendefinerte variabler ``WANWARN'' og ``WANCRIT'', som setter standard grenseverdier for alle brannmurer. For brannmurer der det er normalt med høyere båndbreddebruk, er disse variablene overstyrt i konfigurasjonen for host-objektet.
+Plugin-en det er tatt utgangspunkt i for å hente ut båndbreddebruk heter check\_iftraffic64\cite{checkciscoif}. Denne er noe omskrevet for å kunne sende inn absolutte verdier som grenseverdier for varsling. I generic\_firewall er det satt opp to egendefinerte variabler ``WANWARN'' og ``WANCRIT'', som setter standard grenseverdier for alle brannmurer. For brannmurer der det er normalt med høyere båndbreddebruk, er disse variablene overstyrt i konfigurasjonen for host-objektet.
 
 %TODO: Cluster shit
 \subsection{VMware og Citrix Xen}
@@ -928,7 +926,7 @@ De trådløse kontrollerne mangler støtter for SNMP-get for informasjon som hen
 
 For å få til dette trengs et mellomledd som kan motta SNMP-traps på Icinga-serveren, tolke trap-meldingene og sende informasjonen videre til Icinga. 
 
-For å lytte etter SNMP-traps benyttes SNMPtrapd \cite{snmptraps2}. Her mottas alle trap-meldinger som sendes med riktig community string. Disse sendes så videre til snmptt (SNMP Trap Translator \cite{traptranselator}). Her defineres de trap-meldingene en er ute etter, informasjon om OID-ene og kommandoen som skal kjøres når denne mottas. I Figur \ref{snmptrap} illustreres hvordan en trap blir prosessert. 
+For å lytte etter SNMP-traps benyttes SNMPtrapd\cite{snmptraps2}. Her mottas alle trap-meldinger som sendes med riktig community string. Disse sendes så videre til snmptt (SNMP Trap Translator\cite{traptranselator}). Her defineres de trap-meldingene en er ute etter, informasjon om OID-ene og kommandoen som skal kjøres når denne mottas. I Figur \ref{snmptrap} illustreres hvordan en trap blir prosessert. 
 
 \begin{figure}[H]
     \centering
@@ -976,26 +974,26 @@ Service description for alle meru traps som sendes inn vil da være ``meru\_'' +
 Noe å merke seg er at en ikke vil få informasjon når tjenesten er OK igjen, og må sette tjenestene til OK manuelt i Icingas webgrensesnitt.
 
 \subsection{Serverrommiljø}
-For å overvåke temperatur og luftfuktighet på serverrommet ble det kjøpt inn en APC NetBotz 200 \cite{netbotz2} med fire eksterne sensorer. Disse ble plassert slik at det er to sensorer på hver side av rack-raden. En vil dermed kunne se temperaturforskjellen mellom forsiden av serverne, ved luftinntak og baksiden, der varmluft går ut.
+For å overvåke temperatur og luftfuktighet på serverrommet ble det kjøpt inn en APC NetBotz 200\cite{netbotz2} med fire eksterne sensorer. Disse ble plassert slik at det er to sensorer på hver side av rack-raden. En vil dermed kunne se temperaturforskjellen mellom forsiden av serverne, ved luftinntak og baksiden, der varmluft går ut.
 
 Hver sensor måler både temperatur og relativ luftfuktighet.
 
 \subsubsection{Luftfuktighet}
-Relativ luftfuktighet er definert som "forholdet mellom partielltrykket til vanndamp, i en gassblanding av luft og vann, og vanndampens metningstrykk ved en viss temperatur". Dette gir en prosentandelen av vann i luften \cite{wiki:luftfuktighet}. 
+Relativ luftfuktighet er definert som ``forholdet mellom partielltrykket til vanndamp, i en gassblanding av luft og vann, og vanndampens metningstrykk ved en viss temperatur''. Dette gir en prosentandelen av vann i luften\cite{wiki:luftfuktighet}. 
 
 Mange enheter for overvåkning av servermiljø måler også duggpunkt. Et duggpunkt er temperaturen en viss mengde luft må avkjøles til for at vanndamp skal kondensere. Ved en økning i relativ luftfuktighet vil duggpunktet nærme seg luftemperaturen. Ved 100 \% relativ luftfuktighet vil temperaturen og duggpunktet ha samme verdi. 
 
-I "Sun Microsystems Data Center Site Planning Guide" anbefales en luftfuktighet på 45 \% - 50 \%. Det meste av datautstyr kan fungere innenfor et bredere intervall enn det, typisk 20 \% - 80 \%. Men de anbefalte verdiene er satt for at det skal være et buffer dersom en har klimaanlegg som kontrollerer luftfuktighet, og det slutter å fungere \cite{planningserver}. Andre, som "American Society of Heating, Refrigerating and Air-Conditioning Engineers" (ASHRAE) anbefaler at den relative luftfuktigheten ikke bør overstige 60 \%, mens den nedre grensen er basert på duggpunkt og satt til 5.5° C, der den relative luftfuktigheten vil variere mellom 25 \% og 45 \% \cite{envguide}. Disse verdiene er også anbefalt av Cisco \cite{envguidecisco}, og omtalt som vidt akseptert. 
+I ``Sun Microsystems Data Center Site Planning Guide'' anbefales en luftfuktighet på 45 \% - 50 \%. Det meste av datautstyr kan fungere innenfor et bredere intervall enn det, typisk 20 \% - 80 \%. Men de anbefalte verdiene er satt for at det skal være et buffer dersom en har klimaanlegg som kontrollerer luftfuktighet, og det slutter å fungere\cite{planningserver}. Andre, som ``American Society of Heating, Refrigerating and Air-Conditioning Engineers'' (ASHRAE) anbefaler at den relative luftfuktigheten ikke bør overstige 60 \%, mens den nedre grensen er basert på duggpunkt og satt til 5.5° C, der den relative luftfuktigheten vil variere mellom 25 \% og 45 \% \cite{envguide}. Disse verdiene er også anbefalt av Cisco\cite{envguidecisco}, og omtalt som vidt akseptert. 
 
 Høy luftfuktighet kan føre til kondens, som igjen kan føre til korrosjon på komponenter. Ved lavere luftfuktighet øker faren for utladninger av statisk elektrisitet (kritisk ved 30 \%), som kan føre til utladninger med ekstremt høye spenningsverdier. Dette kan ødelegge komponenter.
 
 \subsubsection{Temperatur}
-Det er mye uenighet rundt anbefalte verdier for temperatur i serverrom. I et studie utført ved University of Toronto \cite{torontopaper}, ble det samlet inn data fra tre forskjellige organisasjoners datasentre, deriblant Googles. I studiet ble det konkludert med at faren for hardware-feil ved høyere temperatur øker mindre enn det som har vært vanlig å basere seg på. For DRAM-feil og ``node outages'' fant de ingen korrelasjon til temperaturøkning for intervallet i testen (15° C - 60° C). I dette studiet ble det ikke målt eller tatt hensyn til luftfuktighet. 
+Det er mye uenighet rundt anbefalte verdier for temperatur i serverrom. I et studie utført ved University of Toronto\cite{torontopaper}, ble det samlet inn data fra tre forskjellige organisasjoners datasentre, deriblant Googles. I studiet ble det konkludert med at faren for hardware-feil ved høyere temperatur øker mindre enn det som har vært vanlig å basere seg på. For DRAM-feil og ``node outages'' fant de ingen korrelasjon til temperaturøkning for intervallet i testen (15° C - 60° C). I dette studiet ble det ikke målt eller tatt hensyn til luftfuktighet. 
 
-ASHRAE anbefaler en inntakstemperatur 18° C - 27° C, mens Suns anbefaling er 20° C - 23° C. Sun begrunner sin anbefaling med at det er lettere å opprettholde trygge verdier for relativ luftfuktighet med dette temperatur-intervallet. ASHRAE refererer også til studier som viser at det totale strømforbruket kan gå opp ved høyere temperaturer, fordi enheter øker frekvensen på egne vifter \cite{datacentertemp}.
+ASHRAE anbefaler en inntakstemperatur 18° C - 27° C, mens Suns anbefaling er 20° C - 23° C. Sun begrunner sin anbefaling med at det er lettere å opprettholde trygge verdier for relativ luftfuktighet med dette temperatur-intervallet. ASHRAE refererer også til studier som viser at det totale strømforbruket kan gå opp ved høyere temperaturer, fordi enheter øker frekvensen på egne vifter\cite{datacentertemp}.
 
 \subsubsection{Plugin for overvåkning av temperatur og luftfuktighet i Icinga}
-Det fantes allerede en plugin for å sjekke sensorverdiene på APC NetBotz \cite{checknetbotz}. Men denne sammenlignet verdiene med grenseverdier satt i konfigurasjonen på enheten. Det var ønskelig å samle mest mulig av konfigurasjon på Icinga-serveren, derfor ble pluginen omskrevet til å kunne ta inn øvre og nedre grenseverdier som argumenter.
+Det fantes allerede en plugin for å sjekke sensorverdiene på APC NetBotz\cite{checknetbotz}. Men denne sammenlignet verdiene med grenseverdier satt i konfigurasjonen på enheten. Det var ønskelig å samle mest mulig av konfigurasjon på Icinga-serveren, derfor ble pluginen omskrevet til å kunne ta inn øvre og nedre grenseverdier som argumenter.
 
 \subsection{UPS}
 UPS (Uninterruptible Power Supply), ofte kalt avbruddsfri strømforsyning på norsk, blir benyttet til å opprettholde strøm til alle enheter på IKT-avdelingens serverrom dersom strømnettet skulle falle ut. Strømmen filtreres også slik at utstyr ikke vil bli skadet av overspenning. Det beskytter derimot ikke mot overspenninger ved lynnedslag %TODO: /cite apc lynnedslag .
