@@ -459,7 +459,7 @@ Overvåkning av en DHCP-tjeneste ble testet i labmiljøet med pluginen ``check\_
     command_line    $USER1$/check_dhcp -s 10.60.0.22
 \end{lstlisting}
 
-\subsection{Webservere}\label{webservere}
+\subsection{Webservere}\label{sec:webservere}
 IKT-avdelingen drifter mange webservere som benyttes av, eller gir informasjon til brukere. Pluginen ``check\_http'' \cite{checkhttp} fra nagios-plugins benyttes for å sjekke at tilkoblingen til webserveren svarer på henvendelsen. Deler av forventet innhold sjekkes for å se at websiden ikke har blitt endret av uvedkommende.
 
 Kommandoen for å gjøre dette er for siden http://portal.hedmark.org:
@@ -493,7 +493,7 @@ Kommando som er brukt for å sjekke antallet aktive brukere på en terminalserve
 \subsection{Microsoft Exchange}
 Microsoft Exchange benyttes som e-postsystem for fylkeskommunen. Her routes og lagres all e-post som sendes ut og inn av alle brukere. I tillegg benyttes funksjonalitet som kalenderdeling, kontakter, og er integrert med telefonsystemet. Exchange er kritisk for kommunikasjon mellom ulike avdelinger i fylkeskommunen, og utad. 
 
-Som for terminalservere, beskrevet i \ref{sect:terminalservere}, brukes Microsoft Performance Monitor for å få tilgang til en rekke viktige tall om Exchange-serverenes ytelse. Firmaet SolarWinds, som selger en kommersiell overvåkningsløsning anbefaler annet at følgende parametre overvåkes\cite{exchange}, i tillegg til basisjekkene CPU, disk og minne:
+Som for terminalservere, beskrevet i \ref{sec:terminalservere}, brukes Microsoft Performance Monitor for å få tilgang til en rekke viktige tall om Exchange-serverenes ytelse. Firmaet SolarWinds, som selger en kommersiell overvåkningsløsning anbefaler annet at følgende parametre overvåkes\cite{exchange}, i tillegg til basisjekkene CPU, disk og minne:
 \begin{itemize*}
 	\item Antall tilkoblinger. Dersom antallet er høyt kan det føre til at e-postklienter oppfattes som trege av brukerne.
 	\item Gjennomsnittlig responstid på forespørsler. Høye tall vil oppfattes som treghet for brukerne.
