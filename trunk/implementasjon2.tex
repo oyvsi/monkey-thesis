@@ -147,7 +147,7 @@ define service contact_sync {
    active_checks_enabled   	0 ; Only use passive checks for this service
    passive_checks_enabled  	1
    check_freshness      	1
-   freshness_threshold     	3660 ; 1h + 1 min splay time # if we don't get a passive result within freshness_threshold this will be run
+   freshness_threshold     	3660 ; 1h + 1 min splay time ; if we don't get a passive result within freshness_threshold this will be run
    check_command     		check_dummy!2 "No contact sync has been run for 24hrs" 
 }
 \end{lstlisting}
@@ -191,11 +191,11 @@ define serviceescalation {
 	hostgroup_name			temperature_sensors
 	service_description		Check Temperature
 	contact_groups			team_leaders
-	first_notification		10	# Ten notifications has to be sent before escalation
-	last_notification		15	# After fiftheen notifications, this escalation stops. "0" is forever.
-	notification_interval	60 	# Escalation notifications are sent every 60 minutes (default 45)
-	escalation_options		c	# Only use escalation when service  is C(ritical)
-	escalation_period		op_hours  # Only escalate during hours of operations
+	first_notification		10	; Ten notifications has to be sent before escalation
+	last_notification		15	; After fiftheen notifications, this escalation stops. "0" is forever.
+	notification_interval	60 	; Escalation notifications are sent every 60 minutes (default 45)
+	escalation_options		c	; Only use escalation when service  is C(ritical)
+	escalation_period		op_hours  ; Only escalate during hours of operations
 }
 \end{lstlisting}
 Det samme kan benyttes på host-objekter:
@@ -204,9 +204,9 @@ define hostescalation {
 	hostgroup_name			domain_controllers
 	contact_groups			big_bosses
 	first_notification		3 	
-	last_notification		5 # When does escalation notifications stop
+	last_notification		5 ; When does escalation notifications stop
 	notification_interval	50
-	escalation_options		d #Only use escalation when host is D(own)
+	escalation_options		d ; Only use escalation when host is D(own)
 }
 \end{lstlisting}
 
@@ -215,10 +215,10 @@ Selve varslingsmeldingene sendes ut først når host- eller service-objekter er 
 
 \begin{lstlisting}[style=example]
 define host {
-   use 					generic_host # Inherit basic config. check_ping for host_check
+   use 					generic_host ; Inherit basic config. check_ping for host_check
    host_name			hig-fw1
-   max_check_attempts   2 # Number of checks before hardstate
-   retry_check_interval	1 # 60 seconds between each consecutive check
+   max_check_attempts   2 			; Number of checks before hardstate
+   retry_check_interval	1 			; 60 seconds between each consecutive check
 }
 \end{lstlisting}
 Dersom objektet oppfyller kriterier for varsling. Det vil si at ingen parent eller avhengigheter er nede vil det sendes ut varslingsmelding.
@@ -236,7 +236,7 @@ define contact {
 }
 \end{lstlisting}
 
-I eksempelet under vises et command-objekt for utsendingen. Her benyttes sendmail \cite{wiki:sendmail} til å sende en e-post til en SMS-gateway.
+I eksempelet under vises et command-objekt for utsendingen. Her benyttes sendmail\cite{wiki:sendmail} til å sende en e-post til en SMS-gateway.
 \begin{lstlisting}[style=example]
 define command {
    command_name host_problem_sms
@@ -244,7 +244,7 @@ define command {
 }
 \end{lstlisting}
 
-Varslingsmeldinger som sendes over SMS vil være korte og lettfattede, mens de som sendes til e-post gjerne er lengre og inkluderer mer utfyllende informasjon. Informasjonen som sendes ut hentes ut ved hjelp av makroer i Icinga \cite{icingamacro}. 
+Varslingsmeldinger som sendes over SMS vil være korte og lettfattede, mens de som sendes til e-post gjerne er lengre og inkluderer mer utfyllende informasjon. Informasjonen som sendes ut hentes ut ved hjelp av makroer i Icinga\cite{icingamacro}.
 
 Alle varslingsmeldinger sendes fra én og samme e-post-server. Dette er ikke helt ideelt, fordi en vil miste både SMS- og e-postvarsling dersom e-post-serveren skulle slutte å fungere. En løsningen på dette kan være å definere en fallback-server som blir brukt hvis Icinga ikke får kontakt med e-post-serveren. 
 
@@ -274,9 +274,9 @@ For at statusvinduet skal imøtekomme IKT-avdelingens ønsker, ble det besluttet
 
 Utviklingsprosessen startet med et møte med hele IKT-avdelingen for å presentere gruppens forslag til utkast på designet, som vist i Figur \ref{statusvindu_utkast}. Her kom det frem forslag om å vise temperaturene fra serverrom-sensorene som en terning der det fysiske oppsettet kom frem.
 
-Eksisterende programvare for denne type fremvisning ble funnet etter research, og det ble besluttet å gjenbruke Nagdash \cite{nagdash}. Løsningen var et godt utgangspunkt for det visuelle, og er skrevet i språket PHP, noe gruppemedlemmene er komfortable med. IKT-avdelingen har også benyttet PHP i tidligere prosjekter. 
+Eksisterende programvare for denne type fremvisning ble funnet etter research, og det ble besluttet å gjenbruke Nagdash\cite{nagdash}. Løsningen var et godt utgangspunkt for det visuelle, og er skrevet i språket PHP, noe gruppemedlemmene er komfortable med. IKT-avdelingen har også benyttet PHP i tidligere prosjekter. 
 
-Nagdash baserer uthenting av informasjon om host- og serviceobjekter på nagios-api \cite{nagiosapi}, som er en tjeneste som må installeres på Icinga-serveren og setter opp et API over HTTP. Icinga har sitt eget API som det var ønskelig å benytte. Uthenting av informasjon måtte derfor endres til å bruke kall til API-et som Icinga Web tilbyr \cite{icingarestapi}.
+Nagdash baserer uthenting av informasjon om host- og serviceobjekter på nagios-api\cite{nagiosapi}, som er en tjeneste som må installeres på Icinga-serveren og setter opp et API over HTTP. Icinga har sitt eget API som det var ønskelig å benytte. Uthenting av informasjon måtte derfor endres til å bruke kall til API-et som Icinga Web tilbyr\cite{icingarestapi}.
 
 Gjennom to iterasjoner kom det frem flere ønsker som ble lagt inn:
 \begin{itemize*}
@@ -309,7 +309,7 @@ Figur \ref{statusvindu_oversatte_kall} viser hvordan Nagdash ser ut med oversatt
     \label{statusvindu_oversatte_kall}
 \end{figure}
 
-Figur \ref{statusvindu_first} viser statusvisningen etter første iterasjon. Følgende funksjonalitet blitt lagt til:
+Figur \ref{statusvindu_first} vises statusvisningen etter første iterasjon. Følgende funksjonalitet blitt lagt til:
 \begin{itemize*}
 	\item Temperatur fra serverrommet
 	\item Antall mottatte, lukkede, og aktive saker fra Footprints
@@ -476,14 +476,14 @@ Grafikken for servermiljø tilpasses automatisk etter den raden med flest antall
 
 \subsection{RSS}
 
-RSS-feeden hentes inn fra IKT-avdelingens egen drifts-feed, der meldinger til alle brukere legges ut. Dersom det ikke er noen meldinger vil det ikke vises noe. Hvis lengden på feeden overstiger det som får plass på én linje vil den begynne å scrolle bortover. Dette gjøres med jQuery-plugin-en \cite{jqmarquee}.
+RSS-feeden hentes inn fra IKT-avdelingens egen drifts-feed, der meldinger til alle brukere legges ut. Dersom det ikke er noen meldinger vil det ikke vises noe. Hvis lengden på feeden overstiger det som får plass på én linje vil den begynne å scrolle bortover. Dette gjøres med jQuery-plugin-en\cite{jqmarquee}.
 
 \subsection{Prioritering}
 Standard visning av et varsel er at det som kom inn sist vises øverst. Ved tilfeller der det er flere varsler, var det ønskelig å kunne gi en prioritering for å få de viktigste varslene til å komme øverst i listen. For å prioritere host-objekter som er DOWN eller UNREACHABLE og service-objekter som har WARNING eller CRITICAL i statusvisningen, ble to løsninger vurdert. 
 
 Den ene metoden var å bruke et severity-tall som Icinga kalkulerer basert på hvor mange child-hosts og child-servicer som hører til et gitt host-objekt som er nede. Dette vises som ``network outages'' i Icinga Classic Web der hver host får et ``severity''-tall. Det eksisterte ikke noen dokumentasjon på om dette kunne hentes ut via API-et eller hvordan ``severity'' kalkuleres. 
 
-Utrekningen skjer i outages.cgi, som ble funnet etter å lese gjennom HTML-koden og lese kildekoden for outages.c \cite{dnsmichi} : 
+Utrekningen skjer i outages.cgi, som ble funnet etter å lese gjennom HTML-koden og lese kildekoden for outages.c\cite{dnsmichi}:
 Child-servicer blir delt på et forhåndsdefinert tall (service\_severity\_divisor) som brukes for å angi hvor kritisk det er i forhold til child-hosts.
 
 \begin{lstlisting}[style=example]
