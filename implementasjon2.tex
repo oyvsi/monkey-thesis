@@ -1,4 +1,4 @@
-\section{Varsling}
+\section{Varsling}\label{sec:varsling}
 Varsling er en funksjon i overvåkningsløsningen som krever en del finjusteringer og balansering av parametere over tid. Det vil være en balansegang mellom å varsle for mye og filtrere for grovkornet. Et tegn på et godt overvåkningssystem er at det er fokusert, og ikke gir overflødig informasjon\cite{buildingnagiosmonitoring}. Sendes det ofte ut ``falske varsler'', kan det føre til at alvorlige hendelser blir ignorert, selv om det sendes ut varsler. Når varsler sendes ut bør det kun være til de som trenger å få dem.
 
 \subsection{Avhengigheter}
@@ -210,7 +210,7 @@ define hostescalation {
 }
 \end{lstlisting}
 
-\subsubsection{Varslingsmelding}\label{sec:varslingsmelding}
+\subsubsection{Varslingsmelding}
 Selve varslingsmeldingene sendes ut først når host- eller service-objekter er i en hard tilstand (beskrevet i \ref{sec:sjekker}). Et eksempel er om en brannmurs hostsjekk returnerer DOWN. Da er det ikke ønskelig å varsle over SMS eller e-post, dersom det er snakk om et par ping som mistes. For eksempel kan en sjekk som har returnert DOWN kjøres to ganger til, med et intervall på ett minutt, før en hard tilstand settes, slik:
 
 \begin{lstlisting}[style=example]

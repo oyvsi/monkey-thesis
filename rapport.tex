@@ -25,6 +25,13 @@
 \geometry{a4paper, top=2.0cm, left=3.0cm, right=3.0cm, bottom=2.5cm, includehead, includefoot}
 \usepackage{sverb}
 
+\usepackage{epigraph}
+\setlength\epigraphwidth{16cm}
+\setlength\epigraphrule{0pt}
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd{\epigraph}{\@epitext{#1}}{\itshape\@epitext{#1}}{}{}
+\makeatother
 %\usepackage[compact]{titlesec}
 
 %\titlespacing{\section}{0pt}{5ex}{0ex}
