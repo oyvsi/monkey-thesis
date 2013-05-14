@@ -1,9 +1,9 @@
 \chapter{Avslutning}
 \section{Evaluering}
 \subsection{Gjennomføring av prosjektet}
-Da prosjektarbeidet ble satt i gang ble det tidlig registrert at oppgavebeskrivelsen var noe defus. Det var derfor usikkerhet rundt hvor omfattende overvåkningsløsning oppdragsgiver ønsket seg. Dersom kommunikasjonen mellom gruppen og oppdragsgiver hadde vært grundigere fra starten av, og kravspesifikasjonen hadde vært mer konkret, ville dette ført til mindre tid på oppklaring ved senere tidspunkt. Det ville også gitt et større overblikk over hva som skulle gjøres. På grunn av dette ble overvåkningsløsningen mer omfattende og tidkrevende enn først forutsett av gruppens medlemmer.
+Da prosjektarbeidet ble satt i gang ble det tidlig registrert at oppgavebeskrivelsen var noe løs/mangelfull/lite konkret. Det var derfor usikkerhet rundt hvor omfattende overvåkningsløsning oppdragsgiver ønsket seg. Dersom kommunikasjonen mellom gruppen og oppdragsgiver hadde vært grundigere fra starten av, og kravspesifikasjonen hadde vært mer konkret, ville dette ført til mindre tid på oppklaring ved senere tidspunkt. Det ville også gitt et større overblikk over hva som skulle gjøres. På grunn av dette ble overvåkningsløsningen mer omfattende og tidkrevende enn først forutsett av gruppens medlemmer.
 
-Fordi vi ønsket å flest mulig av kategoriene ulikt utstyr og tjenester IKT-avdelingen drifter i produksjon valgte vi å sitte på fylkeshuset to dager i uken. Det ble brukt mye tid på reising til og fra fylkeshuset.
+Fordi vi ønsket å dekke flest mulig av kategoriene ulikt utstyr og tjenester IKT-avdelingen drifter i produksjon, valgte vi å sitte på fylkeshuset to dager i uken. Det ble derfor brukt mye tid på reising til og fra fylkeshuset.
 
 I forhold til det Gantt skjemaet som ble satt opp i forprosjeketet har vi fulgt de iterasjonene som ble satt opp, med noen unntak. Serverrommiljø ble flyttet til etter varsling da enheten for å overvåke serverrommiljøet kom senere enn forventet. Iterasjonene Serverrommiljø og statusvindu ble utført parallelt, grunnet mindre arbeidsmengde enn forventet i serverrommiljø. Vi satt også opp sjekker for UPS-er i infrastrukturiterasjonen, som i utgangspunktet var planlagt for serverrommiljø. Noen tjenester har tatt lenger tid å implementere enn planlagt og disse har blitt jobbet med samtidig som andre iterasjoner har pågått.
 
@@ -11,10 +11,10 @@ Innenfor hver iterasjon var det satt opp faser med planlegging, implementering o
 
 Det ble også mye nødvendig dobbeltarbeid med å implementere sjekker i labmiljøet først og så i produksjon. For noen tjenester var det ikke mulig å teste i labmiljøet først.
 
-Valget av Icinga har ikke hindret oss i å få til det som var ønsket. Arkitekturen Icinga baserer seg på er en enkel kjerne hvor tilleggsfunkjsonlitet må legges til. Dette gir stor frihet, og fleksibiltet fordi en kan utnytte et stort antall tredjeparts pluginer som ekstierer, eller utvikle plugin-er etter behov. 
+Valget av Icinga har ikke hindret oss i å få til det som var ønsket. Arkitekturen Icinga baserer seg på er en enkel kjerne hvor tilleggsfunkjsonlitet må legges til. Dette gir stor frihet, og fleksibiltet fordi en kan utnytte et stort antall tredjeparts pluginer som eksisterer, eller utvikle plugin-er etter behov. 
 
-Ulemper med en slik overvåkningsløsning basert på fri programvare i forhold til en propritær løsning:
- er at den kommer uten noen support-avtale, 
+En overvåkningsløsning basert fri programvare kan ha visse ulemper. Ofte kommer slike løsninger uten support-avtaler, noe en som oftest finner i en properitær løsning. Properitære løsninger markedsføres, og selges, ofte som en komplett pakke der en får produktet sammen med support og support-avtaler. 
+
 tredjeparts kode kan variere og ikke oppfylle alle ønsker, 
 arbeidsmengde ved implementasjon av ny funksjonalitet (finne gode plugin og kvalitetssikring), 
 variernde dokumentasjon (ikke standardisert) 
@@ -51,7 +51,7 @@ Dog ble mer tid og ressurser brukt på utføringen av bacheloroppgaven enn det s
 Utføringen av bachelorprosjektet har gitt oss mye lærdom om omfattende prosjekter. Dette er relevant når vi nå skal ut i arbeidslivet. Den type erfaring hadde vi ikke tilegnet oss dersom tiden ble brukt i en forelesningsal, og dermed var dette bachelorprosjektet en godt egnet avslutning på utdanningen. 
 
 \section{Videre arbeid}
-I denne prosjektoppgaven har hovedfokus vært å bygge opp en overvåkningsløsning som tilfredsstiller kravene i oppgavebeskrivelsen. Det er tatt høyde for tilleggsfunksjonaliten fra oppgavebeskrivelsen. Hovedsaklig går dette på historisk overvåkning. Det er satt opp grafing av ytelsesdata fra Icinga, men her er det mange muligheter for forbedring og videre arbeid. Dataene kan for eksempel analyseres for å sende varsler til Icinga om trender som indikerer problemer i nær fremtid, for eksempel om bruk av lagringsplass på en filserver.
+I denne prosjektoppgaven har hovedfokus vært å bygge opp en overvåkningsløsning som tilfredsstiller kravene i oppgavebeskrivelsen. Det er tatt høyde for tilleggsfunksjonaliteten fra oppgavebeskrivelsen. Hovedsaklig går dette på historisk overvåkning. Det er satt opp grafing av ytelsesdata fra Icinga, men her er det mange muligheter for forbedring og videre arbeid. Dataene kan for eksempel analyseres for å sende varsler til Icinga om trender som indikerer problemer i nær fremtid, for eksempel om bruk av lagringsplass på en filserver.
 
 Parallelt med prosjektarbeidet har IKT-avdelingen gjennomført et prosjekt der en CMDB har blitt implementert. Integrasjon mot denne med konfigurasjon fra objektene i overvåkningen og etterhvert mulighet for å definere avhengigheter som gjenspeiler seg i overvåkningen, kan være aktuelt.
 
@@ -59,7 +59,7 @@ Icinga 2 /cite https://www.icinga.org/about/icinga2/ er under utvikling og er en
 
 Varsling er implementert slik at statusvisning blir oppdatert og det sendes ut varslingsmeldinger til en eller flere personer over e-post og SMS. Det må altså manuelt opprettes en sak i sakssystemet Fooprints. Her kan det være aktuelt å implementere en automatikk i at ønskede varsler registreres i sakssystemet, med ulike parametre som tjeneste eller host, prioritering, og ansvarlig person.
 
-Asterix og Trio er to telefonsystemer IKT-avdelingen drifter. Her vil det være relevant å overvåke køer, og annen informasjon. Å integrere dette med Icinga kan være en spennende utfordring å basere en oppgave på.
+Asterisk og Trio er to telefonsystemer IKT-avdelingen drifter. Her vil det være relevant å overvåke køer, og annen informasjon. Å integrere dette med Icinga kan være en spennende utfordring å basere en oppgave på.
 
 IKT-avdelingen ved Hedmark fylkeskommune har flere lokale IKT-avdelinger, som i hovedsak løser lokale problemer ved skoler, men som er avhengig av sentrale tjenester som trådløse nettverk og Internett-tilgang. Icinga Web muligheter for tilgangstyring på brukernivå for visning av informasjon. Et mulig prosjekt kan være å gjøre de tilpasningene som må til for å integrere de lokale avdelingene i overvåkningsløsningen. 
 

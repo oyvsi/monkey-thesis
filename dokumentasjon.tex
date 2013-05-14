@@ -130,7 +130,6 @@ Icinga Classic autentiserer mot AD gjennom modulene ldap og authnz\_ldap til Apa
 \end{lstlisting}
 
 \section{Kontakter og kontaktgrupper}
-
 For å opprette en ny kontakt i Icinga meldes brukeren inn i gruppen icinga\_kontakter (se sec:sync). Den vil trenge å ha e-postadresse og telefonnummer satt.
 
 Kontaktgrupper hentes fra OU-en icinga\_grupper der alle grupper hentes ut og opprettes i Icinga. For at en gruppe skal varsles må dette legges til på et service-objekt. For å slippe å sette opp kontakter for hver service kan en sende med argumentet ``gen\_service'', for å generere en template som kan benyttes på tjenester som sorterer under hver av kontaktgruppene som blir opprettet.
