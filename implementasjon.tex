@@ -563,9 +563,9 @@ export TNS_ADMIN=/usr/lib/oracle/11.2/client/network/admin
 
 Videre trengs også en databasedriver, som gjør det mulig for Perl å benytte klienten. For Oracle-databaser brukes ``libdbd-oracle-perl''.
 
-På en Oracle-server vil hver database ha sin egen instans \cite{oraclefaq}. Derfor vil parametere som overvåkes være forskjellig fra database til database. Etter utveksling over mail med utvikler av plugin-en (se e-post i Vedlegg \ref{app:maildb}), og samtaler med ansvarlig for databaser ved IKT-avdelingen ble det avgjort å overvåke hver enkelt database instanse, med sjekken check\_multi.
+På en Oracle-server vil hver database ha sin egen instans \cite{oraclefaq}. Derfor vil parametere som overvåkes være forskjellig fra instans til instans. Etter utveksling over mail med utvikler av plugin-en (se e-post i Vedlegg \ref{app:maildb}), og samtaler med ansvarlig for databaser ved IKT-avdelingen ble det avgjort å overvåke hver enkelt databaseinstanse, med plugin-en check\_multi.
 
-Navnene til instansene legges derfor inn som en egendefinert variabel på host-objektet for hver enkel Oracle-server. Når plugin-en kjøres sjekkes filen tnsnames.ora, som inneholder tilkoblingsinformasjon for hver enkelt instans, i dette tilfellet må variablen \_HOSTDBINSTANCES innehold ORA11. Strukturen for en enkelt instanse vises tnsnames.ora vises under:
+Navnene til instansene legges derfor inn som en egendefinert variabel på host-objektet for hver enkelt Oracle-server. Når plugin-en kjøres sjekkes filen tnsnames.ora, som inneholder tilkoblingsinformasjon for hver enkelt instanse, i dette tilfellet må variabelen \_HOSTDBINSTANCES inneholde ORA11. Strukturen for en enkelt instanse vises tnsnames.ora vises under:
 \begin{lstlisting}[style=example]
 ORA11 =
  (DESCRIPTION = 
@@ -591,7 +591,7 @@ define command {
 }
 \end{lstlisting}
 %TODO: EXPLAIN
-Da check\_multi utfører sin kommando vil ``eeval'' funksjonen sette sammen en kjede med alle instansene som skal sjekkes, for så å kjøre disse separat. Svaret returnert til Icinga vil inneholde status og ytelsesdata for alle instansene i variablen "\_HOSTDBINSTANCES". Det som blir unikt for denne sjekken er at service-objektet vil inneholde status for alle instansene.
+Da check\_multi utfører sin kommando vil ``eeval'' funksjonen sette sammen en kjede med alle instansene som skal sjekkes, for så å kjøre disse separat. Svaret returnert til Icinga vil inneholde status og ytelsesdata for alle instansene i variabelen "\_HOSTDBINSTANCES". Det som blir unikt for denne sjekken er at service-objektet vil inneholde status for alle instansene.
 \begin{lstlisting}[style=example]
 eeval [ oracle_health ] =
     my $chain = "";
