@@ -8,11 +8,11 @@ Der en har avtaler knyttet til IT-tjenestene som blir levert, kan et overvåknin
 
 Når en leverer tjenester innenfor IT er det viktig at det ikke er kunden som varsler om feilen. Da ender kundene opp som overvåkningsmekanismen. Kriteriene for varsling må være finjustert, slik at en kan reagere før systemene krasjer.
 
-I "The Practice of System and Network Administration"\cite{practiceofsystemandnetwork} sier forfatteren det godt: 
-``If you aren’t monitoring it, you aren’t managing it''
+%I "The Practice of System and Network Administration"\cite{practiceofsystemandnetwork} sier forfatteren det godt: 
+\epigraph{``If you aren’t monitoring it, you aren’t managing it.''}{--- \textup{Limoncelli, Hogan \& Chalup }, The Practice of System and Network Administration }
 
 \section{Generelt om overvåkning}\label{sec:omovervakning}
-Overvåkning deles ofte inn i kategoriene historisk overvåkning og sanntidsovervåkning\cite{practiceofsystemandnetwork}. Ved historisk overvåkning blir data samlet inn for å ha statistikk over oppetid, ytelse og bruk. Ut fra disse dataene kan en trekke konklusjoner, som for eksempel at VPN-tjenesten har hatt en oppetid på 99,9 \% over det siste året og gjennomsnittlig antall brukere har vært 100, med en økning på 10 \% den siste måneden. Dermed kan en få et overblikk over hvor mye nedetid tjenesten har hatt, og en har dokumentasjon på hvordan leveransen har vært opp mot avtalt leveranse.
+Overvåkning deles ofte inn i kategoriene historisk overvåkning og sanntidsovervåkning. Ved historisk overvåkning blir data samlet inn for å ha statistikk over oppetid, ytelse og bruk. Ut fra disse dataene kan en trekke konklusjoner, som for eksempel at VPN-tjenesten har hatt en oppetid på 99,9 \% over det siste året og gjennomsnittlig antall brukere har vært 100, med en økning på 10 \% den siste måneden. Dermed kan en få et overblikk over hvor mye nedetid tjenesten har hatt, og en har dokumentasjon på hvordan leveransen har vært opp mot avtalt leveranse.\cite{practiceofsystemandnetwork}
 
 Ved å se på stigningstallet kan en også forsøke å si noe om trenden og forventet fremtidig nivå, som kan gi en indikasjon på nødvendige skaleringstiltak. For eksempel at med dagens bruk av toner på kopimaskinen, vil den gå tom for toner innen fredag. 
 
@@ -213,7 +213,7 @@ Det finnes et sett med offisielle plugin-er til Nagios; nagios-plugins, som utgi
 \section{Sjekker}\label{sec:sjekker}
 Tilstanden for et service- eller host-objekt vil bestemmes ut i fra et returnert resultat fra en aktiv eller passiv sjekk. Forskjellen på disse to vil bli forklart i de neste delkapitlene.
 
-Dersom en aktiv eller passiv sjekk resulterer i en annen tilstand enn ``OK'', er det to typer av tilstanden, ``SOFT'' og ``HARD''. Første gang en plugin returnerer en feil vil tilstanden bli satt til ``SOFT'', i tillegg til service- eller host-tilstanden. Etter dette vil sjekken kjøres hyppigere for å finne ut om det er snakk om et forbigående problem. Etter et gitt antall ganger der plugin-en fortsatt ikke returnerer ``OK'', vil tilstanden skifte til ``HARD'' og det sendes ut varslingsmelding. Varsling er beskrevet grundigere i \ref{sec:varslingsmelding}.
+Dersom en aktiv eller passiv sjekk resulterer i en annen tilstand enn ``OK'', er det to typer av tilstanden, ``SOFT'' og ``HARD''. Første gang en plugin returnerer en feil vil tilstanden bli satt til ``SOFT'', i tillegg til service- eller host-tilstanden. Etter dette vil sjekken kjøres hyppigere for å finne ut om det er snakk om et forbigående problem. Etter et gitt antall ganger der plugin-en fortsatt ikke returnerer ``OK'', vil tilstanden skifte til ``HARD'' og det sendes ut varslingsmelding. Varsling er beskrevet grundigere i \ref{sec:varsling}.
 
 \subsubsection{Aktive sjekker}
 En aktiv sjekk er en sjekk som initieres av Icinga, der en kommando kjøres på Icinga-serveren. Dette er også kjent som en ``poll''-modell. En aktiv sjekk defineres ut i fra et command-objekt med parametere og et tidsintervall i service- og host-objekter. I command-objektet defineres en plugin som skal kjøre, og returverdien fra denne vil bestemme hvilken tilstand service- eller host-objektet har. I Figur \ref{active_checks} vises komponentene involvert i en aktiv sjekk.
@@ -356,11 +356,11 @@ define service {
 I Icinga kan en definere tre ulike typer avhengigheter, ``Parent'', ``Service dependency'', og ``Host dependency''. Disse har innvirkning på hvilke varsler som sendes ut og statusen de ulike service- og host-objektene får. Hver av disse krever egen konfigurasjon. 
 
 \section{Parent}\label{sec:parent}
-Et host-objekt kan settes som en ``parent'' til et annet host-objekt. Host-objekter som har en parent blir betegnet som en child-host eller child-service. Dette brukes primært for å unngå varsler om andre host- og service-objekter enn det som er definert som parent, om denne går ned. For eksempel hvis kjernerouteren går ned, ønskes ikke varsler for eventuelle host-objekter og tilhørende service-objekter som har kjernerouteren som parent. Disse vil ikke lenger bli sjekket og tilstanden vil bli satt til ``UNREACHABLE''. Tjenester som tilhører host-ene vil få tilstanden ``UNKNOWN''.
+Et host-objekt kan settes som en parent til et annet host-objekt. Host-objekter som har en parent blir betegnet som en child-host eller child-service. Dette brukes primært for å unngå varsler om andre host- og service-objekter enn det som er definert som parent, om denne går ned. For eksempel hvis kjernerouteren går ned, ønskes ikke varsler for eventuelle host-objekter og tilhørende service-objekter som har kjernerouteren som parent. Disse vil ikke lenger bli sjekket og tilstanden vil bli satt til ``UNREACHABLE''. Tjenester som tilhører host-ene vil få tilstanden ``UNKNOWN''.
 
 For redundante oppsett kan et host-objekt ha flere ``parents'' definert. Host-objektet vil da ha tilstanden UP så lenge minst én ``parent''-host er UP.
 
-Ut ifra parent-relasjonene mellom host-objekter i konfigurasjonsfilene genereres også et ``Status Map'' over nettverket, som vist i Figur \ref{statusmap}. Dette brukes til å visualisere alle relasjonene, og vil gjengi redundante oppsett og hvilke host-objekter som er påvirket av at ``parent''-hosten er DOWN.
+Ut ifra parent-relasjonene mellom host-objekter i konfigurasjonsfilene genereres også et ``Status Map'' over nettverket, som vist i Figur \ref{statusmap}. Dette brukes til å visualisere alle relasjonene, og vil gjengi redundante oppsett og hvilke host-objekter som er påvirket av at parent-hosten er DOWN.
 
 \begin{figure}[H]
     \centering
@@ -409,7 +409,7 @@ define servicedependency{
 En kan også erstatte host\_name og dependant\_host\_name med hostgroup og dependant\_host\_group for å lage avhengigheter på alle objekter som tilhører gruppen.
 
 \section{Host dependency}
-For å sette en avhengighet mellom to host-objekter benyttes ``host dependency''. Dette må ikke forveksles med ``parent'', som refererer til nettverksoppsettet. En host dependency vil si at et host-objekt er avhengig av et annet host-objekt. Host dependency er bare nyttig i veldig spesielle tilfeller, da det for de fleste tilfeller vil være avhengigheter til en eller flere tjenester på hosten\cite{hostandservicedep}, eller at en host er avhengig av å kjøre en sjekk igjennom en annen host.
+For å sette en avhengighet mellom to host-objekter benyttes host dependency. Dette må ikke forveksles med parent, som refererer til nettverksoppsettet. En host dependency vil si at et host-objekt er avhengig av et annet host-objekt. Host dependency er bare nyttig i veldig spesielle tilfeller, da det for de fleste tilfeller vil være avhengigheter til en eller flere tjenester på hosten\cite{hostandservicedep}, eller at en host er avhengig av å kjøre en sjekk igjennom en annen host.
 
 \section{Protokoller og agenter}
 For å kjøre sjekker på enheter må Icinga-serveren kunne kommunisere med operativsystemene på de ulike enhetene. Icinga henviser til protokollene SSH, SNMP, RPC (WMI) og agentene NRPE og NSCA (en del av pakken NSClient++) i dokumentasjonen\cite{icingaintegration,icingaadditionalsoftware}. 
@@ -447,7 +447,7 @@ iso(1). org(3). dod(6). internet(1). private(4). enterprises(1). apc(318). produ
 Denne OID-en er definert i APCs MIB-fil "PowerNet MIB". Ved å laste inn denne kan en også benytte "PowerNet-MIB::upsAdvBatteryCapacity.0".
 
 % TODO sjekke forskjellen på de forskjellige protokollene
-SNMP finnes i flere versjoner. I dag brukes for det meste versjon 2c og den nyeste, versjon 3. v2c og v1 er ikke kompatible, men i praksis støtter det meste av utstyr som støtter v3 eller v2c også v1 \cite{rfc3584}. Hovedforskjellen mellom versjon 2c og 3 er at versjon 3 krypterer dataene over nettverket, men krever da også mer konfigurasjon og vedlikehold. Sikkerhetsaspektet ved dette er diskutert videre i Kapittel \ref{chap:sikkerhet}.
+SNMP finnes i flere versjoner. I dag brukes for det meste versjon 2c og den nyeste, versjon 3. v2c og v1 er ikke kompatible, men i praksis støtter det meste av utstyr som støtter v3 eller v2c også v1 \cite{rfc3584}. Hovedforskjellen på versjon 2c og 3 er at versjon 3 krypterer dataene over nettverket, men krever da også mer konfigurasjon og vedlikehold. Sikkerhetsaspektet ved dette er diskutert videre i Kapittel \ref{chap:sikkerhet}.
 
 Det eksisterer to muligheter når enheter skal overvåkes via SNMP. Enten kan enhetene selv rapportere inn hendelelser via SNMP trap/inform, eller så kan serveren spørre enhetene via SNMP GetRequest. Valg av det første medfører at en kan gjøre varsling umiddelbart, men da må også hver enhet konfigureres med parametere for hvilke trap-meldinger som skal sendes og til hvilken IP-adresse. Icinga har ingen støtte for å motta trap-er, men en kan installere en egen daemon for dette og rapportere inn data med passive sjekker. 
 
