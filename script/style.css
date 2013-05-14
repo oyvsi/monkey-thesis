@@ -1,0 +1,52 @@
+h3                  { margin-top: 3px; margin-bottom: 3px; font-size: 1.5em }
+body                { font-family: "HelveticaNeue-Medium", Helvetica, Arial, sans-serif; margin: 5px; margin-top: 0px; min-width: 900px; }
+table,td            { border: none; padding: 2px; border-spacing: 2px; font-size: 1.0em }
+table,tr			{ text-align: center; }
+table table { border:0px;}
+table               { border: 1px solid #c6c6c6; background-color: #F0F0F0; border-collapse: separate; 
+	*border-collapse: collapse; -webkit-border-radius: 4px;
+	-moz-border-radius: 4px; border-radius: 4px; }
+	th                  { border: 1px black solid; background-color: #D8D8D8 }
+	.widetable          { width: 99%;}
+	.bold               { font-weight: bold; }
+	.status_green       { background-color: #269926; color: white; padding: 3px }
+	.status_red         { background-color: #FF4040; color: white; padding: 3px }
+	.status_yellow      { background-color: #FFDE40; color: black; padding: 3px }
+	.status_grey        { background-color: #444444; color: white; padding: 3px }
+	.status_blue		{ background-color: #50BBD7; color: white; padding: 3px }
+	.desc               { font-size: 0.8em }
+	.left               { float: left}
+	.totals             { right: 10px; padding: 5px 0px; border: 1px #848484 solid; background: #F0F0F0; width: 99%; 
+								 -webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px; 
+								 margin-top: 5px; margin-bottom: 5px; text-align: right; }
+
+.section_title { float: left; font-size: 1.2em; font-weight: bold; margin-left: 1%; }
+.known_section_title { text-align: left; display: block; font-size: 1.2em; font-weight: bold; margin-left: 1%; }
+.total_count { margin-right: 1%; }
+.known_problems { opacity:0.3; font-size: 1.0em;}
+
+#contents { margin: 15px }
+#host_section { float: left; width: 50%; margin-left: -5px; }
+#service_section { float: right; width: 50%; margin-right: -5px; }
+
+/* Top section */
+
+/* Date and clock section */
+#clock { float: right; text-align: center;}
+#clock ul { margin: 0 auto; list-style:none; }
+#clock ul li { display: inline; font-size: 2em; }
+#clock #Date { padding-bottom: 10px; }
+
+/* Server room graphics and info */
+#serverroom_climate { position: absolute; background url('img/room.png') no-repeat; }
+#temperature #data #back {  position: absolute; margin-left: 20px; font-size: 1.4em; margin-top: 18px;}
+#temperature #data #front { position: absolute; margin-left: 20px; font-size: 1.4em; margin-top: 100px; }
+#temperature #data #back span, #temperature #data #front span { padding-right: 20px; }
+
+#humidity { background: url('img/humid.png') center center no-repeat; height: 100%;}
+#humidity #data { font-size: 1.4em; position: relative; text-align: center; height: 100%; top: 60px; }
+
+#footprints { margin: 0 auto; width: 400px; }
+
+#feed { white-space: nowrap;  width: 90%; margin: 0 auto; }
+#feed #data { overflow: auto;  font-size: 1.2em;}

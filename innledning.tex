@@ -169,7 +169,7 @@ I tradisjonell systemutvikling må en definere alle parametere og rekkefølge p�
 Vi vil dele inn iterasjonene i faser, som hver består av en planleggingsfase, en implementeringsfase, og en fase for testing og evaluering. Disse vil så gjentas for hver modul som skal implementeres. Halvveis i hver iterasjon vil vi ha et møte med oppdragsgiver der vi kan presentere funksjonalitet i modulen, og få tilbakemeldinger. Det gjør at vi kan jobbe med dette i den siste halvdelen av iterasjonen. Dette vil forhåpentligvis føre til at produktet ikke sporer av fra de forventningene og behovene IKT-avdelingen har.
 
 \section{Organisering av rapporten}
-\subsection{Oversikt over kapitler}
+		\subsection{Oversikt over kapitler}
 Kapittel 1
 Kapittel 2
 Kapittel 3
@@ -177,10 +177,21 @@ Kapittel 4
 Kapittel 5
 Kapittel 6
 \subsection{Konvensjoner} %TODO
-Kildekode markeres slik:
-Fargekoder + linjenummer
+
+Kildekode vil inneholde ``syntax-highlighting'' til riktig programmeringsspråk, og linjenummer, dette markeres slik:
+\begin{lstlisting}[language=perl]
+ #!/usr/bin/perl
+ print "Hello World.\n";
+\end{lstlisting}
+
 Konfigurasjonsfiler markeres slik:
-Plain box
+\begin{lstlisting}[style=example]
+define command {
+   command_name   check_ssh
+   command_line   $USER1$/check_ssh -H $HOSTADDRESS$ -p $_HOSTSSHPORT$
+}
+\end{lstlisting}
+
 Der kun utdrag av konfigurasjon eller kildekode er benyttet bruker ''...'' for å markere hvor det er utelatt.
 
 Objekttyper omtegnes med navn f.eks ``host'', ``service'', ``timeperiod''. ``Tjeneste'' brukes om applikasjoner på en server som benyttes av andre enheter og/eller brukere. 
