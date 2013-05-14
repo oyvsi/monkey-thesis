@@ -70,7 +70,7 @@ En annen utfordring var å vite hvor kraftig hardware serveren trengte. Her ble 
 
 Debian 6 ble valgt som operativsystem på Icinga-serveren etter ønske fra oppdragsgiver. 
 \subsection{Installasjon}
-Ved starten av iterasjonen ``kjerneprogramvare'' var den nyeste versjonen av Icinga 1.8.4. I pakkebrønnen for debian-stable fantes bare versjon 1.0.2 av Icinga, i backports lå 1.7.1. Icinga opprettholder en egen pakkebrønn - ``The Debian Monitoring Project''\cite{debmon} (debmon). Fra denne kunne versjon 1.8.4 installeres. I samråd med teknisk kontakt ved IKT-avdelingen ble det bestemt å bruke versjon 1.8.4 fra debmon.
+Ved starten av iterasjonen ``kjerneprogramvare'' var den nyeste versjonen av Icinga 1.8.4. I pakkebrønnen for debian-stable fantes bare versjon 1.0.2 av Icinga, i backports lå 1.7.1. Icinga opprettholder en egen pakkebrønn - ``The Debian Monitoring Project'' (debmon\cite{debmon}). Fra denne kunne versjon 1.8.4 installeres. I samråd med teknisk kontakt ved IKT-avdelingen ble det bestemt å bruke versjon 1.8.4 fra debmon.
 
 \subsubsection{Icinga Webgrensesnitt}
 Webgrensesnittene Icinga Classic og Icinga Web ble installert med pakkene ``icinga-classic'' og ``icinga-web 1.8.1'', via pakkebrønnen debmon. 
@@ -141,7 +141,7 @@ Dette var uoversiktlig og en mer oppdelt konfigurasjon var ønskelig, som også 
     child { node {services} };
 \end{tikzpicture}
 
-Det ble testet ut et par verktøy for å administrere konfigurasjonsfilene, NConf \cite{nconf} og NagiosQL \cite{nagiosql} i et webgrensesnitt. Disse ble valgt bort til fordel for manuell konfigurering, da oppdeling av konfigurasjonen ikke var støttet, og de kunne ikke kombineres med manuell konfigurering. I samråd med oppdragsgiver ble det avgjort at manuell konfigurasjon oppfyller kravet om at det skal være enkelt å legge til nye enheter for overvåking.
+Det ble testet ut et par verktøy for å administrere konfigurasjonsfilene, NConf\cite{nconf} og NagiosQL\cite{nagiosql} i et webgrensesnitt. Disse ble valgt bort til fordel for manuell konfigurering, da oppdeling av konfigurasjonen ikke var støttet, og de kunne ikke kombineres med manuell konfigurering. I samråd med oppdragsgiver ble det avgjort at manuell konfigurasjon oppfyller kravet om at det skal være enkelt å legge til nye enheter for overvåking.
 
 \subsection{Bruk av hostgroup}
 Som nevnt i \ref{sec:objekter} knyttes et service-objekt til et host-objekt og et command-objekt, for at det skal kjøres en sjekk. For å slippe å skrive et service-objekt for hvert nytt host-objekt, benyttes gruppering av host-objekter i en hostgroup. Under vises et eksempel på hvordan dette er satt opp for MySQL-servere. 
@@ -150,7 +150,7 @@ Først defineres en hostgroup for alle SQL serverne. Dette gjøres for å gruppe
 \begin{lstlisting}[style=example]
 define hostgroup {
     hostgroup_name		sql_servers
-    alias 				SQL Servers
+    alias         		SQL Servers
     hostgroup_members	mysql_servers, mssql_servers, oracle_servers
 }
 \end{lstlisting}
@@ -158,7 +158,7 @@ Deretter defineres en hostgroup for alle MySQL-servere.
 \begin{lstlisting}[style=example]
 define hostgroup {
     hostgroup_name 		mysql_servers
-    alias 				MySQL Servers
+    alias         		MySQL Servers
 }
 \end{lstlisting}
 For å legge til en host i denne gruppen kan host-objektet være definert på følgende måte.
@@ -167,7 +167,7 @@ define host {
     use				generic_linux_host
     address			10.60.0.21
     host_name		HiG2
-    alias			HiG2
+    alias    		HiG2
     hostgroups		debian_servers, mysql_servers
 }
 \end{lstlisting}
@@ -658,7 +658,7 @@ Den enkleste måten å hente ut statistikk for et MySQL Cluster, er å benytte a
 
 Antall noder tilkoblet overvåkes med pluginen check\_ndbd\cite{ndbnode}. Her ble det gjort en endring i koden slik at serveren som ndb\_adm kobler seg til kan spesifiseres som en parameter.
 
-For minnebruk ble det skrevet en egen plugin (Vedlegg \ref{check_ndb_mem}), da ingen eksisterende plugin ble funnet som tillater å spesifisere hvilke noder som skal sjekkes. ID-ene til nodene som skal sjekkes ble satt opp som en egendefinert variabel i host-konfigurasjonen. Denne sendes til pluginen via service- og kommando-objektene. Konfigurasjonen for dette er vist under.
+For minnebruk ble det skrevet en egen plugin (Vedlegg \ref{check_ndb_mem.pl}), da ingen eksisterende plugin ble funnet som tillater å spesifisere hvilke noder som skal sjekkes. ID-ene til nodene som skal sjekkes ble satt opp som en egendefinert variabel i host-konfigurasjonen. Denne sendes til pluginen via service- og kommando-objektene. Konfigurasjonen for dette er vist under.
 
 \begin{lstlisting}[style=example]
 define host {
