@@ -717,13 +717,12 @@ På switchene overvåkes forskjellige sensorer avhengig av hvilke som finnes. Al
 
 Det er laget et generisk oppsett som overvåker temperatur, PSU og viftestatus. Hvilken OiD denne informasjonen ligger under varierer fra leverandør til leverandør. For noen produsenter kan denne også være lik. 
 
-Dersom en vifte eller PSU rapporteres som defekt vil det rapporteres som en CRITICAL-status i Icinga. For temperatur er grenseverdiene satt til xx for WARNING og xx for CRITICAL.
+Dersom en vifte eller PSU rapporteres som defekt vil det rapporteres som en CRITICAL-status i Icinga. For temperatur blir grenseverdiene hentet ut fra SNMP-objektet ``ciscoEnvMonTemperatureStatusDescr'', der enheten selv rapporterer om temperaturtilstanden er normal, warning eller critical\cite{cisco_env_mib}.
 
 Switchene IKT-Avdelingen bruker er forskjellige modeller fra leverandørne Cisco, Dell og HP. Disse overvåkes med plugin-ene ``check\_nwc\_health'' \cite{checknwc} for Cisco og HP, og check\_snmp\_powerconnect for Dell \cite{checkpowerconnect}.
 
 \subsection{Routere og brannmurer}
 IKT-avdelingen benytter Cisco ASA- og Cisco PIX-routere for routing av trafikk mellom forskjellige nettverk. I tillegg utfører de oppgaver som pakkefiltrering, NAT og IPsec-tunnelering.
-% TODO: Sjekk at dette er riktig mot docs
 
 \subsubsection{Ressurser}
 Plugin-en check\_nwc\_health brukes for å overvåke sensorer, CPU-bruk og minneforbruk.
