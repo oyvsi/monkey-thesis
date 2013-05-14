@@ -357,7 +357,11 @@ OK memory within bounds.|'physical memory %'=16%;80;90 'physical memory'=1G;4;5;
 \end{lstlisting}
 
 For Linux benyttes plugin-en check\_mem \cite{checklinuxmem}, da det ikke følger med noen plugin for å sjekke minneforbruk i nagios-plugins.
-
+\begin{lstlisting}[style=example]
+   check_command        check_nrpe!check_mem!80 90
+# Check that percent used is within tresholds. Used is calculated from total - free - cached - buffers 
+command[check_mem]=/usr/lib/nagios/plugins/libexec/check_mem.pl -w $ARG1$ -c $ARG2$
+\end{lstlisting}
 \subsection{Disk}
 En full harddisk kan skape problemer for applikasjoner som lagrer data og logger fra systemet kan stoppe. Ved høyt minneforbruk og bruk av virtuelt minne i kombinasjon med en full disk, vil ikke harddisken kunne utnyttes som swap, og applikasjoner kan stoppe å fungere.
 
@@ -368,11 +372,11 @@ For Windows-servere benyttes ``CheckDisk'' fra NSClient++. For å sjekke flere d
 ./check_nrpe -u -H 10.60.0.22 -p 5666 -c CheckDriveSize -a MaxWarnUsed=94% MaxCritUsed=96% CheckAll
 \end{lstlisting}
 
-For Linux-servere benyttes sjekken "Check\_disk" fra nagios-plugins.
+For Linux-servere benyttes sjekken "Check\_disk" fra nagios-plugins. Her spesifiseres baner som er montert i filsystemet.
 
 Check\_Disk
 \begin{lstlisting}[style=example]
-./check_disk -w 8% -c 4% -e
+./check_disk -w 8% -c 4% --mountpoint --all
 \end{lstlisting}
 Svar: 
 \begin{lstlisting}[style=example]
@@ -396,7 +400,7 @@ Linux-plugin fra nagios-plugins: check\_procs. Her spesifiseres også hvor mange
 define service {
     use            	        generic_service
     hostgroup_name       	linux_servers
-    service_description     NRPE Check my process
+    service_description     	NRPE Check my process
     check_command        	check_nrpe!check_process!sshd 1:40
 }
 \end{lstlisting}
@@ -425,9 +429,12 @@ Ytelsesdata har blitt samlet inn over 30 dager, for å sette grenseverdier for n
     \caption{Ytelsesdata i sekunder ved LDAP-autentisering}
     \label{ldapauth-inv}
 \end{figure}
+\begin{lstlisting} [style=example]
+ check_command check_ldap_status!0.05!0.1!10
+        command_line    $USER1$/check_ldap -H $HOSTADDRESS$ -b $USER6$ -P $USER4$ -w $ARG1 -c $ARG2 -t $ARG
+\end{lstlisting}
 
 \subsubsection*{DNS}
-
 DNS overvåkes med plugin-en ``check\_dns''. Denne, på samme måte som check\_ldap kobler seg til selve tjenesten. Dette fungerer ved å gjøre et DNS-oppslag på en spesifikk IP-adresse, og verifisere dette mot et satt hostname. Dersom dette stemmer vil plugin-en returnere OK, sammen med ytelses-data på hvor lang tid oppslaget tok.
 
 Figur \ref{dns-inv} viser data samlet inn fra to DNS servere over 30 dager. Disse dataene viser forventet tid for et oppslag, og ut ifra dette ble grenseverdien for WARNING satt til 0.01 sek og CRITICAL til 0.02 sek.
@@ -439,8 +446,18 @@ Figur \ref{dns-inv} viser data samlet inn fra to DNS servere over 30 dager. Diss
     \label{dns-inv}
 \end{figure}
 
+\begin{lstlisting} [style=example]
+check_command check_dns_status!$HOSTNAME$!0.1!0.2!10
+   command_line   $USER1$/check_dns -s $HOSTADDRESS$ -H $ARG1$ -w $ARG2$ -c $ARG3$ -t $ARG4$ -A
+\end{lstlisting}
+
 \subsubsection*{DHCP}
 Overvåkning av en DHCP-tjeneste ble testet i labmiljøet med pluginen ``check\_dhcp''. Denne sender en DHCPDISCOVER-pakke til DHCP-serveren. Hvis DHCP-tjenesten fungerer får pluginen en DHCPOFFER-pakke som respons. Dersom denne inneholder en korrekt lease, returnerer pluginen OK til Icinga sammen med tiden det tok.
+
+\begin{lstlisting} [style=example]
+#        check_command           check_nrpe!CheckServiceState!DHCPServer=started ShowAll
+    command_line    $USER1$/check_dhcp -s 10.60.0.22
+\end{lstlisting}
 
 \subsection{Webservere}\label{webservere}
 IKT-avdelingen drifter mange webservere som benyttes av, eller gir informasjon til brukere. Pluginen ``check\_http'' \cite{checkhttp} fra nagios-plugins benyttes for å sjekke at tilkoblingen til webserveren svarer på henvendelsen. Deler av forventet innhold sjekkes for å se at websiden ikke har blitt endret av uvedkommende.
