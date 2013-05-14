@@ -206,7 +206,7 @@ define command {
     command_line	/bin/mv /usr/local/icinga/var/perfdata/service-perfdata /usr/local/icinga/var/perfdata/logs/service-perfdata.$TIMET$
 }
 \end{lstlisting}
- Icinga.cfg må konfigureres til å benytte dette:
+Icinga.cfg må konfigureres til å benytte dette:
 
 \begin{lstlisting}[style=example]
 process_performance_data=1
@@ -219,6 +219,7 @@ For å transformere ytelsesdataene til riktig format for Graphite benyttes ``Met
 
 Det ble også testet å modifisere scriptet til å lagre outputen til service-sjekkene direkte i en MySQL-database, som vist i vedlegg /ref metricinga diff. Dette ble gjort for å oppfylle kravet fra oppgavebeskrivelsen om at alle henvendelser skal lagres i database. I samråd med oppdragsgiver ble det avgjort å gå bort i fra dette fordi det resulterte i et høyt antall nye rader over kort tid. Som et alternativ til dette kan en ta inn all data til Graphite, men aggregere det etter en viss tid. For eksempel lagre dagsgjennomsnittet for data som er eldre enn seks måneder. Dataene kan da eksporteres fra Graphite til videre bruk.
 
+Metricinga kommer ikke med init-script for Debian. For at prosessen skal kunne startes automatisk med serveren ble dette skrevet av gruppen (Vedlegg /ref metricinga-init).
 \section{Overvåkning av Windows-servere}
 For overvåkning av Windows-servere brukes programmet NSClient++\cite{nsclientmain}. Programmet brukes for å kommunisere med ulike agenter over ulike protokoller på en ekstern server. I dette prosjektet brukes NSClient++ til å hente ut informasjon via NRPE-agenten og å kjøre WMI-spørringer mot en Windows-server. 
 
