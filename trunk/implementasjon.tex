@@ -542,7 +542,7 @@ Tre forskjellige databasemotorer brukes. Disse er MySQL, MSSQL og Oracle DB. Hve
 Noen av sjekkene er spesifikke for hver databasemotor, og er valgt for å få en oversikt over trege spørringer:
 \begin{itemize*}
 \item MySQL: Slow queries (antall trege spørringer SQL serveren utfører i et gitt tidsintervall).
-\item MSSQL: Lazy writes ()
+\item MSSQL: Lazy writes (et høyt tall indikerer at mange minne-page-er må skrives til disk. Dette kan indikere mangel på tilgjengelig minne.)
 \item Oracle: Free table space (plass ledig for tabellene).
 \item Oracle: Switch interval (overvåker load).
 \end{itemize*}
