@@ -515,7 +515,6 @@ check_cluster --service -l "Check HTTP"  -d $SERVICESTATEID:localhost:Check HTTP
 
 \section{Databaser}
 Databaser brukes i mange av applikasjonene IKT-avdelingen drifter for brukerne. På databaseserverne samles dataen fra disse applikasjonene på et sted. 
-
 Tre forskjellige databasemotorer brukes. Disse er MySQL, MSSQL og Oracle DB. Hver av disse har ulik arkitektur og virkemåte \cite{databasecomparison}, og derfor blir ikke de samme parameterne overvåket på alle. Felles for alle er:
 \begin{itemize*}
 	\item Connection time (tid det tar å koble til SQL serveren).
@@ -564,8 +563,9 @@ export TNS_ADMIN=/usr/lib/oracle/11.2/client/network/admin
 
 Videre trengs også en databasedriver, som gjør det mulig for Perl å benytte klienten. For Oracle-databaser brukes ``libdbd-oracle-perl''.
 
-På en Oracle-server vil hver database ha sin egen instans \cite{oraclefaq}. Derfor vil parametere som overvåkes være forskjellig fra database til database. Navnene til instansene legges derfor inn som en egendefinert variabel på host-objektet for hver enkel Oracle-server. Når plugin-en kjøres sjekkes filen tnsnames.ora, som inneholder tilkoblingsinformasjon for hver enkelt instans. Strukturen på tnsnames.ora vises under:
+På en Oracle-server vil hver database ha sin egen instans \cite{oraclefaq}. Derfor vil parametere som overvåkes være forskjellig fra database til database. Etter utveksling over mail med utvikler av plugin-en (se e-post i Vedlegg \ref{app:maildb}), og samtaler med ansvarlig for databaser ved IKT-avdelingen ble det avgjort å overvåke hver enkelt database instanse, med sjekken check\_multi.
 
+Navnene til instansene legges derfor inn som en egendefinert variabel på host-objektet for hver enkel Oracle-server. Når plugin-en kjøres sjekkes filen tnsnames.ora, som inneholder tilkoblingsinformasjon for hver enkelt instans, i dette tilfellet må variablen \_HOSTDBINSTANCES innehold ORA11. Strukturen for en enkelt instanse vises tnsnames.ora vises under:
 \begin{lstlisting}[style=example]
 ORA11 =
  (DESCRIPTION = 
@@ -579,7 +579,6 @@ ORA11 =
 \end{lstlisting}
 
 Check\_multi brukes for å samle en Oracle-servers instanser under samme service-objekt. For eksempel når cache hit-sjekken kjøres, vil check\_multi utføre sjekken for alle instansene. I webgrensesnittet vil svarene fra instansene samles under ``check cache hit'' for hvert enkelt host-objekt. Dette gjør det mer oversiktlig og dynamisk enn en sjekk for hver instans. Under vises konfigurasjonen for dette.
-
 \begin{lstlisting}[style=example]
 define service {
 ...
@@ -592,6 +591,7 @@ define command {
 }
 \end{lstlisting}
 %TODO: EXPLAIN
+Da check\_multi utfører sin kommando vil ``eeval'' funksjonen sette sammen en kjede med alle instansene som skal sjekkes, for så å kjøre disse separat. Svaret returnert til Icinga vil inneholde status og ytelsesdata for alle instansene i variablen "\_HOSTDBINSTANCES". Det som blir unikt for denne sjekken er at service-objektet vil inneholde status for alle instansene.
 \begin{lstlisting}[style=example]
 eeval [ oracle_health ] =
     my $chain = "";
