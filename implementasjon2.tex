@@ -1,5 +1,5 @@
 \section{Varsling}
-Varsling er en funksjon i overvåkningsløsningen som krever en del finjusteringer og balansering av parametere over tid. Det vil være en balansegang mellom å varsle for mye og filtrere for grovkornet. Et tegn på et godt overvåkningssystem er at det er fokusert, og ikke gir overflødig informasjon \cite{buildingnagiosmonitoring}. Sendes det ofte ut "falske varsler", kan det føre til at alvorlige hendelser blir ignorert, selv om det sendes ut varsler. Når varsler sendes ut bør det kun være til de som trenger å få dem.
+Varsling er en funksjon i overvåkningsløsningen som krever en del finjusteringer og balansering av parametere over tid. Det vil være en balansegang mellom å varsle for mye og filtrere for grovkornet. Et tegn på et godt overvåkningssystem er at det er fokusert, og ikke gir overflødig informasjon\cite{buildingnagiosmonitoring}. Sendes det ofte ut ``falske varsler'', kan det føre til at alvorlige hendelser blir ignorert, selv om det sendes ut varsler. Når varsler sendes ut bør det kun være til de som trenger å få dem.
 
 \subsection{Avhengigheter}
 For å holde antallet varsler som sendes ut nede, benyttes avhengigheter som beskrevet i \ref{sec:servicedependency}  og \ref{sec:parent}. Som tidligere nevnt gjøres dette for å ikke få mer enn en melding ved følgefeil. ``Parent'' har blitt benyttet til å reflektere det fysiske nettverksoppsettet. Service dependency-objekter er for eksempel satt på tjenester som blir sjekket via NRPE. Disse vil være avhengig av at NRPE-daemon-en på gitt host kan motta henvendelser.
@@ -32,7 +32,7 @@ Når en feil oppstår vil Icinga vurdere ulike konfigurasjonsopsjoner før det e
 \end{table}
 
 \subsection{Flapping}
-I Icinga defineres ``flapping'' som når et host- eller service-objekt skifter tilstand for ofte, noe som resulterer i mange problem- og recoveryvarsler. \cite{icingaflapping} Dersom detektering av flapping er konfigurert for objektet, vil Icinga stoppe varsler for det dersom prosentandelen flapping overstiger en konfigurert grense. Objektet regnes som å ha startet å flappe når andelen for første gang overstiger en ``høy''-grense, og som å stoppe å flappe når andelen igjen er under en ``lav''-grense.
+I Icinga defineres ``flapping'' som når et host- eller service-objekt skifter tilstand for ofte, noe som resulterer i mange problem- og recoveryvarsler\cite{icingaflapping}. Dersom detektering av flapping er konfigurert for objektet, vil Icinga stoppe varsler for det dersom prosentandelen flapping overstiger en konfigurert grense. Objektet regnes som å ha startet å flappe når andelen for første gang overstiger en ``høy''-grense, og som å stoppe å flappe når andelen igjen er under en ``lav''-grense.
 
 Denne prosentandelen er kalkulert ved at
 \begin{enumerate*}
@@ -54,7 +54,7 @@ define host {
 \end{lstlisting}
 
 \subsection{Oppsett av kontakter og kontaktgrupper}\label{sec:sync}
-IKT-avdelingen ønsket å kunne styre kontaktinformasjon og kontaktgrupper fra Active Directory. Det ble bestemt at ansvarsforhold skulle gjenspeiles i kontaktgrupper /ref vedlegg møte, for eksempel ``ts\_ansvarlig'' eller ``printer\_ansvarlig''. Icinga støtter ikke integrasjon mot LDAP i konfigurasjonsfilene, men siden disse er rene tekstfiler kan de enkelt opprettes og endres med script. Gruppen var i utgangspunktet skeptiske til å la et script gjøre endringer i konfigurasjonsfiler, da det ble fryktet at dette kunne medføre en konfigurasjon med feil. Konsekvensen av dette ville være at Icinga ikke ville kunne lese ny konfigurasjon.
+IKT-avdelingen ønsket å kunne styre kontaktinformasjon og kontaktgrupper fra Active Directory. Det ble bestemt at ansvarsforhold skulle gjenspeiles i kontaktgrupper i møte med IKT-avdelingen(Vedlegg \ref{app:moteref}), for eksempel ``ts\_ansvarlig'' eller ``printer\_ansvarlig''. Icinga støtter ikke integrasjon mot LDAP i konfigurasjonsfilene, men siden disse er rene tekstfiler kan de enkelt opprettes og endres med script. Gruppen var i utgangspunktet skeptiske til å la et script gjøre endringer i konfigurasjonsfiler, da det ble fryktet at dette kunne medføre en konfigurasjon med feil. Konsekvensen av dette ville være at Icinga ikke ville kunne lese ny konfigurasjon.
 
 Icinga har en funksjon som gjør at en kan teste konfigurasjonen etter feil med en opsjon på binærfilen (--verify-config). Icinga vil da ta utgangspunkt i rot-konfigurasjonsfilen (icinga.cfg) for så å sjekke alle konfigurasjonsfilene. Dette gjør at alle konfigurasjonsfilene må sjekkes, og ikke bare de som lages for kontakter. Dermed vil ikke kontakter og kontaktgrupper bli oppdatert dersom det allerede finnes en feil i konfigurasjonen. 
 
