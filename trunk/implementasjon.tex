@@ -266,7 +266,7 @@ Distribuering er ikke benyttet fordi IKT-avdelingen ønsker å gjøre installasj
  
 For annen infrastruktur brukes for det meste SNMP for å hente ut informasjon. Dette konfigureres på hver enkelt enhet, og krever ikke noe ekstra programvare installert. I noen tilfeller brukes egne API-er for å hente ut informasjon, som for eksempel for VMware. Her må Icinga serveren ha tilgang til å bruke API-et, som konfigureres på Virtual Center-serveren.
 
-\section{Lokale ressurser}
+\section{Lokale ressurser}\label{sec:lokaleressurser}
 For både Linux- og Windows-servere er det satt opp noen grunnsjekker som skal kjøres på alle servere. Dette er CPU-last, harddiskplass og minnebruk. Hver av sjekkene er definert i et service-objekt der hostgroup-ene er satt til ``windows\_servers'' og ``linux\_servers''. 
 
 For alle disse sjekkene er det mulig å angi grenseverdier både som prosentandel og absolutte tall. Det kan også sjekkes mot både andel ledig og andel brukt. 
@@ -788,100 +788,147 @@ Det er derfor anbefalt å bruke 64 bit-variablene ifHCOutOctets og ifHCInOctets 
 \end{table}
 Plugin-en det er tatt utgangspunkt i for å hente ut båndbreddebruk heter check\_iftraffic64\cite{checkciscoif}. Denne er noe omskrevet for å kunne sende inn absolutte verdier som grenseverdier for varsling. I generic\_firewall er det satt opp to egendefinerte variabler ``WANWARN'' og ``WANCRIT'', som setter standard grenseverdier for alle brannmurer. For brannmurer der det er normalt med høyere båndbreddebruk, er disse variablene overstyrt i konfigurasjonen for host-objektet.
 
-%TODO: Cluster shit
-\subsection{VMware og Citrix Xen}
-Ved IKT-avdelingen er det både et Citrix Xen-miljø og et VMware-miljø. Disse består av servere som kjører hypervisorene ESX 5.1 og Xen 6.1. Begge er av typen 1 (direkte på hardware) og står for administering og kjøring av virtuelle maskiner, som er operativsystemer med applikasjoner. Hypervisoren introduserer altså et nytt lag mellom hardware og applikasjonene brukeren benytter. Host-ene har ansvaret for at de virtuelle maskinene får tilstrekkelig med ressurser for å kunne kjøre installerte applikasjoner. 
 
-For overvåkning av virtuelle maskiner brukes NRPE, det overvåkes da som en ``egen'' server. Overvåkning av servere som kjører hypervisor-ene vil bestå av å sjekke om ressurser strekker til etterspørselen fra de virtuelle maskinene. En eller flere virtuelle maskiner kan kreve mer ressurser enn en server har fysisk. Dette stjeler både CPU-tid, minne og I/O for å håndtere, noe som vil gå utover gjeste-operativsystemer og applikasjoners responstid. Videre vil overvåkning av hvor mye ressurser som brukes gi muligheten for å kalkulere når eventuelle skaleringstiltak må innføres \cite{vmwaremonitoring}.
+\subsection{VMware og Citrix Xen}
+Ved IKT-avdelingen benyttes virtualserings-teknologier levert av VMware og Citrix. VMware vSphere 5.1 og Citrix XenServer 6.1 benyttes som virtualserings-platformer, og har funksjonalitet som kreves for en virtualisert infrastruktur. På de fysiske serverene kjører hypervisorene VMware ESX 5.1 og Xen 6.1. Hypervisorene står for kjøring av virtuelle maskiner og virtualiserer ressurser som cpu, minne, disk, og nettverkskomponenter. De virtuelle maskinene kjører operativsystemene og applikasjoner brukere benytter seg av.  
+
+Innenfor hver platform er clustering sentralt, og åpner opp for funksjonlaitet som lastbalansering av fysiske ressurser for virtuelle maskiner og migrering av virtuelle maskiner uten noe avbrudd av normal operasjon.
+
+Overvåkning av en virtualisert infrastruktur vil bestå av å overvåke de ulike hardware- og softwarekomponentene som gjør virtualiseringen og fleksibilitet mulig: 
+\begin{itemize*}
+	\item Clustere
+	\item Fysiske servere
+	\item Virtuelle maskiner
+	\item Lagring 
+	\item Nettverk 
+\end{itemize*}
+
+For overvåkning av virtuelle maskiner innenfor begge plaformene brukes NRPE, det overvåkes da som en ``egen'' server. Ressurser som overvåkes er gjennomgått i \ref{sec:lokaleressurser}.
 
 \subsubsection{VMware}
-\paragraph{Plugin}
-Plugin-en ``check\_vmware\_api.pl'' , som er utviklet av fri programvare firmaet op5 \cite{op5}, er brukt for å hente ut informasjonen fra VMware vCenter. Denne pluginen bruker et SDK-bibliotek i Perl \cite{vmwareperl} for å utføre API-kall til Virtual Center. Autentisering skjer ved å sende med brukernavn og passord for en brukerkonto, som er opprettet i Virtual Center-serveren med read-rettigheter. For å utveksle informasjon blir SOAP-protokollen benyttet \cite{wiki:soap} via HTTPS \cite{ciscovirtual}.
+I VMware vSphere brukes begrepene ``Datacenter'', ``Cluster'', ``Host'', og ``Virtual Machines'', og hver av disse har informasjon tilgjengelig for uthenting. 
 
-VMware Virtual Center bruker fire intervaller for lagring av historisk data \cite{vmwareperf}. Dette er gjennomsnittet for:
+\paragraph{Plugin}
+Plugin-en ``check\_vmware\_api.pl'' , som er utviklet av fri programvare firmaet op5 \cite{op5}, er brukt for å hente ut informasjonen fra VMware Virtual Center. Denne plugin-en bruker et SDK-bibliotek i Perl \cite{vmwareperl} for å utføre API-kall til Virtual Center. Autentisering skjer ved å sende med brukernavn og passord for en brukerkonto, som er opprettet i Virtual Center-serveren med read-rettigheter. For å utveksle informasjon blir SOAP-protokollen benyttet \cite{wiki:soap} via HTTPS \cite{ciscovirtual}.
+
+check\_vmware\_api.pl har mulighet for å hente ut informasjon fra komponenten Datacenter, Cluster, Host, og VM. For hver er informasjon som cpu, minne, I/O, nettverkstrafikk, lagring, og helsetilstand tilgjengelig.
+
+Data blir hentet ut i fra VMware Virtual Center, og her brukes fire intervaller for lagring av historisk data \cite{vmwareperf}. Dette er gjennomsnittet for:
 \begin{enumerate*}
-        \item hvert 5. minutt over en dag
-        \item hvert 30. minutt i en uke
-        \item hver 2. time i en måned
-        \item en dag over ett år
+        \item hvert 5. minutt for en dag
+        \item hvert 30. minutt den siste uken
+        \item hver 2. time den siste måneden
+        \item hver dag det siste året
 \end{enumerate*}
 
-Pluginen i CLI:
+Eksempel på bruk av check\_vmware\_api.pl for å hente ut cpu-bruk for en Host
 \begin{lstlisting}[style=example]
-./check_vmware_api.pl -D <Virtual Center IP-adresse> -u <brukernavn> -p <passord> | -H <host_navn> -N <vm_navn> -C <cluster_navn>  -l <hovedkommando> -s <subkommando> -i <interval> -T <timeshift>
+./check_vmware_api.pl -D vc.example.org -u user1 -p password123 -H Example-ESX01 -l cpu -s usage -i 300 -T 600
 \end{lstlisting}
 
-For å overvåke flere parametere kan en legge til kode i plugin-en, så lenge ønskede parametere er tilgjengelig via API-et. Navnet på funksjoner følger standarden:
 
-<host eller vm eller cluster>\_<hovedkommando>\_info
+Med opsjonen ``-i'' spesifiseres intervallet en gjennomsnittsverdi skal returneres fra (første intervall i dette tilfellet). Dette gjennomsnittet baserer seg på datapunkter samlet inn for hvert 20. sekund av Virtual Center. Opsjonen ``-T''  er ``timeshift'' i sekunder, som kan brukes for å spesifisere tidsintervallet gjennmomsnittsverdier skal returneres fra.. 
 
-For å legge til en ny CPU-parameter finner en ``host\_cpu\_info''  funksjonen og legger til en elseif på subkommandoen som brukes for å referere til et gitt parameter i VMware API-et. En kan følge oppsettet på de funksjonene som allerede er definert. Dette krever noe kunnskaper om språket Perl.
+For de parametere som blir overvåket blir tilleggsopsjonene ``-i 300'' og ``-T 600'' sendt med. Etter gjennomgang av output fra pluginen ble det observert at dette var innstillingene som ga oss gjennomsnittet for det siste 5 minutters-intervallet. Ved bruk av for eksempel ``-T 60'', som vil si at vi spør 1 minutt tilbake i tid, ble det ikke alltid returnert et resultat siden det ikke har blitt lagret et gjennomsnitt for et 5. minutters intervall i denne perioden. 
 
-For alle parametere som blir hentet ut blir tilleggsopsjonene ``-i 300'' og ``-T 600'' sendt med. Som nevnt over lagres data i ulike intervall, og opsjonen ``-i 300''  vil si at det hentes ut data med intervall-ID 300 og vi får da gjennomsnittet for 5 minutter med datapunkt for hvert 20 sekund (standard innhenting i Virtual Center). Opsjonen ``-T''  er timeshift i sekunder, som vil si at det returneres data fra tiden sjekken blir kjørt og 600 sekunder tilbake i tid.
+Andre opsjoner som ble testet før kombinasjonen ``-i 300'' og ``-T 600'' var``-i 300'', men her kom det 288 resultater tilbake. Dette er antall datapunkt som blir generert i 5 minutters-intervallet for en dag. \cite{vmwareperfintervals}
 
-Etter analyse av output fra pluginen ble det observert at dette var innstillingene som ga oss data om det siste 5 minutters-intervallet. Dette var ønskelig fordi pluginen varsler mot det siste intervallet, så de andre intervallene var overflødige. Andre opsjoner som ble testet var bare ``-i 300'', men her kom det 288 resultater tilbake. Dette er antall datapunkt som blir generert i 5 minutters-intervallet for en dag. \cite{vmwareperfintervals}
 
 \paragraph{Ressurser}
-To counters er benyttet i overvåkningen, og vil være eksempler på hvordan en setter opp sjekker. Disse kan brukes som referanse for utvidelse av overvåkningen av VMware-miljøet.
-
-Ressurser som nå overvåkes \cite{ciscovirtual} \cite{vmwaremonitoring}:
+To counters ble satt opp for overvåkning, og vil være eksempler på hvordan en setter opp sjekker. Disse kan brukes som referanse for utvidelse av overvåkningen av VMware-miljøet.\cite{ciscovirtual} \cite{vmwaremonitoring}:
 
 \subsubsection*{CPU}
 Grenseverdier her er satt til samme nivå som tilsvarende alarm i Virtual Center, og gir indikasjon på at det kan være en eller flere virtuelle maskiner som krever for mye CPU-kraft i forhold til hva hosten har tilgjengelig. Det kan også være et for stort antall virtuelle maskiner på hosten \cite{vmwarecounters}.
 
-Counter usage.average (\%) - ``Actively used CPU of the host, as a percentage of the total available CPU. Active CPU is approximately equal to the ratio of the used CPU to the available CPU. available CPU = \# of physical CPUs x clock rate''
+Teller som blir sjekket er usage.average (\%). Dette er aktiv bruk av CPU i prosent iforhold til total tilgjengelig CPU-kraft. Kalkuleringen her er antall CPU-er ganget med klokkefrekvens.
 
-Grenseverdier (\%): WARNING 75 CRITICAL 90
+Grenseverdier (\%): WARNING 75, CRITICAL 90
 
 \subsubsection*{Minne}
 Grenseverdier for minne er satt til samme nivå som tilsvarende alarmer i Virtual Center, og vil gi indikasjon på om virtuelle maskiner krever mer minne enn hosten har tilgjengelig. Når det er igjen 6 \% minne (tilgjengelig) vil hosten iverksette enten ballooning og eventuelt swapping. Ballooning vil si at en host vil kreve tilbake minne fra virtuelle maskiner uten å hensyn til hva den tar. Dette kan gå utover applikasjoner som ligger i minne for en virtuell maskin. Disse de to minnehåndteringsteknikkene krever CPU-kraft og er en indikasjon på at minneforbruket er for høyt.
 
-Counter: usage.average (\%) - ``Percentage of available machine memory: consumed ÷ machine-memory-size''
+Counter: usage.average (\%). Dette er en prosentandel av konsumert minne iforhold til totalt tilgjengelig fysisk minne.
 
-Grenseverdier (\%): WARNING 80 CRITICAL 90
+Grenseverdier (\%): WARNING 80, CRITICAL 90
 
-\subsubsection{Citrix Xen}
-For Citrix Xen er det satt opp flere ``Resource Pools'' og for å hente ut informasjon om en host må en Master-host kontaktes. Master-hosten har ansvar for å presentere et administrativt grensesnitt, og videresender kommandoer mot spesifikke hosts i Resource Pool-et.
 
-\paragraph{Plugin}
-For overvåkning av Xen-miljøet ble det kun funnet en plugin som gir muligheten for å hente ut informasjon fra host-er og virtuelle maskiner. Plugin-en ``check\_xen\_api.pl'' bruker biblioteket ``XenAPI'' for å generere URL-er. Disse brukes videre for spørringer mot en RRD-database, hvor ``XAPI'' lagrer data\cite{xenwiki}. Det er ikke like mange tellere som er tilgjengelige som for VMware og I/O-data er foreløpig ikke tilgjengelig. Ressursdata som overvåkes for host-er er CPU- og minnebruk.
+\subsubsection{Videre overvåkning}
 
-Pluginen i CLI:
-\begin{lstlisting}[style=example]
-./check_xenapi.pl -S <Master IP> -u <brukernavn> -p <passord> -H <hostname> -l <hovedkommando> -s <subkommando>
+Foreløbig er bare CPU og minnebruk for en host under overvåkning. Videre overvåkning kan bestå av å hente ut informasjon fra  Datacenter og Cluster, I/O for Hosts.
+
+For å se hvordan kapasiteten strekker til vil overvåkning av Datacentere og Cluster være aktuelt. Her kan en via check\_vmware\_api.pl hente ut informasjon om total bruk av for eksempel cpu og minne for å se om skaleringstiltak med dagens bruk må innføres.
+
+Eksempel for å hente ut informasjon fra et cluster og total cpu bruk: 
+
+\begin{lstlisting}
+./check_vmware_api.pl -D vc.example.org -u user1 -p password123 -C Cluster_1 -l cpu -s usage -i 300 -T 600
 \end{lstlisting}
 
-Opsjonen ``-H'' brukes for å spesifisere hvilken host en vil kjøre sjekken mot. Den må være i samme pool som oppgitt Master-host i opsjonen ``-S''.
+Overvåkning av tid brukt på I/O operasjoner kan avdekke ytelsesproblem mellom host og virtuelle maskiner, og mellom host og lagringsenheter benyttet. Counters som kan brukes her er (alle er et gjennomsnitt):
 
-For å få kjørt sjekkene mot Xen-hosts må det angis addressen til to enheter, Master host-en og host-en det skal hentes ut informasjon om. For å kunne sette en Master-IP på ett ojekt, og ikke for hvert host-objekt i et pool, ble det opprettet et generic-objekt. I generic-objektet settes Master IP-en til et gitt pool via en customvariable. Alle host-objekter som bruker dette generic-objektet arver da denne customvariabelen, og MasterIP-en kan endres fra et punkt.
+{\bf kernelLatency.average} - Tiden hypervisoren bruker i millisekunder på å prosessere hver SCSI-kommando fra virtuelle maskiner til den fysiske driveren. VMware anbefaler her at verdien bør være mellom 0-1 millisekund, og ikke overstige 4 milliesekunder.   
+	
+{\bf deviceLatency.average} - Tiden det tar å fullføre en SCSI kommando mellom fysiske driveren og lagringsenheten. VMware anbefaler her å holde tiden under 15ms. Det kan avhenge av hardware brukt, her kan sjekken settes opp for å lagre ytelsedata og se hva tiden er ved normal drift.
+
+
+Eksempler for å hente ut tellerene nevnt over:
+
+{\bf kernelLatency.average}: 
+
+\begin{lstlisting}
+./check_vmware_api.pl -D vc.example.org -u user1 -p password123 -H Example-ESX01 -l io -s kernel -i 300 -T 600
+\end{lstlisting}
+
+{\bf deviceLatency.average}:
+
+\begin{lstlisting}
+./check_vmware_api.pl -D vc.example.org -u user1 -p password123 -H Example-ESX01 -l io -s device -i 300 -T 600
+\end{lstlisting}
+
+Bruk av NRPE for hosts kan være aktuelt om en vil forsikre seg om at det lagres data om cpu, minne, og diskplass skulle vCenter gå ned. All informasjon om hosts avhenger nå av at Virtual Center-serveren kjører, og er et ``single point of failure''.
+
+\subsubsection{Citrix Xen}
+I motsetning til VMware der all informasjon kan hentes ut fra et punkt (Virtual Center), må en for Citrix Xen  kontakte en master-host for et gitt cluster. Master-hosten har ansvar for å presentere et administrativt grensesnitt, og videresender kommandoer mot spesifikke hosts i clusteret.
+
+\paragraph{Plugin}
+For overvåkning av Xen-miljøet ble det kun funnet en plugin som gir muligheten for å hente ut informasjon fra host-er og virtuelle maskiner. Plugin-en ``check\_xen\_api.pl'' bruker biblioteket ``XenAPI'' for å generere URL-er. Disse brukes videre for spørringer mot en RRD-database, hvor ``XAPI'' lagrer data\cite{xenwiki}. Det er ikke like mange tellere som er tilgjengelige som for VMware og I/O-data er foreløpig ikke tilgjengelig for hosts. Ressurser som er satt for overvåkning på host-er er CPU- og minnebruk.
+
+Et eksempel på bruk av check\_xenapi.pl: 
+\begin{lstlisting}[style=example]
+./check_xenapi.pl -S 10.0.1.50 -u xenuser1 -p password -H XEN_HOST-01 -l cpu -s usage -i 300
+\end{lstlisting}
+
+Opsjonen ``-H'' brukes for å spesifisere hvilken host en vil kjøre sjekken mot. Den må være i samme cluster som oppgitt master-host i opsjonen ``-S''. Opsjonen ``-i'' spesifiserer over hvor mange sekunder en skal hente ut data. Resultatet blir da et gjennomsnitt for gitt tidsperiode, og er tilgjengelig for CPU- og minnebruk for hosts.
+
+Som en ser fra eksempelet må det angis addressen til to enheter for å hente ut informasjon, master host-en og host-en en vil ha informasjon om. For å kunne sette en master-IP på ett ojekt, og ikke for hvert host-objekt i et cluster, ble det opprettet et generic-objekt. I generic-objektet settes master IP-en til et gitt cluster via en customvariable. Alle host-objekter som bruker dette generic-objektet arver da denne customvariabelen, og master IP-en kan endres fra et punkt.
 
 Under vises et eksempel hvordan dette kan konfigureres for ett pool med to host-objekter:
 \begin{lstlisting}[style=example]
-// generic-objektet
+// generic-objektet 
 define host {
     use 		generic_linux_host
     name 		generic_xen_pool_1
-    _MASTERIP 	10.0.1.20
+    _MASTERIP 	10.0.1.50
 }
 
 
 // To host-objekt som arver generic-objektet
 define host {
-    name 		Pool_1_Xen_Host_1
-    address 	10.0.1.21
-    use 		generic_xen_pool_1
+    name 		Cluster_1_Xen_Host_1
+    address 	10.0.1.51
+    use 		generic_xen_cluster_1
 }
 
 define host {
-    name 		Pool_1_Xen_Host_2
-    address 	10.0.1.22
-    use 		generic_xen_pool_1
+    name 		Cluster_1_Xen_Host_2
+    address 	10.0.1.52
+    use 		generic_xen_cluster_1
 }
 \end{lstlisting}
 
 Opsjenene blir da ``-S \$HOST\_MASTERIP\$'' og ``-H \$HOSTADDRESS\$''.
 
-RRD-databasen pluginen spør, lagrer data i følgende intervaller:
+RRD-databasen check\_xenapi.pl spør, lagrer data i følgende intervaller:
 
 \begin{enumerate*}
         \item Hvert 5. sekund i en 10 minutters periode
@@ -890,7 +937,7 @@ RRD-databasen pluginen spør, lagrer data i følgende intervaller:
         \item Hver dag for det siste året
 \end{enumerate*}
 
-For hvert 5. sekund blir aktuelle datapunkter lagret. For de andre intervallene blir en minimum-, maksimum-, og gjennomsnittsverdi over gitt tidsperiode lagret ved bruk av en konsolideringsfunksjon. \ref{xenrrd}
+For hvert 5. sekund blir aktuelle datapunkter lagret. For de andre intervallene blir en minimum-, maksimum-, og gjennomsnittsverdi over gitt tidsperiode lagret ved bruk av en konsolideringsfunksjon. \cite{xenrrd}
 
 Det oppstod et problem under implementeringen av check\_xenplugin.api, som hadde innvirkning på returnert resultat fra RRD-databasen. Etter å ha lest gjennom koden til selve pluginen og biblioteket XenAPI som også er skrevet av op5, ble det oppdaget at denne pluginen bruker siste datapunkt fra intervall nr.1 nevnt over. Resultatet vil da bare være ett datapunkt. Dette er vanskelig å sette varsel på, da en spike kan skje når gitt sjekk kjører. Her ble det avgjort å legge til en ny opsjon for å angi over hvor lang tidsperiode en skal hente ut data. Returnert resultat fra gitt tidsperiode blir gått gjennom, og en gjennomsnittsverdi returneres. Dette er foreløpig bare implementert for CPU- og minnebruk for en host
 
@@ -898,15 +945,19 @@ Det oppstod et problem under implementeringen av check\_xenplugin.api, som hadde
 Ressurser som er valgt å overvåke for Xen hosts:
 
 \begin{itemize*}
-        \item CPU-bruk(Totalbruk for alle kjerner ÷ antall kjerner)
+        \item CPU-bruk i prosent Totalbruk for alle kjerner ÷ antall kjerner)
         \begin{itemize*}
-                \item Grenseverdier (\%): WARNING 80 CRITICAL 90
+                \item Grenseverdier (\%): WARNING 80, CRITICAL 90
         \end{itemize*}
-        \item Minne-bruk (Totalt allokert minne - ledig minne)
+        \item Minne-bruk ( Utrekning: Totalt allokert minne - ledig minne)
         \begin{itemize*}
-                \item Grenseverdier (\%): WARNING 80 CRITICAL 90
+                \item Grenseverdier (\%): WARNING 80, CRITICAL 90
         \end{itemize*}
 \end{itemize*}
+
+\subsubsection{Videre overvåkning}
+
+Det må gjøres endringer i check\_xenapi.pl for å få korrekt returnerte data, og dette er bare implementer for CPU-bruk og minne for en host slik det står nå.For å minske administrative oppgaver rundt overvåkning av Citrix Xen kan det være aktuelt i ta i bruk check\_nrpe for å hente ut informajson om de lokale ressursene. Plugin-en kan derimot brukes for å hente ut informasjon som I/O om virtuelle maskiner, men plugin-en må altså modifiseres til å kalkulere gjennomsnittsbruk.
 
 \subsection{Trådløse kontrollere}
 IKT-avdelingen bruker en trådløskontrollerløsning fra Meru Networks. Disse har en viktig rolle i fylkeskommunens nettverk. På en dag har disse rundt 6000 samtidige brukere tilkoblet via aksesspunkter-er ute på hver lokasjon.

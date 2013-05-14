@@ -1,17 +1,17 @@
-\chapter{Dokumentasjon}
-Gjennom prosjektet har det blitt skrevet egen kode, installert ulike pakker, og satt opp konfigurasjon spesifikt for denne overvåkningsløsningen. Dette kapittelet vil gå igjennom implementering av ulike komponenter som gruppen anser som nødvendig å forklare grundigere.
+	\chapter{Dokumentasjon}
+	Gjennom prosjektet har det blitt skrevet egen kode, installert ulike pakker, og satt opp konfigurasjon spesifikt for denne overvåkningsløsningen. Dette kapittelet vil gå igjennom implementering av ulike komponenter som gruppen anser som nødvendig å forklare grundigere.
 \clearpage
 
 I Figur \ref{hostfigur} ser vi hvilke generics de forskjellige host-objektene kan ha.
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.5]{img/host}
-    \caption{Oversikt over host generic plassering}
-    \label{hostfigur}
-\end{figure}
+	\begin{figure}[H]
+	    \centering
+	    \includegraphics[scale=0.5]{img/host}
+	    \caption{Oversikt over host generic plassering}
+	    \label{hostfigur}
+	\end{figure}
 
-I Figur \ref{hostgroupfigur} ser vi hvilke hostgroups de forskjellige hostene skal være medlem av.
+	I Figur \ref{hostgroupfigur} ser vi hvilke hostgroups de forskjellige hostene skal være medlem av.
 
 \begin{figure}[H]
     \centering
@@ -30,21 +30,21 @@ Eksempelet under viser hvordan scriptet kjøres. Linjenummer skrives ut dersom o
 monkey@hig1:~/script$ vim servers.csv
 monkey@hig1:~/script$ ./gen.bash servers.csv
 
-	Generating hosts from servers.csv into working directory
+		Generating hosts from servers.csv into working directory
 
-	Hostname and Address are mandatory.
-	Missing for host on line nr: 4
-	Missing for host on line nr: 6
-	Missing for host on line nr: 7
-	Missing for host on line nr: 8
+		Hostname and Address are mandatory.
+		Missing for host on line nr: 4
+		Missing for host on line nr: 6
+		Missing for host on line nr: 7
+		Missing for host on line nr: 8
 
-	Done
-	Successfully created 4 hosts
-	4 hosts where not created because of errors.
-monkey@hig1:~/script$ ls
-gen.bash  servers.csv  test1.cfg  test2.cfg  test3.cfg  test4.cfg
-monkey@hig1:~/script$
-\end{lstlisting}
+		Done
+		Successfully created 4 hosts
+		4 hosts where not created because of errors.
+	monkey@hig1:~/script$ ls
+	gen.bash  servers.csv  test1.cfg  test2.cfg  test3.cfg  test4.cfg
+	monkey@hig1:~/script$
+	\end{lstlisting}
 
 Koden under viser hvordan servers.csv er bygget opp. Den inneholder også feil for å vise hva som skjer dersom informasjonen ikke er korrekt:
 \begin{lstlisting}
@@ -58,12 +58,12 @@ Koden under viser hvordan servers.csv er bygget opp. Den inneholder også feil f
 ,
 \end{lstlisting}
 
-Kildekoden til scriptet ligger i Vedlegg \ref{gen.bash}.
+	Kildekoden til scriptet ligger i Vedlegg \ref{gen.bash}.
 
 \section{Forventet nedtid}
 Tilfeller kan forekomme hvor en server må tas ut av drift på grunn av vedlikehold. I Icinga er det ikke nødvendig å fjerne denne fra konfigurasjonen, for å unngå at varslingsmelding blir sendt ut. I både Icinga Web og Icinga Classic har man mulighet til å bruke en funksjon som kalles ``Schedule Downtime''. Her blir nedetidens start og slutt definert.
 
-I den nedetidsperioden vil Icinga nekte varslingsmelding i å bli sendt ut. Når nedetidsperioden er ferdig, eller denne blir utført før avtalt tid, vil kontaktene som skal bli varslet få en melding om at nedetid er over, og Icinga vil ikke lengre holde igjen varlser.
+	I den nedetidsperioden vil Icinga nekte varslingsmelding i å bli sendt ut. Når nedetidsperioden er ferdig, eller denne blir utført før avtalt tid, vil kontaktene som skal bli varslet få en melding om at nedetid er over, og Icinga vil ikke lengre holde igjen varlser.
 
 \section{Stoppe varsling}
 Når problemet som fører til et varsel for enten et host- eller service-objekt er kjent, kan en legge dette varselet i kategorien ``Acknowledged Hosts'' eller
@@ -71,30 +71,30 @@ Når problemet som fører til et varsel for enten et host- eller service-objekt 
 
 I Figur \ref{ackbutton} vises knappen for å sette et host- eller service-objekt acknowlegded.
 
-\begin{figure}[H]
-    \centering
-    \includegraphics{img/ack_button}
-    \caption{Knapp for å settet et varsel som acknowledged}
-    \label{ackbutton}
-\end{figure}
+	\begin{figure}[H]
+	    \centering
+	    \includegraphics{img/ack_button}
+	    \caption{Knapp for å settet et varsel som acknowledged}
+	    \label{ackbutton}
+	\end{figure}
 
 Visning av antallet med enten WARNING eller CRITICAL vil gråtonet om bare et host- eller service-objekt er acknowledged. Tallet vil også flyttes til den midterse kolonnen som vist i Figur \ref{ackcombined} .
 
-\begin{figure}[H]
-    \centering
-    \includegraphics{img/ack_combined}
-    \caption{Visning av ett acknowledged problem i webgrensesnittet}
-    \label{ackcombined}
-\end{figure}
+	\begin{figure}[H]
+	    \centering
+	    \includegraphics{img/ack_combined}
+	    \caption{Visning av ett acknowledged problem i webgrensesnittet}
+	    \label{ackcombined}
+	\end{figure}
 
 I statusvinduet vil host- eller service-objektet legges i en egen kategori ``Known <objekttype> problems'', og ha en gråtonet farge, som vist i Figur \ref{ackstatusvindu}.
 
-\begin{figure}[H]
-    \centering
-    \includegraphics{img/ack_statusvindu}
-    \caption{Separering av acknowledged varsel i statusvinduet}
-    \label{ackstatusvindu}
-\end{figure}
+	\begin{figure}[H]
+	    \centering
+	    \includegraphics{img/ack_statusvindu}
+	    \caption{Separering av acknowledged varsel i statusvinduet}
+	    \label{ackstatusvindu}
+	\end{figure}
 
 
 \section{Autentisering mot Active Directory}\label{sec:ldapauth}
@@ -128,7 +128,7 @@ Icinga Classic autentiserer mot AD gjennom modulene ldap og authnz\_ldap til Apa
     </ae:parameter>
 \end{lstlisting}
 
-\section{Kontakter og kontaktgrupper}
+	\section{Kontakter og kontaktgrupper}
 For å opprette en ny kontakt i Icinga meldes brukeren inn i gruppen icinga\_kontakter (hvordan dette fungerer forklart i \ref{sec:sync}). Den vil trenge å ha e-postadresse og telefonnummer satt.
 
 Kontaktgrupper hentes fra OU-en icinga\_grupper der alle grupper hentes ut og opprettes i Icinga. For at en gruppe skal varsles må dette legges til på et service-objekt. For å slippe å sette opp kontakter for hver service kan en sende med argumentet ``gen\_service'', for å generere en template som kan benyttes på tjenester som sorterer under hver av kontaktgruppene som blir opprettet.
@@ -157,57 +157,57 @@ define service {
 }
 \end{lstlisting}
 
-Tabell med sjekker og tilhørende parametere:
-\begin{table}
-\begin{center}
-\begin{tabular}{| l | l | l | l |}
- \hline
-        \textbf{Utstyr} & \textbf{Service navn} & \textbf{Warning} & \textbf{Critical}
-	\\ \hline
-	APC UPS 		& UPS Capacity			& 90:	& 80: \\ \hline
-	APC UPS			& Internal Temp			& 30	& 32 \\ \hline
-	APC UPS			& Load				& 50	& 60 \\ \hline
-	APC UPS			& Voltage In			& 225:239 & 220:245 \\ \hline
-	APC UPS			& Voltage Out			& 225:239 & 220:245 \\ \hline 
-	HP UPS			& Battery Time Remaining 	& 3000: & 2700: \\ \hline
-	HP UPS			& Battery capacity		& 90: 	& 80: \\ \hline
-	HP UPS			& Battery current		& 	& \\ \hline
-	HP UPS			& Voltage In			& 225:239 & 220:245 \\ \hline 
-	HP UPS			& Voltage Out			& 225:239 & 220:245 \\ \hline
-	Windows Server		& Check DNS			& 0.1	& 0.2 \\ \hline
-	Windows Server		& Check LDAP			& 0.05	& 0.1 \\ \hline 
-	Windows Server		& All Disks			& 94\%	& 96\% \\ \hline
-	Windows Server		& Disk Space			& 90\%	& 95\% \\ \hline
-	Windows Server		& CPU Load			& 90	& 95 \\ \hline
-	Windows Server		& Memory Usage			& 94\%	& 98\% \\ \hline
-	Windows Server		& RDP-Sessions: Active		& 20	& 25 \\ \hline
-	Windows Server		& RDP-Sessions: Inactive	& 15	& 20 \\ \hline
-	Cisco ASA / PIX		& CPU Load			& 93	& 96 \\ \hline
-	Cisco ASA / PIX		& Hardware Health		& N/A	& N/A \\ \hline
-	Cisco ASA / PIX		& Memory Usage			& 93	& 96 \\ \hline
-	Cisco ASA / PIX		& Failover Status		& N/A	& N/A \\ \hline
-	Cisco ASA / PIX		& VPN Sessions			& 80 (\% av lisens) & 90 (\% av lisens) \\ \hline
-	Dell Blade Chassis	& Dell Blade Server Health	& N/A	& N/A \\ \hline
-	Dell Powerconnect	& Assets			& N/A	& N/A \\ \hline
-	Dell Powerconnect	& Uptime			& N/A	& N/A \\ \hline
-	Dell Powerconnect	& Fans				& N/A	& N/A \\ \hline
-	Dell Powerconnect	& Power supply			& N/A	& N/A \\ \hline
-	Dell Powerconnect	& Temperature			& 34	& 36 \\ \hline
-	HP Procurve		& Environment Status		& N/A	& N/A \\ \hline
-	MySQL			& Cache Hit			& 60: 	& 50: \\ \hline
-	MySQL			& Health			& 0.1	& 0.2 \\ \hline
-	MySQL			& Slow Queries			& 0.1	& 1 \\ \hline 
-	MySQL			& User Connections		& 50	& 80 \\ \hline
-	MSSQL			& Cache Hit			& 90:	& 80: \\ \hline
-	MSSQL			& Health			& 0.05	& 0.15 \\ \hline
-	MSSQL			& Lazy Writes			& 20	& 0 \\ \hline
-	MSSQL			& User Connections		& 2000	& 2200 \\ \hline
-	Oracle			& Cache Hit			& 93:	& 90: \\ \hline
-	Oracle			& Connected Users		& 50	& 80 \\ \hline
-	Oracle			& Connection Time		& 0.1	& 0.2 \\ \hline
-	Oracle			& Free Tablespace		& 5:	& 2: \\ \hline
+	Tabell med sjekker og tilhørende parametere:
+	\begin{table}
+	\begin{center}
+		\begin{tabular}{| p{3cm} | l | l | l | l |}
+	 \hline
+		\textbf{Plugin} & \textbf{Utstyr} & \textbf{Service navn} & \textbf{Warning} & \textbf{Critical}
+		\\ \hline
+		\multirow{10}{*}{check\_snmp}   & APC UPS 		& UPS Capacity			& 90:	& 80: \\ \cline{2-5}
+		& APC UPS			& Internal Temp			& 30	& 32 \\ \cline{2-5}
+		& APC UPS			& Load				& 50	& 60 \\ \cline{2-5}
+		& APC UPS			& Voltage In			& 225:239 & 220:245 \\ \cline{2-5}
+		& APC UPS			& Voltage Out			& 225:239 & 220:245 \\ \cline{2-5}
+		& HP UPS			& Battery Time Remaining 	& 3000: & 2700: \\ \cline{2-5}
+		& HP UPS			& Battery capacity		& 90: 	& 80: \\ \cline{2-5}
+		& HP UPS			& Battery current		& 	& \\ \cline{2-5}
+		& HP UPS			& Voltage In			& 225:239 & 220:245 \\ \cline{2-5} 
+		& HP UPS			& Voltage Out			& 225:239 & 220:245 \\ \hline
+		check\_dns  & Windows Server	& Check DNS			& 0.1	& 0.2 \\ \hline
+		check\_ldap & Windows Server    & Check LDAP			& 0.05	& 0.1 \\ \hline 
+		\multirow{2}{*}{check\_disk}    & Windows Server		& All Disks			& 94\%	& 96\% \\ \cline{2-5}
+						& Windows Server		& Disk Space			& 90\%	& 95\% \\ \hline
+		check\_cpu		        & Windows Server		& CPU Load			& 90	& 95  \\ \hline
+		check\_mem		        & Windows Server		& Memory Usage			& 94\%	& 98\% \\ \hline
+		\multirow{2}{*}{check\_counter} & Windows Server 		& RDP-Sessions: Active		& 20	& 25 \\ \cline{2-5}
+						& Windows Server		& RDP-Sessions: Inactive	& 15	& 20 \\ \hline
+		\multirow{4}{*}{check\_nwc} 	& HP Procurve                   & Environment Status            & N/A   & N/A \\ \cline{2-5}
+						& Cisco ASA / PIX		& CPU Load			& 93	& 96 \\ \cline{2-5}
+						& Cisco ASA / PIX 		& Memory Usage			& 93    & 96 \\ \cline{2-5}
+						& Cisco ASA / PIX		& Hardware Health		& N/A	& N/A \\ \hline
+		check\_cisco\_ failover		& Cisco ASA / PIX		& Failover Status		& N/A	& N/A \\ \hline
+		check\_asa\_vpn			& Cisco ASA / PIX		& VPN Sessions		 & 80 (\% av lisens) & 90 (\% av lisens) \\ \hline
+		check\_dell\_ bladechassis	& Dell Blade Chassis		& Dell Blade Server Health	& N/A	& N/A \\ \hline
+		\multirow{5}{2cm}{check\_snmp\_ powerconnect} & Dell Powerconnect	& Assets			& N/A	& N/A \\ \cline{2-5}
+							   & Dell Powerconnect	& Uptime			& N/A	& N/A \\ \cline{2-5}
+							   & Dell Powerconnect	& Fans				& N/A	& N/A \\ \cline{2-5}
+							   & Dell Powerconnect	& Power supply			& N/A	& N/A \\ \cline{2-5}
+							   & Dell Powerconnect	& Temperature			& 34	& 36 \\ \hline
+		\multirow{4}{2cm}{check\_mysql\_ health}      & MySQL			& Cache Hit			& 60: 	& 50: \\ \cline{2-5}
+							   & MySQL			& Health			& 0.1	& 0.2 \\ \cline{2-5}
+							   & MySQL			& Slow Queries			& 0.1	& 1 \\ \cline{2-5}
+							   & MySQL			& User Connections		& 50	& 80 \\ \hline
+		\multirow{4}{2cm}{check\_mssql\_ health}	   & MSSQL			& Cache Hit			& 90:	& 80: \\ \cline{2-5}
+							   & MSSQL			& Health			& 0.05	& 0.15 \\ \cline{2-5}
+							   & MSSQL			& Lazy Writes			& 20	& 0 \\ \cline{2-5}
+							   & MSSQL			& User Connections		& 2000	& 2200 \\ \hline
+		\multirow{4}{2cm}{check\_oracle\_ health}	   & Oracle			& Cache Hit			& 93:	& 90: \\ \cline{2-5}
+							   & Oracle			& Connected Users		& 50	& 80 \\ \cline{2-5}
+							   & Oracle			& Connection Time		& 0.1	& 0.2 \\ \cline{2-5}
+							   & Oracle			& Free Tablespace		& 5:	& 2: \\ \hline
 \end{tabular}
-\label{objekt_varsling}
+\label{plugins_parametere}
 \end{center}
 \end{table}
 
