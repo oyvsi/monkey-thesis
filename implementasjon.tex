@@ -445,16 +445,16 @@ Figur \ref{dns-inv} viser data samlet inn fra to DNS servere over 30 dager. Diss
 \end{figure}
 
 \begin{lstlisting} [style=example]
-check_command check_dns_status!$HOSTNAME$!0.1!0.2!10
-   command_line   $USER1$/check_dns -s $HOSTADDRESS$ -H $ARG1$ -w $ARG2$ -c $ARG3$ -t $ARG4$ -A
+    check_command	check_dns_status!$HOSTNAME$!0.1!0.2!10
+    command_line	$USER1$/check_dns -s $HOSTADDRESS$ -H $ARG1$ -w $ARG2$ -c $ARG3$ -t $ARG4$ -A
 \end{lstlisting}
 
 \subsubsection*{DHCP}
 Overvåkning av en DHCP-tjeneste ble testet i labmiljøet med pluginen ``check\_dhcp''. Denne sender en DHCPDISCOVER-pakke til DHCP-serveren. Hvis DHCP-tjenesten fungerer får pluginen en DHCPOFFER-pakke som respons. Dersom denne inneholder en korrekt lease, returnerer pluginen OK til Icinga sammen med tiden det tok.
 
 \begin{lstlisting} [style=example]
-#        check_command           check_nrpe!CheckServiceState!DHCPServer=started ShowAll
-    command_line    $USER1$/check_dhcp -s 10.60.0.22
+;   check_command	check_nrpe!CheckServiceState!DHCPServer=started ShowAll
+    command_line	$USER1$/check_dhcp -s 10.60.0.22
 \end{lstlisting}
 
 \subsection{Webservere}\label{sec:webservere}
@@ -952,7 +952,7 @@ A rogue AP is detected. The AP id, mac address, and other information are descri
 EDESC
 \end{lstlisting}
 
-Her benyttes variabler i snmptt \cite{snmptrans}:
+Her benyttes variabler i snmptt\cite{snmptrans}:
 \begin{itemize*}
 	\item IP-adressen til snmp agenten, altså kontrollereren
 	\item Navnet på trap-en

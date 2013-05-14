@@ -375,7 +375,7 @@ http://<host>/icinga-web/web/api/<objekt>/filter[OR(HOST_CURRENT_STATE|=|1;HOST_
 Da får en et javascript objekt ut med de kolonnene en har bedt om.
 
 Vi har totalt seks spørringer og de ulike gjør følgende:
-\begin{enumerate*}
+\begin{enumerate*}\label{sporringer}
 	\item  \textbf{hostQuery} henter ut alle hosts som har status DOWN eller UNREACHABLE
 	\item  \textbf{serviceQuery} henter ut alle servicer som har en UP host, men en service som er enten WARNING eller CRITICAL
 	\item  \textbf{hostTotalQuery} henter ut alle hosts, med en kolonne som forteller hvilken tilstand den er i. Dette blir brukt for å regne ut et antall innenfor hver tilstand.
@@ -401,34 +401,32 @@ For å grafe returnert resultat i external.js ble jQuery biblioteket Highcarts b
 I utdraget nedenfor vises koden for å definere hver søyle i diagrammet (``categories''), og sette de ulike dataverdiene med stats.<variabel>:
 \begin{lstlisting}[style=example]
 xAxis: {
-   categories: ['Closed(today)', 'Received(today)', 'Closed(overall)', 'Active(overall)']
-
+    categories: ['Closed(today)', 'Received(today)', 'Closed(overall)', 'Active(overall)']
+}
 series: [{
-         name: 'Amount',
-         data: [{ y: stats.Closed,
-                  color: '#32CD32'},
-                { y: stats.Received,
-             color: '#FF0000'},
-                { y: stats.ClosedAll,
-             color: '#32CD32'},
-                { y: stats.Open,
-             color: '#FF8F00'}
-               ]
-         }]
+    name: 'Amount',
+    data: [
+        { y: stats.Closed, color: '#32CD32'},
+        { y: stats.Received, color: '#FF0000'},
+        { y: stats.ClosedAll, color: '#32CD32'},
+        { y: stats.Open, color: '#FF8F00'}
+    ]
+}]
 \end{lstlisting}
 
 Visning av søylene uten et antall for hver kategori, ga bare visualisering av forholdet mellom de ulike kategoriene. Derfor ble det lagt til konfigurasjon for å vise selve antallet over hver søyle, slik: 
 
 \begin{lstlisting}
 dataLabels: {
-               enabled: true,
-               style: {
-                  fontSize: "16px",
-                  lineHeight: "auto"
-               }
+    enabled: true,
+    style: {
+        fontSize: "16px",
+        lineHeight: "auto"
+    }
+}
 \end{lstlisting}
 
-Standard font-størrelse var for liten, så denne ble justert opp. I Internet Explorer 9.0 ble da antallet flyttet for høyt over søylen i forhold til standard høyde. En løsning på dette ble funnet via siden for rapportering av feil til Highcharts \cite{iebug}. 
+Standard font-størrelse var for liten, så denne ble justert opp. I Internet Explorer 9.0 ble da antallet flyttet for høyt over søylen i forhold til standard høyde. En løsning på dette ble funnet via siden for rapportering av feil til Highcharts\cite{iebug}. 
 
 Endring:
 
@@ -457,19 +455,19 @@ Det er ønskelig at det skal være enkelt å legge til nye sensorer for temperat
 
 Utdrag fra external.js
 \begin{lstlisting}[style=example]
- var front_layout = [2, 1]; // The netbotz sensor IDs for the front row
-  var back_layout = [5, 4];  // and the back
-  var columns = Math.max(front_layout.length, back_layout.length); // Largest row is used 
+var front_layout = [2, 1]; // The netbotz sensor IDs for the front row
+var back_layout = [5, 4];  // and the back
+var columns = Math.max(front_layout.length, back_layout.length); // Largest row is used 
 ...
-  var room = new Image(); // Set up background image for the div
-  room.onload = function() {
-      $('#serverroom_climate').css('width', this.width);
-      $('#serverroom_climate').css('height', this.height);
-      $('#serverroom_climate').css('background-image', 'url(' + this.src + ')');
-   };
+var room = new Image(); // Set up background image for the div
+room.onload = function() {
+    $('#serverroom_climate').css('width', this.width);
+    $('#serverroom_climate').css('height', this.height);
+    $('#serverroom_climate').css('background-image', 'url(' + this.src + ')');
+};
 
-   // Set the background image to be one with the right number of columns
-   room.src = "image.php?sensor_cols=" + columns;
+// Set the background image to be one with the right number of columns
+room.src = "image.php?sensor_cols=" + columns;
 \end{lstlisting}
 
 Grafikken for servermiljø tilpasses automatisk etter den raden med flest antall sensorer, ved å lime sammen riktig antall bilder dynamisk gjennom GD i PHP (se image.php i vedlegg \ref{image.php}).
@@ -510,9 +508,9 @@ Metoden er ikke anvendelig for prioriteringen, da det skal kunne settes på hvil
 
 Den andre metoden gruppen kom frem til var å sette en egendefinert variabel ``\_PRIORITY'' på host- og service-objekter, og å hente ut variabelen via API-et til Icinga-web. Detteble valgt, fordi denne kan anvendes på alle servicer og hosts, og gir et bedre prioriteringsgrunnlag enn severity som vurderer antall child-objekter, noe ikke alle host-objekter nødvendigvis har. En kan heller ikke prioritere en service med metode 1.
 
-Implementasjonen av metode to blir gjort ved å spørre API-et for hver host eller service som er hentet ut fra det første kallet (ref x.x). Har hosten eller servicen variabelen \_PRIORITY definert, vil denne lagres, ellers blir det satt 0 som prioritetstall.
+Implementasjonen av metode to blir gjort ved å spørre API-et for hver host eller service som er hentet ut fra det første kallet i Tabell \ref{sporringer}. Har hosten eller servicen variabelen \_PRIORITY definert, vil denne lagres, ellers blir det satt 0 som prioritetstall.
 
-Selve sorteringen av hosts og servicer blir gjort av PHP-funksjonen usort() med to egenskrevne sammenligningsfunksjoner. \cite{usort}. Grunnen til dette er at array-et er flerdimensjonalt, så det må sorteres på verdien til en spesifikk nøkkel. Det skal også sorteres innenfor tilstandene DOWN og UNREACHABLE, og CRITICAL og WARNING. DOWN skal gå foran UNREACHABLE for host-objekter, og CRITICAL foran WARNING for service-objekter, deretter sorteres det etter prioriteringsvariabelen. I Figur \ref{prioritering} vises oppsettet for en sortert tabell.
+Selve sorteringen av hosts og servicer blir gjort av PHP-funksjonen usort() med to egenskrevne sammenligningsfunksjoner. \cite{usort}. Grunnen til dette er at array-et er flerdimensjonalt, så det må sorteres på verdien til en spesifikk nøkkel. Det skal også sorteres innenfor tilstandene DOWN og UNREACHABLE, og CRITICAL og WARNING. DOWN skal gå foran UNREACHABLE for host-objekter, og CRITICAL foran WARNING for service-objekter, deretter sorteres det etter prioriteringsvariabelen. I Tabell \ref{prioritering} vises oppsettet for hvordan dette sorteres.
 
 \begin{table}
 \begin{center}
