@@ -139,6 +139,7 @@ Dette var uoversiktlig og en mer oppdelt konfigurasjon var ønskelig, som også 
 
 Det ble testet ut et par verktøy for å administrere konfigurasjonsfilene, NConf\cite{nconf} og NagiosQL\cite{nagiosql} i et webgrensesnitt. Disse ble valgt bort til fordel for manuell konfigurering, da oppdeling av konfigurasjonen ikke var støttet, og de kunne ikke kombineres med manuell konfigurering. I samråd med oppdragsgiver ble det avgjort at manuell konfigurasjon oppfyller kravet om at det skal være enkelt å legge til nye enheter for overvåking.
 
+\clearpage
 \subsection{Bruk av hostgroup}
 Som nevnt i \ref{sec:objekter} knyttes et service-objekt til et host-objekt og et command-objekt, for at det skal kjøres en sjekk. For å slippe å skrive et service-objekt for hvert nytt host-objekt, benyttes gruppering av host-objekter i en hostgroup. Under vises et eksempel på hvordan dette er satt opp for MySQL-servere. 
 
@@ -272,6 +273,7 @@ Overvåkning av CPU vil kunne hjelpe til med å oppdage ressursproblemer. Dette 
 
 På Windows-servere benyttes ``CheckCPU'' fra NSClient++ for å sjekke CPU-last over NRPE. Her legges det ved tre opsjoner i sjekken som spesifiserer tidsintervallet for datagrunnlaget, grenseverdi for når det skal gis en WARNING og grenseverdi for CRITICAL.
 
+\clearpage
 Kommandoen for plugin-en slik den er definert i command-objektet. Dette henter et gjennomsnittsbruk av CPU over 5 minutter: 
 \begin{lstlisting}[style=example]
 ./check_nrpe -u -H 10.60.0.22 -p 5666 -c CheckCPU -a time=5m warn=80 crit=90
@@ -298,7 +300,7 @@ I Figur \ref{cpucritical} ser vi at sjekken gir en CRITICAL-tilstand på service
 \end{figure}
 
 I Figur \ref{cpustrain} ser vi at alle de fire CPU-kjernene jobber opp mot maksimalt. Et Batch-script ble kjørt lokalt på serveren som ble overvåket for å generere CPU-bruk.
-\begin{lstlisting}[style=example]
+\begin{lstlisting}[language=perl]
 ## winloop.bat
 ##
 # Runs loop.bat 10 times.
@@ -335,6 +337,7 @@ Kommando brukt i command-objektet check\_dist\_load:
 /check_load -r -w $ARG1$ -c $ARG2$
 \end{lstlisting}
 
+\clearpage
 \subsection{Minne}
 Datamaskiner som bruker opp tilgjengelig minne må skrive til disk for å få plass til mellomlagrede data. Data som må hentes fra disk vil ha en betydelig høyere aksesstid enn når RAM brukes til mellomlagring \cite{wiki:mem}. 
 Kontinuerlig høyt minneforbruk kan være en indikasjon på flere minnekrevende applikasjoner på samme server, at en applikasjon har minnelekkasje, eller at mengden minne ikke strekker til.
@@ -363,9 +366,8 @@ For Windows-servere benyttes ``CheckDisk'' fra NSClient++. For å sjekke flere d
 ./check_nrpe -u -H 10.60.0.22 -p 5666 -c CheckDriveSize -a MaxWarnUsed=94% MaxCritUsed=96% CheckAll
 \end{lstlisting}
 
-For Linux-servere benyttes sjekken ``check\_disk'' fra nagios-plugins. Her spesifiseres baner som er montert i filsystemet.
-
-check\_disk kjøres slik:
+\clearpage
+For Linux-servere benyttes sjekken ``check\_disk'' fra nagios-plugins. Her spesifiseres baner som er montert i filsystemet. check\_disk kjøres slik:
 \begin{lstlisting}[style=example]
 ./check_disk -w 8% -c 4% --mountpoint --all
 \end{lstlisting}
@@ -441,6 +443,7 @@ Kommandoen for hvordan sjekken kjøres er vist under:
     ./check_dns -s 10.60.0.21 -H icinga1.monkey.local -w 0.01 -c 0.02
 \end{lstlisting}
 
+\clearpage
 \subsubsection*{DHCP}
 Overvåkning av en DHCP-tjeneste ble testet i labmiljøet med plugin-en ``check\_dhcp''. Denne sender en DHCPDISCOVER-pakke til DHCP-serveren. Hvis DHCP-tjenesten fungerer får plugin-en en DHCPOFFER-pakke som respons. Dersom denne inneholder en korrekt lease, returnerer plugin-en OK til Icinga sammen med tiden det tok.
 
@@ -462,6 +465,7 @@ For websider som skal svare via HTTPS, sjekkes også utløpsdato for SSL-sertifi
 ./check_http -H portal.hedmark.org -C 50
 \end{lstlisting}
 
+\clearpage
 \subsection{Terminalservere}\label{sec:terminalservere}
 Mange interne applikasjoner kjøres via terminalservere. Det er viktig at terminalserverne er stabile fordi hver enkelt brukes som en lokal maskin av mange brukere. Ofte kan terminalservere belastes mer i perioder, derfor overvåkes hvor mange aktive brukere som er tilkoblet. Da kan en se hvilke som er mest belastet og når det er behov for å sette inn flere servere.
 
@@ -503,6 +507,7 @@ For å overvåke redundante oppsett, har plugin-ene ``check\_multi'' \cite{check
 
 Med check\_multi kan en benytte en eller flere egendefinerte kommandoer som parametere. Disse vil parses av check\_multi og kan inneholde alt i fra ``echo 'Hello, World!', til mer avanserte Perl-script som kjøres ved hjelp av eval. Dette blir brukt for Oracle-databaser som forklart i \ref{sec:oracle}. 
 
+\clearpage
 For å evaluere resultatene fra alle sjekkene samlet, kan en definere kriterier som gir et varsel. Da brukes standard Icinga-tilstander, som vist i eksempelet under:
 \begin{lstlisting}[style=example]
 command [ HTTP_Node1 ] = check_http -H 192.168.2.10
@@ -722,6 +727,7 @@ I følge Cisco kan høyt minneforbruk under vanlig drift indikere at brannmuren 
 
 Begge brannmurene legges i en hostgroup som er lagt på service-objektet for ``cisco\_health'', slik at lokale ressurser sjekkes på samme måte som switcher. Brannmurene legges også inn i en hostgroup som heter Cisco-failover som benyttes i service-objektet for failover.
 
+\clearpage
 \subsubsection{Failover}
 Cisco-routere og brannmurer har en viktig funksjon som kalles failover. Failover fungerer ved at to like enheter settes opp, der en blir satt som ``primary'' og den andre som ``secondary''. Secondary kan da ta over for primary dersom det skulle bli nødvendig. Routerne kobles sammen med en seriellkabel. Figur \ref{ciscoasafailover} viser denne oppkoblingen. 
 
@@ -764,7 +770,7 @@ Mange plugin-er benytter seg av dette ved å lese ut ``ifInOctets'' og ``ifOutOc
 En stor ulempe med å benytte disse er at de er 32 bit, og vil dermed nullstilles kjapt ved høye hastigheter. For 1000 Mbps vil det ta ca. 34 sekunder til telleren har brukt opp tilgjengelig bit og nullstilles. Se Tabell \ref{kalkulering_teller} for andre hastigheter.
 \[\frac{(2^{32}-1)\:B}{\frac{10^9\:b/s}{8\:b/B}}=34.36\:s \] 
 Det er derfor anbefalt å bruke 64 bit-variablene ifHCOutOctets og ifHCInOctets i stedet for\cite{ciscosnmpcounters}.
-\begin{table}
+\begin{table}[H]
 \begin{center}
 \begin{tabular}{ | l | p{7cm} |} \hline
     \textbf{Hastighet} & \textbf{Tid} \\ \hline
