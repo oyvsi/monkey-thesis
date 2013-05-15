@@ -420,9 +420,9 @@ Ytelsesdata har blitt samlet inn over 30 dager, for å sette grenseverdier for n
     \caption{Ytelsesdata i sekunder ved LDAP-autentisering}
     \label{ldapauth-inv}
 \end{figure}
+Kommandoen for hvordan sjekken kjøres er vist under:
 \begin{lstlisting} [style=example]
-    check_command 	check_ldap_status!0.05!0.1!10
-    command_line    	$USER1$/check_ldap -H $HOSTADDRESS$ -b $USER6$ -P $USER4$ -w $ARG1 -c $ARG2 -t $ARG
+    ./check_ldap -H 10.60.0.21 -b icingauser -P pass -w 0.01 -c 0.02
 \end{lstlisting}
 
 \subsubsection*{DNS}
@@ -436,18 +436,17 @@ Figur \ref{dns-inv} viser data samlet inn fra to DNS servere over 30 dager. Diss
     \caption{Ytelsesdata i sekunder ved DNS-oppslag}
     \label{dns-inv}
 \end{figure}
-
+Kommandoen for hvordan sjekken kjøres er vist under:
 \begin{lstlisting} [style=example]
-    check_command	check_dns_status!$HOSTNAME$!0.1!0.2!10
-    command_line	$USER1$/check_dns -s $HOSTADDRESS$ -H $ARG1$ -w $ARG2$ -c $ARG3$ -t $ARG4$ -A
+    ./check_dns -s 10.60.0.21 -H icinga1.monkey.local -w 0.01 -c 0.02
 \end{lstlisting}
 
 \subsubsection*{DHCP}
 Overvåkning av en DHCP-tjeneste ble testet i labmiljøet med plugin-en ``check\_dhcp''. Denne sender en DHCPDISCOVER-pakke til DHCP-serveren. Hvis DHCP-tjenesten fungerer får plugin-en en DHCPOFFER-pakke som respons. Dersom denne inneholder en korrekt lease, returnerer plugin-en OK til Icinga sammen med tiden det tok.
 
+Kommandoen for hvordan sjekken kjøres er vist under:
 \begin{lstlisting} [style=example]
-;   check_command	check_nrpe!CheckServiceState!DHCPServer=started ShowAll
-    command_line	$USER1$/check_dhcp -s 10.60.0.22
+    ./check_dhcp -s 10.60.0.22
 \end{lstlisting}
 
 \subsection{Webservere}\label{sec:webservere}
