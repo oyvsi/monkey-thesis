@@ -141,13 +141,13 @@ Til slutt sendes resultatet som en passiv sjekk til Icinga. Dersom ingen feil op
 For å sikre at synkroniseringen kjører er service-objektet satt opp med en freshness-sjekk. Dette vil si at det forventes at Icinga mottar et resultat av sjekken hver time (pluss en feilmargin på ett minutt). Dersom det ikke skjer vil det bli satt en feil på ``Contact sync''. Konfigurasjonen for service-objektet er vist under:
 \begin{lstlisting}[style=example]
 define service contact_sync {
-   use 						generic_service
-   host_name    	  		localhost
+   use 				generic_service
+   host_name    	  	localhost
    service_description  	Contact sync
    active_checks_enabled   	0 ; Only use passive checks for this service
    passive_checks_enabled  	1
    check_freshness      	1
-   freshness_threshold     	3660 ; 1h + 1 min splay time ; if we don't get a passive result within freshness_threshold this will be run
+   freshness_threshold     	3660 ; 1h + 1 min splay time 
    check_command     		check_dummy!2 "No contact sync has been run for 24hrs" 
 }
 \end{lstlisting}
@@ -175,8 +175,8 @@ define timeperiod {
 
 \begin{lstlisting}[style=example]
 define timeperiod {
-    timeperiod_name     service_vindu
-    alias				Servicevindu
+    timeperiod_name     	service_vindu
+    alias			Servicevindu
     tuesday 2 - wednesday   	15:00-04:00
     exclude 			patch_tuesday
 }
