@@ -1,23 +1,23 @@
 \section{Varsling}\label{sec:varsling}
-Varsling er en funksjon i overvåkningsløsningen som krever en del finjusteringer og balansering av parametere over tid. Det vil være en balansegang mellom å varsle for mye og filtrere for grovkornet. Et tegn på et godt overvåkningssystem er at det er fokusert, og ikke gir overflødig informasjon\cite{buildingnagiosmonitoring}. Sendes det ofte ut ``falske varsler'', kan det føre til at alvorlige hendelser blir ignorert, selv om det sendes ut varsler. Når varsler sendes ut bør det kun være til de som trenger å få dem.
+Varsling er en funksjon i overvåkningsløsningen som krever en del finjusteringer og balansering av parametere over tid. Det vil være en balansegang mellom å varsle for mye og for lite. Et tegn på et godt overvåkningssystem er at det er fokusert, og ikke gir overflødig informasjon\cite{buildingnagiosmonitoring}. Sendes det ofte ut ``falske varsel'', kan det føre til at alvorlige hendelser blir ignorert, selv om det sendes ut varsler. Når varsel sendes ut bør det kun være til de som trenger å få dem.
 
 \subsection{Avhengigheter}
-For å holde antallet varsler som sendes ut nede, benyttes avhengigheter som beskrevet i \ref{sec:servicedependency}  og \ref{sec:parent}. Som tidligere nevnt gjøres dette for å ikke få mer enn en melding ved følgefeil. ``Parent'' har blitt benyttet til å reflektere det fysiske nettverksoppsettet. Service dependency-objekter er for eksempel satt på tjenester som blir sjekket via NRPE. Disse vil være avhengig av at NRPE-daemon-en på gitt host kan motta henvendelser.
+For å holde antallet varsel som sendes ut lavt benyttes avhengigheter som beskrevet i \ref{sec:parent} og \ref{sec:servicedependency}. Som tidligere nevnt gjøres dette for å ikke få mer enn en melding ved følgefeil. Parent har blitt benyttet til å reflektere det fysiske nettverksoppsettet. Service dependency-objekter er for eksempel satt på tjenester som blir sjekket via NRPE. Disse vil være avhengig av at NRPE-daemon-en på gitt host kan motta henvendelser.
 
 \subsection{Konfigurasjon}
 I Icinga kan en lage kontakter og legge disse i kontaktgrupper. Oppsettet følger samme logikk som at et hostgroup-objekt referer til en eller flere host-objekt i et service-objekt.
 
-Det vil si at contact- og contactgroup-objekter refereres til i et service- eller host-objekt. Disse kontaktene kan bli varslet dersom service-objektet får en annen status enn OK. Dette konfigureres i service-objektet, der også hvilke tilstander det skal varsles ved defineres. Dette er vist i Tabell \ref{objekt_varsling}.
+Det vil si at contact- og contactgroup-objekter refereres til i et service- eller host-objekt. Disse kontaktene kan bli varslet dersom service-objektet får en annen status enn OK. Dette konfigureres i service-objektet, sammen med hvilke tilstander det skal varsles ved defineres. Dette er vist i Tabell \ref{objekt_varsling}.
 
 Når en feil oppstår vil Icinga vurdere ulike konfigurasjonsopsjoner før det eventuelt sendes ut et varsel. Om konfigurasjonen tilsier at det skal varsles, vil Icinga sende varsler gjennom et command-objekt definert på kontaktene. 
 
 \begin{table}
 \begin{center}
 \begin{tabular}{| c | l | l | p{7cm} |} \hline
-        \textbf{Objekt} & \textbf{Opsjon} & \textbf{Tilstand} & \textbf{Det sendes varsler om} \\ \hline
+        \textbf{Objekt} & \textbf{Opsjon} & \textbf{Tilstand} & \textbf{Det sendes varsel om} \\ \hline
 	\multirow{3}{*}{Host} & d & DOWN 			& Host-objektet er DOWN 			\\ \cline{2-4}
-					    & u & UNREACHABLE 		& Et parent er DOWN eller UNREACHABLE		\\ \cline{2-4}	
-					    & r & UP 			& Hosten går til UP				\\ \hline 
+					    & u & UNREACHABLE 		& En parent er DOWN eller UNREACHABLE		\\ \cline{2-4}	
+					    & r & UP 			& Host-en går til UP				\\ \hline 
         \multirow{3}{*}{Service} 	    & c & CRITICAL 		& Service-en er CRITICAL 			\\ \cline{2-4}
 					    & w & WARNING  		& Service-en er WARNING  			\\ \cline{2-4}
 					    & u & UNKNOWN  		& Service-en er UNKNOWN  			\\ \hline
@@ -32,24 +32,24 @@ Når en feil oppstår vil Icinga vurdere ulike konfigurasjonsopsjoner før det e
 \end{table}
 
 \subsection{Flapping}
-I Icinga defineres ``flapping'' som når et host- eller service-objekt skifter tilstand for ofte, noe som resulterer i mange problem- og recoveryvarsler\cite{icingaflapping}. Dersom detektering av flapping er konfigurert for objektet, vil Icinga stoppe varsler for det dersom prosentandelen flapping overstiger en konfigurert grense. Objektet regnes som å ha startet å flappe når andelen for første gang overstiger en ``høy''-grense, og som å stoppe å flappe når andelen igjen er under en ``lav''-grense.
+I Icinga defineres ``flapping'' som når et host- eller service-objekt skifter tilstand for ofte, noe som resulterer i mange problem- og recoveryvarsler. Dersom detektering av flapping er konfigurert for objektet, vil Icinga stoppe varsler for det dersom prosentandelen flapping overstiger en konfigurert grense. Objektet regnes som å ha startet å flappe når andelen for første gang overstiger en ``høy''-grense, og stopper når andelen er under en ``lav''-grense igjen. \cite{icingaflapping}
 
-Denne prosentandelen er kalkulert ved at
+Denne prosentandelen er kalkulert ved at:
 \begin{enumerate*}
 	\item resultatet for de siste 21 sjekkene blir lagret.
 	\item Icinga finner tilstandsendringene fra de lagrede resultatene.
 	\item Flap-prosent blir kalkulert ut fra andelen tilstandsendringer, der resultatet av de nyeste sjekkene vektes høyere.
 \end{enumerate*}
 
-Standardgrense er satt til 20.0 for høy og 5 for lav i Icinga.cfg. Men den kan også konfigureres på hvert host- og service-objekt med direktivene ``low\_flap\_threshold'' og ``high\_flap\_threshold'', som vist i eksempelet under:
+Standardgrense er satt til 20 for høy og 5 for lav i icinga.cfg. Grensen kan også konfigureres på hvert host- og service-objekt med direktivene ``low\_flap\_threshold'' og ``high\_flap\_threshold'', som vist i eksempelet under:
 \begin{lstlisting}[style=example]
 define host {
-    name 					important_servers  	;template
-    use						generic_host
+    name 			important_servers  	;template
+    use				generic_host
     flap_detection_enabled	1     ; Flap detection is enabled
     low_flap_threshold		70    ; Stop flapping at 70 %
     high_flap_threshold		80    ; Start flapping at 80 %
-    register				0
+    register			0
 }
 \end{lstlisting}
 
@@ -89,7 +89,7 @@ Perl-scriptet som kalles fungerer ved å:
 \begin{enumerate*}
 	\item hente alle medlemmer av gruppe ``icinga\_kontakter'' og medlemmer av undergrupper rekursivt.
 	\item det opprettes en konfigurasjonsfil for hver av medlemmene.
-	\item alle grupper under ``Kontaktgrupper'' hentes ut
+	\item alle grupper under ``Kontaktgrupper'' hentes ut.
 	\item medlemmene av hver gruppe hentes ut og det opprettes en konfigruasjonsfil for hver gruppe.
 	\item det opprettes en egen service-objekt-template der kontaktgruppen er satt til å få meldinger, slik at tjenester kan arve fra denne.
 \end{enumerate*}
@@ -205,30 +205,30 @@ define hostescalation {
 	contact_groups			big_bosses
 	first_notification		3 	
 	last_notification		5 ; When does escalation notifications stop
-	notification_interval	50
+	notification_interval		50
 	escalation_options		d ; Only use escalation when host is D(own)
 }
 \end{lstlisting}
 
 \subsubsection{Varslingsmelding}
-Selve varslingsmeldingene sendes ut først når host- eller service-objekter er i en hard tilstand (beskrevet i \ref{sec:sjekker}). Et eksempel er om en brannmurs hostsjekk returnerer DOWN. Da er det ikke ønskelig å varsle over SMS eller e-post, dersom det er snakk om et par ping som mistes. For eksempel kan en sjekk som har returnert DOWN kjøres to ganger til, med et intervall på ett minutt, før en hard tilstand settes, slik:
+Selve varslingsmeldingene sendes ut først når host- eller service-objekter er i en hard tilstand (beskrevet i \ref{sec:sjekker}). Et eksempel er om en brannmurs host-sjekk returnerer DOWN. Da er det ikke ønskelig å varsle over SMS eller e-post, dersom det er snakk om et par ping som mistes. For eksempel kan en sjekk som har returnert DOWN kjøres to ganger til, med et intervall på ett minutt, før en hard tilstand settes, slik:
 
 \begin{lstlisting}[style=example]
 define host {
-   use 					generic_host ; Inherit basic config. check_ping for host_check
+   use 				generic_host ; Inherit basic config. check_ping for host_check
    host_name			hig-fw1
-   max_check_attempts   2 			; Number of checks before hardstate
-   retry_check_interval	1 			; 60 seconds between each consecutive check
+   max_check_attempts   	2 	; Number of checks before hardstate
+   retry_check_interval		1 	; 60 seconds between each consecutive check
 }
 \end{lstlisting}
 Dersom objektet oppfyller kriterier for varsling. Det vil si at ingen parent eller avhengigheter er nede vil det sendes ut varslingsmelding.
  
 For et contact-objekt kan det settes opp ett eller flere command-objekter for både host- og service-objekter, som skal brukes for utsending og formatering av varslingsmeldingen.  
 
-I eksempelet under brukes command-objektene host\_problem\_email og host\_problem\_smsb for varslingsmeldinger:
+I eksempelet under brukes command-objektene ``host\_problem\_email'' og ``host\_problem\_sms'' for varslingsmeldinger:
 \begin{lstlisting}[style=example]
 define contact {
-   contact_name 		Kari Sysadmin
+   contact_name 			Kari Sysadmin
    email 				kari@example.org
    pager 				480 88 256 
    host_notification_commands    	host_problem_email, host_problem_sms
@@ -244,15 +244,15 @@ define command {
 }
 \end{lstlisting}
 
-Varslingsmeldinger som sendes over SMS vil være korte og lettfattede, mens de som sendes til e-post gjerne er lengre og inkluderer mer utfyllende informasjon. Informasjonen som sendes ut hentes ut ved hjelp av makroer i Icinga\cite{icingamacro}.
+Varslingsmeldinger som sendes over SMS vil være korte og lettfattede, mens de som sendes til e-post gjerne er lengre og inkluderer mer utfyllende informasjon. Informasjonen som sendes ut hentes ved hjelp av makroer i Icinga\cite{icingamacro}.
 
 Alle varslingsmeldinger sendes fra én og samme e-post-server. Dette er ikke helt ideelt, fordi en vil miste både SMS- og e-postvarsling dersom e-post-serveren skulle slutte å fungere. En løsningen på dette kan være å definere en fallback-server som blir brukt hvis Icinga ikke får kontakt med e-post-serveren. 
 
 \subsection{Kritisk varsling}
-For kritiske tjenester og utstyr er det i konfigurasjonen defineret et eget generisk objekt som brukes av de service- og host-objektene som anses som kritiske. Dette gjelder domenekontrollere, nettverksutstyr på hoveddatarommet, temperatursensorer og UPS-er. Disse objektene vil sjekkes oftere enn det som er satt som standard. Varslingsmelding vil også sendes til alle ved IKT-avdelingen om en hendelse skulle inntreffe, også utenom arbeidstid og i servicevinduet.
+For kritiske tjenester og utstyr er det i konfigurasjonen definert et eget generisk objekt som brukes av de service- og host-objektene som anses som kritiske. Dette gjelder domenekontrollere, nettverksutstyr på hoveddatarommet, temperatursensorer og UPS-er. Disse objektene vil sjekkes oftere enn det som er satt som standard. Varslingsmelding vil også sendes til alle ved IKT-avdelingen om en hendelse skulle inntreffe, også utenom arbeidstid og i servicevinduet.
 
 \section{Statusvisning}
-Som nevnt i \ref{sec:teoriweb}, finnes det et webgrensesnitt for Icinga. Dette er et verktøy for å utføre handlinger på hosts og servicer. Her finnes også et ``tactical overview'', som vist i Figur \ref{icingawebgui}. Det er ikke tilrettelagt for å vise en kort beskrivelse om hva som er galt på de host- og service-objektene med feil, på en stor skjerm. Det er lagt større vekt på administrering av objektene. Det vises et totalt antall objekter med de ulike tilstandene, men det kreves flere handlinger for å få en bedre oversikt. Det ble derfor besluttet å utvikle et webgrensesnitt for statusvisning, som er tilpasset IKT-avdelings behov.
+Som nevnt i \ref{sec:teoriweb}, finnes det et webgrensesnitt for Icinga. Dette er et verktøy for å utføre handlinger på hosts og servicer. Her finnes også et ``tactical overview'', som vist i Figur \ref{icingawebgui}. Det er ikke tilrettelagt for å vise en kort beskrivelse om hva som er galt på de host- og service-objektene med feil, på en stor skjerm. Det er lagt større vekt på administrering av objektene. Det vises et totalt antall objekter med de ulike tilstandene, men det kreves flere handlinger for å få en bedre oversikt. Det ble derfor besluttet å utvikle et webgrensesnitt for statusvisning, som er tilpasset IKT-avdelingens behov.
 \begin{figure}
 	\centering
     \includegraphics[width=1.0\textwidth]{img/icinga_tactical}
@@ -266,10 +266,10 @@ Ansatte som sitter på servicedesk og besvarer henvendelser vil være hovedbruke
 For at statusvinduet skal imøtekomme IKT-avdelingens ønsker, ble det besluttet å gjøre utviklingen i iterasjoner. Ofte vet ikke brukeren hva de vil ha før de ser et utkast og prosessen har begynt. For utviklingen av statusvinduet har designprosessen beskrevet i ISO 9241-210 blitt fulgt. Der er det beskrevet fire aktiviteter som går i syklus til en får et tilfredsstillende resultat:
 % TODO: Oversette til norsk?
 \begin{itemize*}
-	\item Understand and specify the context of use
-	\item Specify the user and organizational requirements
-	\item Produce design solutions
-	\item Evaluate designs against requirements.
+	\item Kartlegge bruksmønstre.
+	\item Spesifisere bruker- og organisasjonskrav.
+	\item Designe løsning.
+	\item Evaluering av designet opp mot kravene.
 \end{itemize*}
 
 Utviklingsprosessen startet med et møte med hele IKT-avdelingen for å presentere gruppens forslag til utkast på designet, som vist i Figur \ref{statusvindu_utkast}. Her kom det frem forslag om å vise temperaturene fra serverrom-sensorene som en terning der det fysiske oppsettet kom frem.
@@ -280,11 +280,11 @@ Nagdash baserer uthenting av informasjon om host- og serviceobjekter på nagios-
 
 Gjennom to iterasjoner kom det frem flere ønsker som ble lagt inn:
 \begin{itemize*}
-	 \item Uthenting av driftsmeldinger via RSS fra portal.hedmark.org
-	 \item Endre utseendet på ``Known Services''
-	 \item Sette kolonnene med hosts og servicer ved siden av hverandre 
-	 \item Hente ut og grafe antall åpne, lukkede, og mottatte saker fra sakssystemet Footprints
-	 \item Fjerne irrelevant informasjon, som hvor mange ganger en service-sjekk har fått en soft tilstandsendring
+	 \item Uthenting av driftsmeldinger via RSS fra portal.hedmark.org.
+	 \item Endre utseendet på ``Known Services'' og ``Known Host problems''.
+	 \item Sette kolonnene med hosts og servicer ved siden av hverandre.
+	 \item Hente ut og grafe antall åpne, lukkede, og mottatte saker fra sakssystemet Footprints.
+	 \item Fjerne irrelevant informasjon, som hvor mange ganger en service-sjekk har fått en soft tilstandsendring.
 \end{itemize*}
 
 Det ble også rapportert en bug om at datoen på skjermen ikke endret seg før etter en sideoppdatering. Koden som oppdaterer datoen var ikke lagt inn i funksjonen som sørger for automatisk oppdatering. Dette viser viktigheten av å ha brukertesting, da en slik bug kan være vanskelig å oppdage.
@@ -296,12 +296,11 @@ I Figur \ref{statusvindu_utkast} vises et utkast til statusvisningen som vi la f
 \begin{figure}[H]
     \centering
     \includegraphics[scale=0.3]{img/statusvindu_mockup}
-    \caption{Mockup av statusvindu}
+    \caption{Utkast til statusvindu}
     \label{statusvindu_utkast}
 \end{figure}
 
 Figur \ref{statusvindu_oversatte_kall} viser hvordan Nagdash ser ut med oversatte API-kall:
-
 \begin{figure}[H]
     \centering
     \includegraphics[scale=0.3]{img/statusvindu_oversatte_kall}
@@ -311,8 +310,8 @@ Figur \ref{statusvindu_oversatte_kall} viser hvordan Nagdash ser ut med oversatt
 
 Figur \ref{statusvindu_first} vises statusvisningen etter første iterasjon. Følgende funksjonalitet blitt lagt til:
 \begin{itemize*}
-	\item Temperatur fra serverrommet
-	\item Antall mottatte, lukkede, og aktive saker fra Footprints
+	\item Temperatur fra serverrommet.
+	\item Antall mottatte, lukkede, og aktive saker fra Footprints.
 \end{itemize*}
 
 \begin{figure}[H]
@@ -325,12 +324,12 @@ Figur \ref{statusvindu_first} vises statusvisningen etter første iterasjon. Fø
 Figur \ref{statusvindu_final} viser den ferdige statusvisningen. Følgende funksjonalitet er lagt til fra første iterasjon:
 
 \begin{itemize*}
-	\item Visualisering av retning på luftstrøm
-	\item Temperatur fra de sensorene som er konfigurert
-	\item Luftfuktighet
-	\item Kolonnene for host og services er satt ved siden av hverandre
-	\item Driftsmeldinger fra portal.hedmark.org
-	\item Grafing av lukkede saker som er mottatt i dag, lukkede saker fra alle mottatte saker, mottatte saker i dag og totalt antall åpne saker
+	\item Visualisering av retning på luftstrøm.
+	\item Temperatur fra de sensorene som er konfigurert.
+	\item Luftfuktighet.
+	\item Kolonnene for host og services er satt ved siden av hverandre.
+	\item Driftsmeldinger fra portal.hedmark.org.
+	\item Grafer over lukkede saker som er mottatt i dag, lukkede saker fra alle mottatte saker, mottatte saker i dag og totalt antall åpne saker.
 \end{itemize*}
 
 \begin{figure}[H]
@@ -340,12 +339,10 @@ Figur \ref{statusvindu_final} viser den ferdige statusvisningen. Følgende funks
     \label{statusvindu_final}
 \end{figure}
 
-
 \subsection{Arkitektur}
-
 Statusvindu definerer strukturen for HTML og inkluderer CSS og Javascript.
 
-Hver av modulene ``footprints.php \ref{footprints.php}, netbotz.php \ref{netbotz.php} og rss.php \ref{rss.php}'' retunerer et javascript-objekt med data ut fra ajax-kall fra external.js \ref{external.js}. Dataene bearbeides og settes inn i riktig ``div''-element i HTML-koden med Javascript. Nagdash returnerer rå HTML, da denne inneholder tabeller og annen markup i tillegg til dataene.
+Hver av modulene ``footprints.php'' (Vedlegg \ref{footprints.php}), ``netbotz.php'' (Vedlegg \ref{netbotz.php}) og ``rss.php'' (Vedlegg \ref{rss.php}) retunerer data ut fra Ajax-kall fra ``external.js'' (Vedlegg \ref{external.js}). Dataene bearbeides og settes inn i riktig ``div''-element i HTML-koden med Javascript. Nagdash returnerer rå HTML, da denne inneholder tabeller og annen markup i tillegg til dataene.
 
 I filen external.js hentes data fra de ulike modulene og settes inn i statusvinduet. Dette gjøres dynamisk gjennom Ajax, i et bestemt intervall. Arkitekturen for dette vises i Figur \ref{statusvindu_arkitektur}.
 
@@ -356,50 +353,46 @@ I filen external.js hentes data fra de ulike modulene og settes inn i statusvind
     \label{statusvindu_arkitektur}
 \end{figure}
 
-
 \subsection{Nagdash}
-
 For å hente ut data fra Icinga benyttes REST-API-et til Icinga Web. I eksempelet under vises en spørring som henter alle host-objekter som har state-en DOWN (HOST\_CURRENT\_STATE|=|1) eller UNREACHABLE (HOST\_CURRENT\_STATE|=|2). Viktige parametere:
 \begin{itemize*}
-	\item <host>: hostnavn eller IP til hosten som kjører Icinga-web
-	\item <objekt>: Objekttypen spørringen skal kjøres mot (f.eks host eller service)
-	\item filter: Kolonner som skal brukes i sammen med de logiske operatorene AND og/eller OR
-	\item columns: kolonner som skal returneres i resultatet
-	\item authkey: Nøkkelen brukt for å autentisere til API-et
+	\item <host>: hostnavn eller IP til hosten som kjører Icinga Web.
+	\item <objekt>: objekttypen spørringen skal kjøres mot (for eksempel host eller service).
+	\item filter: Kolonner som skal brukes sammen med de logiske operatorene AND og/eller OR.
+	\item columns: kolonner som skal returneres i resultatet.
+	\item authkey: nøkkelen brukt for å autentisere til API-et.
 \end{itemize*}
 
 \begin{lstlisting}[style=example]
 http://<host>/icinga-web/web/api/<objekt>/filter[OR(HOST_CURRENT_STATE|=|1;HOST_CURRENT_STATE|=|2)]/columns[HOST_ID|HOST_CURRENT_CHECK_ATTEMPT|...]/authkey=<apikey>/json
 \end{lstlisting}
+Det returneres JSON-data med kolonnene spesifisert i spørringen.
 
-Da får en et javascript objekt ut med de kolonnene en har bedt om.
-
-Vi har totalt seks spørringer og de ulike gjør følgende:
+Det er totalt seks spørringer og de ulike gjør følgende:
 \begin{enumerate*}\label{sporringer}
 	\item  \textbf{hostQuery} henter ut alle hosts som har status DOWN eller UNREACHABLE
 	\item  \textbf{serviceQuery} henter ut alle servicer som har en UP host, men en service som er enten WARNING eller CRITICAL
 	\item  \textbf{hostTotalQuery} henter ut alle hosts, med en kolonne som forteller hvilken tilstand den er i. Dette blir brukt for å regne ut et antall innenfor hver tilstand.
 	\item  \textbf{serviceTotalQuery} samme som 3, men henter alle servicer.
-	\item  \textbf{hostPriorityQuery} henter ut en og en host basert på objekt id. Informasjonen brukes videre for å sjekke om den har en prioritets variabel satt, som vil føre til at den blir prioritert ved fremvisning.
-	\item  \textbf{servicePriorityQuery} samme som 4, men henter her ut for en service.
+	\item  \textbf{hostPriorityQuery} henter ut en og en host basert på objekt-id. Informasjonen brukes videre for å sjekke om den har en prioritets variabel satt, som vil føre til at den blir prioritert ved fremvisning.
+	\item  \textbf{servicePriorityQuery} samme som 5, men henter her ut for en service.
 \end{enumerate*}
 
 \subsection{Footprints}
-
-For uthenting av antall saker innenfor ulike kategorier i Footprints ble det benyttet SQL-spørringer direkte mot databasen. IKT-avdelingen ønsket å få en graf om følgende antall om saker:
+For uthenting av antall saker innenfor ulike kategorier i Footprints ble det benyttet SQL-spørringer direkte mot databasen. IKT-avdelingen ønsket å få grafer over følgende antall saker:
 \begin{itemize*}
-	\item Mottatt i dag
-	\item Både lukket og mottatt i dag
-	\item Lukket av alle mottatte saker
-	\item Antall aktive saker
+	\item Mottatt i dag.
+	\item Både lukket og mottatt i dag.
+	\item Lukket av alle mottatte saker.
+	\item Antall aktive saker.
 \end{itemize*}
+I footprints.php vil returnert data fra alle de fire spørringene bli slått sammen til et array som videre returneres som JSON-data til external.js via Ajax. 
 
-I footprints.php vil returnert data fra alle de fire spørringene bli slått sammen til et array som videre returneres som et JSON-objekt til external.js via Ajax. 
-
-For å grafe returnert resultat i external.js ble jQuery biblioteket Highcarts benyttet. Det ble først testet et annet bibliotek for grafing: jqBarGraph, men dette hadde manglende konfigurasjonsmuligheter.  
+For å generere grafer av returnert resultat i external.js ble jQuery biblioteket Highcarts benyttet. Det ble først testet et annet bibliotek for grafing: jqBarGraph, men dette hadde manglende konfigurasjonsmuligheter og ble valgt bort. 
 
 I utdraget nedenfor vises koden for å definere hver søyle i diagrammet (``categories''), og sette de ulike dataverdiene med stats.<variabel>:
 \begin{lstlisting}[style=example]
+...
 xAxis: {
     categories: ['Closed(today)', 'Received(today)', 'Closed(overall)', 'Active(overall)']
 }
@@ -412,30 +405,33 @@ series: [{
         { y: stats.Open, color: '#FF8F00'}
     ]
 }]
+...
 \end{lstlisting}
 
 Visning av søylene uten et antall for hver kategori, ga bare visualisering av forholdet mellom de ulike kategoriene. Derfor ble det lagt til konfigurasjon for å vise selve antallet over hver søyle, slik: 
-
 \begin{lstlisting}
+...
 dataLabels: {
     enabled: true,
     style: {
         fontSize: "16px",
-        lineHeight: "auto"
     }
+...
 }
 \end{lstlisting}
-
 Standard font-størrelse var for liten, så denne ble justert opp. I Internet Explorer 9.0 ble da antallet flyttet for høyt over søylen i forhold til standard høyde. En løsning på dette ble funnet via siden for rapportering av feil til Highcharts\cite{iebug}. 
 
 Endring:
-
 \begin{lstlisting}[style=example]
-lineHeight: "auto"
+...
+style: {
+	lineHeight: "auto"
+        fontSize: "16px",
+    }
+...
 \end{lstlisting}
 
 Figur \ref{IE_bug} viser høydeforskjellen, der høyre er før endring og venstre etter:
-
 \begin{figure}[H]
 \centering
 \begin{subfigure}
