@@ -49,3 +49,11 @@ Brukeren som brukes for XenServer har rollen Pool Admin, da IKT-avdelingen bruke
 
 \subsection{LDAP}
 LDAP benyttes ved synkronisering av kontakter og kan benyttes til innlogging i Icinga Web og Icinga Classic, som beskrevet i \ref{sec:ldapauth}. LDAP over SSL kan benyttes for å kryptere denne kommunikasjonen. Da må et sertifikat installeres på Icinga-serveren.
+
+\subsection{Databaser}
+For MSSQL benyttes en bruker opprettet i Active Directory for autentisering. Denne brukeren får minimale rettigheter slik at den kun kan lese administrative tabeller. I MySQL trenger hver server en egen bruker, denne får også minimale rettigheter, altså kun tilgang til å lese databasen ``INFORMATION\_SCHEMA''. For hver Oracle instanse kreves en egen bruker som har tilgang til se logger, statistikk og status for instansenen, her lages en bruker med SELECT for disse tabellene.
+
+I tillegg til at brukeropprettingsscriptene er fra et firma som jobber med open source overvåkning av database-servere har alle brukeropprettingene blitt gjennomgått med databaseansvarlige ved IKT-avdelingen. 
+
+
+
