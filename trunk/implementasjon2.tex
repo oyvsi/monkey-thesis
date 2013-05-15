@@ -391,7 +391,7 @@ I footprints.php vil returnert data fra alle de fire spørringene bli slått sam
 For å generere grafer av returnert resultat i external.js ble jQuery biblioteket Highcarts benyttet. Det ble først testet et annet bibliotek for grafing: jqBarGraph, men dette hadde manglende konfigurasjonsmuligheter og ble valgt bort. 
 
 I utdraget nedenfor vises koden for å definere hver søyle i diagrammet (``categories''), og sette de ulike dataverdiene med stats.<variabel>:
-\begin{lstlisting}[language=javascript]
+\begin{lstlisting}
 ...
 xAxis: {
     categories: ['Closed(today)', 'Received(today)', 'Closed(overall)', 'Active(overall)']
@@ -422,10 +422,10 @@ dataLabels: {
 Standard font-størrelse var for liten, så denne ble justert opp. I Internet Explorer 9.0 ble da antallet flyttet for høyt over søylen i forhold til standard høyde. En løsning på dette ble funnet via siden for rapportering av feil til Highcharts\cite{iebug}. 
 
 Endring:
-\begin{lstlisting}[style=example]
+\begin{lstlisting}
 ...
 style: {
-	lineHeight: "auto"
+        lineHeight: "auto"
         fontSize: "16px",
     }
 ...
@@ -450,7 +450,7 @@ Figur \ref{IE_bug} viser høydeforskjellen, der venstre er før endring og høyr
 Det er ønskelig at det skal være enkelt å legge til nye sensorer for temperatur og luftfuktighet. Alle sensorene oppdages automatisk av plugin-en som utførerer sjekkene for Icinga. Via API-et til Icinga-web hentes siste verdi for denne sjekken ut. Samtidig får en ut hvilken ID hver av sensorene har fått. Dette returneres til external.js som JSON-data. I Javascript settes verdiene inn i statusvinduet og hver sensor kobles til riktig rad.
 
 Utdrag fra external.js
-\begin{lstlisting}[style=example]
+\begin{lstlisting}
 ...
 var front_layout = [2, 1]; // The netbotz sensor IDs for the front row
 var back_layout = [5, 4];  // and the back
