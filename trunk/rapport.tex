@@ -159,15 +159,10 @@ xleftmargin=3em, framexrightmargin=5pt, framexbottommargin=4pt
 
 %\end{center}
 \end{titlepage}
-
 \pagenumbering{roman}
-\thispagestyle{empty}
-\mbox{}
-
+\clearpage
 %\input{sammendrag}
-\thispagestyle{empty}
-\mbox{}
-\includepdf[pages=-]{forord.pdf}
+\includepdf[pages=-,pagecommand={\thispagestyle{plain}}]{forord.pdf}
 %\input{deklarasjoner}
 \input{ordliste}
 
