@@ -102,7 +102,7 @@ Selve LDAP-binden gjøres via PHP-modulen ``php-ldap''. Når en bruker logger in
 
 Icinga Classic autentiserer mot AD gjennom modulene ldap og authnz\_ldap til Apache2.
 
-/etc/apache2/conf.d/:
+Konfigurasjon for Icinga Classic, i /etc/apache2/conf.d/:
 \begin{lstlisting}[style=example]
     AuthName "Authentication"
     AuthType Basic
@@ -113,7 +113,7 @@ Icinga Classic autentiserer mot AD gjennom modulene ldap og authnz\_ldap til Apa
     require ldap-group CN=icinga-login, OU=icinga, DC=monkey, DC=local
 \end{lstlisting}
 
-/usr/share/icinga-web/app/modules/AppKit/config/auth.xml:
+Konfigurasjon for Icinga Web, i /usr/share/icinga-web/app/modules/AppKit/config/auth.xml:
 \begin{lstlisting}
     <ae:parameter name="ldap_allow_anonymous">false</ae:parameter>
         <ae:parameter name="ldap_dsn">ldap://10.60.0.22</ae:parameter>
