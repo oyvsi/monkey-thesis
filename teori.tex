@@ -21,7 +21,7 @@ Sanntidsovervåkning vil si at en sjekker tilstanden til en enhet eller tjeneste
 \subsection{Overvåkning i ITIL}
 ITIL (Information Technology Infrastucture Library) er et sett med standarder og konsepter som beskriver hvordan IT-tjenester kan kvalitetsikres innenfor leveranse, drift og support. ITIL brukes i dag av IT-bedrifter over hele verden og gir et felles rammeverk for hvordan en bør praktisere innen IT-sektoren. ITIL blir definert i et sett med bøker som blir utgitt av Office of Government Commerce i Storbritannia.
 
-Innenfor ITIL er prossessflyt og involvering av ulike prosesser ved hendelser essensielt. Overvåkning av systemer og infrastruktur bak forretningskritiske systemer, og overvåkning av forretningskritiske systemer i seg selv er viktig i ITIL-prosessen Service Operations. Overvåkning og varsling er et viktig ledd for kunne å registrere en hendelse som kan være et engangstilfelle, eller en indikasjon på et underliggende problem. Et eksempel her vil være om en bruker melder inn at det er problem med innlogging på en terminalserver. Her kan et engangstilfelle være at passordet har løpt ut for denne brukeren, eller indikere et underliggende problem med LDAP-autentisering.
+Innenfor ITIL er prossessflyt og involvering av ulike prosesser ved hendelser essensielt. Overvåkning av systemer og infrastruktur bak forretningskritiske systemer, og overvåkning av forretningskritiske systemer i seg selv er viktig i ITIL-prosessen Service Operations. Overvåkning og varsling er et viktig ledd for kunne å registrere en hendelse som kan være et engangstilfelle, eller en indikasjon på et underliggende problem. Et eksempel på dette er om en bruker melder inn om problemer med innlogging på en terminalserver. Da vil et engangstilfelle være at brukerens passordet har utløpt, men det kan samtidig indikere et underliggende problem med LDAP-autentisering.
 
 Når en hendelse inntreffer, enten ved at en bruker rapporterer om en feil eller at overvåkningsløsningen varsler om det, vil servicedesk være første instans som må reagere. Servicedesk er derfor et viktig ledd for å opprettholde forretningskritisk funksjonalitet, og en god statusvisning og tilrettelagt varsling vil bidra til å raskt identifisere hendelsen.
 
@@ -96,12 +96,14 @@ Icinga Classic baserer seg på det samme vindusoppsettet som Nagios. For uthenti
 
 Icinga Web er en total omskrivning av webgrensesnittet. Det er en Ajax-drevet, Web 2.0-inspirert front-end, som har flere lag mellom kjernen av Icinga og visningene:
 
-\textbf{Doctrine Abstraction Layer} henter informasjon fra databasen. Det kan også benyttes av utviklere for å legge til egne moduler i Icinga Web med uthenting av informasjon fra andre databaser.
+\textbf{Doctrine Abstraction Layer} (DAL) henter informasjon fra databasen. Det kan også benyttes av utviklere for å legge til egne moduler i Icinga Web med uthenting av informasjon fra andre databaser.
+\
 \textbf{REST API} presenterer dataene fra DAL til Icinga Web. Her kan autentisering utføres slik at en kan sette hvilken informasjon ulike brukere skal kunne se.
+\
 \textbf{Command Control Interface} kan videresende kommandoer til Icinga Core. For eksempel manuell kjøring av en sjekk eller restart av Icinga. 
 
 \section{Objekter}\label{sec:objekter}
-All konfigurasjon av Icinga gjøres i tekstfiler. I selve konfigurasjonsfilen ''icinga.cfg'' settes filbanen til konfigurasjonsfilene. Icinga vil da ved oppstart lete rekursivt gjennom mappen etter filer som ender med ''.cfg''.
+All konfigurasjon av Icinga gjøres i tekstfiler. I selve konfigurasjonsfilen ``icinga.cfg'' settes filbanen til konfigurasjonsfilene. Icinga vil da ved oppstart lete rekursivt gjennom mappen etter filer som ender med ``.cfg''.
 
 Konfigurasjonsdataene er bygget rundt det som i Icinga kalles objekter. Dette er en samling av konfigurasjon som hører sammen. Selv om en ikke kan si at Icingas objekter er det samme som objekter i programmeringsverden, benyttes mange av de samme begrepene og konseptene.
 
@@ -113,16 +115,16 @@ En rekke objekter er definert i Icinga, som vist i Tabell \ref{objekter}.
 %\begin{tabular}{|p{2.0in}|c|c|c|} \hline
 \begin{tabular}{ | p{3.5cm} | p{6.5cm} | p{6cm} |} \hline
 	\textbf{Objekt} & \textbf{Forklaring} & \textbf{Eksempel} \\ \hline
-	Host & En enhet med en adresse (typisk IP-adresse eller MAC-adresse). & Server, switch, router etc. \\ \hline
-	Command & En kommando som skal kjøres på overvåkningsserveren & Et program, for eksempel check\_ping. \\ \hline 
-	Service & Kombinasjonen av et host-objekt og et command-ojekt. & Sjekk oppetid: kommandoen ``check\_uptime'' skal kjøres på ``dc1''. \\ \hline
-	Servicegroup & Service-objekt knyttet til host-objekter satt sammen til en applikasjon. & En applikasjon har tre prosesser som må være kjørende for at applikasjonen fungerer. Disse grupperes under samme servicegroup. \\ \hline
-	Contact & Når og hvordan en person skal kontaktes angående en service. & Jens skal få en SMS hvis DHCP ikke er tilgjengelig. \\ \hline
+	Host & En enhet med en adresse IP-adresse. & Server, switch eller router. \\ \hline
+	Command & En kommando som skal kjøres på overvåkningsserveren. & Et program, for eksempel check\_ping. \\ \hline 
+	Service & Kombinasjonen av et host-objekt og et command-objekt. & Sjekk oppetid: kommandoen ``check\_uptime'' skal kjøres på host-objektet``dc1''. \\ \hline
+	Servicegroup & Service-objekt(er) knyttet til host-objekt(er) samles. & En applikasjon har tre prosesser som må være kjørende for at applikasjonen fungerer. Disse grupperes under samme servicegroup. \\ \hline
+	Contact & Når og hvordan en person skal kontaktes angående et service-objekt. & Jens skal få en SMS hvis DHCP ikke er tilgjengelig. \\ \hline
 	Timeperiod & Navn og definisjon av en tidsperiode. & Mellom 08.00 og 16.00 på annenhver tirsdag, hvis det er den tredje dagen i måneden. \\ \hline
-	Host dependency & En eller flere avhengigheter. Dersom et host-objekt er avhengig av et annet, og det ikke svarer lenger, trenger ikke Icinga utføre sjekker på det avhengige objektet. & kantswitch1 er avhengig av kjerneswitch. \\ \hline
-	Service dependency & Samme som host, men for service. & Captive portal er avhengig av RADIUS. \\ \hline
-	Host escalation & Hva skal skje etter at en host har vært nede etter en definert tid. &	Om dc1 har vært nede i 30 minutter, send e-post til Ola Sysadmin. Etter 60 minutter sendes SMS til alle i admin contactgroup-en \\ \hline
-	Service escalation & Samme som for objektet host-dependency, men for service-objeker. & Om DNS har vært nede i 30 minutter, send e-post til Kari Sysadmin. Etter 60 minutter send SMS til alle i admin hostgroup-en. \\ \hline
+	Host dependency & En eller flere avhengigheter mellom host-objekter. & kantswitch1 er avhengig av kjerneswitch. \\ \hline
+	Service dependency & Samme som host dependency, men for service-objekter. & Captive portal er avhengig av RADIUS. \\ \hline
+	Host escalation & Hva skal skje etter at en host har vært nede etter en definert tid. &	Om dc1 har vært nede i 30 minutter, send e-post til Ola Sysadmin. Etter 60 minutter sendes SMS til alle i avdelingen \\ \hline
+	Service escalation & Samme som host escalation, men for service-objeker. & Om DNS har vært nede i 30 minutter, send e-post til Kari Sysadmin. Etter 60 minutter sendes SMS til alle i avdelingen. \\ \hline
 	\end{tabular}
 	\caption{Oversikt over objekter i Icinga}
 	\label{objekter}
@@ -130,11 +132,11 @@ En rekke objekter er definert i Icinga, som vist i Tabell \ref{objekter}.
 \end{table}
 \end{changemargin}
 
-I tillegg til disse kan host, service og contact grupperes med henholdsvis hostgroup, servicegroup og contactgroup.
+I tillegg til disse kan host-, service- og contact-objekter grupperes med henholdsvis hostgroup, servicegroup og contactgroup.
 
 Det er også to objekter med metainformasjon, ``hostextinfo'' og ``serviceextinfo'', der en kan definere ekstra konfigurasjon som bildebaner, notater og koordinater for host- og service-objekter.
 
-Den siste objekttypen er module. Her spesifiseres konfigurasjon for en modul som utvider funksjonalitet i Icinga Web.
+Den siste objekttypen er ``module''. Her spesifiseres konfigurasjon for en modul som utvider funksjonalitet i Icinga Web.
 
 Sammenhengen mellom objektene er viktig å forstå for å skjønne hvordan sjekker utføres i Icinga. I et service-objekt defineres hvilket command-objekt som skal benyttes for å teste tjenesten og hvilke host- eller hostgroup-objekter dette skal sjekkes på. Dette er vist i Figur \ref{command_host_service}.
 
@@ -173,7 +175,7 @@ Icinga i seg selv kommer uten noen overvåkningssjekker. Til dette benyttes plug
 
 En plugin i Icinga er et eksternt program som kjøres og outputen hentes inn som data. Resultatet av sjekken hentes fra exit-koden\cite{wiki:returncode} og oversettes til en tilstand, som vist i Tabell \ref{state}.
 
-En plugin kan være noe helt enkelt som scriptet under. Der exit-koden til en ping-kommando sjekkes. Hvis ping ikke får svar, vil den gi exit-koden 1. Scriptet vil da gi exit koden 2, som i Icinga oversettes til CRITICAL.
+I eksempelet under vises en enkel plugin der exit-koden til en ping-kommando sjekkes. Hvis ping ikke får svar, vil den gi exit-koden 1. Scriptet vil da gi exit koden 2, som i Icinga oversettes til tilstanden ``CRITICAL''.
 \begin{lstlisting}[language=bash]
 #!/usr/bin/env bash
 loss=$(ping -c 5 google.com)
@@ -200,7 +202,7 @@ Det finnes et sett med offisielle plugin-er til Nagios; nagios-plugins, som utgi
 	\end{tabular}
 	\begin{tablenotes}
 	\small
-	\item *Ved bruk av Aggressive host checking\cite{icingapluginapi}.
+	\item *Ved bruk av ``Aggressive host checking''\cite{icingapluginapi}.
 	\end{tablenotes}
 	\caption{Tilstandsoversikt}
 	\label{state}
@@ -211,7 +213,7 @@ Det finnes et sett med offisielle plugin-er til Nagios; nagios-plugins, som utgi
 \section{Sjekker}\label{sec:sjekker}
 Tilstanden for et service- eller host-objekt vil bestemmes ut i fra et returnert resultat fra en aktiv eller passiv sjekk. Forskjellen på disse to vil bli forklart i de neste delkapitlene.
 
-Dersom en aktiv eller passiv sjekk resulterer i en annen tilstand enn OK, er det to typer av tilstanden, ``SOFT'' og ``HARD''. Første gang en plugin returnerer en feil vil tilstanden bli satt til SOFT, i tillegg til service- eller host-tilstanden. Etter dette vil sjekken kjøres hyppigere for å finne ut om det er snakk om et forbigående problem. Etter et gitt antall ganger der plugin-en fortsatt ikke returnerer OK, vil tilstanden skifte til HARD og det sendes ut varslingsmelding. Varsling er beskrevet grundigere i \ref{sec:varsling}.
+Dersom en aktiv eller passiv sjekk resulterer i en annen tilstand enn ``OK'', er det to typer av tilstanden, ``SOFT'' og ``HARD''. Første gang en plugin returnerer en feil vil tilstanden bli satt til SOFT, i tillegg til service- eller host-tilstanden. Etter dette vil sjekken kjøres hyppigere for å finne ut om det er snakk om et forbigående problem. Etter et gitt antall ganger der plugin-en fortsatt ikke returnerer OK, vil tilstanden skifte til HARD og det sendes ut varslingsmelding. Varsling er beskrevet grundigere i \ref{sec:varsling}.
 
 \clearpage
 \subsubsection{Aktive sjekker}
@@ -226,7 +228,7 @@ En aktiv sjekk er en sjekk som initieres av Icinga, der en kommando kjøres på 
 \subsubsection{Passive sjekker}
 Passive sjekker går motsatt vei av aktive sjekker. Her vil hver host si ifra når verdier har overgått en satt grense eller en feil har oppstått. Dette kalles ofte for en ``push''-modell. Passive sjekker kjøres ved at et eksternt program skriver en linje med informasjon om tjenesten og sjekkresultat til en fil, som Icinga sjekker periodisk. Dette er illustrert i Figur \ref{passive_checks}.
 
-Fordelen med passive sjekker er at Icinga vil oppdage feil raskere. Ved standard konfigurasjon sjekkes filen med sjekkresultater så ofte som mulig, mens aktive sjekker kjøres hver 5. minutt. Passive sjekker vil også avlaste Icinga-serveren, da alle sjekker utelukkende vil bli kjørt lokalt på enheten som overvåkes. Men en må åpne for at kommunikasjon kan initieres fra alle enheter som skal overvåkes til Icinga-serveren, og mister da samtidig muligheten til å samle all konfigurasjon på ett sentralt sted. 
+Fordelen med passive sjekker er at Icinga vil oppdage feil raskere. Ved standard konfigurasjon sjekkes filen med sjekkresultater så ofte som mulig, mens aktive sjekker kjøres hver 5. minutt. Passive sjekker vil også avlaste Icinga-serveren, da alle sjekker utelukkende vil bli kjørt lokalt på enheten som overvåkes. Ulempene med aktive sjekker er at en må åpne for at kommunikasjon kan initieres fra alle enheter som skal overvåkes til Icinga-serveren og at en mister muligheten til å samle all konfigurasjon på ett sentralt sted. 
 
 \begin{figure}[H]
     \centering
@@ -238,9 +240,9 @@ Fordelen med passive sjekker er at Icinga vil oppdage feil raskere. Ved standard
 \subsubsection{Hostsjekk}
 Resultatet av en host-sjekk vil avgjøre om tilstanden til host-objektet er ``UP'' eller ``DOWN''. 
 
-Det er ikke et fast tidsintervall for en hostsjekk med mindre check\_interval er definert for objektet. Icinga vil kjøre sjekken om en service som er satt opp for host-en skifter tilstand. Service-objekter som er definert for en host som er i ``DOWN'' vil automatisk bli vist under ``Known service problems'' i webgrensesnittet, og ingen sjekker vil bli kjørt på dem før host-en er ``OK'' igjen.
+Det er ikke et fast tidsintervall for en hostsjekk med mindre check\_interval er definert for objektet. Icinga vil kjøre sjekken service-objektet som er satt opp for host-objektet skifter tilstand. Service-objekter som er definert for et host-objekt som har tilstanden ``DOWN'' vil automatisk bli vist under ``Known service problems'' i webgrensesnittet, og ingen sjekker vil bli kjørt på dem før host-en har tilstandeden ``UP'' igjen.
 
-Grunnsjekken for en host defineres i host-konfigurasjonen med ''check\_command'', som vist under.
+Grunnsjekken for en host defineres i host-konfigurasjonen med ``check\_command'', som vist under.
 \begin{lstlisting}[style=example]
 define host {
 ...
@@ -267,9 +269,9 @@ Her benyttes de innebygde variablene ``USER1'' for banen til plugin-en som kjør
 USER-variablene defineres i den globale konfigurasjonsfilen og brukes der hvor informasjon skal sjules fra webgrensesnittet. Som for eksempel når det trengs et passord for å utføre en sjekk.
 
 \subsubsection{Templates}
-En template er ikke et objekt i seg selv, men en mal for et objekt. Med direktivet ``register 0'' vil ikke Icinga registrere dette objektet for overvåkning. Ved å bruke direktivet ``use'' kan en i et annet objekt ``arve'' konfigurasjonen fra template-en. Template-er kan også arve, og en kan dermed sette opp et hierarki der en spesifiserer generell konfigurasjon i toppen og arver nedover til mer spesiell. 
+En template er ikke et objekt i seg selv, men en mal for et objekt. Med direktivet ``register 0'' vil ikke Icinga registrere dette objektet for overvåkning. Ved å bruke direktivet ``use'' kan en i et annet objekt ``arve'' konfigurasjonen fra template-en. Objektet som er definert som template-er kan også arve, og en kan dermed sette opp et hierarki der en spesifiserer generell konfigurasjon i toppen og arver nedover til mer spesiell konfigurasjon. 
 
-I eksempelet under er generell konfigurasjon for alle host-objekter definert i ``generic\_host'', som brukes i de andre objektene. I ``generic\_firewall'' erstattes verdien for kontaktgruppe, og i cisco\_firewall settes en egendefinert variabel:
+I eksempelet under er generell konfigurasjon for alle host-objekter definert i ``generic\_host'', som brukes i de andre objektene. I ``generic\_firewall'' erstattes verdien for kontaktgruppe, og i ``cisco\_firewall'' settes en egendefinert variabel:
 
 Template-en generic\_host: 
 \begin{lstlisting}[style=example]
