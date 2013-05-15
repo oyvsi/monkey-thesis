@@ -21,10 +21,9 @@ Sanntidsovervåkning vil si at en sjekker tilstanden til en enhet eller tjeneste
 \subsection{Overvåkning i ITIL}
 ITIL (Information Technology Infrastucture Library) er et sett med standarder og konsepter som beskriver hvordan IT-tjenester kan kvalitetsikres innenfor leveranse, drift og support. ITIL brukes i dag av IT-bedrifter over hele verden og gir et felles rammeverk for hvordan en bør praktisere innen IT-sektoren. ITIL blir definert i et sett med bøker som blir utgitt av Office of Government Commerce i Storbritannia.
 
-Innenfor ITIL er prossessflyt og involvering av ulike prosesser ved hendelser essensielt. Overvåkning av systemer og infrastruktur bak forretningskritiske systemer, og overvåkning av forretningskritiske systemer i seg selv er viktig i ITIL-prosessen Service Operations. Overvåkning og varsling er et viktig ledd for kunne å registrere en hendelse som kan være et engangstilfelle, eller en indikasjon på et underliggende problem. 
+Innenfor ITIL er prossessflyt og involvering av ulike prosesser ved hendelser essensielt. Overvåkning av systemer og infrastruktur bak forretningskritiske systemer, og overvåkning av forretningskritiske systemer i seg selv er viktig i ITIL-prosessen Service Operations. Overvåkning og varsling er et viktig ledd for kunne å registrere en hendelse som kan være et engangstilfelle, eller en indikasjon på et underliggende problem. Et eksempel her vil være om en bruker melder inn at det er problem med innlogging på en terminalserver. Her kan et engangstilfelle være at passordet har løpt ut for denne brukeren, eller indikere et underliggende problem med LDAP-autentisering.
 
-% TODO: Eksempel
-I ITIL kan hendelser indikere et underliggende problem. Når en hendelse inntreffer, enten ved at en bruker rapporterer om en feil eller at overvåkningsløsningen varsler om det, vil servicedesk være første instans som må reagere. Servicedesk er derfor et viktig ledd for å opprettholde forretningskritisk funksjonalitet, og en god statusvisning og tilrettelagt varsling vil bidra til å raskt identifisere hendelsen.
+Når en hendelse inntreffer, enten ved at en bruker rapporterer om en feil eller at overvåkningsløsningen varsler om det, vil servicedesk være første instans som må reagere. Servicedesk er derfor et viktig ledd for å opprettholde forretningskritisk funksjonalitet, og en god statusvisning og tilrettelagt varsling vil bidra til å raskt identifisere hendelsen.
 
 Overvåkning er også en del av komponenten ``Capacity Management'' innenfor kategorien ``Service Delivery'', som legger retningslinjer for proaktive handlinger framfor reaktive. Proaktive handlinger innebærer å være i forkant av hendelser som kan oppstå, og ikke reagere når det allerede har skjedd; reaktivt. Informasjon fra overvåkningen kan hjelpe til med å identfisere situasjoner som kan håndteres før hendelser inntreffer og får innvirkning for brukere. \cite{itil1,itil2,events}
 
@@ -423,7 +422,6 @@ Gjennom en tilkobling til en SSH (Secure Shell)-server kan en spesifisere en kom
 
 Ulempen med å kjøre sjekker over SSH er at en må sette opp nøkkelbasert innlogging mellom Icinga-serveren og alle Linux-serverne som skal overvåkes. En kan begrense rettigheter for brukeren som kjører sjekkene, men den vil fortsatt ha muligheten til å logge inn til et shell og eksekvere kommandoer. Dette kan føre til at en potensiell angriper via Icinga-serveren, har en vei inn til alle servere som overvåkes, ved å bruke den private nøkkelen.
 
-%TODO: SSH forced
 SSH gir også endel overhead både på nettverkstrafikk og i CPU-tid\cite{sshmanpage}. En måte å begrense dette på er å benytte SSH med ControlMaster. Dette innebærer en endring i SSH-konfigurasjonen på serveren, slik at SSH-klienten lagrer informasjon om hver utgående TCP-tilkobling, og samme tilkobling kan benyttes mot samme host. Dermed unngås en ny TCP-tilkobling for hver ny sjekk som skal utføres på hosten.
 
 \subsubsection{SNMP}
@@ -441,7 +439,6 @@ iso(1). org(3). dod(6). internet(1). private(4). enterprises(1). apc(318). produ
 \
 Denne OID-en er definert i APCs MIB-fil ``PowerNet MIB''. Ved å laste inn denne kan en også benytte ``PowerNet-MIB::upsAdvBatteryCapacity.0''.
 
-% TODO sjekke forskjellen på de forskjellige protokollene
 SNMP finnes i flere versjoner. I dag brukes for det meste versjon 2c og den nyeste, versjon 3. De ulike versjonene er ikke kompatible, men i praksis støtter det meste av utstyr som støtter v3 eller v2c også v1 \cite{rfc3584}. Hovedforskjellen på versjon 2c og 3 er at versjon 3 har støtte for flere sikkerhetsmekanismer, men krever noe mer konfigurasjon. Sikkerhetsaspektet ved dette er diskutert videre i Kapittel \ref{chap:sikkerhet}.
 
 Det eksisterer to muligheter når enheter skal overvåkes via SNMP. Enten kan enhetene selv rapportere inn hendelelser via SNMP trap/inform, eller så kan serveren spørre enhetene via SNMP GetRequest. Valg av det første medfører at en kan gjøre varsling umiddelbart, men da må også hver enhet konfigureres med parametere for hvilke trap-meldinger som skal sendes og til hvilken IP-adresse. Icinga har ingen støtte for å motta trap-er, men en kan installere en egen daemon for dette og rapportere inn data med passive sjekker. 
