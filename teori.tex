@@ -335,20 +335,20 @@ Dette kan være nyttig dersom en for eksempel vil legge alle hoster i en hostgro
 I eksempelet nedenfor brukes det regulære uttrykket \verb|"^HiG\[0-9\]+\$"| i attributten ``members'' til å legge til alle konfigurerte hosts der navnet starter på ``HiG'' etterfulgt og avsluttet med ett eller flere siffer mellom 0 og 9, i hostgroup-objektet ``all\_servers''.
 \begin{lstlisting}[style=example]
 define hostgroup {
-    hostgroup_name	all_servers
-    alias		All Servers
-    members		^HiG[0-9]+$
+    hostgroup_name  all_servers
+    alias           All Servers
+    members         ^HiG[0-9]+$
 }
 \end{lstlisting}
 
 Det kan også benyttes til å ekskludere en host fra en service-sjekk. I eksempelet nedenfor er HiG3 medlem av hostgroup-en ``windows\_servers'', men blir ekskludert fra å kjøre sjekken på diskplass ved å sette ``!HiG3'':
 \begin{lstlisting}[style=example]
 define service {
-    use				generic_service
-    service_description		Disk space
-    hostgroup_name		windows_servers
-    host_name			!HiG3
-    check_command		win_nrpe!CheckDriveSize!Drive="C" MaxWarnUsed=80% MaxCritUsed=90%
+    use                     generic_service
+    service_description	    Disk space
+    hostgroup_name          windows_servers
+    host_name               !HiG3
+    check_command           win_nrpe!CheckDriveSize!Drive="C" MaxWarnUsed=80% MaxCritUsed=90%
 }
 \end{lstlisting}
 
@@ -374,6 +374,7 @@ Service dependency er en egen objekttype der en kan sette opp avhengighet mellom
 
 Icinga undersøker om avhengigheter er definert for et service-objekt, før det utføres sjekker på det. Dette er med på å bestemme om det blir sendt ut varsel for service-objektet.
 
+\clearpage
 I eksempelet under er tjenesten ``Check SMB'' på HiG3 avhengig av master-service-en Check LDAP på HiG3. ``execution\_failure\_criteria'' bestemmer ved hvilke tilfeller tjenesten ikke skal sjekkes. Her er den satt til ``c'', som vil si at Check SMB ikke skal kjøres dersom ``Check LDAP'' er i CRITICAL tilstand.
 
 \begin{lstlisting}[style=example]
@@ -398,7 +399,7 @@ For å konfigurere avhengigheter mellom tjenester som kjører på samme host kan
 \begin{lstlisting}[style=example]
 define servicedependency{
     ;dependent_host_name   	    ; Not defined to make dependancy on same host            
-    hostgroup_name 		    linux_servers
+    hostgroup_name 		            linux_servers
     service_description             NRPE-daemon
     dependent_service_description   NRPE Check *
     execution_failure_criteria      c

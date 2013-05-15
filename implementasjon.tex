@@ -146,36 +146,36 @@ Som nevnt i \ref{sec:objekter} knyttes et service-objekt til et host-objekt og e
 Først defineres en hostgroup for alle SQL serverne. Dette gjøres for å gruppere alle SQL serverne uavhengig av hvilken databasetype som brukes. 
 \begin{lstlisting}[style=example]
 define hostgroup {
-    hostgroup_name		sql_servers
-    alias         		SQL Servers
-    hostgroup_members	mysql_servers, mssql_servers, oracle_servers
+    hostgroup_name      sql_servers
+    alias               SQL Servers
+    hostgroup_members   mysql_servers, mssql_servers, oracle_servers
 }
 \end{lstlisting}
 Deretter defineres en hostgroup for alle MySQL-servere.
 \begin{lstlisting}[style=example]
 define hostgroup {
-    hostgroup_name 		mysql_servers
-    alias         		MySQL Servers
+    hostgroup_name      mysql_servers
+    alias               MySQL Servers
 }
 \end{lstlisting}
 For å legge til en host i denne gruppen kan host-objektet være definert på følgende måte.
 \begin{lstlisting}[style=example]
 define host {
-    use				generic_linux_host
-    address			10.60.0.21
-    host_name		HiG2
-    alias    		HiG2
-    hostgroups		debian_servers, mysql_servers
+    use             generic_linux_host
+    address         10.60.0.21
+    host_name       HiG2
+    alias           HiG2
+    hostgroups      debian_servers, mysql_servers
 }
 \end{lstlisting}
 Service-objektet defineres slik og refererer til hostgroup-en og kommandoen ``check\_mysql\_health''. Alle host-objekter i ``mysql\_servers'' vil da få denne sjekken.
 \begin{lstlisting}[style=example]
 define service {
-    service_description	MySQL Connection Time
-    use		 			generic_service
-    name 				mysql_connection_time
-    hostgroup_name 		mysql_servers
-    check_command 		check_mysql_health!connection-time!0.1!0.4
+    service_description MySQL Connection Time
+    use                 generic_service
+    name                mysql_connection_time
+    hostgroup_name      mysql_servers
+    check_command       check_mysql_health!connection-time!0.1!0.4
 }
 \end{lstlisting}
 
@@ -334,7 +334,7 @@ check_command check_nrpe!check_dist_load!0.9,0.7,0.5 1.2,1.0,0.9
 \end{lstlisting}
 Kommando brukt i command-objektet check\_dist\_load:
 \begin{lstlisting}[style=example]
-/check_load -r -w $ARG1$ -c $ARG2$
+./check_load -r -w $ARG1$ -c $ARG2$
 \end{lstlisting}
 
 \clearpage
@@ -353,8 +353,7 @@ OK memory within bounds.|'physical memory %'=16%;80;90 'physical memory'=1G;4;5;
 
 For Linux benyttes plugin-en check\_mem \cite{checklinuxmem}, da det ikke følger med noen plugin for å sjekke minneforbruk i nagios-plugins.
 \begin{lstlisting}[style=example]
-   check_command    check_nrpe!check_mem!80 90 ; Check that percent used is within tresholds. Used is calculated from total - free - cached - buffers 
-                    command[check_mem]=/usr/lib/nagios/plugins/libexec/check_mem.pl -w $ARG1$ -c $ARG2$
+./check_mem.pl -w 80 -c 90
 \end{lstlisting}
 \subsection{Disk}
 En full harddisk kan skape problemer for applikasjoner som lagrer data og logger fra systemet kan stoppe. Ved høyt minneforbruk og bruk av virtuelt minne i kombinasjon med en full disk, vil ikke harddisken kunne utnyttes som swap, og applikasjoner kan stoppe å fungere.
@@ -382,19 +381,19 @@ IKT-avdelingen ønsket å overvåke tjenester og prosesser på serverne. Prosses
 Overvåkning av tjenester vil innebære å se på om en eller flere prosesser kjører til en hver tid. NSClient++ har muligheten til å se om en bestemt tjeneste kjører eller har stoppet gjennom ``CheckServiceState''. Her spesifiserers navnet på tjenesten, og sjekken svarer på om denne tjensten kjører.
 \begin{lstlisting}[style=example]
 define service {
-    service_description     DHCP Service
-    hostgroup_name          dhcp_servers
-    check_command           check_nrpe!CheckServiceState!DHCPServer=started ShowAll
-    use                     generic_service
+    service_description DHCP Service
+    hostgroup_name      dhcp_servers
+    check_command       check_nrpe!CheckServiceState!DHCPServer=started ShowAll
+    use                 generic_service
 }
 \end{lstlisting}
 For Linux brukes plugin-en ``check\_procs'' fra nagios-plugins. For denne plugin-en spesifiseres også hvor mange instanser av prosessen som skal forekomme. 
 \begin{lstlisting}[style=example]
 define service {
-    use            	        generic_service
-    hostgroup_name       	linux_servers
-    service_description     	NRPE Check my process
-    check_command        	check_nrpe!check_process!sshd 1:40
+    use                   generic_service
+    hostgroup_name        linux_servers
+    service_description   NRPE Check my process
+    check_command         check_nrpe!check_process!sshd 1:40
 }
 \end{lstlisting}
 
@@ -424,7 +423,7 @@ Ytelsesdata har blitt samlet inn over 30 dager, for å sette grenseverdier for n
 \end{figure}
 Kommandoen for hvordan sjekken kjøres er vist under:
 \begin{lstlisting} [style=example]
-    ./check_ldap -H 10.60.0.21 -b icingauser -P pass -w 0.01 -c 0.02
+./check_ldap -H 10.60.0.21 -b icingauser -P pass -w 0.01 -c 0.02
 \end{lstlisting}
 
 \subsubsection*{DNS}
@@ -440,7 +439,7 @@ Figur \ref{dns-inv} viser data samlet inn fra to DNS servere over 30 dager. Diss
 \end{figure}
 Kommandoen for hvordan sjekken kjøres er vist under:
 \begin{lstlisting} [style=example]
-    ./check_dns -s 10.60.0.21 -H icinga1.monkey.local -w 0.01 -c 0.02
+./check_dns -s 10.60.0.21 -H icinga1.monkey.local -w 0.01 -c 0.02
 \end{lstlisting}
 
 \clearpage
@@ -449,7 +448,7 @@ Overvåkning av en DHCP-tjeneste ble testet i labmiljøet med plugin-en ``check\
 
 Kommandoen for hvordan sjekken kjøres er vist under:
 \begin{lstlisting} [style=example]
-    ./check_dhcp -s 10.60.0.22
+./check_dhcp -s 10.60.0.22
 \end{lstlisting}
 
 \subsection{Webservere}\label{sec:webservere}
@@ -639,7 +638,10 @@ Script for å opprette brukere i Oracle og MSSQL finnes i Vedlegg \ref{oracledb.
 
 Konfigurasjon for command-objektet for MSSQL og MySQL vises under. \$ARG1\$ brukes for å sende med hvilken parameter plugin-en sjekker.
 \begin{lstlisting}[style=example]
+define command {
+...
     command_line	$USER1$/check_<database-motor>_health --hostname=$HOSTADDRESS$ --username=$USER5$ --password=$USER4$ --mode $ARG1$ --warning $ARG2$ --critical $ARG3$
+}
 \end{lstlisting}
 
 \subsubsection{MySQL Cluster}
@@ -900,24 +902,24 @@ Som en ser fra eksempelet må det angis addressen til to enheter for å hente ut
 \clearpage
 Under vises et eksempel hvordan dette kan konfigureres for ett pool med to host-objekter:
 \begin{lstlisting}[style=example]
-// generic-objektet 
+; generic-objektet 
 define host {
-    use 		generic_linux_host
-    name 		generic_xen_pool_1
-    _MASTERIP 		10.0.1.50
+    use         generic_linux_host
+    name        generic_xen_pool_1
+    _MASTERIP   10.0.1.50
 }
 
-// To host-objekt som arver generic-objektet
+; To host-objekt som arver generic-objektet
 define host {
-    name 		Cluster_1_Xen_Host_1
-    address 		10.0.1.51
-    use 		generic_xen_cluster_1
+    name        Cluster_1_Xen_Host_1
+    address     10.0.1.51
+    use         generic_xen_cluster_1
 }
 
 define host {
-    name 		Cluster_1_Xen_Host_2
-    address 		10.0.1.52
-    use 		generic_xen_cluster_1
+    name        Cluster_1_Xen_Host_2
+    address     10.0.1.52
+    use         generic_xen_cluster_1
 }
 \end{lstlisting}
 
