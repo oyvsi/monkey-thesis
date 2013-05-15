@@ -134,9 +134,9 @@ Kontaktgrupper hentes fra OU-en icinga\_grupper der alle grupper hentes ut og op
 Eksempel på generisk service som blir opprettet:
 \begin{lstlisting}[style=example]
 define service {
-    name 				    network_services
-    register 		   		0
-    use 			   		generic-service     
+    name 		    network_services
+    register 		    0
+    use 		    generic-service     
     notification_interval   30
     notification_period     24x7
     notification_options    w,c,r
@@ -210,7 +210,7 @@ define service {
 \end{table}
 
 \section{Backup-rutiner}
-I Tabell \ref{backup}, vises viktige filer og mapper for overvåkningsløsningen. Disse bør integreres i en backup av Icinga-serveren.
+I Tabell \ref{backup}, vises viktige filer og mapper for overvåkningsløsningen. Disse bør integreres i en plan for backup av Icinga-serveren.
 \begin{table} \label{backup}
 \begin{center}
 \begin{tabular}{| p{8cm} | p{8cm} |}
@@ -232,5 +232,4 @@ I Tabell \ref{backup}, vises viktige filer og mapper for overvåkningsløsningen
 \end{tabular}
 \end{center}
 \end{table}
-I tillegg bruker Icinga Classic og Icinga Web hver sine databaser, kalt ``icinga'' og ''icinga\_web''. Graphite bruker også en database, som heter ``graphite''.
-
+I tillegg bruker Icinga Classic og Icinga Web hver sine databaser, kalt ``icinga'' og ''icinga\_web''. Graphite bruker også en database, som heter ``graphite''. Alle disse kjøres av MySQL lokalt på Icinga-serveren, og bør også inkluderes i en backup.
