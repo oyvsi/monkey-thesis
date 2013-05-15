@@ -6,12 +6,10 @@ Datasystemene er kritiske for daglig drift av de mange funksjonene fylkeskommune
 
 Per i dag benyttes en enkel overvåkningsløsning, ``Servers Alive''\cite{servers}, som ikke dekker IKT-avdelingens behov. Oppsettet gir for mye irrelevant informasjon, som gjør at en ikke får et godt nok oversiktsbilde. Det mangler også mulighet for å kunne overvåke mange ønskede tjenester. Systemet gir kun varsling til skjerm, men det er i tillegg ønskelig å kunne få varsler på SMS og e-post. Servers Alive er også en proprietær løsning, og dermed ikke lett å utvide. I tillegg til dette kjøres ikke sjekkene parallelt, og derfor skalerer systemet dårlig.
 
-IKT-avdelingen har lenge arbeidet med å finne en bedre overvåkningsløsning for infrastrukturen. Det er ønskelig å erstatte Servers Alive med en mer modulbasert løsning, der IKT-avdelingen har tilgang til kildekoden og kan utføre endringer.
-
-De har imidlertid for hver gjennomgang av mulige overvåkningsløsninger konkludert med at de ikke har de nødvendige ressursene til et slikt prosjekt. Da vi forespurte IKT-avdelingen om de hadde noen mulige bachelorprosjekter, var de veldig interessert i at en bachelorgruppe kunne se på hvordan et slikt prosjekt kunne gjennomføres.
+IKT-avdelingen har lenge arbeidet med å finne en bedre overvåkningsløsning for infrastrukturen. Det er ønskelig å erstatte Servers Alive med en mer modulbasert løsning, der IKT-avdelingen har tilgang til kildekoden og kan utføre endringer. De har imidlertid for hver gjennomgang av mulige overvåkningsløsninger konkludert med at de ikke har de nødvendige ressursene til et slikt prosjekt. Da vi forespurte IKT-avdelingen om de hadde noen mulige bachelorprosjekter, var de veldig interessert i at en bachelorgruppe kunne se på hvordan et slikt prosjekt kunne gjennomføres.
 
 \section*{Oppgavebeskrivelse}
-Det skal settes opp en overvåkningsløsning, som skal varsle feil og hendelser på enheter i fylkeskommunens datanettverk. Dette innebefatter servere med tjenester, og nettverksenheter som switcher, routere og brannmurer. Dette systemet må være modulært med mulighet for enkelt å kunne legge til nye moduler i ettertid. Følgende krav er satt til løsningen:
+Det skal settes opp en overvåkningsløsning, som skal varsle feil og hendelser på enheter i fylkeskommunens datanettverk. Dette innebeærer servere med tjenester, og nettverksenheter som switcher, routere og brannmurer. Dette systemet må være modulært med mulighet for enkelt å kunne legge til nye moduler i ettertid. Følgende krav er satt til løsningen:
 
 \begin{itemize*}
 	\item Webgrensesnitt for administering av overvåkningssystemet, der informasjon om enheter og hvilke tjenester som overvåkes skal vises.
@@ -30,12 +28,12 @@ Det skal settes opp en overvåkningsløsning, som skal varsle feil og hendelser 
 	\item Innen servermiljø skal det kunne overvåkes temperatur, luftfuktighet og UPS.
 \end{itemize*}
 
-Vi må derfor finne programvare som kan tilpasses fylkeskommunes systemer, og som dekker flest mulig av disse kravene. Dersom eksisterende løsninger ikke finnes, eller ikke dekker behovet, må vi utvikle dette selv.
+Vi må derfor finne programvare som kan tilpasses fylkeskommunens systemer, og som dekker flest mulig av disse kravene. Dersom eksisterende løsninger ikke finnes, eller ikke dekker behovet, må vi utvikle dette selv.
 
 IKT-avdelingen har også en liste over tilleggsfunksjonalitet de ønsker implementert i løsningen. Disse vil implementeres dersom det er tid til det.
 
 \begin{itemize*}
-	\item Rapporter som viser dagens situasjon og uthenting av trender.
+	\item Rapporter som viser dagens situasjon og trender.
 	\item Ta hensyn til driftsarbeid. Planlagt arbeid definert på enheter vil ikke utløse alarm, men driftsarbeidsvarsling.
 	\item SLA
 	\begin{itemize*}
@@ -85,12 +83,12 @@ Etter at valg av kjerneprogramvare var tatt ble det definert at følgende katego
 	\end{itemize*}
 \end{itemize*}
 
+\section{Avgrensninger}
+Siden oppdragsgiver har både krav og ønsket tilleggsfunksjonalitet, må vi avgrense oss slik at vi overholder tidsrammer for å oppfylle kravene. Dersom vi ligger foran tidsskjemaet, vil vi begynne å se på og implementere tilleggsfunksjonalitet.
+
 Manuell endring av konfigurasjon i tekstfiler er den mest fleksible løsningen, og oppdragsgiver var enig i at dette var enkelt nok og dermed ikke trengte å være grafisk.
 
 Kravet til at alle data inn og ut skal logges i databaser bortfaller, da dette gjennom testing genererte for store datamengder til at det var hensiktsmessig å lagre alt.
-
-\section{Avgrensninger}
-Siden oppdragsgiver har både krav og ønsket tilleggsfunksjonalitet, må vi avgrense oss slik at vi overholder tidsrammer for å oppfylle kravene. Dersom vi ligger foran tidsskjemaet, vil vi begynne å se på og implementere tilleggsfunksjonalitet.
 
 \section{Målgruppe}
 Overvåkningsløsningen utvikles for IKT-avdelingen, og ansatte her vil være en av målgruppene. Selve rapporten vil vinkles slik at medstudenter, veileder, oppdragsgiver, sensor og ellers andre interesserte kan få et innblikk i hvordan prosessen med å implementere en overvåkningsløsning basert på fri programvare har vært. Det faglige nivået på rapporten vil være slik at medstudenter kan få utbytte av stoffet.
@@ -131,7 +129,7 @@ Bjørn-Erik og Øyvind er 3. års studenter på Drift av nettverk og datasysteme
 
 Bjørn-Erik og Øyvind har også tidligere skrevet en rapport om bruk av ITIL ved Hedmark fylkeskommunes IKT-avdeling, i faget ``IT Service Management''.
 
-Vi mener at en overvåkningsoppgave med denne beskrivelsen kan komme innom mange av områdene vi har vært gjennom i løpet av studiet. Her er det også områder der gruppen har delvis eller manglende kunnskap, både om hvilke teknologier som finnes og hvordan de brukes i et større datamiljø.
+Vi mener at en overvåkningsoppgave med denne beskrivelsen kan dekke mange av områdene vi har vært gjennom i løpet av studiet. Her er det også områder der gruppen har delvis eller manglende kunnskap, både om hvilke teknologier som finnes og hvordan de brukes i et større datamiljø.
 
 \section{Roller}
 \subsubsection{Prosjektleder}
@@ -141,13 +139,13 @@ Prosjektleder er Øyvind Sigerstad. Denne rollen vil være fast under hele prosj
 Vår kontaktperson er Nils Slåen. All kontakt med oppdragsgiver og annen utgående kommunikasjon vil gå via ham. Kommunikasjonsansvarlig har også ansvar for å avtale møter.
 
 \subsubsection{Webansvarlig}
-Vår webansvarlig er Bjørn-Erik Strand. Hans hovedansvar er å sette websiden vår i drift før fristen. Webansvarlig har også et overordnet ansvar for å publisere oppdateringer. De andre medlemmene i gruppen skal også ha tilgang til å utføre oppdateringer.
+Vår webansvarlig er Bjørn-Erik Strand. Hans hovedansvar er å sette websiden vår i drift før fristen. Webansvarlig har også et overordnet ansvar for å publisere oppdateringer. De andre medlemmene i gruppen skal også ha tilgang til å legge ut informasjon.
 
 \subsubsection{Oppdragsgiver}
 Vår oppdragsgiver er Svein-Inge Kvalø (Fungerende driftsleder ved IKT-avdelingen, Hedmark fylkeskommune), og er vårt kontaktpunkt ved Hedmark fylkeskommune. Lasse Odden er vår tekniske kontakt (IT-konsulent ved IKT-avdelingen, Hedmark fylkeskommune). Han vil være en ressurs som brukes for tekniske spørmål rundt IKT-avdelingens oppsett.
 
 \subsubsection{Veileder}
-Erik Hjelmås (Førsteamanuensis, Dr. scient ved HiG), er vår veileder gjennom bacheloroppgaven. Han vil bidra til avklaringer rundt oppgaven og komme med innspill rundt tekniske utfordringer.
+Erik Hjelmås (Førsteamanuensis, Dr. scient ved Høgskolen i Gjøvik), er vår veileder gjennom bacheloroppgaven. Han vil bidra til avklaringer rundt oppgaven og komme med innspill rundt tekniske utfordringer.
 
 \section{Rutiner og regler i gruppa}
 Et eget dokument er utarbeidet med grupperegler som alle gruppens medlemmer er enige i og har skrevet under på. Dette finnes i Vedlegg \ref{app:forprosjekt}.
@@ -155,29 +153,30 @@ Et eget dokument er utarbeidet med grupperegler som alle gruppens medlemmer er e
 \section{Verktøy}
 Alt av egenutviklet kildekode og konfigurasjonsfiler vil bli lagt under et SVN repository. Dette for å få versjonskontroll og samle alt på et sted, som vi kan ta backup av. Google Docs vil bli brukt for å samarbeide på dokumenter. Når den endelige rapporten skal genereres, vil vi overføre Google Docs-dokumentet til \LaTeX. Dropbox vil bli benyttet til å dele filer og dokumenter innad i prosjektgruppen, og med oppdragsgiver. Vi vil bruke Wordpress som publiseringsverktøy for hjemmesiden.
 
-Av andre verktøy har vi benyttet Microsoft Visio til å lage illustrasjoner. Grafene er generert av Graphite.
+Av andre verktøy skal Microsoft Visio benyttes til å lage illustrasjoner og matplotlib til diagrammer. 
 
 \section{Utviklingsmodell/rammeverk}
 For å tilpasse overvåkningssystemet til IKT-avdelingens krav, vil det med stor sannsynlighet komme endringer etterhvert. Det vil kunne oppstå ulike situasjoner som er vanskelige å forutse. Eksempler på dette er at en plugin som kreves ikke eksisterer, eller at webgrensesnittet må endres på grunn av mer informasjon eller omorganisering. I tillegg kan oppdragsgiver komme med innspill som fører til endring av funksjonalitet. Derfor må vi ha en fleksibel modell med tanke på endringer og tilbakefall, men med begrensninger på hvor mye tid vi kan bruke ved uforutsette problemer.
 
-På grunn av en naturlig sammenheng og avhengigheter mellom kravene som er satt, har vi valgt å gruppere funksjonalitet i moduler. De forskjellige modulene er ``Kjerneprogramvare'', ``Server'', ``Infrastruktur'', ''Servermiljø'', ``Varsling'' og ``Statusvindu'' (visualisert i Vedlegg \ref[p.~12]{app:forprosjekt}). Med nærliggende sammenheng mener vi at funksjonalitet som CPU, RAM, disk og prosesser er i samme kategori. 
+På grunn av en naturlig sammenheng og avhengigheter mellom kravene som er satt, har vi valgt å gruppere funksjonalitet i moduler. De forskjellige modulene er ``Kjerneprogramvare'', ``Server'', ``Infrastruktur'', ''Servermiljø'', ``Varsling'' og ``Statusvindu'' (visualisert i Vedlegg \ref{app:forprosjekt}). Med nærliggende sammenheng mener vi at funksjonalitet som CPU, RAM, disk og prosesser er i samme kategori. 
 
-Planen er også å gjennomføre kategoriene i en gitt rekkefølge. Varsling kan settes opp uten noe input, men med tanke på redundans i systemene, avhengigheter mellom objektene, og testing av funksjonene som går inn under varsling, ser vi på dette som en avhengighet av ``Server'' og ``Infrastruktur''. ``Statusvindu'' har vi valgt å legge sist fordi vi ser for oss at modulene ``Server'', ``Infrastruktur'', ''Servermiljø'', og ``Varsling'' må være på plass før en varslingsskjerm kan ferdigstilles.
+Planen er også å gjennomføre kategoriene i en gitt rekkefølge. Varsling kan settes opp uten noe input, men med tanke på redundans i systemene, avhengigheter mellom objektene, og testing av funksjonene som går inn under varsling, ser vi på dette som en avhengighet av Server og Infrastruktur. Statusvindu har vi valgt å legge sist fordi vi ser for oss at modulene Server, Infrastruktur, Servermiljø, og Varsling må være på plass før en varslingsskjerm kan ferdigstilles.
 
 I tradisjonell systemutvikling må en definere alle parametere og rekkefølge på alt som skal utvikles, før en starter med selve utviklingen. En smidig modell vil gi oss mer frihet til å gjøre justeringer underveis. Vi har derfor valgt en iterativ modell\cite{wiki:iterativ}. En del av den iterative modellen er ``product control list'', men denne har vi valgt å ikke ta med fordi vi har satt opp en overordnet kategorisering av funksjonalitet, og bestemt når hver av disse skal implementeres.
 
 Vi vil dele inn iterasjonene i faser, som hver består av en planleggingsfase, en implementeringsfase, og en fase for testing og evaluering. Disse vil så gjentas for hver modul som skal implementeres. Halvveis i hver iterasjon vil vi ha et møte med oppdragsgiver der vi kan presentere funksjonalitet i modulen, og få tilbakemeldinger. Det gjør at vi kan jobbe med dette i den siste halvdelen av iterasjonen. Dette vil forhåpentligvis føre til at produktet ikke sporer av fra de forventningene og behovene IKT-avdelingen har.
 
 \section{Organisering av rapporten}
-		\subsection{Oversikt over kapitler}
-Kapittel 1 introduserer oppgaven.
-Kapittel 2 gir en teoretisk bakgrunn.
-Kapittel 3 handler om implementasjonen som ble utført.
-Kapittel 4 går gjennom sikkerhetsvurderinger i implementasjonen.
-Kapittel 5 dokumentasjon gruppen anser vil være nyttig.
-Kapittel 6 avsluttes og konkluderes rapporten.
-\subsection{Konvensjoner} %TODO
-
+\subsection{Oversikt over kapitler}
+\begin{enumerate*}
+\item Innleding - oppgaven inntroduseres. Bakgrunn, formål og plan for gjennomføring gjennomgås.
+\item Teori - en teoretisk bakgrunn innen overvåkning og konfigurasjon av overvåkningsløsningen.
+\item Implementasjon - gjennomgang av implementasjonen av overvåkningsløsningen.
+\item Sikkerhet - de sikkerhetsvurderinger gruppen har tatt i implementasjonen presenteres.
+\item Dokumentasjon - gruppen anser som nyttig tilleggsinformasjon til implementasjonen.
+\item Avslutning - rapporten avsluttes og konkluderes.
+\end{enumerate*}
+\subsection{Konvensjoner}
 Kildekode vil inneholde ``syntax-highlighting'' til riktig programmeringsspråk og linjenummer. Dette markeres slik:
 \begin{lstlisting}[language=perl]
  #!/usr/bin/perl
@@ -191,7 +190,9 @@ define command {
    command_line   $USER1$/check_ssh -H $HOSTADDRESS$ -p $_HOSTSSHPORT$
 }
 \end{lstlisting}
-En linje i en konfigurasjonsfil omtales som et ``direktiv''. En spesifikk verdi omtales som et ``attributt''.
+En linje i en konfigurasjonsfil omtales som et ``direktiv''. En spesifikk verdi omtales som et ``attributt'' (for eksempel command\_name).
 Der kun utdrag av konfigurasjon eller kildekode er benyttet brukes ``...'' for å markere hvor det er utelatt.
 
 Objekttyper omtegnes med det navnet som er brukt i dokumentasjonen for eksempel ``host'', ``service'', ``timeperiod''. ``Tjeneste'' brukes om applikasjoner påpå en server, som benyttes av andre enheter og/eller brukere. ``Host'' brukes om en enhet med en IP-adresse. 
+\subsection{Grafikk}
+Grafene er generert av Graphite. Alle illustrasjoner er enten egenprodusert eller hentet fra Icingas dokumentasjon, der de er publisert under GPLv2.
