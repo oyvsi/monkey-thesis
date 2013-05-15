@@ -840,7 +840,7 @@ Grenseverdier (\%): WARNING 80, CRITICAL 90
 
 \subsection*{I/O}
 
-Overvåkning av tid brukt på I/O operasjoner kan avdekke ytelsesproblem mellom host og virtuelle maskiner, og mellom host og lagringsenheter benyttet. Uthenting av informasjon her er foreløbig bare sanntidsdata når sjekken kjører. Counters hentet ut for I/O, aggregeres ikke ved standard innstilling for lagring av data i Virtual Center. Standard innstilling er "level 1", og det kreves "level 2" for å kunne benytte disse counter-ene.
+Overvåkning av tid brukt på I/O operasjoner kan avdekke ytelsesproblem mellom host og virtuelle maskiner, og mellom host og lagringsenheter benyttet. Uthenting av informasjon her er foreløbig bare sanntidsdata når sjekken kjører. Counters hentet ut for I/O, aggregeres ikke ved standard innstilling for lagring av data i Virtual Center. Standard innstilling er ``level 1'', og det kreves ``level 2'' for å kunne benytte disse counter-ene.
 
 Flere anbefalinger eksisterer for overvåkning av I/O counters, men disse baseres på real-time data, og VMware anbefaler at det ikke overstiger 10ms over en periode. Opsjonene ``-i 300'' og ``-T 600'' kan benyttes etter aktivering av level 2 for aggregering av data.
 
@@ -858,7 +858,7 @@ I tillegg til de over kjøres det to sjekker som gjenspeiler status fra Virtual 
 
 Bruk av NRPE for host-er kan være aktuelt om en vil forsikre seg om at det lagres data om cpu, minne, og diskplass skulle vCenter gå ned. All informasjon om hosts avhenger nå av at Virtual Center-serveren kjører, og er et ``single point of failure''.
 
-For kapasitetsmåling og helsestilstanden for et cluster kan det settes sjekker for cpu, minnne og helsetilstanden rapportert fra Virtual Center. En bruker da opsjonen "-C" med navn på cluster tilsvarende "-H"
+For kapasitetsmåling og helsestilstanden for et cluster kan det settes sjekker for cpu, minnne og helsetilstanden rapportert fra Virtual Center. En bruker da opsjonen ``-C'' med navn på cluster tilsvarende ``-H''.
 
 \subsubsection{Citrix Xen}
 I motsetning til VMware der all informasjon kan hentes ut fra et punkt (Virtual Center), må en for Citrix Xen  kontakte en master-host for et gitt cluster. Master-hosten har ansvar for å presentere et administrativt grensesnitt, og videresender kommandoer mot spesifikke hosts i clusteret.
