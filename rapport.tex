@@ -160,7 +160,8 @@ xleftmargin=3em, framexrightmargin=5pt, framexbottommargin=4pt
 %\end{center}
 \end{titlepage}
 \pagenumbering{roman}
-\clearpage
+\includepdf[pages=-,pagecommand={\thispagestyle{plain}}]{sammendrag.pdf}
+%\clearpage
 %\input{sammendrag}
 \includepdf[pages=-,pagecommand={\thispagestyle{plain}}]{forord.pdf}
 %\input{deklarasjoner}
