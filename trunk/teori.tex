@@ -480,7 +480,7 @@ Valg av protokoll eller agenter har basert seg på følgende punkter:
 \end{itemize*}
 Nettverkstrafikken som ble generert ved både en NRPE- og en SSH-sjekk ble målt ved å benytte et Bash-script som kjørte en disk-sjekk 100 ganger, som vist under. 
 
-\begin{lstlisting}[style=example,language=bash]
+\begin{lstlisting}[language=bash]
 #!/usr/bin/env bash
 if [ "$1" == "ssh" ]; then
     cmd="/usr/lib/nagios/plugins/check_by_ssh -H 10.60.0.21 -C \"/usr/lib/nagios/plugins/check_disk -W 10% -C 5% -M -A\" > /dev/null"
