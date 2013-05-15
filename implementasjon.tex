@@ -696,7 +696,7 @@ I dette eksempelet kjøres service-sjekker mot alle tjenestene. Service-objekten
 Det vil det også være naturlig å sette opp servicedependency-er mellom ``Check ERP Web Contents'' på Web1 og sjekkene for webserveren, filserveren, mailserveren og databaseserveren for å unnga flere varsler ved følgefeil.
 
 \section{Infrastruktur}
-Infrastruktur består av de grunnleggende enhetene de andre serverne er avhengig av, og er dermed ekstra viktig å overvåke. I dette prosjektet er det definert til: switcher, routere, brannmurer, UPS, virtualiseringsteknologi og serverrommiljø.
+Infrastruktur består av de grunnleggende enhetene de andre serverne er avhengig av, og er dermed ekstra viktig å overvåke. I dette prosjektet er det definert til: switcher, routere, brannmurer, UPS, virtualiseringsteknologi og servermiljø.
 
 Det er viktig at design av overvåkningen fører til at man raskt og effektivt skal kunne varsle feil, og hvilke andre enheter dette berører. For å få til dette i Icinga benyttes parent \ref{sec:parent}. De aller fleste enheter i infrastrukturen vil være parent for andre enheter, med unntak av servermiljø. Dette reflekteres også i et statuskart i Icinga, som vist i Figur \ref{statusmap}.
 
@@ -1001,7 +1001,7 @@ Service description for alle meru traps som sendes inn vil da være ``meru\_'' +
 
 Noe å merke seg er at en ikke vil få informasjon når tjenesten er OK igjen, og må sette tjenestene til OK manuelt i Icingas webgrensesnitt.
 
-\subsection{Serverrommiljø}
+\subsection{Servermiljø}
 For å overvåke temperatur og luftfuktighet på serverrommet ble det kjøpt inn en APC NetBotz 200 med fire eksterne sensorer. Disse ble plassert slik at det er to sensorer på hver side av rack-raden. En vil dermed kunne se temperaturforskjellen mellom forsiden av serverne, ved luftinntak og baksiden, der varmluft går ut.
 
 Hver sensor måler både temperatur og relativ luftfuktighet.
