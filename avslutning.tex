@@ -17,11 +17,6 @@ En overvåkningsløsning basert fri programvare kan ha visse ulemper. Ofte komme
 
 Tredjeparts kode kan variere i standard og kvalitet. Ofte har dokumentasjonen vært mangelfull eller ikke eksisterende. Det har ikke alltid vært mulig å finne en plugin som fyller alle behov og da har modifisering av eksisterende løsninger vært nødvendig. Dette krever både tid og noe programmeringskunnskaper.
 
-\section{Bidrag til fri programvare}
-Både scriptet for å sjekke hvor mye minne en MySQL Cluster node har brukt og scriptet for å synknronisere kontakt-objekter fra Active Directory ble lagt ut på Internett under en GPL-lisens. Disse ble lagt ut på Nagios Exchange\cite{monkeymonndb,monkeymonadsync} og Monitoring Exchange\cite{monkeyexchange} etter godkjenning fra oppdragsgiver. På begge sidene har vi selv funnet flere av plugin-ene, og håper at andre får nytte av vårt arbeid.
-
-Plugin-er vi mener inneholder kritiske feil som gjør at plugin-en ikke utfører sjekker i henhold til beskrivelse er rapportert tilbake til utvikler. dette gjelder xen\_api.pl (e-post ligger i \ref{app:xenapi}) plugin-en.
- 
 \subsection{Organisering av arbeid}
 Innad i gruppen har det blitt avholdt daglige møter for å oppdatere resten av gruppen om utført arbeid, og om eventuelle utfordringer som har oppstått. 
 
@@ -58,7 +53,7 @@ I denne prosjektoppgaven har hovedfokus vært å bygge opp en overvåkningsløsn
 
 Parallelt med prosjektarbeidet har IKT-avdelingen gjennomført et prosjekt der en CMDB har blitt implementert. Integrasjon mot denne med konfigurasjon fra objektene i overvåkningen og etterhvert mulighet for å definere avhengigheter som gjenspeiler seg i overvåkningen, kan være aktuelt.
 
-Icinga 2\cite{icinga2} er under utvikling og er en parallell utviklingsprossess med Icinga 1.x. Planlagt stable release er i slutten av 2013. Icinga 2 er en ny kjerne som skal skrives fra bunnen av og fjerner det som Icinga 1.x har arvet i fra Nagios. Den nye kjernen vil fungere sammen med Icinga 1.x gjennom et kompabilitetslag\cite{wiki:comp} som oversetter systemkall. Her kan enten migrering til Icinga 2, oppsett av Icinga 2 sammen med eksisterende Icinga 1.x, eller å evaluere Icinga 2 som et nytt verktøy være aktuelt videre arbeid. 
+Icinga 2\cite{icinga2} er under utvikling og er en parallell utviklingsprossess med Icinga 1.x. Planlagt stable release er i slutten av 2013. Icinga 2 er en ny kjerne som skal skrives fra bunnen av og fjerner det som Icinga 1.x har arvet i fra Nagios. Den nye kjernen vil fungere sammen med Icinga 1.x gjennom et kompabilitetslag\cite{wiki:comp} som oversetter kall. Her kan enten migrering til Icinga 2, oppsett av Icinga 2 sammen med eksisterende Icinga 1.x, eller å evaluere Icinga 2 som et nytt verktøy være aktuelt videre arbeid. 
 
 Varsling er implementert slik at statusvisning blir oppdatert og det sendes ut varslingsmeldinger til en eller flere personer over e-post og SMS. Det må altså manuelt opprettes en sak i sakssystemet Fooprints. Her kan det være aktuelt å implementere en automatikk i at ønskede varsler registreres i sakssystemet, med ulike parametre som tjeneste eller host, prioritering, og ansvarlig person.
 
@@ -66,6 +61,11 @@ Asterisk og Trio er to telefonsystemer IKT-avdelingen drifter. Her vil det være
 
 IKT-avdelingen ved Hedmark fylkeskommune har flere lokale IKT-avdelinger, som i hovedsak løser lokale problemer ved skoler, men som er avhengig av sentrale tjenester som trådløse nettverk og Internett-tilgang. Icinga Web muligheter for tilgangstyring på brukernivå for visning av informasjon. Et mulig prosjekt kan være å gjøre de tilpasningene som må til for å integrere de lokale avdelingene i overvåkningsløsningen. 
 
+\section{Bidrag til fri programvare}
+Både scriptet for å sjekke hvor mye minne en MySQL Cluster node har brukt og scriptet for å synknronisere kontakt-objekter fra Active Directory ble lagt ut på Internett under en GPL-lisens. Disse ble lagt ut på Nagios Exchange\cite{monkeymonndb,monkeymonadsync} og Monitoring Exchange\cite{monkeyexchange} etter godkjenning fra oppdragsgiver. På begge sidene har vi selv funnet flere av plugin-ene, og håper at andre får nytte av vårt arbeid.
+
+Plugin-er vi mener inneholder kritiske feil som gjør at plugin-en ikke utfører sjekker i henhold til beskrivelse er rapportert tilbake til utvikler. dette gjelder xen\_api.pl (e-post ligger i \ref{app:xenapi}) plugin-en.
+ 
 \section{Konklusjon}
 Det viktigste målet med denne prosjektoppgaven ble oppnådd. En ny overvåkningsløsning ble satt i produksjon med overvåkning av store deler av IKT-avdelingens infrastruktur og servertjenester. Løsningen kjører nå parallelt med den overvåknigsløsningen som fantes fra før, og overvåker mye som den gamle løsningen ikke har mulighet til. Oppdragsgiver planlegger at den eksisterende overvåknigsløsningen skal fases ut over tid, etterhvert som resterende tjenester og enheter integreres i den nye løsningen. 
 
