@@ -2,11 +2,11 @@
 \section{Bakgrunn}
 Serviceenheten IKT ved Hedmark Fylkeskommune (heretter kalt IKT-avdelingen) har det overordnede ansvaret for alt datautstyr som tilhører fylkeskommunen, og datanettverket for sentraladministrasjonen og øvrige lokasjoner. Dette omfatter blant annet videregående skoler, tannklinikker og Hedmark Trafikk. Totalt benyttes IT-løsningene av over 10 000 brukere.
 
-Datasystemene er kritiske for daglig drift av de mange funksjonene fylkeskommunen fyller. Det er derfor mange brukere som berøres dersom en feil skulle inntreffe i systemene. Derfor er det viktig at de ansvarlige får beskjed så raskt og effektivt som mulig når et system går ned, eller ikke fungerer som det skal.
+Datasystemene er kritiske for daglig drift av de mange funksjonene fylkeskommunen fyller. Det er derfor mange brukere som berøres dersom en feil skulle inntreffe i systemene. Det er det viktig at de ansvarlige får beskjed så raskt og effektivt som mulig når et system går ned, eller ikke fungerer som det skal.
 
 Per i dag benyttes en enkel overvåkningsløsning, ``Servers Alive''\cite{servers}, som ikke dekker IKT-avdelingens behov. Oppsettet gir for mye irrelevant informasjon, som gjør at en ikke får et godt nok oversiktsbilde. Det mangler også mulighet for å kunne overvåke mange ønskede tjenester. Systemet gir kun varsling til skjerm, men det er i tillegg ønskelig å kunne få varsler på SMS og e-post. Servers Alive er også en proprietær løsning, og dermed ikke lett å utvide. I tillegg til dette kjøres ikke sjekkene parallelt, og derfor skalerer systemet dårlig.
 
-IKT-avdelingen har lenge arbeidet med å finne en bedre overvåkningsløsning for infrastrukturen. Det er ønskelig å erstatte Servers Alive med en mer modulbasert løsning, der IKT-avdelingen har tilgang til kildekoden og kan utføre endringer. De har imidlertid for hver gjennomgang av mulige overvåkningsløsninger konkludert med at de ikke har de nødvendige ressursene til et slikt prosjekt. Da vi forespurte IKT-avdelingen om de hadde noen mulige bachelorprosjekter, var de veldig interessert i at en bachelorgruppe kunne se på hvordan et slikt prosjekt kunne gjennomføres.
+IKT-avdelingen har lenge arbeidet med å finne en bedre overvåkningsløsning. Det er ønskelig å erstatte Servers Alive med en mer modulbasert løsning, der IKT-avdelingen har tilgang til kildekoden og kan utføre endringer. De har imidlertid for hver gjennomgang av mulige overvåkningsløsninger konkludert med at de ikke har de nødvendige ressursene til et slikt prosjekt. Da vi forespurte IKT-avdelingen om de hadde noen mulige bachelorprosjekter, var de veldig interessert i at en bachelorgruppe kunne se på hvordan et slikt prosjekt kunne gjennomføres.
 
 \section*{Oppgavebeskrivelse}
 Det skal settes opp en overvåkningsløsning, som skal varsle feil og hendelser på enheter i fylkeskommunens datanettverk. Dette innebeærer servere med tjenester, og nettverksenheter som switcher, routere og brannmurer. Dette systemet må være modulært med mulighet for enkelt å kunne legge til nye moduler i ettertid. Følgende krav er satt til løsningen:
@@ -21,9 +21,9 @@ Det skal settes opp en overvåkningsløsning, som skal varsle feil og hendelser 
 		\item som tar hensyn til redundans.
 	\end{itemize*}
 	\item Avhengigheter mellom enheter som overvåkes skal kunne settes opp. Varsling skal gi informasjon om det er antatt følgefeil og hovedfeil.
-	\item Objekter (data inn) og data skapt av programvaren (data ut) lagres i database(r).
+	\item Objekter (data inn) og data skapt av programvaren (data ut) skal lagres i database(r).
 	\item All tiltstandsinformasjon skal logges og lagres i database.
-	\item Støtte WMI, SNMP, ICMP (med antall drop før varsling), og eventuelt andre aktuelle standarder.
+	\item WMI, SNMP, ICMP (med antall drop før varsling), og eventuelt andre aktuelle standarder skal støttes.
 	\item Det skal være enkelt å legge til nye enheter for overvåking, fra et grafisk grensesnitt.
 	\item Innen servermiljø skal det kunne overvåkes temperatur, luftfuktighet og UPS.
 \end{itemize*}
@@ -49,42 +49,41 @@ IKT-avdelingen har også en liste over tilleggsfunksjonalitet de ønsker impleme
 \end{itemize*}
 
 Etter at valg av kjerneprogramvare var tatt ble det definert at følgende kategorier med underpunkter skulle overvåkes:
-
 \begin{itemize*}
-	\item Infrastruktur og nettverk
+	\item Infrastruktur og nettverk.
 	\begin{itemize*}
-		\item Brannmur
-		\item Switch
-		\item Trådløse kontrollere
-		\item VMware ESX og Citrix Xen
-		\item Serverrommiljø
+		\item Brannmurer.
+		\item Switcher.
+		\item Trådløse kontrollere.
+		\item VMware ESX og Citrix Xen.
+		\item Serverrommiljø.
 		\begin{itemize*}
-			\item Temperatur
-			\item Strøm (UPS)
-			\item Luftfuktighet
+			\item Temperatur.
+			\item Strøm (UPS).
+			\item Luftfuktighet.
 		\end{itemize*}
 	\end{itemize*}
 	\item Servere
 	\begin{itemize*}
-		\item CPU
-		\item Minne
-		\item Disk
-		\item Prosesser
-		\item Applikasjoner
+		\item CPU.
+		\item Minne.
+		\item Disk.
+		\item Prosesser.
+		\item Applikasjoner.
 		\item Databaser: MySQL, MySQL Cluster, Oracle og MSSQL.
-		\item E-post: Microsoft Exchange
-		\item Tjenester
+		\item E-postserver: Microsoft Exchange.
+		\item Tjenester.
 		\begin{itemize*}
-			\item Webservere
-			\item DNS 
-			\item DHCP
-			\item LDAP
+			\item Webservere.
+			\item DNS.
+			\item DHCP.
+			\item LDAP.
 		\end{itemize*}
 	\end{itemize*}
 \end{itemize*}
 
 \section{Avgrensninger}
-Siden oppdragsgiver har både krav og ønsket tilleggsfunksjonalitet, må vi avgrense oss slik at vi overholder tidsrammer for å oppfylle kravene. Dersom vi ligger foran tidsskjemaet, vil vi begynne å se på og implementere tilleggsfunksjonalitet.
+Fordi oppdragsgiver har både krav og ønsket tilleggsfunksjonalitet, må oppgaven avgrenses slik at tidsrammer for å oppfyllene kravene overholdes. Dersom vi ligger foran tidsskjemaet, vil vi begynne å se på og implementere tilleggsfunksjonalitet.
 
 Manuell endring av konfigurasjon i tekstfiler er den mest fleksible løsningen, og oppdragsgiver var enig i at dette var enkelt nok og dermed ikke trengte å være grafisk.
 
