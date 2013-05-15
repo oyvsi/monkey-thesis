@@ -822,8 +822,7 @@ Med opsjonen ``-i'' spesifiseres intervallet en gjennomsnittsverdi skal returner
 
 For de parametere som blir overvåket blir tilleggsopsjonene ``-i 300'' og ``-T 600'' sendt med. Etter gjennomgang av output fra plugin-en ble det observert at dette var innstillingene som ga oss gjennomsnittet for det siste 5 minutters-intervallet. Ved bruk av for eksempel ``-T 60'', som vil si at vi spør 1 minutt tilbake i tid, ble det ikke alltid returnert et resultat siden det ikke har blitt lagret et gjennomsnitt for et 5. minutters intervall i denne perioden. 
 
-Andre opsjoner som ble testet før kombinasjonen ``-i 300'' og ``-T 600'' var``-i 300'', men her kom det 288 resultater tilbake. Dette er antall datapunkt som blir generert i 5 minutters-intervallet for en dag. \cite{vmwareperfintervals}
-
+Andre opsjoner som ble testet før kombinasjonen ``-i 300'' og ``-T 600'' var``-i 300'', men her kom det 288 resultater tilbake. Dette er antall datapunkt som blir generert i 5 minutters-intervallet for en dag. (86400 / 300)
 \paragraph{Ressurser}
 Ressurser som overvåkes nå er CPU-bruk, minne-bruk, I/O responsitivitet, status for nettverkskort, og generell helsestatus som rapporteres fra vCenter.\cite{ciscovirtual} \cite{vmwaremonitoring}:
 
