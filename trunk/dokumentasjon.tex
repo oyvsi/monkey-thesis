@@ -154,7 +154,7 @@ define service {
     check_command 		check_network_component!cpu-load
 }
 \end{lstlisting}
-
+\iffalse
 	Tabell med sjekker og tilhørende parametere:
 	\begin{table}
 	\begin{center}
@@ -209,9 +209,11 @@ define service {
 \end{center}
 \end{table}
 
+\fi
 \section{Backup-rutiner}
 I Tabell \ref{backup}, vises viktige filer og mapper for overvåkningsløsningen. Disse bør integreres i en plan for backup av Icinga-serveren.
-\begin{table} \label{backup}
+\begin{table}[H]
+\label{backup}
 \begin{center}
 \begin{tabular}{| p{8cm} | p{8cm} |}
  \hline
