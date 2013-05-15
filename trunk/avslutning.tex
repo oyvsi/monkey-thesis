@@ -62,9 +62,11 @@ Asterisk og Trio er to telefonsystemer IKT-avdelingen drifter. Her vil det være
 IKT-avdelingen ved Hedmark fylkeskommune har flere lokale IKT-avdelinger, som i hovedsak løser lokale problemer ved skoler, men som er avhengig av sentrale tjenester som trådløse nettverk og Internett-tilgang. Icinga Web muligheter for tilgangstyring på brukernivå for visning av informasjon. Et mulig prosjekt kan være å gjøre de tilpasningene som må til for å integrere de lokale avdelingene i overvåkningsløsningen. 
 
 \section{Bidrag til fri programvare}
-Både scriptet for å sjekke hvor mye minne en MySQL Cluster node har brukt og scriptet for å synknronisere kontakt-objekter fra Active Directory ble lagt ut på Internett under en GPL-lisens. Disse ble lagt ut på Nagios Exchange\cite{monkeymonndb,monkeymonadsync} og Monitoring Exchange\cite{monkeyexchange} etter godkjenning fra oppdragsgiver. På begge sidene har vi selv funnet flere av plugin-ene, og håper at andre får nytte av vårt arbeid.
+Både scriptet for å sjekke hvor mye minne en MySQL Cluster node har brukt og scriptet for å synknronisere kontakt-objekter fra Active Directory ble lagt ut på Internett under en GPL-lisens. Disse ble lagt ut på Nagios Exchange\cite{monkeyexchange} og Monitoring Exchange\cite{monkeymonndb,monkeymonadsync} etter godkjenning fra oppdragsgiver. På begge sidene har vi selv funnet flere av plugin-ene, og håper at andre får nytte av vårt arbeid.
 
 Plugin-er vi mener inneholder kritiske feil som gjør at plugin-en ikke utfører sjekker i henhold til beskrivelse er rapportert tilbake til utvikler. dette gjelder xen\_api.pl (e-post ligger i \ref{app:xenapi}) plugin-en.
+
+Da statusvinduet ble implementert fant vi ingen dokumentasjon på hvordan prioritere forskjellige host-objekter eller service-objekter. Da vi fant ut måten dette kan gjøres på ble det laget en artikkel på Icinga sin Wiki.
  
 \section{Konklusjon}
 Det viktigste målet med denne prosjektoppgaven ble oppnådd. En ny overvåkningsløsning ble satt i produksjon med overvåkning av store deler av IKT-avdelingens infrastruktur og servertjenester. Løsningen kjører nå parallelt med den overvåknigsløsningen som fantes fra før, og overvåker mye som den gamle løsningen ikke har mulighet til. Oppdragsgiver planlegger at den eksisterende overvåknigsløsningen skal fases ut over tid, etterhvert som resterende tjenester og enheter integreres i den nye løsningen. 
