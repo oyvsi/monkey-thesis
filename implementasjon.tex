@@ -790,7 +790,7 @@ For overvåkning av virtuelle maskiner innenfor begge plaformene brukes NRPE. De
 I VMware vSphere brukes begrepene ``Datacenter'', ``Cluster'', ``Host'', og ``Virtual Machines'', og hver av disse har informasjon tilgjengelig for uthenting. 
 
 \paragraph{Plugin}
-Plugin-en ``check\_vmware\_api.pl'' , som er utviklet av fri programvare firmaet op5 \cite{op5}, er brukt for å hente ut informasjonen fra VMware Virtual Center. Denne plugin-en bruker et SDK-bibliotek i Perl \cite{vmwareperl} for å utføre API-kall til VMware Virtual Center. Autentisering skjer ved å sende med brukernavn og passord for en brukerkonto, som er opprettet i Virtual Center-serveren med read-rettigheter. For å utveksle informasjon blir SOAP-protokollen benyttet \cite{wiki:soap} via HTTPS \cite{ciscovirtual}.
+Plugin-en ``check\_vmware\_api.pl'' , som er utviklet av fri programvare firmaet op5 \cite{op5}, er brukt for å hente ut informasjonen fra VMware VirtualCenter. Denne plugin-en bruker et SDK-bibliotek i Perl \cite{vmwareperl} for å utføre API-kall til VirtualCenter. Autentisering skjer ved å sende med brukernavn og passord for en brukerkonto, som er opprettet i Virtual Center-serveren med read-rettigheter. For å utveksle informasjon blir SOAP-protokollen benyttet \cite{wiki:soap} via HTTPS \cite{ciscovirtual}.
 
 check\_vmware\_api.pl har mulighet for å hente ut informasjon fra komponenten Datacenter, Cluster, Host, og VM. For hver er informasjon som cpu, minne, I/O, nettverkstrafikk, lagring, og helsetilstand tilgjengelig.
 
@@ -807,23 +807,23 @@ Eksempel på bruk av check\_vmware\_api.pl for å hente ut cpu-bruk for en Host
 ./check_vmware_api.pl -D vc.example.org -u user1 -p password123 -H Example-ESX01 -l cpu -s usage -i 300 -T 600
 \end{lstlisting}
 
-Med opsjonen ``-i'' spesifiseres intervallet en gjennomsnittsverdi skal returneres fra (første intervall i dette tilfellet). Dette gjennomsnittet baserer seg på datapunkter samlet inn for hvert 20. sekund av Virtual Center. Opsjonen ``-T''  er ``timeshift'' i sekunder, som kan brukes for å spesifisere tidsintervallet gjennmomsnittsverdier skal returneres fra. 
+Med opsjonen ``-i'' spesifiseres intervallet en gjennomsnittsverdi skal returneres fra (første intervall i dette tilfellet). Dette gjennomsnittet baserer seg på datapunkter samlet inn for hvert 20. sekund av VMware VirtualCenter. Opsjonen ``-T''  er ``timeshift'' i sekunder, som kan brukes for å spesifisere tidsintervallet gjennmomsnittsverdier skal returneres fra. 
 
 For de parametere som blir overvåket blir tilleggsopsjonene ``-i 300'' og ``-T 600'' sendt med. Etter gjennomgang av output fra plugin-en ble det observert at dette var innstillingene som ga oss gjennomsnittet for det siste 5 minutters-intervallet. Ved bruk av for eksempel ``-T 60'', som vil si at vi spør 1 minutt tilbake i tid, ble det ikke alltid returnert et resultat siden det ikke har blitt lagret et gjennomsnitt for et 5. minutters intervall i denne perioden. 
 
 Andre opsjoner som ble testet før kombinasjonen ``-i 300'' og ``-T 600'' var``-i 300'', men her kom det 288 resultater tilbake. Dette er antall datapunkt som blir generert i 5 minutters-intervallet for en dag. (86400 / 300)
 \paragraph{Ressurser}
-Ressurser som overvåkes nå er CPU-bruk, minne-bruk, I/O responsitivitet, status for nettverkskort, og generell helsestatus som rapporteres fra Virtual Center.\cite{ciscovirtual} \cite{vmwaremonitoring}:
+Ressurser som overvåkes nå er CPU-bruk, minne-bruk, I/O responsitivitet, status for nettverkskort, og generell helsestatus som rapporteres fra VirtualCenter.\cite{ciscovirtual} \cite{vmwaremonitoring}:
 
 \subsubsection*{CPU}
-Grenseverdier her er satt til samme nivå som tilsvarende alarm i Virtual Center, og gir indikasjon på at det kan være en eller flere virtuelle maskiner som krever for mye CPU-kraft i forhold til hva hosten har tilgjengelig.  \cite{vmwarecounters}.
+Grenseverdier her er satt til samme nivå som tilsvarende alarm i VirtualCenter, og kan gi en indikasjon på at CPU-kraften ikke strekker til for en eller flere virtuelle maskinenr. Dette kan føre til at virtuelle maskiner ikke får kjørt tid på de fysiske CPU-ene og går utover eksekvering av prosesser.  \cite{vmwarecounters}.
 
 Teller som blir sjekket er usage.average (\%). Dette er aktiv bruk av CPU i prosent iforhold til total tilgjengelig CPU-kraft. Kalkuleringen her er antall CPU-er ganget med klokkefrekvens.
 
 Grenseverdier (\%): WARNING 75, CRITICAL 90
 
 \subsubsection*{Minne}
-Grenseverdier for minne er satt til samme nivå som tilsvarende alarmer i Virtual Center, og vil gi indikasjon på om virtuelle maskiner krever mer minne enn hosten har tilgjengelig. Når ledig minne går under 6 \%(tilgjengelig), kan host-en iverksette swapping. Når host-en starter å swappe vil den ikke ta hensyn til hva den henter av minne fra de virtuelle maskinene. Dette kan gå utover funksjonalitet og applikasjoner som den virtuelle maskinene kjører.
+Grenseverdier for minne er satt til samme nivå som tilsvarende alarmer i VirtualCenter, og vil gi indikasjon på om virtuelle maskiner krever mer minne enn hosten har tilgjengelig. Når ledig minne går under 6 \%(tilgjengelig), kan host-en iverksette swapping. Når host-en starter å swappe vil den ikke ta hensyn til hva den henter av minne fra de virtuelle maskinene. Dette kan gå utover funksjonalitet og applikasjoner som den virtuelle maskinene kjører.
 
 Counter: usage.average (\%). Dette er en prosentandel av konsumert minne iforhold til totalt tilgjengelig fysisk minne.
 
@@ -831,7 +831,7 @@ Grenseverdier (\%): WARNING 80, CRITICAL 90
 
 \subsection*{I/O}
 
-Overvåkning av tid brukt på I/O operasjoner kan avdekke ytelsesproblem mellom host og virtuelle maskiner, og mellom host og lagringsenheter benyttet. Uthenting av informasjon her er foreløbig bare sanntidsdata når sjekken kjører. Counters hentet ut for I/O, aggregeres ikke ved standard innstilling for lagring av data i Virtual Center. Standard innstilling er ``level 1``, og det kreves ``level 2'' for å kunne benytte disse counter-ene.
+Overvåkning av tid brukt på I/O operasjoner kan avdekke ytelsesproblem mellom host og virtuelle maskiner, og mellom host og lagringsenheter benyttet. Uthenting av informasjon her er foreløbig bare sanntidsdata når sjekken kjører. Counters hentet ut for I/O, aggregeres ikke ved standard innstilling for lagring av data i VMware VirtualCenter. Standard innstilling er ``level 1``, og det kreves ``level 2'' for å kunne benytte disse counter-ene.
 
 Flere anbefalinger eksisterer for overvåkning av I/O counters, men disse baseres på real-time data, og VMware anbefaler at det ikke overstiger 10ms over en periode. Opsjonene ``-i 300'' og ``-T 600'' kan benyttes etter aktivering av level 2 for aggregering av data.
 
@@ -847,17 +847,28 @@ Videre overvåkes det totale antallet av kernelLatency og deviceLatency for båd
 
 {\bf disk.totalWriteLatency.average} - Total tid samlet i millisekunder for kernelLatency og deviceLatency for lese-operasjoner.
 
-I tillegg til de over kjøres det to sjekker som gjenspeiler status fra Virtual Center. Disse er nettverskort som sjekkes om de er OK, og en generell helsetilstand. H
+I tillegg til de over kjøres det to sjekker som gjenspeiler status fra VirtualCenter. Disse er nettverskort som sjekkes om de er OK, og en generell helsetilstand. H
 
-Bruk av NRPE for host-er kan være aktuelt om en vil forsikre seg om at det lagres data om cpu, minne, og diskplass skulle vCenter gå ned. All informasjon om hosts avhenger nå av at Virtual Center-serveren kjører, og er et ``single point of failure''.
+Bruk av NRPE for host-er kan være aktuelt om en vil forsikre seg om at det lagres data om cpu, minne, og diskplass skulle vCenter gå ned. All informasjon om hosts avhenger nå av at VirtualCenter-serveren kjører, og er et ``single point of failure''.
 
-For kapasitetsmåling og helsestilstanden for et cluster kan det settes sjekker for cpu, minnne og helsetilstanden rapportert fra Virtual Center. En bruker da opsjonen ``-C'' med navn på cluster tilsvarende ``-H''
+For kapasitetsmåling og helsestilstanden for et cluster kan det settes sjekker for cpu, minnne og helsetilstanden rapportert fra VirtualCenter. En bruker da opsjonen ``-C'' med navn på cluster tilsvarende ``-H''
 
 \subsubsection{Citrix Xen}
-I motsetning til VMware der all informasjon kan hentes ut fra et punkt (Virtual Center), må en for Citrix Xen  kontakte en master-host for et gitt cluster. Master-hosten har ansvar for å presentere et administrativt grensesnitt, og videresender kommandoer mot spesifikke hosts i clusteret.
+I motsetning til VMware der all informasjon kan hentes ut fra ett punkt (VMware VirtualCenter), må en for Citrix Xen  kontakte en master-host for et gitt cluster. Master-hosten har ansvar for å presentere et administrativt grensesnitt, og videresender kommandoer mot spesifikke hosts i clusteret.
 
 \paragraph{Plugin}
-For overvåkning av Xen-miljøet ble det kun funnet en plugin som gir muligheten for å hente ut informasjon fra host-er og virtuelle maskiner. Plugin-en ``check\_xen\_api.pl'' bruker biblioteket ``XenAPI'' for å generere URL-er. Disse brukes videre for spørringer mot en RRD-database, hvor ``XAPI'' lagrer data\cite{xenwiki}. Det er ikke like mange tellere som er tilgjengelige som for VMware og I/O-data er foreløpig ikke tilgjengelig for hosts. Ressurser som er satt for overvåkning på host-er er CPU- og minnebruk.
+For overvåkning av Xen-miljøet ble det kun funnet én plugin som gir muligheten for å hente ut informasjon fra host-er og virtuelle maskiner. Plugin-en ``check\_xen\_api.pl'' bruker biblioteket ``XenAPI'' for å generere URL-er. Disse brukes videre for spørringer mot en RRD-database, hvor ``XAPI'' lagrer data\cite{xenwiki}. Det er ikke like mange tellere som er tilgjengelige som for VMware og I/O-data er foreløpig ikke tilgjengelig for hosts. Ressurser som er satt for overvåkning på host-er er CPU- og minnebruk.
+
+RRD-databasen check\_xenapi.pl spør, lagrer data i følgende intervaller:
+\begin{enumerate*}
+        \item Hvert 5. sekund i en 10 minutters periode
+        \item Hvert minutt for de siste 2 timene
+        \item Hver time for den siste uken
+        \item Hver dag for det siste året
+\end{enumerate*}
+
+For hvert 5. sekund blir aktuelle datapunkter lagret. For de andre intervallene blir en minimum-, maksimum-, og gjennomsnittsverdi over gitt tidsperiode lagret ved bruk av en konsolideringsfunksjon. \cite{xenrrd}
+
 
 Et eksempel på bruk av check\_xenapi.pl: 
 \begin{lstlisting}[style=example]
@@ -893,17 +904,8 @@ define host {
 
 Opsjenene blir da ``-S \$HOST\_MASTERIP\$'' og ``-H \$HOSTADDRESS\$''.
 
-RRD-databasen check\_xenapi.pl spør, lagrer data i følgende intervaller:
-\begin{enumerate*}
-        \item Hvert 5. sekund i en 10 minutters periode
-        \item Hvert minutt for de siste 2 timene
-	\item Hver time for den siste uken
-        \item Hver dag for det siste året
-\end{enumerate*}
-
-For hvert 5. sekund blir aktuelle datapunkter lagret. For de andre intervallene blir en minimum-, maksimum-, og gjennomsnittsverdi over gitt tidsperiode lagret ved bruk av en konsolideringsfunksjon. \cite{xenrrd}
-
 Det oppstod et problem under implementeringen av check\_xenplugin.api, som hadde innvirkning på returnert resultat fra RRD-databasen. Etter å ha lest gjennom koden til selve plugin-en og biblioteket XenAPI som også er skrevet av op5, ble det oppdaget at denne plugin-en bruker siste datapunkt fra intervall nr.1 nevnt over. Resultatet vil da bare være ett datapunkt. Dette er vanskelig å sette varsel på, da en spike kan skje når gitt sjekk kjører. Her ble det avgjort å legge til en ny opsjon for å angi over hvor lang tidsperiode en skal hente ut data. Returnert resultat fra gitt tidsperiode blir gått gjennom, og en gjennomsnittsverdi returneres. Dette er foreløpig bare implementert for CPU- og minnebruk for en host
+
 
 \paragraph{Ressurser}
 Ressurser som er valgt å overvåke for Xen hosts:
