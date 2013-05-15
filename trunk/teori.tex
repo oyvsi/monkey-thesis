@@ -18,6 +18,7 @@ Ved å se på stigningstallet kan en også forsøke å si noe om trenden og forv
 
 Sanntidsovervåkning vil si at en sjekker tilstanden til en enhet eller tjeneste i et gitt intervall, og så fort noe avviker fra normalen sendes det ut varsel. Målet er at de ansvarlige skal kunne vite om noe er feil så fort som mulig, og helst før brukerne.
 
+\clearpage
 \subsection{Overvåkning i ITIL}
 ITIL (Information Technology Infrastucture Library) er et sett med standarder og konsepter som beskriver hvordan IT-tjenester kan kvalitetsikres innenfor leveranse, drift og support. ITIL brukes i dag av IT-bedrifter over hele verden og gir et felles rammeverk for hvordan en bør praktisere innen IT-sektoren. ITIL blir definert i et sett med bøker som blir utgitt av Office of Government Commerce i Storbritannia.
 
@@ -410,6 +411,7 @@ En kan også erstatte host\_name og dependant\_host\_name med hostgroup og depen
 \section{Host dependency}
 For å sette en avhengighet mellom to host-objekter benyttes host dependency. Dette må ikke forveksles med parent, som refererer til nettverksoppsettet. En host dependency vil si at et host-objekt er avhengig av et annet host-objekt. Host dependency er bare nyttig i veldig spesielle tilfeller, da det for de fleste tilfeller vil være avhengigheter til en eller flere tjenester på host-en\cite{hostandservicedep}, eller at en host er avhengig av å kjøre en sjekk igjennom en annen host.
 
+\clearpage
 \section{Protokoller og agenter}
 For å kjøre sjekker på enheter må Icinga-serveren kunne kommunisere med operativsystemene på de ulike enhetene. Icinga henviser til protokollene SSH, SNMP, RPC (WMI) og agentene NRPE og NSCA (en del av pakken NSClient++) i dokumentasjonen\cite{icingaintegration,icingaadditionalsoftware}. 
 
@@ -467,6 +469,7 @@ WMI er et grensesnitt som gjør det mulig å lage programmer eller script som ut
 
 For å benytte WMI-spørringer direkte fra en ekstern enhet må det konfigureres brukertilgang og brannmurregler\cite{wmiremote}. Med NSclient++ har en mulighet til å kjøre WMI-spørringer over NRPE uten ekstra konfigurasjon.
 
+\clearpage
 \subsubsection{Valg av Agenter}
 Valg av protokoll eller agenter har basert seg på følgende punkter:
 \begin{itemize*}
@@ -497,7 +500,7 @@ Både serveren og klienten stod i et eget nettverk i Virtualbox sammen med en Wi
 
 Det ble også undersøkt hvor mye CPU-tid NRPE og SSH trenger for å utføre sjekker. Fordi hver sjekk går veldig raskt ble det kjørt 100 disksjekker, 100 ganger. ``time''-kommandoen ble brukt for å se på tiden brukt i user- og kernel-mode. Dette ble gjort ved å bruke Bash-scriptet nedenfor, som kjører det samme scriptet som ble brukt for å generere nettverkstrafikk.
 
-\begin{lstlisting}[style=example]
+\begin{lstlisting}[language=bash]
 #!/usr/bin/env bash
 
 args=(nrpe ssh)
