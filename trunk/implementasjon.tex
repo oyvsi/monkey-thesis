@@ -763,9 +763,7 @@ Både Cisco Pix og ASA har tellere for antall byte som går ut og inn på en net
 Mange plugin-er benytter seg av dette ved å lese ut ``ifInOctets'' og ``ifOutOctets'' over SNMP. Dette følger Ciscos notat ``How to Calculate Bandwidth Using SNMP''\cite{ciscobandwidth}. 
 
 En stor ulempe med å benytte disse er at de er 32 bit, og vil dermed nullstilles kjapt ved høye hastigheter. For 1000 Mbps vil det ta ca. 34 sekunder til telleren har brukt opp tilgjengelig bit og nullstilles. Se Tabell \ref{kalkulering_teller} for andre hastigheter.
-\begin{equation}
-\frac{2^{32}-1}{\frac{10^9b/s}{8b/B}}=34.36s
-\end{equation}
+\[\frac{(2^{32}-1)\:B}{\frac{10^9\:b/s}{8\:b/B}}=34.36\:s \] 
 Det er derfor anbefalt å bruke 64 bit-variablene ifHCOutOctets og ifHCInOctets i stedet for\cite{ciscosnmpcounters}.
 \begin{table}
 \begin{center}
