@@ -762,9 +762,9 @@ Både Cisco Pix og ASA har tellere for antall byte som går ut og inn på en net
 
 Mange plugin-er benytter seg av dette ved å lese ut ``ifInOctets'' og ``ifOutOctets'' over SNMP. Dette følger Ciscos notat ``How to Calculate Bandwidth Using SNMP''\cite{ciscobandwidth}. 
 
-En stor ulempe med å benytte disse er at de er 32 bit, og vil dermed nullstilles kjapt ved høye hastigheter. For 1000 Mbps vil det ta ca. 34 sekunder til telleren har gått rundt. Se Tabell \ref{kalkulering_teller} for andre hastigheter.
+En stor ulempe med å benytte disse er at de er 32 bit, og vil dermed nullstilles kjapt ved høye hastigheter. For 1000 Mbps vil det ta ca. 34 sekunder til telleren har brukt opp tilgjengelig bit og nullstilles. Se Tabell \ref{kalkulering_teller} for andre hastigheter.
 \begin{equation}
-\frac{2^{32}-1}{\frac{10^9b}{8b/s}}=34.36s
+\frac{2^{32}-1}{\frac{10^9b/s}{8b/B}}=34.36s
 \end{equation}
 Det er derfor anbefalt å bruke 64 bit-variablene ifHCOutOctets og ifHCInOctets i stedet for\cite{ciscosnmpcounters}.
 \begin{table}
@@ -775,11 +775,11 @@ Det er derfor anbefalt å bruke 64 bit-variablene ifHCOutOctets og ifHCInOctets 
     100 Mbps & 5 minutter og 43.60 sekunder \\ \hline
     1000 Mbps & 34.36 sekunder \\ \hline
 \end{tabular}
-\caption{Sekunder før en 32 bit nullstilles }
+\caption{Sekunder før en 32 bit teller nullstilles }
 \label{kalkulering_teller}
 \end{center}
 \end{table}
-Plugin-en det er tatt utgangspunkt i for å hente ut båndbreddebruk heter check\_iftraffic64\cite{checkciscoif}. Denne er noe omskrevet for å kunne sende inn absolutte verdier som grenseverdier for varsling. I generic\_firewall er det satt opp to egendefinerte variabler ``WANWARN'' og ``WANCRIT'', som setter standard grenseverdier for alle brannmurer. For brannmurer der det er normalt med høyere båndbreddebruk, er disse variablene overstyrt i konfigurasjonen for host-objektet.
+Plugin-en det er tatt utgangspunkt i for å hente ut båndbreddebruk heter ``check\_iftraffic64\cite{checkciscoif}''. Denne er noe omskrevet for å kunne sende inn absolutte verdier som grenseverdier for varsling. I template-en ``generic\_firewall'' er det satt opp to egendefinerte variabler, ``WANWARN'' og ``WANCRIT'', som setter standard grenseverdier for alle brannmurer. For brannmurer der det er normalt med høyere båndbreddebruk, er disse variablene overstyrt i konfigurasjonen for host-objektet.
 
 \subsection{VMware og Citrix Xen}
 Ved IKT-avdelingen benyttes virtualserings-teknologier levert av VMware og Citrix. VMware vSphere 5.1 og Citrix XenServer 6.1 benyttes som virtualserings-platformer, og har funksjonalitet som kreves for en virtualisert infrastruktur. På de fysiske serverene kjører hypervisorene VMware ESX 4.1 og Xen 6.1. Hypervisorene står for kjøring av virtuelle maskiner og virtualiserer ressurser som cpu, minne, disk, og nettverkskomponenter. De virtuelle maskinene kjører operativsystemene og applikasjoner brukere benytter seg av.  

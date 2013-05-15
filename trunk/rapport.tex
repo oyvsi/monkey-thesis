@@ -160,12 +160,10 @@ Erik Hjelmås
 \end{titlepage}
 
 \pagenumbering{roman}
-\newpage
 \thispagestyle{empty}
 \mbox{}
 
-\input{sammendrag}
-\newpage
+%\input{sammendrag}
 \thispagestyle{empty}
 \mbox{}
 \input{deklarasjoner}
@@ -251,34 +249,34 @@ I dette vedlegget finnes statusrapporter skrevet for hver iterasjon.
 \includepdf[pages=-]{status/status4.pdf}
 \includepdf[pages=-]{status/status5.pdf}
 \includepdf[pages=-]{status/status6.pdf}
-
-\chapter{Forprosjekt}\label{app:forprosjekt}
-I dette vedlegget finnes forprosjektet for MonKey
-%\modifiedincludepdf{-}{forprosjekt}{forprosjekt.pdf}
+\chapter{Gantt-skjema}\label{app:gantt}
+I dette vedlegget er Gantt-skjema for prosjektet slik det ble gjennomført.  
+\includepdf[pages=-]{gantt_gjennomforing.pdf}
+\chapter{Forprosjekt}\label{app:forprosjekt} I dette vedlegget finnes forprosjektet for MonKey.  %\modifiedincludepdf{-}{forprosjekt}{forprosjekt.pdf}
 \includepdf[pages=-]{forprosjekt.pdf}
 
 \chapter{Kildekode}\label{app:kildekode}
-Selvskreven kildekode er lagt ved under dette vedlegget. Innholder plugins og generering av host-er script, init-script, SQL brukeroppretting(ikke skrevet selv), differanse på endrede plugin-er.
+Selvprodusert kildekode er lagt ved under dette vedlegget. Innholder plugin-er, script for generering av host og kontakter, init-script, SQL brukeroppretting (ikke skrevet selv) og differansen på endrede plugin-er.
 \begin{changemargin}{-1cm}{-1cm}
 
-\section{Host generering}
+\section{Host-generering}
 \lstinputlisting[language=Bash, label={gen.bash}]{script/gen.bash}
 
-\section{Active Directory Kontakt Sync}
+\section{Synkronisering av kontakter fra Active Directory}
 \lstinputlisting[language=Perl, label={ad_sync.pl}]{script/ad_sync.pl}
 
 \section{Check NDB Mem}
 \lstinputlisting[language=Perl, label={check_ndb_mem.pl}]{script/check_ndb_mem.pl}
 \clearpage
 
-\section{SQL Brukeroppretting}
+\section{Brukeroppretting for SQL-motorer}
 \lstinputlisting[language=sql, label={oracledb.sql}]{script/oracledb.sql}
 \lstinputlisting[language=sql, label={mssqldb.sql}]{script/mssqldb.sql}
 
 \section{Init-script}
 \lstinputlisting[language=Bash, label={metricinga_init.d}]{script/metricinga_init.d}
 
-\section{Statusvindu Kildekode}
+\section{Statusvindu}
 \lstinputlisting[language=PHP, label={index.php}]{script/index.php}
 \lstinputlisting[language=PHP, label={nagdash.php}]{script/nagdash.php}
 \lstinputlisting[language=PHP, label={netbotz.php}]{script/netbotz.php}
@@ -291,13 +289,13 @@ Selvskreven kildekode er lagt ved under dette vedlegget. Innholder plugins og ge
 \clearpage
 \lstinputlisting[language=HTML, label={style.css}]{script/style.css}
 \clearpage
-\section{Differanse på nedlastede plug-ins}
+\section{Differanse på endrede plug-ins}
 \inputencoding{latin1}
 \lstinputlisting[label={diff.pl}]{vedlegg/diff.pl}
 \end{changemargin}
 
 \chapter{Epost}\label{epost}
-Eposter av relevans for rapporten, svar er fjernet av hensyn til mottaker.
+Eposter av relevans for rapporten. Svar er fjernet av hensyn til mottaker.
 \clearpage
 \verbatiminput{vedlegg/customvariable_mail.txt}
 \noindent\rule{\textwidth}{0.4pt}
