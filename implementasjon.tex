@@ -781,7 +781,22 @@ Plugin-en det er tatt utgangspunkt i for å hente ut båndbreddebruk heter ``che
 \subsection{VMware og Citrix Xen}
 Ved IKT-avdelingen benyttes virtualserings-teknologier levert av VMware og Citrix. VMware vSphere 5.1 og Citrix XenServer 6.1 benyttes som virtualserings-platformer, og har funksjonalitet som kreves for en virtualisert infrastruktur. På de fysiske serverene kjører hypervisorene VMware ESX 4.1 og Xen 6.1. Hypervisorene står for kjøring av virtuelle maskiner og virtualiserer ressurser som cpu, minne, disk, og nettverkskomponenter. De virtuelle maskinene kjører operativsystemene og applikasjoner brukere benytter seg av.  
 
-Overvåkning av host-ene som kjører hypervisorene vil bestå av CPU-bruk, minnebruk, I/O, nettverkskomponenter og helsetilstand.
+Overvåkning av host-ene:
+\begin{itemize}
+\item VMware ESX
+	\begin{itemize}
+	\item CPU-bruk
+	\item Minne
+	\item I/O
+	\item Nettverskort og helse
+	\end{itemize}
+\item Xen
+	\begin{itemize}
+	\item CPU-bruk
+	\item Minne
+	\end{itemize}
+\end{itemize}
+
 
 For overvåkning av virtuelle maskiner innenfor begge plaformene brukes NRPE. Det overvåkes da som en ``egen'' server. Ressurser som overvåkes er gjennomgått i \ref{sec:lokaleressurser}.
 
