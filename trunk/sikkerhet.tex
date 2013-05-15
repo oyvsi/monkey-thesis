@@ -33,7 +33,7 @@ som NSClient++ støtter, det vil da føre til en sikrere nøkkelutveksling enn d
 I konfigurasjonen for NRPE på Linux-servere brukes direktivet ``dont\_blame\_nrpe=1''. Uten dette vil det ikke tillates å sende argumenter til sjekker som skal kjøres.
 \subsubsection{NSClient++}
 For Windows som bruker NSClient++ kan det settes opp passord som i tillegg kreves for kommunikasjon, dette legger enda et lag med sikkerthet.
-allow\_nasty\_meta\_chars, gjør at WMI-spørringer kan sendes som parameter til check\_nrpe og ikke blir regnet som skadelige når NSclient++ mottar de. Dette er fordi en del karakterer vanligvis ville blitt escapet.
+Direktivet ``allow\_nasty\_meta\_chars'' er satt i konfigurasjonen for å kunne benytte  WMI-spørringer som parameter til check\_nrpe. Direktivet gjør at spørringene ikke blir regnet som skadelige når NSclient++ mottar de. Dette er fordi en del karakterer vanligvis ville blitt escapet.
 
 I konfigurasjonesfilen for NSClient++ defineres serveradressen slik at kun Icinga-serveren har tilgang til å koble til via NRPE. Dersom denne settes opp til å inkludere et subnett eller inneholder feil adresse vil det være mulig for andre enheter enn Icinga-serveren å koble seg til NRPE-agenten.
 
