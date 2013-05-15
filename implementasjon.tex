@@ -355,9 +355,8 @@ OK memory within bounds.|'physical memory %'=16%;80;90 'physical memory'=1G;4;5;
 
 For Linux benyttes plugin-en check\_mem \cite{checklinuxmem}, da det ikke følger med noen plugin for å sjekke minneforbruk i nagios-plugins.
 \begin{lstlisting}[style=example]
-   check_command        check_nrpe!check_mem!80 90
-# Check that percent used is within tresholds. Used is calculated from total - free - cached - buffers 
-command[check_mem]=/usr/lib/nagios/plugins/libexec/check_mem.pl -w $ARG1$ -c $ARG2$
+   check_command    check_nrpe!check_mem!80 90 ; Check that percent used is within tresholds. Used is calculated from total - free - cached - buffers 
+                    command[check_mem]=/usr/lib/nagios/plugins/libexec/check_mem.pl -w $ARG1$ -c $ARG2$
 \end{lstlisting}
 \subsection{Disk}
 En full harddisk kan skape problemer for applikasjoner som lagrer data og logger fra systemet kan stoppe. Ved høyt minneforbruk og bruk av virtuelt minne i kombinasjon med en full disk, vil ikke harddisken kunne utnyttes som swap, og applikasjoner kan stoppe å fungere.
@@ -541,7 +540,7 @@ Noen av sjekkene er spesifikke for hver databasemotor, og er valgt for å få en
 \item MySQL: Slow queries (antall trege spørringer SQL serveren utfører i et gitt tidsintervall).
 \item MSSQL: Lazy writes (et høyt tall indikerer at mange minne-page-er må skrives til disk. Dette kan indikere mangel på tilgjengelig minne.)
 \item Oracle: Free table space (plass ledig for tabellene).
-\item Oracle: Switch interval (overvåker load).
+\item Oracle: Switch interval (indikerer høy load).
 \end{itemize*}
 
 \subsection*{Connection time}
@@ -577,7 +576,7 @@ export TNS_ADMIN=/usr/lib/oracle/11.2/client/network/admin
 
 Videre trengs også en databasedriver, som gjør det mulig for Perl å benytte klienten. For Oracle-databaser brukes ``libdbd-oracle-perl''.
 
-På en Oracle-server vil hver database ha sin egen instans \cite{oraclefaq}. Derfor vil parametere som overvåkes være forskjellig fra instans til instans. Etter utveksling over mail med utvikler av plugin-en (se e-post i Vedlegg \ref{app:maildb}), og samtaler med ansvarlig for databaser ved IKT-avdelingen ble det avgjort å overvåke hver enkelt databaseinstanse, med plugin-en check\_multi.
+På en Oracle-server vil hver database ha sin egen instans \cite{oraclefaq}. Derfor vil parametere som overvåkes være forskjellig fra instans til instans. Etter utveksling over e-post med utvikler av plugin-en (se e-post i Vedlegg \ref{app:maildb}), og samtaler med ansvarlig for databaser ved IKT-avdelingen ble det avgjort å overvåke hver enkelt databaseinstanse, med plugin-en check\_multi.
 
 Navnene til instansene legges derfor inn som en egendefinert variabel på host-objektet for hver enkelt Oracle-server. Når plugin-en kjøres sjekkes filen tnsnames.ora, som inneholder tilkoblingsinformasjon for hver enkelt instanse, i dette tilfellet må variabelen \_HOSTDBINSTANCES inneholde ORA11. Strukturen for en enkelt instanse vises tnsnames.ora vises under:
 \begin{lstlisting}[style=example]
@@ -592,7 +591,7 @@ ORA11 =
 )
 \end{lstlisting}
 
-Check\_multi brukes for å samle en Oracle-servers instanser under samme service-objekt. For eksempel når cache hit-sjekken kjøres, vil check\_multi utføre sjekken for alle instansene. I webgrensesnittet vil svarene fra instansene samles under ``check cache hit'' for hvert enkelt host-objekt. Dette gjør det mer oversiktlig og dynamisk enn en sjekk for hver instans. Under vises konfigurasjonen for dette.
+check\_multi brukes for å samle en Oracle-servers instanser under samme service-objekt. For eksempel når cache hit-sjekken kjøres, vil check\_multi utføre sjekken for alle instansene. I webgrensesnittet vil svarene fra instansene samles under ``check cache hit'' for hvert enkelt host-objekt. Dette gjør det mer oversiktlig og dynamisk enn en sjekk for hver instans. Under vises konfigurasjonen for dette.
 \begin{lstlisting}[style=example]
 define service {
 ...
