@@ -27,12 +27,12 @@ For kryptering og gjenkjenning av hosts har NRPE implementert OpenSSL med en ano
 
 NRPE blir som nevnt tidligere i \ref{sec:nrpe} brukt for å eksekvere kommandoer på eksterne maskiner, og kan være en angrepsvektor både fra overvåkningsserveren og via andre enheter til de den er installert på. Den eksterne maksinen som NRPE blir installert på vil åpne opp for sikkerhetsrisikoer, men det er fortsatt tilpasninger som kan gjøres for å unngå tilgang for uvedkommende og utførelse av ondsinnede handlinger. I konfigurasjonen må en definere hvilke hosts som skal kunne kommunisere med serveren, en må da vite hvilke IP-er som er definert i denne listen. Her vil overvåkningsserveren  i de fleste tilfeller være en definert IP, og da kan det spoofes om denne er kjent for en angriper. En kan også via konfigurasjonen endre porten eksterne enheter skal lytte på. Standardisert port kan finnes i dokumentasjonen så denne bør endres for å skjule tjenestenavn ved portscanning.
 
-For Windows som bruker NSClient++ kan det settes opp passord som i tillegg kreves for kommunikasjon, dette legger enda et lag med sikkerthet.
-
 Videre utvidelse av implementasjonen av NRPE vil være å ta i bruk forhåndssignerte sertifikater 
 som NSClient++ støtter, det vil da føre til en sikrere nøkkelutveksling enn dagens som bare baseres på et prim- og basenummer som er definert ved kompilering.
 
+I konfigurasjonen for NRPE på Linux-servere brukes direktivet ``dont\_blame\_nrpe=1''. Uten dette vil det ikke tillates å sende argumenter til sjekker som skal kjøres.
 \subsubsection{NSClient++}
+For Windows som bruker NSClient++ kan det settes opp passord som i tillegg kreves for kommunikasjon, dette legger enda et lag med sikkerthet.
 allow\_nasty\_meta\_chars, gjør at WMI-spørringer kan sendes som parameter til check\_nrpe og ikke blir regnet som skadelige når NSclient++ mottar de. Dette er fordi en del karakterer vanligvis ville blitt escapet.
 
 I konfigurasjonesfilen for NSClient++ defineres serveradressen slik at kun Icinga-serveren har tilgang til å koble til via NRPE. Dersom denne settes opp til å inkludere et subnett eller inneholder feil adresse vil det være mulig for andre enheter enn Icinga-serveren å koble seg til NRPE-agenten.
