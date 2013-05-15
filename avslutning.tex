@@ -11,7 +11,7 @@ Innenfor hver iterasjon var det satt opp faser med planlegging, implementering o
 
 Det ble også mye nødvendig dobbeltarbeid med å implementere sjekker i labmiljøet først og så i produksjon. For noen tjenester var det ikke mulig å teste i labmiljøet først.
 
-Valget av Icinga har ikke hindret oss i å få til det som var ønsket. Arkitekturen Icinga baserer seg på er en enkel kjerne hvor tilleggsfunkjsonlitet må legges til. Dette gir stor frihet, og fleksibiltet fordi en kan utnytte et stort antall tredjeparts pluginer som eksisterer, eller utvikle plugin-er etter behov. 
+Valget av Icinga har ikke hindret oss i å få til det som var ønsket. Arkitekturen Icinga baserer seg på er en enkel kjerne hvor tilleggsfunkjsonlitet må legges til. Dette gir stor frihet, og fleksibiltet fordi en kan utnytte et stort antall tredjeparts plugin-er som eksisterer, eller utvikle plugin-er etter behov. 
 
 En overvåkningsløsning basert fri programvare kan ha visse ulemper. Ofte kommer slike løsninger uten support-avtaler, noe en som oftest finner i en properitær løsning. Properitære løsninger markedsføres, og selges, ofte som en komplett pakke der en får produktet sammen med support-avtaler. 
 
@@ -32,7 +32,7 @@ Det positive med å ta en større del av implementeringen av overvåkningssystem
 
 Ved utvikling av statusvindu endte vi opp med å skrive om nesten all koden i Nagdash. Her gikk det med mye tid, og strukturen på koden ble heller ikke slik gruppen hadde gjort det om det ble skrevet fra bunnen. 
 
-Gjennomgang av ulike plugin-er viste seg å ta mer tid enn forventet. Årsaken var for det meste dårlig dokumentasjon og varierende kodekvalitet. Et tilfelle var check\_xenapi.pl som ble gjennomgått for å sjekke om det var noe gjennomsnittskalkulering på returnert resultat, og om det var mulig å legge dette til. Pluginen bruker 12 ekstra Perl-filer for å sette opp kall til RRD-databasen, og gjennomgang av disse tok for mye av tiden i forhold til gevinsten med å få den implementert. Det var den eneste plugin-en som hadde mer funksjonalitet enn å sjekke statusen for en Xen-host, så det ble priortert å gå gjennom koden for denne. 
+Gjennomgang av ulike plugin-er viste seg å ta mer tid enn forventet. Årsaken var for det meste dårlig dokumentasjon og varierende kodekvalitet. Et tilfelle var check\_xenapi.pl som ble gjennomgått for å sjekke om det var noe gjennomsnittskalkulering på returnert resultat, og om det var mulig å legge dette til. Plugin-en bruker 12 ekstra Perl-filer for å sette opp kall til RRD-databasen, og gjennomgang av disse tok for mye av tiden i forhold til gevinsten med å få den implementert. Det var den eneste plugin-en som hadde mer funksjonalitet enn å sjekke statusen for en Xen-host, så det ble priortert å gå gjennom koden for denne. 
 Det har i ettertid lært oss at det ikke alltid vil være besparende å gjenbruke kode. Noen ganger kan det faktisk lønne seg å finne opp hjulet på nytt.
 
 \subsubsection{Arbeidsfordeling}

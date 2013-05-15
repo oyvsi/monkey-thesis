@@ -11,8 +11,7 @@ I Figur \ref{hostfigur} vises hvilke generics de forskjellige host-objektene kan
 	    \label{hostfigur}
 	\end{figure}
 
-	I Figur \ref{hostgroupfigur} vises hvilke hostgroups de forskjellige hostene skal være medlem av.
-
+I Figur \ref{hostgroupfigur} vises hvilke hostgroups de forskjellige host-objektene skal være medlem av.
 \begin{figure}[H]
     \centering
     \includegraphics[scale=0.5]{img/hostgroups}
@@ -63,7 +62,7 @@ Koden under viser hvordan servers.csv er bygget opp. Den inneholder også feil f
 \section{Forventet nedtid}
 Tilfeller kan forekomme hvor en server må tas ut av drift på grunn av vedlikehold. I Icinga er det ikke nødvendig å fjerne denne fra konfigurasjonen, for å unngå at varslingsmelding blir sendt ut. I både Icinga Web og Icinga Classic har man mulighet til å bruke en funksjon som kalles ``Schedule Downtime''. Her blir nedetidens start og slutt definert.
 
-	I den nedetidsperioden vil Icinga nekte varslingsmelding i å bli sendt ut. Når nedetidsperioden er ferdig, eller denne blir utført før avtalt tid, vil kontaktene som skal bli varslet få en melding om at nedetid er over, og Icinga vil ikke lengre holde igjen varlser.
+I nedetidsperioden vil Icinga nekte varslingsmelding i å bli sendt ut. Når nedetidsperioden er ferdig, eller denne blir utført før avtalt tid, vil kontaktene som skal bli varslet få en melding om at nedetid er over, og Icinga vil ikke lenger holde igjen varsel.
 
 \section{Stoppe varsling}
 Når problemet som fører til et varsel for enten et host- eller service-objekt er kjent, kan en legge dette varselet i kategorien ``Acknowledged Hosts'' eller
@@ -129,7 +128,7 @@ Icinga Classic autentiserer mot AD gjennom modulene ldap og authnz\_ldap til Apa
 \end{lstlisting}
 
 	\section{Kontakter og kontaktgrupper}
-For å opprette en ny kontakt i Icinga meldes brukeren inn i gruppen icinga\_kontakter (hvordan dette fungerer forklart i \ref{sec:sync}). Den vil trenge å ha e-postadresse og telefonnummer satt.
+For å opprette en ny kontakt i Icinga meldes brukeren inn i gruppen icinga\_kontakter (hvordan dette fungerer er forklart i \ref{sec:sync}). Den vil trenge å ha e-postadresse og telefonnummer satt.
 
 Kontaktgrupper hentes fra OU-en icinga\_grupper der alle grupper hentes ut og opprettes i Icinga. For at en gruppe skal varsles må dette legges til på et service-objekt. For å slippe å sette opp kontakter for hver service kan en sende med argumentet ``gen\_service'', for å generere en template som kan benyttes på tjenester som sorterer under hver av kontaktgruppene som blir opprettet.
 
@@ -234,4 +233,4 @@ I Tabell \ref{backup}, vises viktige filer og mapper for overvåkningsløsningen
 \end{tabular}
 \end{center}
 \end{table}
-I tilegg bruker Icinga Classic og Icinga Web hver sine databaser, kalt ``icinga'' og ''icinga\_web''. Graphite bruker også en database, som heter ``graphite''.
+I tillegg bruker Icinga Classic og Icinga Web hver sine databaser, kalt ``icinga'' og ''icinga\_web''. Graphite bruker også en database, som heter ``graphite''.
