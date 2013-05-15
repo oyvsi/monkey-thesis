@@ -321,7 +321,7 @@ Host-objektet hig-hw1, som arver fra cisco\_firewall:
 \begin{lstlisting}[style=example]
 define host {
     use             cisco_firewall
-    host_name	    hig-fw1
+    host_name       hig-fw1
 }
 \end{lstlisting}
 
@@ -332,6 +332,7 @@ Ved å sette ``use regular expressions'' i konfigurasjonen for Icinga, kan en be
 
 Dette kan være nyttig dersom en for eksempel vil legge alle hoster i en hostgroup, som har en navnekonvensjon som gjør at hver av hostene unikt kan identifiseres ved å bytte ut deler av navnet med en variabel.
 
+\clearpage
 I eksempelet nedenfor brukes det regulære uttrykket \verb|"^HiG\[0-9\]+\$"| i attributten ``members'' til å legge til alle konfigurerte hosts der navnet starter på ``HiG'' etterfulgt og avsluttet med ett eller flere siffer mellom 0 og 9, i hostgroup-objektet ``all\_servers''.
 \begin{lstlisting}[style=example]
 define hostgroup {
