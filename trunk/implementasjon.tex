@@ -789,7 +789,7 @@ Plugin-en det er tatt utgangspunkt i for å hente ut båndbreddebruk heter ``che
 \subsection{VMware og Citrix Xen}
 Ved IKT-avdelingen benyttes virtualserings-teknologier levert av VMware og Citrix. VMware vSphere 5.1 og Citrix XenServer 6.1 benyttes som virtualserings-platformer, og har funksjonalitet som kreves for en virtualisert infrastruktur. På de fysiske serverene kjører hypervisorene VMware ESX 4.1 og Xen 6.1. Hypervisorene (type 1) står for kjøring av virtuelle maskiner og virtualiserer ressurser som CPU, minne, disk, og nettverkskomponenter. De virtuelle maskinene kjører operativsystemene og applikasjoner brukere benytter seg av.  
 
-Overvåkning av host-ene:
+Ressurser som overvåkes for host-ene:
 \begin{itemize*}
 \item VMware ESX
 	\begin{itemize*}
@@ -835,28 +835,28 @@ For de parametere som blir overvåket blir tilleggsopsjonene ``-i 300'' og ``-T 
 
 Andre opsjoner som ble testet før kombinasjonen ``-i 300'' og ``-T 600'' var``-i 300'', men her kom det 288 resultater tilbake. Dette er antall datapunkt som blir generert i 5 minutters-intervallet for en dag (86400 / 300).
 \paragraph{Ressurser}
-Ressurser som overvåkes nå er CPU-bruk, minne-bruk, I/O responsitivitet, status for nettverkskort, og generell helsestatus som rapporteres fra VirtualCenter.\cite{ciscovirtual,vmwaremonitoring}:
+Ressurser som overvåkes nå er CPU-bruk, minne-bruk, I/O responsitivitet, status for nettverkskort, og generell helsestatus som rapporteres fra VirtualCenter.
 
 \subsubsection*{CPU}
-Grenseverdier for CPU-bruk er satt til samme nivå som tilsvarende alarm i VirtualCenter, og kan gi en indikasjon på at CPU-kraften ikke strekker til for en eller flere virtuelle maskiner. Dette kan føre til at virtuelle maskiner ikke får kjørt tid på de fysiske CPU-ene og går utover eksekvering av prosesser.  \cite{vmwarecounters}.
+Grenseverdier for CPU-bruk er satt til samme nivå som tilsvarende alarm i VirtualCenter, og kan gi en indikasjon på at CPU-kraften ikke strekker til for en eller flere virtuelle maskiner. Dette kan føre til at virtuelle maskiner ikke får kjørt tid på de fysiske CPU-ene og går utover eksekvering av prosesser. \cite{vmwaremonitoring}
 
-Teller som blir sjekket er usage.average (\%). Dette er aktiv bruk av CPU i prosent iforhold til total tilgjengelig CPU-kraft. Kalkuleringen her er antall CPU-er ganget med klokkefrekvens.
+Teller som blir sjekket er usage.average (\%). Dette er aktiv bruk av CPU i prosent iforhold til total tilgjengelig CPU-kraft. Kalkuleringen her er antall CPU-er ganget med klokkefrekvens\cite{vmwarecpucounters}.
 
 Grenseverdier (\%): WARNING 75, CRITICAL 90
 
 \subsubsection*{Minne}
 Grenseverdier for minne er satt til samme nivå som tilsvarende alarmer i VirtualCenter, og vil gi indikasjon på om virtuelle maskiner krever mer minne enn hosten har tilgjengelig. Når ledig minne går under 6 \%(tilgjengelig), kan host-en iverksette swapping. Når host-en starter å swappe vil den ikke ta hensyn til hva den henter av minne fra de virtuelle maskinene. Dette kan gå utover funksjonalitet og applikasjoner som den virtuelle maskinene kjører.
 
-Counter: usage.average (\%). Dette er en prosentandel av konsumert minne iforhold til totalt tilgjengelig fysisk minne.
+Counter: usage.average (\%). Dette er en prosentandel av konsumert minne iforhold til totalt tilgjengelig fysisk minne\cite{vmwarememcounters}.
 
 Grenseverdier (\%): WARNING 80, CRITICAL 90
 
 \subsection*{I/O}
-Overvåkning av tid brukt på I/O operasjoner kan avdekke ytelsesproblem mellom host og virtuelle maskiner, og mellom host og lagringsenheter benyttet. Uthenting av informasjon her er foreløpig bare sanntidsdata når sjekken kjører. Counters hentet ut for I/O, aggregeres ikke ved standard innstilling for lagring av data i VMware VirtualCenter. Standard innstilling er ``level 1``, og det kreves ``level 2'' for å kunne benytte disse tellerene.
+Overvåkning av tid brukt på I/O operasjoner kan avdekke ytelsesproblem mellom host og virtuelle maskiner, og mellom host og lagringsenheter benyttet. Uthenting av informasjon her er foreløpig bare sanntidsdata når sjekken kjører. Counters hentet ut for I/O, aggregeres ikke ved standard innstilling for lagring av data i VMware VirtualCenter. Standard innstilling er ``level 1``, og det kreves ``level 2'' for å kunne benytte disse tellerene\cite{vmwaredatalevels}. 
 
-Flere anbefalinger eksisterer for overvåkning av I/O counters, men disse baseres på real-time data, og VMware anbefaler at det ikke overstiger 10ms over en periode. Opsjonene ``-i 300'' og ``-T 600'' kan benyttes etter aktivering av level 2 for aggregering av data.
+Flere anbefalinger eksisterer for overvåkning av I/O tellere \cite{solarwindsio, vmwareiobasics}. VMware anbefaler at det ikke overstiger 10ms over en periode \cite{vmwareiotresh}. Opsjonene ``-i 300'' og ``-T 600'' kan benyttes etter aktivering av level 2 for aggregering av data.
 
-Tellere for I/O:
+Tellere for I/O\cite{vmwareiocounters}:
 
 {\bf disk.kernelLatency.average} - Tiden i millisekunder hver SCSI-kommando bruker fra virtuelle maskiner til den fysiske kontrolleren på host-en. Denne inkluderer også hvor mye tid hver kommando bruker i kø før den blir prossesert, og kan indikere et høyere antall diskforespørsler enn host-en eller den fysiske kontrolleren takler.
  
@@ -933,7 +933,7 @@ Ressurser som er valgt å overvåke for Xen hosts:
 \begin{itemize*}
         \item CPU-bruk i prosent (totalbruk for alle kjerner ÷ antall kjerner)
         \begin{itemize*}
-                \item Grenseverdier (\%): WARNING 80, CRITICAL 90
+		\item Grenseverdier (\%): WARNING 80, CRITICAL 90
         \end{itemize*}
         \item Minne-bruk (Totalt allokert minne - ledig minne)
         \begin{itemize*}
