@@ -788,20 +788,20 @@ Plugin-en det er tatt utgangspunkt i for å hente ut båndbreddebruk heter ``che
 Ved IKT-avdelingen benyttes virtualserings-teknologier levert av VMware og Citrix. VMware vSphere 5.1 og Citrix XenServer 6.1 benyttes som virtualserings-platformer, og har funksjonalitet som kreves for en virtualisert infrastruktur. På de fysiske serverene kjører hypervisorene VMware ESX 4.1 og Xen 6.1. Hypervisorene (type 1) står for kjøring av virtuelle maskiner og virtualiserer ressurser som CPU, minne, disk, og nettverkskomponenter. De virtuelle maskinene kjører operativsystemene og applikasjoner brukere benytter seg av.  
 
 Overvåkning av host-ene:
-\begin{itemize}
+\begin{itemize*}
 \item VMware ESX
-	\begin{itemize}
+	\begin{itemize*}
 	\item CPU-bruk.
 	\item Minne-bruk.
 	\item I/O.
 	\item Nettverskort og helse.
-	\end{itemize}
+	\end{itemize*}
 \item Xen
-	\begin{itemize}
+	\begin{itemize*}
 	\item CPU-bruk.
 	\item Minne-bruk.
-	\end{itemize}
-\end{itemize}
+	\end{itemize*}
+\end{itemize*}
 
 
 For overvåkning av virtuelle maskiner innenfor begge plaformene brukes NRPE. Det overvåkes da som en ``egen'' server. Ressurser som overvåkes er gjennomgått i \ref{sec:lokaleressurser}.
@@ -833,7 +833,7 @@ For de parametere som blir overvåket blir tilleggsopsjonene ``-i 300'' og ``-T 
 
 Andre opsjoner som ble testet før kombinasjonen ``-i 300'' og ``-T 600'' var``-i 300'', men her kom det 288 resultater tilbake. Dette er antall datapunkt som blir generert i 5 minutters-intervallet for en dag (86400 / 300).
 \paragraph{Ressurser}
-Ressurser som overvåkes nå er CPU-bruk, minne-bruk, I/O responsitivitet, status for nettverkskort, og generell helsestatus som rapporteres fra VirtualCenter.\cite{ciscovirtual} \cite{vmwaremonitoring}:
+Ressurser som overvåkes nå er CPU-bruk, minne-bruk, I/O responsitivitet, status for nettverkskort, og generell helsestatus som rapporteres fra VirtualCenter.\cite{ciscovirtual,vmwaremonitoring}:
 
 \subsubsection*{CPU}
 Grenseverdier for CPU-bruk er satt til samme nivå som tilsvarende alarm i VirtualCenter, og kan gi en indikasjon på at CPU-kraften ikke strekker til for en eller flere virtuelle maskiner. Dette kan føre til at virtuelle maskiner ikke får kjørt tid på de fysiske CPU-ene og går utover eksekvering av prosesser.  \cite{vmwarecounters}.
@@ -897,6 +897,7 @@ Opsjonen ``-H'' brukes for å spesifisere hvilken host en vil kjøre sjekken mot
 
 Som en ser fra eksempelet må det angis addressen til to enheter for å hente ut informasjon, master host-en og host-en en vil ha informasjon om. For å kunne sette en master-IP på ett ojekt, og ikke for hvert host-objekt i et cluster, ble det opprettet et generic-objekt. I generic-objektet settes master IP-en til et gitt cluster via en customvariable. Alle host-objekter som bruker dette generic-objektet arver da denne customvariabelen, og master IP-en kan endres fra et punkt.
 
+\clearpage
 Under vises et eksempel hvordan dette kan konfigureres for ett pool med to host-objekter:
 \begin{lstlisting}[style=example]
 // generic-objektet 
@@ -940,6 +941,7 @@ Ressurser som er valgt å overvåke for Xen hosts:
 
 Det må gjøres endringer i check\_xenapi.pl for å få korrekt returnerte data, og dette er bare implementer for CPU-bruk og minne for en host slik det står nå.For å minske administrative oppgaver rundt overvåkning av Citrix Xen kan det være aktuelt i ta i bruk check\_nrpe for å hente ut informajson om de lokale ressursene. Plugin-en kan derimot brukes for å hente ut informasjon som I/O om virtuelle maskiner, men plugin-en må altså modifiseres til å kalkulere gjennomsnittsbruk.
 
+\clearpage
 \subsection{Trådløse kontrollere}
 IKT-avdelingen bruker en kontrollerløsning fra Meru Networks på trådløse nettverk. Disse har en viktig rolle i fylkeskommunens nettverk. På en dag har disse rundt 6000 samtidige brukere tilkoblet via aksesspunkter ute på hver lokasjon.
 
