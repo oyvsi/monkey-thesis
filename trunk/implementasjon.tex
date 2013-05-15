@@ -812,6 +812,7 @@ For overvåkning av virtuelle maskiner innenfor begge plaformene brukes NRPE. De
 I VMware vSphere brukes begrepene ``Datacenter'' og ``Cluster'' for gruppering av host-er og virtuelle maskiner.  Datacenter er en gruppering av en eller flere cluster med host-er. Cluster består av flere host-er som igjen kjører virtuelle maskiner. For hver av disse kan det hentes ut informasjon om ressurserbruk. 
 
 \paragraph{Plugin} \mbox{}\\
+
 Plugin-en ``check\_vmware\_api.pl'' , som er utviklet av fri-programvare firmaet op5 \cite{op5}, er brukt for å hente ut informasjonen fra VMware VirtualCenter. Denne plugin-en bruker et SDK-bibliotek i Perl \cite{vmwareperl} for å utføre API-kall til VirtualCenter. Autentisering skjer ved å sende med brukernavn og passord for en brukerkonto opprettet i VirtualCenter-serveren med read-rettigheter. For å utveksle informasjon blir SOAP-protokollen benyttet \cite{wiki:soap} via HTTPS.
 
 check\_vmware\_api.pl har mulighet for å hente ut informasjon fra komponentene Datacenter, Cluster, Host, og VM. For hver er informasjon som CPU, minne, I/O, nettverkstrafikk, lagring, og helsetilstand tilgjengelig.
@@ -835,10 +836,10 @@ For de parametere som blir overvåket blir tilleggsopsjonene ``-i 300'' og ``-T 
 
 Andre opsjoner som ble testet før kombinasjonen ``-i 300'' og ``-T 600'' var``-i 300'', men her kom det 288 resultater tilbake. Dette er antall datapunkt som blir generert i 5 minutters-intervallet for en dag (86400 / 300).
 \paragraph{Ressurser} \mbox{}\\
+
 Ressurser som overvåkes nå er CPU-bruk, minne-bruk, I/O responsitivitet, status for nettverkskort, og generell helsestatus som rapporteres fra VirtualCenter.
 
 \textit {CPU} \mbox{}\\
-
 Grenseverdier for CPU-bruk er satt til samme nivå som tilsvarende alarm i VirtualCenter, og kan gi en indikasjon på at CPU-kraften ikke strekker til for en eller flere virtuelle maskiner. Dette kan føre til at virtuelle maskiner ikke kjørt prossesser som applikasjoner benytter. \cite{vmwaremonitoring}
 
 Teller som blir sjekket er usage.average (\%). Dette er aktiv bruk av CPU i prosent iforhold til total tilgjengelig CPU-kraft. Kalkuleringen her er antall CPU-er ganget med klokkefrekvens\cite{vmwarecpucounters}.
@@ -879,6 +880,7 @@ For kapasitetsmåling og helsestilstanden for et cluster kan det settes sjekker 
 I motsetning til VMware der all informasjon kan hentes ut fra ett punkt (VMware VirtualCenter), må en for Citrix Xen kontakte en master-host for et gitt cluster. Master-hosten har ansvar for å presentere et administrativt grensesnitt, og videresender kommandoer mot spesifikke host-er i clusteret.
 
 \paragraph{Plugin}  \mbox{}\\
+
 For overvåkning av Xen-miljøet ble det kun funnet én plugin som gir muligheten for å hente ut informasjon fra host-er og virtuelle maskiner. Plugin-en ``check\_xen\_api.pl'' bruker biblioteket ``XenAPI'' for å generere URL-er. Disse brukes videre for spørringer mot en RRD-database, hvor ``XAPI'' lagrer data\cite{xenwiki}. Det er ikke like mange tellere som er tilgjengelige som for VMware og I/O-data er foreløpig ikke tilgjengelig for hosts. Ressurser som er satt for overvåkning på host-er er CPU- og minnebruk.
 
 RRD-databasen check\_xenapi.pl spør, lagrer data i følgende intervaller:
@@ -930,6 +932,7 @@ Det oppstod et problem under implementeringen av check\_xenplugin.api, som hadde
 
 
 \paragraph{Ressurser}  \mbox{}\\
+
 Ressurser som er valgt å overvåke for Xen hosts:
 \begin{itemize*}
         \item CPU-bruk i prosent (totalbruk for alle kjerner ÷ antall kjerner)
