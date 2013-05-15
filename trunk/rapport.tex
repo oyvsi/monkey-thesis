@@ -258,9 +258,9 @@ I dette vedlegget finnes forprosjektet for MonKey
 \includepdf[pages=-]{forprosjekt.pdf}
 
 \chapter{Kildekode}\label{app:kildekode}
-Selvskrevene kildekode er lagt ved under dette vedlegget. Innholder plugins og generering av host-er script.
-
+Selvskreven kildekode er lagt ved under dette vedlegget. Innholder plugins og generering av host-er script, init-script, SQL brukeroppretting(ikke skrevet selv), differanse på endrede plugin-er.
 \begin{changemargin}{-1cm}{-1cm}
+
 \section{Host generering}
 \lstinputlisting[language=Bash, label={gen.bash}]{script/gen.bash}
 
@@ -270,9 +270,11 @@ Selvskrevene kildekode er lagt ved under dette vedlegget. Innholder plugins og g
 \section{Check NDB Mem}
 \lstinputlisting[language=Perl, label={check_ndb_mem.pl}]{script/check_ndb_mem.pl}
 \clearpage
+
 \section{SQL Brukeroppretting}
 \lstinputlisting[language=sql, label={oracledb.sql}]{script/oracledb.sql}
 \lstinputlisting[language=sql, label={mssqldb.sql}]{script/mssqldb.sql}
+
 \section{Init-script}
 \lstinputlisting[language=Bash, label={metricinga_init.d}]{script/metricinga_init.d}
 
@@ -309,7 +311,6 @@ Eposter av relevans for rapporten, svar er fjernet av hensyn til mottaker.
 \clearpage
 \verbatiminput{vedlegg/servermiljo_mail.txt}
 \clearpage
-\verbinput{vedlegg/check_xenapi_mail.txt}
+\verbinput{vedlegg/check_xenapi_mail.txt}\label{app:xenapi}
 \end{appendices}
-
 \end{document}
