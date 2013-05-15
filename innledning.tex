@@ -148,7 +148,7 @@ Vår oppdragsgiver er Svein-Inge Kvalø (Fungerende driftsleder ved IKT-avdeling
 Erik Hjelmås (Førsteamanuensis, Dr. scient ved Høgskolen i Gjøvik), er vår veileder gjennom bacheloroppgaven. Han vil bidra til avklaringer rundt oppgaven og komme med innspill rundt tekniske utfordringer.
 
 \section{Rutiner og regler i gruppa}
-Et eget dokument er utarbeidet med grupperegler som alle gruppens medlemmer er enige i og har skrevet under på. Dette finnes i Vedlegg \ref{app:forprosjekt}.
+Et eget dokument er utarbeidet med grupperegler som alle gruppens medlemmer er enige i og har skrevet under på. Dette finnes i Vedlegg \ref{app:forprosjekt} side 14.
 
 \section{Verktøy}
 Alt av egenutviklet kildekode og konfigurasjonsfiler vil bli lagt under et SVN repository. Dette for å få versjonskontroll og samle alt på et sted, som vi kan ta backup av. Google Docs vil bli brukt for å samarbeide på dokumenter. Når den endelige rapporten skal genereres, vil vi overføre Google Docs-dokumentet til \LaTeX. Dropbox vil bli benyttet til å dele filer og dokumenter innad i prosjektgruppen, og med oppdragsgiver. Vi vil bruke Wordpress som publiseringsverktøy for hjemmesiden.
@@ -158,7 +158,7 @@ Av andre verktøy skal Microsoft Visio benyttes til å lage illustrasjoner og ma
 \section{Utviklingsmodell/rammeverk}
 For å tilpasse overvåkningssystemet til IKT-avdelingens krav, vil det med stor sannsynlighet komme endringer etterhvert. Det vil kunne oppstå ulike situasjoner som er vanskelige å forutse. Eksempler på dette er at en plugin som kreves ikke eksisterer, eller at webgrensesnittet må endres på grunn av mer informasjon eller omorganisering. I tillegg kan oppdragsgiver komme med innspill som fører til endring av funksjonalitet. Derfor må vi ha en fleksibel modell med tanke på endringer og tilbakefall, men med begrensninger på hvor mye tid vi kan bruke ved uforutsette problemer.
 
-På grunn av en naturlig sammenheng og avhengigheter mellom kravene som er satt, har vi valgt å gruppere funksjonalitet i moduler. De forskjellige modulene er ``Kjerneprogramvare'', ``Server'', ``Infrastruktur'', ''Servermiljø'', ``Varsling'' og ``Statusvindu'' (visualisert i Vedlegg \ref{app:forprosjekt}). Med nærliggende sammenheng mener vi at funksjonalitet som CPU, RAM, disk og prosesser er i samme kategori. 
+På grunn av en naturlig sammenheng og avhengigheter mellom kravene som er satt, har vi valgt å gruppere funksjonalitet i moduler. De forskjellige modulene er ``Kjerneprogramvare'', ``Server'', ``Infrastruktur'', ''Servermiljø'', ``Varsling'' og ``Statusvindu'' (visualisert i Vedlegg \ref{app:forprosjekt} side 12). Med nærliggende sammenheng mener vi at funksjonalitet som CPU, RAM, disk og prosesser er i samme kategori. 
 
 Planen er også å gjennomføre kategoriene i en gitt rekkefølge. Varsling kan settes opp uten noe input, men med tanke på redundans i systemene, avhengigheter mellom objektene, og testing av funksjonene som går inn under varsling, ser vi på dette som en avhengighet av Server og Infrastruktur. Statusvindu har vi valgt å legge sist fordi vi ser for oss at modulene Server, Infrastruktur, Servermiljø, og Varsling må være på plass før en varslingsskjerm kan ferdigstilles.
 
