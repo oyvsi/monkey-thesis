@@ -32,6 +32,7 @@ Den enkleste formen for overvåkning av en server er å sende en ICMP echo reque
 
 En bedre løsning er å teste hver av tjenestene. For en webserver kan det være å prøve å hente ned forsiden av hjemmesiden som skal leveres og sjekke at en får reponsen ``HTTP OK 200''. Da vil en vite at webserveren kjører og leverer ut sider riktig. Et skritt videre kan være å sjekke at siden inneholder riktig informasjon og at det ikke har blitt endret av uvedkommende (defacing).
 
+\clearpage
 \section{Hvilke overvåkingsløsninger finnes}\label{sec:hvilkefinnes}
 Det finnes i dag mange løsninger for overvåkning av IT-systemer\cite{wiki:networkmonitoring}. Det ble tatt utgangspunkt i prosjektets rammer og krav til funksjonalitet, og valgt ut noen løsninger som ble undersøkt nærmere. Punktene om ønsket tilleggsfunksjonalitet ble også vektlagt slik at de skulle være lettere å implementere i senere faser av prosjektetet, eller i senere prosjekter. 
 
@@ -147,24 +148,26 @@ Sammenhengen mellom objektene er viktig å forstå for å skjønne hvordan sjekk
 I eksempelet under vises konfigurasjonen for å sette opp en ping-sjekk på HiG1.
 \begin{lstlisting} [style=example]
 define host {
-    use 	generic_host
-    host_name	HiG1
-    address   	192.168.0.1
+    use                  generic_host
+    host_name            HiG1
+    address              192.168.0.1
 }
 
 define service {
-   use			generic_service
-   host_name            HiG1
-   service_description  Ping
-   check_command        check_ping!200,5%!500,10%
-   check_interval       5
+    use	                 generic_service
+    host_name            HiG1
+    service_description  Ping
+    check_command        check_ping!200,5%!500,10%
+    check_interval       5
 }
 
 define command {
-        command_name    check_ping
-        command_line    /usr/lib/nagios/plugins/check_ping -H $HOSTADDRESS$ --warning $ARG1$ --critical $ARG2$   
+    command_name         check_ping
+    command_line         /usr/lib/nagios/plugins/check_ping -H $HOSTADDRESS$ --warning $ARG1$ --critical $ARG2$   
 }
 \end{lstlisting}
+
+\clearpage
 \section{Plugin-er}
 Icinga i seg selv kommer uten noen overvåkningssjekker. Til dette benyttes plugin-er.
 
@@ -210,6 +213,7 @@ Tilstanden for et service- eller host-objekt vil bestemmes ut i fra et returnert
 
 Dersom en aktiv eller passiv sjekk resulterer i en annen tilstand enn OK, er det to typer av tilstanden, ``SOFT'' og ``HARD''. Første gang en plugin returnerer en feil vil tilstanden bli satt til SOFT, i tillegg til service- eller host-tilstanden. Etter dette vil sjekken kjøres hyppigere for å finne ut om det er snakk om et forbigående problem. Etter et gitt antall ganger der plugin-en fortsatt ikke returnerer OK, vil tilstanden skifte til HARD og det sendes ut varslingsmelding. Varsling er beskrevet grundigere i \ref{sec:varsling}.
 
+\clearpage
 \subsubsection{Aktive sjekker}
 En aktiv sjekk er en sjekk som initieres av Icinga, der en kommando kjøres på Icinga-serveren. Dette er også kjent som en ``poll''-modell. En aktiv sjekk defineres ut i fra et command-objekt med parametere og et tidsintervall i service- og host-objekter. I command-objektet defineres en plugin som skal kjøre, og returverdien fra denne vil bestemme hvilken tilstand service- eller host-objektet har. I Figur \ref{active_checks} vises komponentene involvert i en aktiv sjekk.
 \begin{figure}
