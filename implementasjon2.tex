@@ -287,11 +287,11 @@ Gjennom to iterasjoner kom det frem flere ønsker som ble lagt inn:
 	 \item Fjerne irrelevant informasjon, som hvor mange ganger en service-sjekk har fått en soft tilstandsendring.
 \end{itemize*}
 
-Det ble også rapportert en bug om at datoen på skjermen ikke endret seg før etter en sideoppdatering. Koden som oppdaterer datoen var ikke lagt inn i funksjonen som sørger for automatisk oppdatering. Dette viser viktigheten av å ha brukertesting, da en slik bug kan være vanskelig å oppdage.
+Det ble også rapportert inn en bug om at datoen på skjermen ikke endret seg før etter en sideoppdatering. Koden som oppdaterer datoen var ikke lagt inn i funksjonen som sørger for automatisk oppdatering. Dette viser viktigheten av å ha brukertesting, da en slik bug kan være vanskelig å oppdage.
 
 Etter at all funksjonalitet og design var på plass ble all kode gjennomgått av gruppen i fellesskap for å kvalitetssikre løsningen og sørge for at all ikke-triviell kode var kommentert.
 
-I Figur \ref{statusvindu_utkast} vises et utkast til statusvisningen som vi la fram for IKT-avdelingen ved første møte.
+I Figur \ref{statusvindu_utkast} vises et utkast til statusvisningen som ble lagt fram for IKT-avdelingen ved første møte.
 
 \begin{figure}[H]
     \centering
@@ -329,7 +329,13 @@ Figur \ref{statusvindu_final} viser den ferdige statusvisningen. Følgende funks
 	\item Luftfuktighet.
 	\item Kolonnene for host og services er satt ved siden av hverandre.
 	\item Driftsmeldinger fra portal.hedmark.org.
-	\item Grafer over lukkede saker som er mottatt i dag, lukkede saker fra alle mottatte saker, mottatte saker i dag og totalt antall åpne saker.
+	\item Grafer over følgende antall saker: 
+	\begin{itemize*}
+		\item Mottatt i dag.
+		\item Mottatt og lukket i dag.
+		\item Totalt lukker i dag.
+		\item Totalt aktive.
+	\end{itemize*}
 \end{itemize*}
 
 \begin{figure}[H]
@@ -344,7 +350,7 @@ Statusvindu definerer strukturen for HTML og inkluderer CSS og Javascript.
 
 Hver av modulene ``footprints.php'' (Vedlegg \ref{footprints.php}), ``netbotz.php'' (Vedlegg \ref{netbotz.php}) og ``rss.php'' (Vedlegg \ref{rss.php}) retunerer data ut fra Ajax-kall fra ``external.js'' (Vedlegg \ref{external.js}). Dataene bearbeides og settes inn i riktig ``div''-element i HTML-koden med Javascript. Nagdash returnerer rå HTML, da denne inneholder tabeller og annen markup i tillegg til dataene.
 
-I filen external.js hentes data fra de ulike modulene og settes inn i statusvinduet. Dette gjøres dynamisk gjennom Ajax, i et bestemt intervall. Arkitekturen for dette vises i Figur \ref{statusvindu_arkitektur}.
+I filen external.js hentes data fra de ulike modulene og settes inn i statusvinduet. Dette gjøres dynamisk gjennom Ajax, i et bestemt intervall. Hvordan dette henger sammen vises i Figur \ref{statusvindu_arkitektur}.
 
 \begin{figure}[H]
     \centering
@@ -380,12 +386,6 @@ Det er totalt seks spørringer og de ulike gjør følgende:
 
 \subsection{Footprints}
 For uthenting av antall saker innenfor ulike kategorier i Footprints ble det benyttet SQL-spørringer direkte mot databasen. IKT-avdelingen ønsket å få grafer over følgende antall saker:
-\begin{itemize*}
-	\item Mottatt i dag.
-	\item Både lukket og mottatt i dag.
-	\item Lukket av alle mottatte saker.
-	\item Antall aktive saker.
-\end{itemize*}
 I footprints.php vil returnert data fra alle de fire spørringene bli slått sammen til et array som videre returneres som JSON-data til external.js via Ajax. 
 
 For å generere grafer av returnert resultat i external.js ble jQuery biblioteket Highcarts benyttet. Det ble først testet et annet bibliotek for grafing: jqBarGraph, men dette hadde manglende konfigurasjonsmuligheter og ble valgt bort. 
@@ -431,7 +431,7 @@ style: {
 ...
 \end{lstlisting}
 
-Figur \ref{IE_bug} viser høydeforskjellen, der høyre er før endring og venstre etter:
+Figur \ref{IE_bug} viser høydeforskjellen, der venstre er før endring og høyre etter:
 \begin{figure}[H]
 \centering
 \begin{subfigure}
@@ -442,15 +442,16 @@ Figur \ref{IE_bug} viser høydeforskjellen, der høyre er før endring og venstr
   \centering
   \includegraphics[scale=0.7]{img/IE_footprints_fix}
 \end{subfigure}
-\caption{Høydeforskjell for antall over hvert søylediagram i Internet Explorer 9.0}
+\caption{Høydeforskjell mellom font over hvert søylediagram i Internet Explorer 9.0}
 \label{IE_bug}
 \end{figure}
 
 \subsection{Netbotz}
-Det er ønskelig at det skal være enkelt å legge til nye sensorer for temperatur og luftfuktighet. Alle sensorene oppdages automatisk av plugin-en som utførerer sjekkene for Icinga. Via API-et til Icinga-web hentes siste verdi for denne sjekken ut. Samtidig får en ut hvilken ID hver av sensorene har fått. I Javascript mappes hver sensor til riktig rad.
+Det er ønskelig at det skal være enkelt å legge til nye sensorer for temperatur og luftfuktighet. Alle sensorene oppdages automatisk av plugin-en som utførerer sjekkene for Icinga. Via API-et til Icinga-web hentes siste verdi for denne sjekken ut. Samtidig får en ut hvilken ID hver av sensorene har fått. Dette returneres til external.js som JSON-data. I Javascript settes verdiene inn i statusvinduet og hver sensor kobles til riktig rad.
 
 Utdrag fra external.js
 \begin{lstlisting}[style=example]
+...
 var front_layout = [2, 1]; // The netbotz sensor IDs for the front row
 var back_layout = [5, 4];  // and the back
 var columns = Math.max(front_layout.length, back_layout.length); // Largest row is used 
@@ -461,21 +462,21 @@ room.onload = function() {
     $('#serverroom_climate').css('height', this.height);
     $('#serverroom_climate').css('background-image', 'url(' + this.src + ')');
 };
-
+...
 // Set the background image to be one with the right number of columns
 room.src = "image.php?sensor_cols=" + columns;
+...
 \end{lstlisting}
 
 Grafikken for servermiljø tilpasses automatisk etter den raden med flest antall sensorer, ved å lime sammen riktig antall bilder dynamisk gjennom GD i PHP (se image.php i vedlegg \ref{image.php}).
 
 \subsection{RSS}
-
-RSS-feeden hentes inn fra IKT-avdelingens egen drifts-feed, der meldinger til alle brukere legges ut. Dersom det ikke er noen meldinger vil det ikke vises noe. Hvis lengden på feeden overstiger det som får plass på én linje vil den begynne å scrolle bortover. Dette gjøres med jQuery-plugin-en\cite{jqmarquee}.
+RSS-feeden hentes inn fra IKT-avdelingens egen drifts-feed, der meldinger til alle brukere legges ut. XML-en fra feeden parses og meldingene sendes til external.js som JSON-data. Dersom det ikke er noen meldinger vil det ikke vises noe. Hvis lengden på feeden overstiger det som får plass på én linje vil den begynne å scrolle bortover. Dette gjøres med jQuery-plugin-en ``jQuery Marquee''\cite{jqmarquee}.
 
 \subsection{Prioritering}
 Standard visning av et varsel er at det som kom inn sist vises øverst. Ved tilfeller der det er flere varsler, var det ønskelig å kunne gi en prioritering for å få de viktigste varslene til å komme øverst i listen. For å prioritere host-objekter som er DOWN eller UNREACHABLE og service-objekter som har WARNING eller CRITICAL i statusvisningen, ble to løsninger vurdert. 
 
-Den ene metoden var å bruke et severity-tall som Icinga kalkulerer basert på hvor mange child-hosts og child-servicer som hører til et gitt host-objekt som er nede. Dette vises som ``network outages'' i Icinga Classic Web der hver host får et ``severity''-tall. Det eksisterte ikke noen dokumentasjon på om dette kunne hentes ut via API-et eller hvordan ``severity'' kalkuleres. 
+Den ene metoden var å bruke et severity-tall som Icinga kalkulerer basert på hvor mange child-host- og child-service-objekter som hører til et gitt host-objekt som er nede. Dette vises som ``network outages'' i Icinga Classic der hver host får et ``severity''-tall. Det eksisterte ikke noen dokumentasjon på om dette kunne hentes ut via API-et eller hvordan ``severity'' kalkuleres. 
 
 Utrekningen skjer i outages.cgi, som ble funnet etter å lese gjennom HTML-koden og lese kildekoden for outages.c\cite{dnsmichi}:
 Child-servicer blir delt på et forhåndsdefinert tall (service\_severity\_divisor) som brukes for å angi hvor kritisk det er i forhold til child-hosts.
@@ -502,11 +503,11 @@ Severity = 1 + \frac{4}{4} = 2
 
 Metoden er ikke anvendelig for prioriteringen, da det skal kunne settes på hvilket som helst host- eller service-objekt, og den gjengir ikke viktigheten godt nok.     
 
-Den andre metoden gruppen kom frem til var å sette en egendefinert variabel ``\_PRIORITY'' på host- og service-objekter, og å hente ut variabelen via API-et til Icinga-web. Detteble valgt, fordi denne kan anvendes på alle servicer og hosts, og gir et bedre prioriteringsgrunnlag enn severity som vurderer antall child-objekter, noe ikke alle host-objekter nødvendigvis har. En kan heller ikke prioritere en service med metode 1.
+Den andre metoden gruppen kom frem til var å sette en egendefinert variabel ``\_PRIORITY'' på host- og service-objekter, og å hente ut variabelen via API-et til Icinga Web. Dette ble valgt fordi det kan anvendes på alle service- og host-objekter, og gir et bedre prioriteringsgrunnlag enn severity som vurderer antall child-objekter, noe ikke alle host-objekter nødvendigvis har. En kan heller ikke prioritere en service med metode én.
 
 Implementasjonen av metode to blir gjort ved å spørre API-et for hver host eller service som er hentet ut fra det første kallet i Tabell \ref{sporringer}. Har hosten eller servicen variabelen \_PRIORITY definert, vil denne lagres, ellers blir det satt 0 som prioritetstall.
 
-Selve sorteringen av hosts og servicer blir gjort av PHP-funksjonen usort() med to egenskrevne sammenligningsfunksjoner. \cite{usort}. Grunnen til dette er at array-et er flerdimensjonalt, så det må sorteres på verdien til en spesifikk nøkkel. Det skal også sorteres innenfor tilstandene DOWN og UNREACHABLE, og CRITICAL og WARNING. DOWN skal gå foran UNREACHABLE for host-objekter, og CRITICAL foran WARNING for service-objekter, deretter sorteres det etter prioriteringsvariabelen. I Tabell \ref{prioritering} vises oppsettet for hvordan dette sorteres.
+Selve sorteringen av host- og service-objekter blir gjort med PHP-funksjonen usort() med to egenskrevne sammenligningsfunksjoner. \cite{usort}. Grunnen til dette er at array-et er flerdimensjonalt, så det må sorteres på verdien til en spesifikk nøkkel. Det skal også sorteres innenfor tilstandene DOWN og UNREACHABLE, og CRITICAL og WARNING. DOWN skal gå foran UNREACHABLE for host-objekter, og CRITICAL foran WARNING for service-objekter, deretter sorteres det etter prioriteringsvariabelen. I Tabell \ref{prioritering} vises oppsettet for hvordan dette sorteres.
 
 \begin{table}
 \begin{center}
