@@ -15,7 +15,8 @@
 \usepackage[absolute]{textpos}
 \usepackage[T1]{fontenc}
 \usepackage{cite}
-\usepackage{listings,babel,graphicx,mathpple,textcomp,varioref,pdfpages,geometry} % For inclusion of graphics
+\usepackage[norsk]{babel}
+\usepackage{listings,graphicx,mathpple,textcomp,varioref,pdfpages,geometry} % For inclusion of graphics
 \usepackage[toc,page]{appendix}
 \usepackage[flushleft]{threeparttable}
 \usepackage{fancyhdr}
@@ -111,11 +112,13 @@ xleftmargin=3em, framexrightmargin=5pt, framexbottommargin=4pt
 \author{Øyvind Sigerstad, Nils Slåen og Bjørn-Erik Strand}
 
 \predisplaypenalty=10000
-\tolerance = 5000 % Hvor mange ord kan paa hver linje
+\tolerance = 6000 % Hvor mange ord kan paa hver linje
 \hbadness = \tolerance
-\pretolerance = 6000
-\raggedbottom
 
+\pretolerance = 6000
+%\pretolerance = 8000
+
+\raggedbottom
 
 \begin{document}
 \begin{titlepage}
@@ -213,6 +216,7 @@ xleftmargin=3em, framexrightmargin=5pt, framexbottommargin=4pt
 \clearpage
 
 % Appendixes
+  \renewcommand\appendixpagename{Vedlegg}
 \pagestyle{plain}
 \begin{appendices}
 \clearpage

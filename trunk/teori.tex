@@ -96,12 +96,11 @@ I utgangspunktet kommer ikke Icinga med noe webgrensesnitt. Men det er mulig å 
 Icinga Classic baserer seg på det samme vindusoppsettet som Nagios. For uthenting av data benyttes CGI-moduler som henter ut data fra filen ''status.dat''. Filen blir brukt av Icinga for å lagre tilstandsinformasjon om enheter og tjenester, kommentarer, og informasjon om nedetid. 
 
 Icinga Web er en total omskrivning av webgrensesnittet. Det er en Ajax-drevet, Web 2.0-inspirert front-end, som har flere lag mellom kjernen av Icinga og visningene:
-
-\textbf{Doctrine Abstraction Layer} (DAL) henter informasjon fra databasen. Det kan også benyttes av utviklere for å legge til egne moduler i Icinga Web med uthenting av informasjon fra andre databaser.
-\
-\textbf{REST API} presenterer dataene fra DAL til Icinga Web. Her kan autentisering utføres slik at en kan sette hvilken informasjon ulike brukere skal kunne se.
-\
-\textbf{Command Control Interface} kan videresende kommandoer til Icinga Core. For eksempel manuell kjøring av en sjekk eller restart av Icinga. 
+\begin{itemize*}
+\item \textbf{Doctrine Abstraction Layer} (DAL) henter informasjon fra databasen. Det kan også benyttes av utviklere for å legge til egne moduler i Icinga Web med uthenting av informasjon fra andre databaser.
+\item \textbf{REST API} presenterer dataene fra DAL til Icinga Web. Her kan autentisering utføres slik at en kan sette hvilken informasjon ulike brukere skal kunne se.
+\item \textbf{Command Control Interface} kan videresende kommandoer til Icinga Core. For eksempel manuell kjøring av en sjekk eller restart av Icinga.
+\end{itemize*}
 
 \section{Objekter}\label{sec:objekter}
 All konfigurasjon av Icinga gjøres i tekstfiler. I selve konfigurasjonsfilen ``icinga.cfg'' settes filbanen til konfigurasjonsfilene. Icinga vil da ved oppstart lete rekursivt gjennom mappen etter filer som ender med ``.cfg''.
